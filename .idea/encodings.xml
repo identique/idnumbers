@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/idnumbers/NGA.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/idnumbers/__init__.py" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/idnumbers/test_NGA.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/idnumbers/nationalid/NGA.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/idnumbers/nationalid/test_NGA.py" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

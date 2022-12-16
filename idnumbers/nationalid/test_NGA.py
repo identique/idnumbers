@@ -1,5 +1,5 @@
 from unittest import TestCase, main
-from . import NGA
+from idnumbers.nationalid import NGA
 
 
 class TestNGAValidation(TestCase):
