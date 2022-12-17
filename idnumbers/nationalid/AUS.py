@@ -20,9 +20,9 @@ class TaxFileNumber:
         # length without insignificant chars
         'min_length': 8,
         'max_length': 9,
-        # is id parsable
+        # has parse function
         'parsable': False,
-        # does id has checksum
+        # has checksum function
         'checksum': True,
         # regular expression to validate the id
         'regexp': re.compile(r'^(\d{9}|\d{8})$')
@@ -39,12 +39,15 @@ class TaxFileNumber:
             id_number = repr(id_number)
         if TaxFileNumber.METADATA.regexp.search(id_number) is None:
             return False
+        return TaxFileNumber.checksum(id_number) % 11 == 0
+
+    @staticmethod
+    def checksum(id_number: str) -> bool:
         normalized = normalize(id_number)
         if len(normalized) == 8:
             normalized = normalized[0:7] + '0' + normalized[7]
         number_list = [int(char) for char in list(normalized)]
-        total = sum([value * TaxFileNumber.MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)])
-        return total % 11 == 0
+        return sum([value * TaxFileNumber.MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)]) % 11
 
 
 class DriverLicenseNumber:
@@ -58,9 +61,9 @@ class DriverLicenseNumber:
         # length without insignificant chars
         'min_length': 6,
         'max_length': 10,
-        # is id parsable
+        # has parse function
         'parsable': False,
-        # does id has checksum
+        # has checksum function
         'checksum': False,
         # regular expression to validate the id
         'regexp': re.compile(r'^('
@@ -95,9 +98,9 @@ class MedicareNumber:
         # length without insignificant chars
         'min_length': 9,
         'max_length': 11,
-        # is id parsable
+        # has parse function
         'parsable': False,
-        # does id has checksum
+        # has checksum function
         'checksum': True,
         # regular expression to validate the id
         'regexp': re.compile(r'^('
@@ -120,7 +123,12 @@ class MedicareNumber:
         if MedicareNumber.METADATA.regexp.search(id_number) is None:
             return False
         normalized = normalize(id_number)
+        return MedicareNumber.checksum(id_number) == int(normalized[8])
+
+    @staticmethod
+    def checksum(id_number: str) -> int:
+        normalized = normalize(id_number)
         # only validate first 8 digits
         number_list = [int(char) for char in list(normalized)][:8]
         total = sum([value * MedicareNumber.MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)])
-        return total % 10 == int(normalized[8])
+        return total % 10
