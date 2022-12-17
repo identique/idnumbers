@@ -3,7 +3,7 @@ from idnumbers.nationalid import ZAF
 from idnumbers.nationalid.constant import Citizenship, Gender
 
 
-class TestNGAValidation(TestCase):
+class TestZAFValidation(TestCase):
     def test_normal_case(self):
         self.assertTrue(ZAF.validate('7605300675088'))
 

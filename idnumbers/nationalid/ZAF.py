@@ -6,7 +6,7 @@ from .constant import Citizenship, Gender
 
 
 """
-Nigeria National ID number format
+South Africa national ID number format
 https://en.wikipedia.org/wiki/National_identification_number#South_Africa
 https://www.westerncape.gov.za/general-publication/decoding-your-south-african-id-number-0
 """
@@ -15,10 +15,11 @@ METADATA = SimpleNamespace(**{
     'min_length': 13,
     'max_length': 13,
     'parsable': True,
+    'checksum': True,
     'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>0[1-9]|1[12])'
                          r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
                          r'(?P<sn>\d{4})'
-                         r'(?P<citizenship>[01])(8|9)'
+                         r'(?P<citizenship>[01])([89])'
                          r'(?P<checksum>\d)$')
 })
 

@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 
 """
-Nigeria National ID number format
+Nigeria national ID number format
 https://en.wikipedia.org/wiki/National_identification_number#Nigeria
 """
 METADATA = SimpleNamespace(**{
@@ -11,6 +11,7 @@ METADATA = SimpleNamespace(**{
     'min_length': 11,
     'max_length': 11,
     'parsable': False,
+    'checksum': False,
     'regexp': re.compile(r'^\d{11}$')
 })
 
