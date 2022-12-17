@@ -8,10 +8,14 @@ https://en.wikipedia.org/wiki/National_identification_number#Nigeria
 """
 METADATA = SimpleNamespace(**{
     'iso3166_alpha2': 'NG',
+    # length without insignificant chars
     'min_length': 11,
     'max_length': 11,
+    # is id parsable
     'parsable': False,
+    # does id has checksum
     'checksum': False,
+    # regular expression to validate the id
     'regexp': re.compile(r'^\d{11}$')
 })
 

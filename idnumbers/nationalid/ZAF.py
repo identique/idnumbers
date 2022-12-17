@@ -12,10 +12,14 @@ https://www.westerncape.gov.za/general-publication/decoding-your-south-african-i
 """
 METADATA = SimpleNamespace(**{
     'iso3166_alpha2': 'ZA',
+    # length without insignificant chars
     'min_length': 13,
     'max_length': 13,
+    # is id parsable
     'parsable': True,
+    # does id has checksum
     'checksum': True,
+    # regular expression to validate the id
     'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>0[1-9]|1[12])'
                          r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
                          r'(?P<sn>\d{4})'

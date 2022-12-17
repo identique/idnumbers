@@ -17,10 +17,14 @@ class TaxFileNumber:
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'AU',
-        'min_length': 9,
+        # length without insignificant chars
+        'min_length': 8,
         'max_length': 9,
+        # is id parsable
         'parsable': False,
+        # does id has checksum
         'checksum': True,
+        # regular expression to validate the id
         'regexp': re.compile(r'^(\d{9}|\d{8})$')
     })
 
@@ -51,10 +55,14 @@ class DriverLicenseNumber:
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'AU',
-        'min_length': 9,
-        'max_length': 9,
+        # length without insignificant chars
+        'min_length': 6,
+        'max_length': 10,
+        # is id parsable
         'parsable': False,
+        # does id has checksum
         'checksum': False,
+        # regular expression to validate the id
         'regexp': re.compile(r'^('
                              r'\d{9}|\d{3} \d{3} \d{3}|'
                              r'\d{8}|\d{2} \d{3} \d{3}|'
@@ -84,10 +92,14 @@ class MedicareNumber:
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'AU',
+        # length without insignificant chars
         'min_length': 9,
-        'max_length': 9,
+        'max_length': 11,
+        # is id parsable
         'parsable': False,
+        # does id has checksum
         'checksum': True,
+        # regular expression to validate the id
         'regexp': re.compile(r'^('
                              r'[2-6]\d{10}|[2-6]\d{3} \d{5} \d|[2-6]\d{3}-\d{5}-\d|'
                              r'[2-6]\d{9}|[2-6]\d{9}([-/]\d)?|'
