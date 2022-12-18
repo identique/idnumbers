@@ -109,6 +109,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+publish_env/
+prepublish_test/
+
 
 # Spyder project settings
 .spyderproject
