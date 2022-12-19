@@ -1,13 +1,5 @@
 import re
 from types import SimpleNamespace
-from typing import TypedDict
-
-
-class ParseResult(TypedDict):
-    register_office_code: str
-    national_num: str
-    check_letter: str
-    district_code: str
 
 
 class NationalID:
