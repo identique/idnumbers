@@ -20,10 +20,11 @@ class NationalID:
         'min_length': 11,
         'max_length': 12,
         'parsable': True,
+        'checksum': True,
         'regexp': re.compile(r'^(?P<register_office_code>\d{2})'
                              r'(?P<national_num>(\d{6}|\d{7}))'
-                             r'(?P<check_letter>\D"*)'
-                             r'(?P<district_code>\d{2}"*$)')
+                             r'(?P<check_letter>[A-Z])'
+                             r'(?P<district_code>\d{2}$)')
     })
 
     @staticmethod
@@ -44,7 +45,7 @@ class NationalID:
         national_num = match_obj.group('national_num')
         check_letter = match_obj.group('check_letter')
         district_code = match_obj.group('district_code')
-        if NationalID.checksum(register_office_code, national_num) != check_letter:
+        if not NationalID.validate_checksum(id_number):
             return None
         elif not NationalID.check_district_code(register_office_code):
             return None
@@ -60,7 +61,15 @@ class NationalID:
             }
 
     @staticmethod
-    def checksum(register_office_code: str, national_num: str) -> str:
+    def validate_checksum(id_number) -> bool:
+        match_obj = NationalID.METADATA.regexp.match(id_number)
+        register_office_code = match_obj.group('register_office_code')
+        national_num = match_obj.group('national_num')
+        check_letter = match_obj.group('check_letter')
+        return NationalID.get_checksum(register_office_code, national_num) == check_letter
+
+    @staticmethod
+    def get_checksum(register_office_code: str, national_num: str) -> str:
         """
         https://www.slideshare.net/povonews/zimbabwe-2018-biometric-voters-roll-analysis-pachedu
         page 56 Appendix 2

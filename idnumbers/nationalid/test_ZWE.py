@@ -12,6 +12,7 @@ class TestNGAValidation(TestCase):
         self.assertFalse(ZWE.NationalID.validate('75191962R00'))
         self.assertFalse(ZWE.NationalID.validate('00191962R58'))
         self.assertFalse(ZWE.NationalID.validate('40191962R75'))
+        self.assertFalse(ZWE.NationalID.validate('40191962r75'))
 
     def test_parse_11_digits(self):
         result = ZWE.NationalID.parse('75191961R00')
@@ -26,6 +27,10 @@ class TestNGAValidation(TestCase):
         self.assertEqual('1910961', result['national_num'])
         self.assertEqual('R', result['check_letter'])
         self.assertEqual('58', result['district_code'])
+
+    def test_checksum(self):
+        self.assertTrue(ZWE.NationalID.validate_checksum('751910961R58'))
+        self.assertFalse(ZWE.NationalID.validate_checksum('751910961S58'))
 
 
 if __name__ == '__main__':

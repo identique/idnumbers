@@ -13,11 +13,12 @@ class NationalID:
         'min_length': 10,
         'max_length': 10,
         'parsable': False,
-        'regexp': re.compile(r'^(?P<first_section>[0-9][0-9])'
-                             r'([.])'
-                             r'(?P<second_section>[0-9][0-9][0-9])'
-                             r'([.])'
-                             r'(?P<third_section>[0-9][0-9][0-9])$')
+        'checksum': False,
+        'regexp': re.compile(r'^(?P<first_section>\d{2})'
+                             r'(\.)'
+                             r'(?P<second_section>\d{3})'
+                             r'(\.)'
+                             r'(?P<third_section>\d{3})$')
     })
 
     @staticmethod
