@@ -1,6 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import List
+from .util import validate_regexp
 
 
 def normalize(id_number):
@@ -34,10 +35,9 @@ class DriverLicenseNumber:
         """
         Validate the NZL driver license number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        return DriverLicenseNumber.METADATA.regexp.search(id_number) is not None \
-            and id_number[-6:] not in BLACK_TRAILING_NUMBER
+        if not validate_regexp(id_number, DriverLicenseNumber.METADATA.regexp):
+            return False
+        return id_number[-6:] not in BLACK_TRAILING_NUMBER
 
 
 class PassportNumber:
@@ -63,10 +63,9 @@ class PassportNumber:
         """
         Validate the NZL passport number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        return PassportNumber.METADATA.regexp.search(id_number) is not None \
-            and id_number[-6:] not in BLACK_TRAILING_NUMBER
+        if not validate_regexp(id_number, PassportNumber.METADATA.regexp):
+            return False
+        return id_number[-6:] not in BLACK_TRAILING_NUMBER
 
 
 class InlandRevenueDepartmentNumber:
@@ -99,9 +98,7 @@ class InlandRevenueDepartmentNumber:
         """
         Validate the NZL IRD number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        if InlandRevenueDepartmentNumber.METADATA.regexp.search(id_number) is None:
+        if not validate_regexp(id_number, InlandRevenueDepartmentNumber.METADATA.regexp):
             return False
         return InlandRevenueDepartmentNumber.checksum(id_number)
 
@@ -161,9 +158,7 @@ class NationalHealthIndexNumber:
         """
         Validate the NZL NHI number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        if NationalHealthIndexNumber.METADATA.regexp.search(id_number) is None:
+        if not validate_regexp(id_number, NationalHealthIndexNumber.METADATA.regexp):
             return False
         return NationalHealthIndexNumber.checksum(id_number)
 

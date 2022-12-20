@@ -1,5 +1,6 @@
 import re
 from types import SimpleNamespace
+from .util import validate_regexp
 
 
 def normalize(id_number):
@@ -35,9 +36,7 @@ class TaxFileNumber:
         """
         Validate the AUS tax file number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        if TaxFileNumber.METADATA.regexp.search(id_number) is None:
+        if not validate_regexp(id_number, TaxFileNumber.METADATA.regexp):
             return False
         return TaxFileNumber.checksum(id_number) % 11 == 0
 
@@ -81,9 +80,7 @@ class DriverLicenseNumber:
         """
         Validate the AUS driver license number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        if DriverLicenseNumber.METADATA.regexp.search(id_number) is None:
+        if not validate_regexp(id_number, DriverLicenseNumber.METADATA.regexp):
             return False
         return normalize(id_number)[-5:] not in DriverLicenseNumber.BLACK_TRAILING_NUMBER
 
@@ -118,9 +115,7 @@ class MedicareNumber:
         """
         Validate the medicare number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        if MedicareNumber.METADATA.regexp.search(id_number) is None:
+        if not validate_regexp(id_number, MedicareNumber.METADATA.regexp):
             return False
         normalized = normalize(id_number)
         return MedicareNumber.checksum(id_number) == int(normalized[8])

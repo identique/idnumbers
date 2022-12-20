@@ -45,7 +45,7 @@ class NationalID:
         national_num = match_obj.group('national_num')
         check_letter = match_obj.group('check_letter')
         district_code = match_obj.group('district_code')
-        if not NationalID.validate_checksum(id_number):
+        if not NationalID.checksum(id_number):
             return None
         elif not NationalID.check_district_code(register_office_code):
             return None
@@ -61,7 +61,7 @@ class NationalID:
             }
 
     @staticmethod
-    def validate_checksum(id_number) -> bool:
+    def checksum(id_number) -> bool:
         match_obj = NationalID.METADATA.regexp.match(id_number)
         register_office_code = match_obj.group('register_office_code')
         national_num = match_obj.group('national_num')

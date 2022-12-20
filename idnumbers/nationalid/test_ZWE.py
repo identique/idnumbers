@@ -29,8 +29,8 @@ class TestNGAValidation(TestCase):
         self.assertEqual('58', result['district_code'])
 
     def test_checksum(self):
-        self.assertTrue(ZWE.NationalID.validate_checksum('751910961R58'))
-        self.assertFalse(ZWE.NationalID.validate_checksum('751910961S58'))
+        self.assertTrue(ZWE.NationalID.checksum('751910961R58'))
+        self.assertFalse(ZWE.NationalID.checksum('751910961S58'))
 
 
 if __name__ == '__main__':

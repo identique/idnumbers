@@ -12,10 +12,6 @@ class TestAUSTFNValidation(TestCase):
         self.assertFalse(AUS.TaxFileNumber.validate('12345678'))
         self.assertFalse(AUS.TaxFileNumber.validate('123456781'))
 
-    def test_number_type(self):
-        # if the user doesn't follow the type hinting, we still handle it
-        self.assertTrue(AUS.TaxFileNumber.validate(123456782))
-
     def test_with_regex(self):
         self.assertRegex('123456782', AUS.TaxFileNumber.METADATA.regexp)
 

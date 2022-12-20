@@ -1,5 +1,6 @@
 import re
 from types import SimpleNamespace
+from .util import validate_regexp
 
 
 class NationalID:
@@ -25,6 +26,4 @@ class NationalID:
         """
         Validate the NGA id number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        return NationalID.METADATA.regexp.search(id_number) is not None
+        return validate_regexp(id_number, NationalID.METADATA.regexp)

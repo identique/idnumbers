@@ -10,10 +10,6 @@ class TestZAFValidation(TestCase):
     def test_error_case(self):
         self.assertFalse(ZAF.NationalID.validate('7605300675089'))
 
-    def test_number_type(self):
-        # if the user doesn't follow the type hinting, we still handle it
-        self.assertTrue(ZAF.NationalID.validate(7605300675088))
-
     def test_parse(self):
         result = ZAF.NationalID.parse('7605300675088')
         self.assertEqual(1976, result['yyyymmdd'].year)
