@@ -15,8 +15,8 @@ class TestBRARGNumberValidation(TestCase):
 
     def test_with_metadata(self):
         self.assertIsNotNone(BRA.RGNumber.METADATA)
-        self.assertIsNotNone(BRA.RGNumber.METADATA.parsable)
-        self.assertIsNotNone(BRA.RGNumber.METADATA.checksum)
+        self.assertTrue(BRA.RGNumber.METADATA.parsable)
+        self.assertTrue(BRA.RGNumber.METADATA.checksum)
 
     def test_parse(self):
         result = BRA.RGNumber.parse('99.953.539-X')
@@ -35,8 +35,8 @@ class TestBRACPFNumberValidation(TestCase):
 
     def test_with_metadata(self):
         self.assertIsNotNone(BRA.CPFNumber.METADATA)
-        self.assertIsNotNone(BRA.CPFNumber.METADATA.parsable)
-        self.assertIsNotNone(BRA.CPFNumber.METADATA.checksum)
+        self.assertTrue(BRA.CPFNumber.METADATA.parsable)
+        self.assertTrue(BRA.CPFNumber.METADATA.checksum)
 
     def test_parse(self):
         result = BRA.CPFNumber.parse('111.333.666-86')
