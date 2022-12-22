@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict, Union
+from typing import Literal, Optional, TypedDict
 from .constant import Gender
 from .util import validate_regexp
 
@@ -15,7 +15,7 @@ class ParseResult(TypedDict):
     yyyymmdd: date
     sn: int
     gender: Gender
-    checksum: Union[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], Literal['X']]
+    checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']
 
 
 class ResidentIDNumber:
@@ -34,7 +34,7 @@ class ResidentIDNumber:
                              r'(?P<mm>0[1-9]|1[12])'
                              r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>(?:\d|X)$)')
+                             r'(?P<checksum>(?:\d|X))$')
     })
 
     @staticmethod
@@ -70,7 +70,7 @@ class ResidentIDNumber:
             }
 
     @staticmethod
-    def checksum(id_number) -> Optional[Union[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], Literal['X']]]:
+    def checksum(id_number) -> Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']]:
         if not validate_regexp(id_number, ResidentIDNumber.METADATA.regexp):
             return None
         normalized = normalize(id_number)
