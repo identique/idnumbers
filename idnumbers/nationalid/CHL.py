@@ -4,7 +4,7 @@ from typing import Optional, TypedDict
 
 
 def normalize(id_number):
-    return re.sub(r'[\-/]|[\./]', '', id_number)
+    return re.sub(r'[\-/]|[./]', '', id_number)
 
 
 class ParseResult(TypedDict):
@@ -34,7 +34,7 @@ class NationalID:
                              r'(?P<second_section>\d{3})'
                              r'(\.)'
                              r'(?P<third_section>\d{3})'
-                             r'(\-)'
+                             r'(-)'
                              r'(?P<check_digit>[0-9K])$')
     })
 

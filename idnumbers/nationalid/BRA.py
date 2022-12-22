@@ -4,7 +4,7 @@ from typing import Optional, TypedDict
 
 
 def normalize(id_number):
-    return re.sub(r'[\-/]|[\./]', '', id_number)
+    return re.sub(r'[\-/]|[./]', '', id_number)
 
 
 class ParseResult(TypedDict):
@@ -32,7 +32,7 @@ class RGNumber:
                              r'(?P<second_section>\d{3})'
                              r'(\.)'
                              r'(?P<third_section>\d{3})'
-                             r'(\-)'
+                             r'(-)'
                              r'(?P<check_digit>[\d|X])$')
     })
 
@@ -82,7 +82,7 @@ class CPFNumber:
                              r'(?P<second_section>\d{3})'
                              r'(\.)'
                              r'(?P<third_section>\d{3})'
-                             r'(\-)'
+                             r'(-)'
                              r'(?P<check_digit>\d{2})$')
     })
 
