@@ -58,7 +58,7 @@ class ResidentIDNumber:
         sn = match_obj.group('sn')
         checksum_str = match_obj.group('checksum')
         checksum = ResidentIDNumber.checksum(id_number)
-        if not checksum or str(checksum) != checksum_str:
+        if checksum is None or str(checksum) != checksum_str:
             return None
         else:
             return {

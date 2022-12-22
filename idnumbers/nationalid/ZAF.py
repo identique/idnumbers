@@ -3,6 +3,7 @@ from datetime import date
 from typing import Optional, TypedDict
 from types import SimpleNamespace
 from .constant import Citizenship, Gender
+from .util import luhn_digit
 
 
 class NationalIDParseResult(TypedDict):
@@ -66,19 +67,6 @@ class NationalID:
     @staticmethod
     def checksum(id_number: str) -> int:
         """
-        implement the algorithm of Luhn.
-        https://en.wikipedia.org/wiki/Luhn_algorithm
-        :param id_number:str ZAF national id
-        :return: checksum number
+        use Luhn algorithm.
         """
-        digits = id_number[:-1]
-        total_sum = 0
-        for idx, char in enumerate(list(digits)):
-            int_val = int(char)
-            if idx % 2 == 0:
-                total_sum += int_val
-            elif int_val > 4:
-                total_sum += (2 * int_val - 9)
-            else:
-                total_sum += (2 * int_val)
-        return 10 - total_sum % 10
+        return luhn_digit([int(char) for char in id_number[:-1]])
