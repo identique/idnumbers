@@ -54,10 +54,10 @@ class NationalID:
             return None
         else:
             return {
-                "register_office_code": register_office_code,
-                "national_num": national_num,
-                "check_letter": check_letter,
-                "district_code": district_code
+                'register_office_code': register_office_code,
+                'national_num': national_num,
+                'check_letter': check_letter,
+                'district_code': district_code
             }
 
     @staticmethod
