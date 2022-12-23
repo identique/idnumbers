@@ -23,3 +23,12 @@ def luhn_digit(digits: List[int]) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
         else:
             total_sum += (2 * int_val)
     return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], (10 - total_sum % 10) % 10)
+
+
+def modulus_check(numbers: List[int], weights: List[int], divider) -> int:
+    assert len(numbers) <= len(weights), 'numbers length must be less than or equal to weights length'
+    return divider - sum([value * weights[index] for (index, value) in enumerate(numbers)]) % divider
+
+
+def modulus_overflow_mod10(modulus: int) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+    return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], modulus % 10 if modulus > 9 else modulus)

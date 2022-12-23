@@ -35,7 +35,7 @@ class EmiratesIDNumber:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the CHN id number
+        Validate the UAE id number
         """
         if not id_number:
             return False
