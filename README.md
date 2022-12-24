@@ -44,3 +44,21 @@ print(id_data['yyyymmdd'])
 print(id_data['gender'])
 print(id_data['citizenship'])
 ```
+
+# Supported Country List:
+
+* ARE - United Arab Emirates
+* ARG - Argentina 
+* AUS - Australia
+* BRA - Brazil
+* CAN - Canada
+* CHL - Chile
+* CHN - China
+* GBR - United Kingdom of Great Britain and Northern Ireland
+* NGA - Nigeria
+* NZL - New Zealand
+* THA - Thailand
+* UKR - Ukraine
+* VNM - Viet Nam
+* ZAF - South Africa
+* ZWE - Zimbabwe
