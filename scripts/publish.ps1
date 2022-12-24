@@ -24,7 +24,8 @@ $setup_py = Get-Content setup.py
 if ($null -eq $DryRun) {
     # not dry run, modify and commit
     Write-Output "[$(Get-Date)] - update file setup.py"
-    $setup_py -Replace "version='.+',", "version='$Version'," | Set-Content setup.py
+    $new_setup_py = $setup_py -Replace "version='.+',", "version='$Version',"
+    ($new_setup_py -join "`n") + "`n" | Set-Content -NoNewline setup.py
     Write-Output "[$(Get-Date)] - commit version update $Version with message '$message'"
     git reset
     git add setup.py
