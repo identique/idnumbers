@@ -13,7 +13,7 @@ def read(filename):
 
 setup(
     name='idnumbers',
-    version='0.0.0b1',
+    version='0.0.0.b2',
     author='MicrodataXYZ',
     author_email='microdataxyz@outlook.com',
     description='id numbers verification toolkits',
