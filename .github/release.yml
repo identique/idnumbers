@@ -13,7 +13,7 @@ changelog:
         - enhancement
     - title: Bugs Fixes 🪲
       labels:
-        - enhancement
+        - bug
     - title: Other Changes
       labels:
         - "*"
