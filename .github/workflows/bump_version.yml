@@ -1,0 +1,36 @@
+name: Bump Release Version with PR
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version value'
+        required: true
+
+jobs:
+  bump-version:
+    name: Bump setup.py version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update version
+        run: |
+          echo "==== before update ========================="
+          cat VERSION
+          echo "${{ inputs.version }}" > VERSION
+          echo "==== after update ========================="
+          cat VERSION
+          git add VERSION
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          commit-message: Bump version to ${{ inputs.version }}
+          committer: Microdata Bot <microdataxyz@outlook.com>
+          title: Bump version to ${{ inputs.version }}
+          body: Bump version by ${{ github.actor }}
+
+      - name: Check outputs
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"

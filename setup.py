@@ -13,7 +13,7 @@ def read(filename):
 
 setup(
     name='idnumbers',
-    version='0.0.0.b2',
+    version=read('VERSION').replace('\n', '').replace('\r', ''),
     author='MicrodataXYZ',
     author_email='microdataxyz@outlook.com',
     description='id numbers verification toolkits',
@@ -26,6 +26,7 @@ setup(
         'Tracker': 'https://github.com/microdataxyz/idnumbers/issues',
     },
     packages=find_packages(exclude=['test_*']),
+    data_files=[('version', ['VERSION'])],
     python_requires='>=3.7',
     install_requires=[],
     setup_requires=[],
