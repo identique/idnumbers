@@ -5,6 +5,11 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues['*:ErrorAction']='Stop'
 
+if ($null -eq $Version) {
+    Write-Output "[ERROR] Version is required."
+    exit -1
+}
+
 # Phase 1: bump version
 Write-Output "[$(Get-Date)] - Dry Run => [$($null -ne $DryRun)]"
 Write-Output "[$(Get-Date)] - bump version to $Version"
@@ -55,7 +60,7 @@ if ($null -eq $DryRun) {
     twine upload --verbose "dist/$Version/*"
     # add the tag
     Write-Output "[$( Get-Date )] - add tag $Version"
-    git tag -a "$Version" -m "$message"
+    git tag -a "v$Version" -m "$message"
 } else {
     Write-Output "[$( Get-Date )] - DryRun - publish and add tag"
 }
