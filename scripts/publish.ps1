@@ -20,20 +20,18 @@ if ($null -eq $CommitMessage) {
 }
 
 # read the content
-$setup_py = Get-Content setup.py
 if ($null -eq $DryRun) {
     # not dry run, modify and commit
-    Write-Output "[$(Get-Date)] - update file setup.py"
-    $new_setup_py = $setup_py -Replace "version='.+',", "version='$Version',"
-    ($new_setup_py -join "`n") + "`n" | Set-Content -NoNewline setup.py
+    Write-Output "[$(Get-Date)] - update file VERSION"
+    $Version | Set-Content -NoNewline VERSION
     Write-Output "[$(Get-Date)] - commit version update $Version with message '$message'"
     git reset
-    git add setup.py
+    git add VERSION
     git commit -m "$message"
 } else {
     # output to console
-    $dry_run_setup = $setup_py -Replace "version='.+',", "version='$Version',"
-    Write-Output "[$(Get-Date)] - DryRun modify: $dry_run_setup"
+    Write-Output "[$(Get-Date)] - update file VERSION"
+    Write-Output "[$(Get-Date)] - DryRun modify: $Version"
 }
 
 ## Pre-phase 2 - Ensure Environment
