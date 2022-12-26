@@ -1,7 +1,8 @@
 # idnumbers
 National ID verification libs
 
-[![PyPI version](https://badge.fury.io/py/idnumbers.svg)](https://badge.fury.io/py/idnumbers)
+* [![PyPI version](https://badge.fury.io/py/idnumbers.svg)](https://badge.fury.io/py/idnumbers)
+* [![PyPI Stats](https://img.shields.io/pypi/dm/idnumbers)](https://pypistats.org/packages/idnumbers)
 
 This project in early phase. We might change the interface. Please wait our changelogs for more information.
 
@@ -58,6 +59,7 @@ print(id_data['citizenship'])
 * NGA - Nigeria
 * NZL - New Zealand
 * THA - Thailand
+* TWN - Taiwan
 * UKR - Ukraine
 * VNM - Viet Nam
 * ZAF - South Africa
