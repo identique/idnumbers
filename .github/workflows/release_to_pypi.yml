@@ -1,0 +1,44 @@
+name: Official Release
+on:
+  workflow_dispatch:
+    inputs:
+      to_prod:
+        default: "no"
+        description: "Please type yes to publish to pypi.org, otherwise go to test.pypi.org"
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+      - name: install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r "scripts/publish/requirements.txt"
+      - name: read version
+        id: read-version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./VERSION
+          trim: true
+      - name: build package
+        run: |
+          rm -rf dist
+          mkdir -p dist
+          python -m build
+      - name: release to prod
+        uses: pypa/gh-action-pypi-publish@release/v1
+        if: inputs.to_prod == 'yes'
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: release to test
+        uses: pypa/gh-action-pypi-publish@release/v1
+        if: inputs.to_prod != 'yes'
+        with:
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository_url: https://test.pypi.org/legacy/
