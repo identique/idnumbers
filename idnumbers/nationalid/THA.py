@@ -117,7 +117,7 @@ class NationalID:
                 'province_code': province,
                 'distinct_code': distinct,
                 'sn': sn,
-                'checksum': match_obj.group('checksum')
+                'checksum': int(match_obj.group('checksum'))
             }
 
     @staticmethod

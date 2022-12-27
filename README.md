@@ -56,6 +56,7 @@ print(id_data['citizenship'])
 * CHL - Chile
 * CHN - China
 * GBR - United Kingdom of Great Britain and Northern Ireland
+* LKA - Sri Lanka
 * NGA - Nigeria
 * NZL - New Zealand
 * THA - Thailand

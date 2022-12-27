@@ -69,7 +69,7 @@ class NationalID:
                 'location': location,
                 'gender': Gender.MALE if gender == '1' else Gender.FEMALE,
                 'sn': sn,
-                'checksum': match_obj.group('checksum')
+                'checksum': int(match_obj.group('checksum'))
             }
 
     @staticmethod

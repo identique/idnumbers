@@ -25,7 +25,7 @@ class TestTHAValidation(TestCase):
         self.assertEqual('41', result['province_code'])
         self.assertEqual('17', result['distinct_code'])
         self.assertEqual('0083033', result['sn'])
-        self.assertEqual('4', result['checksum'])
+        self.assertEqual(4, result['checksum'])
 
 
 if __name__ == '__main__':
