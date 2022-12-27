@@ -56,12 +56,15 @@ print(id_data['citizenship'])
 * CHL - Chile
 * CHN - China
 * GBR - United Kingdom of Great Britain and Northern Ireland
+* HKG - Hong Kong
+* JPN - Japan
 * LKA - Sri Lanka
 * NGA - Nigeria
 * NZL - New Zealand
 * THA - Thailand
 * TWN - Taiwan
 * UKR - Ukraine
+* USA - United States
 * VNM - Viet Nam
 * ZAF - South Africa
 * ZWE - Zimbabwe
