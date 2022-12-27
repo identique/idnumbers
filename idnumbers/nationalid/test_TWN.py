@@ -4,7 +4,7 @@ from idnumbers.nationalid import TWN
 from idnumbers.nationalid.constant import Gender
 
 
-class TestTHAValidation(TestCase):
+class TestTWNValidation(TestCase):
     def test_normal_case(self):
         self.assertTrue(TWN.NationalID.validate('A123456789'))
         self.assertTrue(TWN.NationalID.validate('M140051653'))
@@ -19,7 +19,7 @@ class TestTHAValidation(TestCase):
         self.assertEqual('A', result['location'])
         self.assertEqual(Gender.MALE, result['gender'])
         self.assertEqual('2345678', result['sn'])
-        self.assertEqual('9', result['checksum'])
+        self.assertEqual(9, result['checksum'])
 
 
 if __name__ == '__main__':
