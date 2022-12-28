@@ -1,6 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional, TypedDict
+from .util import validate_regexp
 
 
 class ParseResult(TypedDict):
@@ -32,9 +33,11 @@ class NationalID:
         """
         Validate the ZWE id number
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        return NationalID.parse(id_number) is not None
+        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+            return False
+        elif NationalID.parse(id_number) is None:
+            return False
+        return NationalID.checksum(id_number)
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:

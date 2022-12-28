@@ -1,17 +1,10 @@
 import re
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from .util import validate_regexp
 
 
 def normalize(id_number):
     return re.sub(r'[\-/]|[./]', '', id_number)
-
-
-class ParseResult(TypedDict):
-    first_section: str
-    second_section: str
-    third_section: str
-    check_digit: str
 
 
 class RGNumber:
@@ -23,17 +16,12 @@ class RGNumber:
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'BR',
-        'min_length': 12,
-        'max_length': 12,
-        'parsable': True,
+        # length without insignificant chars
+        'min_length': 9,
+        'max_length': 9,
+        'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^(?P<first_section>\d{2})'
-                             r'(\.)'
-                             r'(?P<second_section>\d{3})'
-                             r'(\.)'
-                             r'(?P<third_section>\d{3})'
-                             r'(-)'
-                             r'(?P<check_digit>[\d|X])$')
+        'regexp': re.compile(r'^(\d{2}[.]\d{3}[.]\d{3}[-][\d|X])$')
     })
 
     @staticmethod
@@ -41,18 +29,9 @@ class RGNumber:
         """
         Validate the BRA RegistroGeralNumber
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        elif RGNumber.parse(id_number) is None:
+        if not validate_regexp(id_number, RGNumber.METADATA.regexp):
             return False
         return RGNumber.checksum(id_number)
-
-    @staticmethod
-    def parse(id_number) -> Optional[ParseResult]:
-        match_obj = RGNumber.METADATA.regexp.match(id_number)
-        if not match_obj:
-            return None
-        return {k: match_obj.group(k) for k in ['first_section', 'second_section', 'third_section', 'check_digit']}
 
     MAGIC_MULTIPLIER = [2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -73,17 +52,12 @@ class CPFNumber:
        """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'BR',
-        'min_length': 14,
-        'max_length': 14,
-        'parsable': True,
+        # length without insignificant chars
+        'min_length': 11,
+        'max_length': 11,
+        'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^(?P<first_section>\d{3})'
-                             r'(\.)'
-                             r'(?P<second_section>\d{3})'
-                             r'(\.)'
-                             r'(?P<third_section>\d{3})'
-                             r'(-)'
-                             r'(?P<check_digit>\d{2})$')
+        'regexp': re.compile(r'^(\d{3}[.]\d{3}[.]\d{3}[-]\d{2})$')
     })
 
     @staticmethod
@@ -93,18 +67,9 @@ class CPFNumber:
         https://en.wikipedia.org/wiki/CPF_number
         https://4app.net/tools/validator/document/cpf_validator
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        elif CPFNumber.parse(id_number) is None:
+        if not validate_regexp(id_number, CPFNumber.METADATA.regexp):
             return False
         return CPFNumber.checksum(id_number)
-
-    @staticmethod
-    def parse(id_number) -> Optional[ParseResult]:
-        match_obj = CPFNumber.METADATA.regexp.match(id_number)
-        if not match_obj:
-            return None
-        return {k: match_obj.group(k) for k in ['first_section', 'second_section', 'third_section', 'check_digit']}
 
     @staticmethod
     def checksum(id_number: str) -> bool:

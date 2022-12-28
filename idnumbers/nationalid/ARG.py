@@ -11,15 +11,13 @@ class NationalID:
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'AR',
-        'min_length': 10,
-        'max_length': 10,
+        # length without insignificant chars
+        'min_length': 8,
+        'max_length': 8,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^(?P<first_section>\d{2})'
-                             r'(\.)'
-                             r'(?P<second_section>\d{3})'
-                             r'(\.)'
-                             r'(?P<third_section>\d{3})$')
+        'regexp': re.compile(r'^(\d{2}[.]\d{3}[.]\d{3})$')
+
     })
 
     @staticmethod

@@ -15,15 +15,7 @@ class TestCHLNationalIDValidation(TestCase):
 
     def test_with_metadata(self):
         self.assertIsNotNone(CHL.NationalID.METADATA)
-        self.assertTrue(CHL.NationalID.METADATA.parsable)
         self.assertTrue(CHL.NationalID.METADATA.checksum)
-
-    def test_parse(self):
-        result = CHL.NationalID.parse('31.174.738-K')
-        self.assertEqual('31', result['first_section'])
-        self.assertEqual('174', result['second_section'])
-        self.assertEqual('738', result['third_section'])
-        self.assertEqual('K', result['check_digit'])
 
     def test_checksum(self):
         self.assertTrue(CHL.NationalID.checksum('31.174.738-K'))

@@ -1,17 +1,10 @@
 import re
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from .util import validate_regexp
 
 
 def normalize(id_number):
     return re.sub(r'[\-/]|[./]', '', id_number)
-
-
-class ParseResult(TypedDict):
-    first_section: str
-    second_section: str
-    third_section: str
-    check_digit: str
 
 
 class NationalID:
@@ -25,17 +18,11 @@ class NationalID:
         'min_length': 8,
         'max_length': 9,
         # has parse function
-        'parsable': True,
+        'parsable': False,
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(?P<first_section>(\d{2}|\d))'
-                             r'(\.)'
-                             r'(?P<second_section>\d{3})'
-                             r'(\.)'
-                             r'(?P<third_section>\d{3})'
-                             r'(-)'
-                             r'(?P<check_digit>[0-9K])$')
+        'regexp': re.compile(r'^(\d{1,2}[.]\d{3}[.]\d{3}[-][\d|K])$')
     })
 
     @staticmethod
@@ -44,18 +31,9 @@ class NationalID:
         Validate the CHL id number
         https://codepen.io/alisteroz/pen/KEoqgQ
         """
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
-        elif NationalID.parse(id_number) is None:
+        if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         return NationalID.checksum(id_number)
-
-    @staticmethod
-    def parse(id_number: str) -> Optional[ParseResult]:
-        match_obj = NationalID.METADATA.regexp.match(id_number)
-        if not match_obj:
-            return None
-        return {k: match_obj.group(k) for k in ['first_section', 'second_section', 'third_section', 'check_digit']}
 
     MAGIC_MULTIPLIER = [3, 2, 7, 6, 5, 4, 3, 2]
 
