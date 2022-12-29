@@ -88,11 +88,8 @@ class NationalID:
         """
         Validate the THA id number
         """
-        if not id_number:
+        if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
-
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
         return NationalID.parse(id_number) is not None
 
     @staticmethod
