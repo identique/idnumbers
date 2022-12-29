@@ -41,13 +41,10 @@ class NationalID:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the TWN id number
+        Validate the LKA id number
         """
-        if not id_number:
+        if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
-
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
         return NationalID.parse(id_number) is not None
 
     @staticmethod

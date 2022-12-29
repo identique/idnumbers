@@ -9,3 +9,5 @@ class Gender(Enum):
 class Citizenship(Enum):
     CITIZEN = 'citizen'
     RESIDENT = 'resident'
+    # In some countries, foreigners are the same as resident. But in other countries, they are not the same.
+    FOREIGNER = 'foreigner'

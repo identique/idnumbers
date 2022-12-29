@@ -58,6 +58,7 @@ print(id_data['citizenship'])
 * GBR - United Kingdom of Great Britain and Northern Ireland
 * HKG - Hong Kong
 * JPN - Japan
+* KOR - South Korea
 * LKA - Sri Lanka
 * NGA - Nigeria
 * NZL - New Zealand
