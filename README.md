@@ -62,6 +62,7 @@ print(id_data['citizenship'])
 * LKA - Sri Lanka
 * NGA - Nigeria
 * NZL - New Zealand
+* PHL - Philippine
 * SGP - Singapore
 * THA - Thailand
 * TWN - Taiwan
