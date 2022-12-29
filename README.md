@@ -60,6 +60,7 @@ print(id_data['citizenship'])
 * JPN - Japan
 * KOR - South Korea
 * LKA - Sri Lanka
+* MYS - Malaysia
 * NGA - Nigeria
 * NZL - New Zealand
 * PHL - Philippine
