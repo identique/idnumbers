@@ -1,7 +1,6 @@
 from unittest import TestCase, main
 
 from idnumbers.nationalid import SGP
-from idnumbers.nationalid.constant import Gender
 
 
 class TestSGPValidation(TestCase):
