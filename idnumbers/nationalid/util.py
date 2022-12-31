@@ -69,3 +69,10 @@ def modulus_check(numbers: List[int], weights: List[int], divider: int, modulus_
 
 def modulus_overflow_mod10(modulus: int) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
     return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], modulus % 10 if modulus > 9 else modulus)
+
+
+def letter_to_number(letter: str, capital: bool = True):
+    assert len(letter) == 1 and letter.isalpha(), 'only allow one alphabet'
+    if capital:
+        return ord(letter) - 64
+    return ord(letter) - 96
