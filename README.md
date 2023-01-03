@@ -57,6 +57,7 @@ print(id_data['citizenship'])
 * CHN - China
 * GBR - United Kingdom of Great Britain and Northern Ireland
 * HKG - Hong Kong
+* IDN - Indonesia
 * JPN - Japan
 * KOR - South Korea
 * IND - India
