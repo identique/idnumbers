@@ -62,6 +62,7 @@ print(id_data['citizenship'])
 * IND - India
 * IRL - Ireland
 * LKA - Sri Lanka
+* MEX - Mexico
 * MYS - Malaysia
 * NGA - Nigeria
 * NZL - New Zealand
