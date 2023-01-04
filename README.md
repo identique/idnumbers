@@ -51,6 +51,7 @@ print(id_data['citizenship'])
 * ARE - United Arab Emirates
 * ARG - Argentina 
 * AUS - Australia
+* BEL - Belgium
 * BRA - Brazil
 * CAN - Canada
 * CHL - Chile
@@ -58,10 +59,10 @@ print(id_data['citizenship'])
 * GBR - United Kingdom of Great Britain and Northern Ireland
 * HKG - Hong Kong
 * IDN - Indonesia
-* JPN - Japan
-* KOR - South Korea
 * IND - India
 * IRL - Ireland
+* JPN - Japan
+* KOR - South Korea
 * LKA - Sri Lanka
 * MEX - Mexico
 * MYS - Malaysia
