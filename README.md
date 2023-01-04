@@ -55,6 +55,7 @@ print(id_data['citizenship'])
 * CAN - Canada
 * CHL - Chile
 * CHN - China
+* FRA - France
 * GBR - United Kingdom of Great Britain and Northern Ireland
 * HKG - Hong Kong
 * JPN - Japan
