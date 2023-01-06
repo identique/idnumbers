@@ -76,3 +76,17 @@ def letter_to_number(letter: str, capital: bool = True):
     if capital:
         return ord(letter) - 64
     return ord(letter) - 96
+
+
+def ean13_check(numbers: List[int]) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+    odd = 0
+    even = 0
+    for index, value in enumerate(numbers):
+        if (index + 1) % 2 == 0:
+            even += value
+        else:
+            odd += value
+    total = even * 2 + odd
+    modulus = total % 10
+    return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                0 if modulus == 0 else (10 - modulus))

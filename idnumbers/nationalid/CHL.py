@@ -22,7 +22,7 @@ class NationalID:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{1,2}[.]\d{3}[.]\d{3}[-][\d|K])$')
+        'regexp': re.compile(r'^(\d{1,2}[.]\d{3}[.]\d{3}-[\d|K])$')
     })
 
     @staticmethod
