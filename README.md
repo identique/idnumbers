@@ -54,6 +54,7 @@ print(id_data['citizenship'])
 * BEL - Belgium
 * BRA - Brazil
 * CAN - Canada
+* CHE - Switzerland / Swiss
 * CHL - Chile
 * CHN - China
 * ESP - Spain
