@@ -71,6 +71,7 @@ print(id_data['citizenship'])
 * MYS - Malaysia
 * NGA - Nigeria
 * NLD - Netherlands
+* NOR - Norway
 * NZL - New Zealand
 * PHL - Philippine
 * SGP - Singapore
