@@ -58,6 +58,7 @@ print(id_data['citizenship'])
 * CHL - Chile
 * CHN - China
 * ESP - Spain
+* FIN - Finland
 * FRA - France
 * GBR - United Kingdom of Great Britain and Northern Ireland
 * HKG - Hong Kong
