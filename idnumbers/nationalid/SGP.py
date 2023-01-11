@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from .util import modulus_check, validate_regexp
+from .util import weighted_modulus_digit, validate_regexp
 
 
 class NationalID:
@@ -47,5 +47,5 @@ class NationalID:
         checksum = id_number[-1]
         # it uses modulus 11 algorithm with magic numbers
         numbers = [int(char) for char in id_number[1:-1]]
-        modulus = modulus_check(numbers, NationalID.MAGIC_MULTIPLIER, 11, True)
+        modulus = weighted_modulus_digit(numbers, NationalID.MAGIC_MULTIPLIER, 11, True)
         return checksum == NationalID.CHECKSUM_MAP[series][modulus]

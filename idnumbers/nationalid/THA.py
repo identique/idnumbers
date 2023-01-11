@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from types import SimpleNamespace
 from typing import Literal, Optional, TypedDict
-from .util import modulus_check, modulus_overflow_mod10, validate_regexp
+from .util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp
 
 
 class ThaiCitizenship(Enum):
@@ -123,7 +123,7 @@ class NationalID:
             return False
         # it uses modulus 11 algorithm with magic numbers
         numbers = [int(char) for char in normalize(id_number)]
-        modulus = modulus_overflow_mod10(modulus_check(numbers[:-1], NationalID.MAGIC_MULTIPLIER, 11))
+        modulus = modulus_overflow_mod10(weighted_modulus_digit(numbers[:-1], NationalID.MAGIC_MULTIPLIER, 11))
         return modulus == numbers[-1]
 
     @staticmethod

@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from .util import validate_regexp, modulus_check, letter_to_number
+from .util import validate_regexp, weighted_modulus_digit, letter_to_number
 
 
 def normalize(id_number: str) -> str:
@@ -39,9 +39,9 @@ class PersonalPublicServiceNumber:
         number_list = [int(i) for i in normalized[:7]]
         if len(normalized) == 9 and normalized[-1] not in [' ', 'W']:
             number_list.append(letter_to_number(normalized[-1]))
-        modulus = modulus_check(numbers=number_list,
-                                weights=PersonalPublicServiceNumber.MAGIC_MULTIPLIER,
-                                divider=23, modulus_only=True)
+        modulus = weighted_modulus_digit(numbers=number_list,
+                                         weights=PersonalPublicServiceNumber.MAGIC_MULTIPLIER,
+                                         divider=23, modulus_only=True)
         # the last digit is a check_char if the length is 8
         check_char = normalized[-2] if len(normalized) == 9 else normalized[-1]
 
