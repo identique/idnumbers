@@ -76,6 +76,7 @@ print(id_data['citizenship'])
 * NZL - New Zealand
 * PHL - Philippine
 * SGP - Singapore
+* SWE - Sweden
 * THA - Thailand
 * TWN - Taiwan
 * UKR - Ukraine
