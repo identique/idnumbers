@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from .util import validate_regexp, ean13_check
+from .util import validate_regexp, ean13_digit
 
 
 def normalize(id_number: str) -> str:
@@ -32,7 +32,7 @@ class SocialSecurityNumber:
         if not validate_regexp(id_number, SocialSecurityNumber.METADATA.regexp):
             return False
         numbers = [int(char) for char in normalize(id_number)]
-        return numbers[-1] == ean13_check(numbers[:-1])
+        return numbers[-1] == ean13_digit(numbers[:-1])
 
 
 AVH = SocialSecurityNumber

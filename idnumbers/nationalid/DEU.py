@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import List
-from .util import CHECK_DIGIT, mn_modulus_check, modulus_overflow_mod10, validate_regexp
+from .util import CHECK_DIGIT, mn_modulus_digit, modulus_overflow_mod10, validate_regexp
 
 
 def normalize(id_number):
@@ -48,7 +48,7 @@ class TaxID:
 
     @staticmethod
     def get_checkdigit(numbers: List[int]) -> CHECK_DIGIT:
-        return modulus_overflow_mod10(mn_modulus_check(numbers, 10, 11))
+        return modulus_overflow_mod10(mn_modulus_digit(numbers, 10, 11))
 
     @staticmethod
     def check_multiple_occurrence(id_number: str) -> bool:

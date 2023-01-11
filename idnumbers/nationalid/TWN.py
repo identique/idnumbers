@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Literal, Optional, TypedDict
-from .util import modulus_check, validate_regexp
+from .util import weighted_modulus_digit, validate_regexp
 from .constant import Gender
 
 
@@ -76,5 +76,5 @@ class NationalID:
         # it uses modulus 10 algorithm with magic numbers
         location = id_number[0]
         numbers = NationalID.LOCATION_NUM[ord(location) - 65] + [int(char) for char in id_number[1:]]
-        modulus = modulus_check(numbers[:-1], NationalID.MAGIC_MULTIPLIER, 10)
+        modulus = weighted_modulus_digit(numbers[:-1], NationalID.MAGIC_MULTIPLIER, 10)
         return modulus == numbers[-1]

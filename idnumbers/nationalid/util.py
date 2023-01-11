@@ -26,11 +26,14 @@ VERHOEFF = {
         [7, 0, 4, 6, 9, 1, 3, 2, 5, 8]
     ]
 }
+"""[Table](https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm) for the Verhoeff algorithm"""
 
 CHECK_DIGIT = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+"""Check digit type. Numeric check digits are only allowed in 0 to 9"""
 
 
 def validate_regexp(id_number: str, regexp: Pattern[str]) -> bool:
+    """validate string again the regular expression"""
     assert isinstance(id_number, str), 'id_number MUST be str'
     return regexp.search(id_number) is not None
 
@@ -39,8 +42,8 @@ def luhn_digit(digits: List[int]) -> CHECK_DIGIT:
     """
     implement the algorithm of Luhn.
     https://en.wikipedia.org/wiki/Luhn_algorithm
-    :param digits:List[int]
-    :return: checksum number
+    :param digits: digits for calculating the check digit
+    :return: checksum
     """
     total_sum = 0
     for idx, int_val in enumerate(digits):
@@ -54,6 +57,10 @@ def luhn_digit(digits: List[int]) -> CHECK_DIGIT:
 
 
 def verhoeff_check(digits: List[int]) -> bool:
+    """
+    implement the verhoeff algorithm in table format:
+    https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm
+    """
     rev_digits = list(digits)
     rev_digits.reverse()
     c = 0
@@ -63,18 +70,31 @@ def verhoeff_check(digits: List[int]) -> bool:
     return c == 0
 
 
-def modulus_check(numbers: List[int], weights: List[int], divider: int, modulus_only: bool = False) -> int:
+def weighted_modulus_digit(numbers: List[int], weights: List[int], divider: int, modulus_only: bool = False) -> int:
+    """
+    It metrix-multiples numbers and weights and calculate the modulus by the divider.
+    :param numbers: the numbers list.
+    :param weights: the weights list which will used in matrix multiplications.
+    :param divider: the divider used for calculating modulus.
+    :param modulus_only: If True, it returns the modulus calculated by divider,
+                         otherwise it returns divider - modulus. The default is False.
+    :return: the value
+    """
     assert len(numbers) <= len(weights), 'numbers length must be less than or equal to weights length'
     modulus = sum([value * weights[index] for (index, value) in enumerate(numbers)]) % divider
     return modulus if modulus_only else divider - modulus
 
 
-def mn_modulus_check(numbers: List[int], m: int, n: int) -> int:
+def mn_modulus_digit(numbers: List[int], m: int, n: int) -> int:
     """
     MN modulus check, (official name TBD)
     1. (adds numbers and product) mod by m
     2. next product = (2 * total) mod by n
     3. return n - product
+    :param numbers: numbers
+    :param m: M value used by calculate the first step
+    :param n: N value used by the 2nd and 3rd step
+    :return: the digit
     """
     product = m
     for number in numbers:
@@ -87,17 +107,29 @@ def mn_modulus_check(numbers: List[int], m: int, n: int) -> int:
 
 
 def modulus_overflow_mod10(modulus: int) -> CHECK_DIGIT:
+    """
+    get the units digit of a modulus. Some modulus may not be calculated with 10. In some cases, we need the units digit
+    to be the ID.
+    """
     return cast(CHECK_DIGIT, modulus % 10 if modulus > 9 else modulus)
 
 
 def letter_to_number(letter: str, capital: bool = True):
+    """
+    English letter to its index. A = 1, B = 2...
+    """
     assert len(letter) == 1 and letter.isalpha(), 'only allow one alphabet'
     if capital:
         return ord(letter) - 64
     return ord(letter) - 96
 
 
-def ean13_check(numbers: List[int]) -> CHECK_DIGIT:
+def ean13_digit(numbers: List[int]) -> CHECK_DIGIT:
+    """
+    The EAN-13 validation. The EAN-13 is a [barcode format](https://boxshot.com/barcode/tutorials/ean-13-barcodes/).
+    This is the check digit of EAN-13.
+    https://boxshot.com/barcode/tutorials/ean-13-calculator/
+    """
     odd = 0
     even = 0
     for index, value in enumerate(numbers):
