@@ -27,13 +27,15 @@ VERHOEFF = {
     ]
 }
 
+CHECK_DIGIT = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
 
 def validate_regexp(id_number: str, regexp: Pattern[str]) -> bool:
     assert isinstance(id_number, str), 'id_number MUST be str'
     return regexp.search(id_number) is not None
 
 
-def luhn_digit(digits: List[int]) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+def luhn_digit(digits: List[int]) -> CHECK_DIGIT:
     """
     implement the algorithm of Luhn.
     https://en.wikipedia.org/wiki/Luhn_algorithm
@@ -48,7 +50,7 @@ def luhn_digit(digits: List[int]) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
             total_sum += (2 * int_val - 9)
         else:
             total_sum += (2 * int_val)
-    return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], (10 - total_sum % 10) % 10)
+    return cast(CHECK_DIGIT, (10 - total_sum % 10) % 10)
 
 
 def verhoeff_check(digits: List[int]) -> bool:
@@ -67,8 +69,25 @@ def modulus_check(numbers: List[int], weights: List[int], divider: int, modulus_
     return modulus if modulus_only else divider - modulus
 
 
-def modulus_overflow_mod10(modulus: int) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
-    return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], modulus % 10 if modulus > 9 else modulus)
+def mn_modulus_check(numbers: List[int], m: int, n: int) -> int:
+    """
+    MN modulus check, (official name TBD)
+    1. (adds numbers and product) mod by m
+    2. next product = (2 * total) mod by n
+    3. return n - product
+    """
+    product = m
+    for number in numbers:
+        total = (number + product) % m
+        if total == 0:
+            total = m
+        product = (2 * total) % n
+
+    return n - product
+
+
+def modulus_overflow_mod10(modulus: int) -> CHECK_DIGIT:
+    return cast(CHECK_DIGIT, modulus % 10 if modulus > 9 else modulus)
 
 
 def letter_to_number(letter: str, capital: bool = True):
@@ -78,7 +97,7 @@ def letter_to_number(letter: str, capital: bool = True):
     return ord(letter) - 96
 
 
-def ean13_check(numbers: List[int]) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
+def ean13_check(numbers: List[int]) -> CHECK_DIGIT:
     odd = 0
     even = 0
     for index, value in enumerate(numbers):
@@ -88,5 +107,5 @@ def ean13_check(numbers: List[int]) -> Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
             odd += value
     total = even * 2 + odd
     modulus = total % 10
-    return cast(Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    return cast(CHECK_DIGIT,
                 0 if modulus == 0 else (10 - modulus))
