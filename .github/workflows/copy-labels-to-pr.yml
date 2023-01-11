@@ -9,6 +9,6 @@ jobs:
     name: Copy labels from linked issues to pull requests
     steps:
       - name: copy-labels
-        uses: michalvankodev/copy-issue-labels@v1
+        uses: michalvankodev/copy-issue-labels@v1.2.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
