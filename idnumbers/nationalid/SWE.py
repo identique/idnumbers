@@ -73,6 +73,6 @@ class PersonalIdentityNumber:
         normalized = normalize(id_number)
         '''
         https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)#Checksum
-        Multiplier start with 2, so we add a 0 in the start of the normalized digits
+        Multiplier start by 2
         '''
-        return luhn_digit([0, *[int(char) for char in normalized[:-1]]])
+        return luhn_digit([int(char) for char in normalized[:-1]], True)
