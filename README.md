@@ -65,6 +65,7 @@ print(id_data['citizenship'])
 * IDN - Indonesia
 * IND - India
 * IRL - Ireland
+* ITA - Italy
 * JPN - Japan
 * KOR - South Korea
 * LKA - Sri Lanka

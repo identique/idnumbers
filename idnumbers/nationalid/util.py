@@ -31,6 +31,11 @@ VERHOEFF = {
 CHECK_DIGIT = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 """Check digit type. Numeric check digits are only allowed in 0 to 9"""
 
+CHECK_ALPHA = Literal['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                      'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'Y', 'U',
+                      'V', 'W', 'X', 'Y', 'Z']
+"""Check digit type. Numeric check digits are only allowed in A to Z (all in upper cases)"""
+
 
 def validate_regexp(id_number: str, regexp: Pattern[str]) -> bool:
     """validate string again the regular expression"""
