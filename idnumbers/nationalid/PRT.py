@@ -68,5 +68,4 @@ class TaxIDNumber:
         multipliers = [9, 8, 7, 6, 5, 4, 3, 2]
         mod = weighted_modulus_digit([int(i) for i in id_number[:-1]], multipliers, 11, True)
         calculated_checksum = 0 if mod == 0 or mod == 1 else (11 - mod)
-        print(calculated_checksum)
         return calculated_checksum == int(id_number[-1])
