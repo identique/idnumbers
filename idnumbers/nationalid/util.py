@@ -38,15 +38,16 @@ def validate_regexp(id_number: str, regexp: Pattern[str]) -> bool:
     return regexp.search(id_number) is not None
 
 
-def luhn_digit(digits: List[int]) -> CHECK_DIGIT:
+def luhn_digit(digits: List[int], multipliers_start_by_two: bool = False) -> CHECK_DIGIT:
     """
     implement the algorithm of Luhn.
     https://en.wikipedia.org/wiki/Luhn_algorithm
+    :param multipliers_start_by_two: Multipliers start by two
     :param digits: digits for calculating the check digit
     :return: checksum
     """
     total_sum = 0
-    for idx, int_val in enumerate(digits):
+    for idx, int_val in enumerate([0, *digits] if multipliers_start_by_two else digits):
         if idx % 2 == 0:
             total_sum += int_val
         elif int_val > 4:
