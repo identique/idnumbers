@@ -75,6 +75,7 @@ print(id_data['citizenship'])
 * NOR - Norway
 * NZL - New Zealand
 * PHL - Philippine
+* PRT - Portugal
 * SGP - Singapore
 * SWE - Sweden
 * THA - Thailand
