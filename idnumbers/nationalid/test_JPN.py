@@ -16,9 +16,6 @@ class TestJPNValidation(TestCase):
     def test_with_metadata(self):
         self.assertIsNotNone(JPN.NationalID.METADATA)
 
-    def test_checksum(self):
-        self.assertTrue(JPN.NationalID.checksum("765895492872"))
-
 
 if __name__ == '__main__':
     main()

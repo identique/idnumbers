@@ -9,6 +9,7 @@ class NationalID:
     Hong Kong national ID number format
     https://en.wikipedia.org/wiki/National_identification_number#Hong_Kong
     https://pinkylam.me/playground/hkid/
+    https://github.com/hsyuen720/hkid-tools/blob/main/app/utils/validate.ts
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'HK',
@@ -30,23 +31,23 @@ class NationalID:
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
-        return NationalID.checksum(id_number)
+        return NationalID.checksum(id_number) == id_number[-1]
 
     @staticmethod
-    def checksum(id_number: str) -> bool:
+    def checksum(id_number: str) -> str:
         """
-        https://github.com/hsyuen720/hkid-tools/blob/main/app/utils/validate.ts
+        Calculate HKG national id checksum digit
         """
         arr = list(id_number[:-1])
-        MULTIPLIERS = [len(arr) + 1 - index for (index, _) in enumerate(arr)]
+        MULTIPLIER = [len(arr) + 1 - index for (index, _) in enumerate(arr)]
         total = 0 if len(arr) % 2 == 0 else 36 * 9
-        total += sum([NationalID.get_number(arr[idx]) * mul for (idx, mul) in enumerate(MULTIPLIERS)])
+        total += sum([NationalID.get_number(arr[idx]) * mul for (idx, mul) in enumerate(MULTIPLIER)])
         rem = total % 11
-        check_digit: str = "A" if rem == 1 else '0' if rem == 0 else str(11 - rem)
-        return check_digit == id_number[-1]
+        return "A" if rem == 1 else '0' if rem == 0 else str(11 - rem)
 
     @staticmethod
     def get_number(digit: str) -> int:
+        """Convert letter to number"""
         if re.match('[A-Z]', digit):
             return int(ord(digit)) - 55
         else:

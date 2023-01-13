@@ -11,7 +11,6 @@ class RGNumber:
     """
     Brazil Registro Geral Number
     https://en.wikipedia.org/wiki/National_identification_number#Brazil
-    https://learn.microsoft.com/en-us/microsoft-365/compliance/sit-defn-brazil-national-identification-card?view=o365-worldwide
     https://en.wikipedia.org/wiki/Brazilian_identity_card
     """
     METADATA = SimpleNamespace(**{
@@ -37,6 +36,7 @@ class RGNumber:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """Validate RG number checksum"""
         normalized = normalize(id_number)
         number_list = [int(char) for char in list(normalized[:8])]
         # X is equal to 11 in check digit
@@ -73,31 +73,31 @@ class CPFNumber:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """Validate CPF number checksum digits"""
         normalized = normalize(id_number)
         number_list = [int(char) for char in list(normalized[:9])]
         return normalized[9] == CPFNumber.first_digit_checksum(number_list) and normalized[
             10] == CPFNumber.second_digit_checksum(number_list)
 
-    FIRST_MAGIC_MULTIPLIER = [10, 9, 8, 7, 6, 5, 4, 3, 2]
-
     @staticmethod
     def first_digit_checksum(number_list) -> str:
-        total = sum([value * CPFNumber.FIRST_MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)])
+        """Get the first checksum digit"""
+        MULTIPLIER = [10, 9, 8, 7, 6, 5, 4, 3, 2]
+        total = sum([value * MULTIPLIER[index] for (index, value) in enumerate(number_list)])
         return str(CPFNumber.get_checksum(total))
-
-    SECOND_MAGIC_MULTIPLIER = [11, 10, 9, 8, 7, 6, 5, 4, 3]
 
     @staticmethod
     def second_digit_checksum(number_list) -> str:
+        """Get the second checksum digit"""
+        MULTIPLIER = [11, 10, 9, 8, 7, 6, 5, 4, 3]
         first_checksum = CPFNumber.first_digit_checksum(number_list)
-        total = sum([value * CPFNumber.SECOND_MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)])
+        total = sum([value * MULTIPLIER[index] for (index, value) in enumerate(number_list)])
         # Using first digit of the checksum to get total
         total += int(first_checksum) * 2
         return str(CPFNumber.get_checksum(total))
 
     @staticmethod
     def get_checksum(total: int) -> int:
+        """Map the total sum to checksum number"""
         remainder = total % 11
         return 0 if remainder < 2 else 11 - remainder
-
-# TODO RIC NUMBER

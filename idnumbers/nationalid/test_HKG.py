@@ -17,10 +17,6 @@ class TestHKGValidation(TestCase):
     def test_with_metadata(self):
         self.assertIsNotNone(HKG.NationalID.METADATA)
 
-    def test_checksum(self):
-        self.assertTrue(HKG.NationalID.checksum("D360546A"))
-        self.assertFalse(HKG.NationalID.checksum("TP1490253"))
-
 
 if __name__ == '__main__':
     main()

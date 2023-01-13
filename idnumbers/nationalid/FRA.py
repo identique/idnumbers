@@ -77,7 +77,6 @@ class NationalID:
     @staticmethod
     def validate_birth_department(birth_department: str) -> Optional[BirthDepartment]:
         department_code = birth_department[:2].upper()
-        # TODO: Map the area
         if (department_code.isdigit() and 1 <= int(department_code) <= 95) or department_code in ['2A', '2B']:
             return {
                 "department": birth_department[:2],
