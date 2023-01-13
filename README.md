@@ -47,43 +47,4 @@ print(id_data['citizenship'])
 ```
 
 # Supported Country List:
-
-* ARE - United Arab Emirates
-* ARG - Argentina 
-* AUS - Australia
-* BEL - Belgium
-* BRA - Brazil
-* CAN - Canada
-* CHE - Switzerland / Swiss
-* CHL - Chile
-* CHN - China
-* ESP - Spain
-* FIN - Finland
-* FRA - France
-* GBR - United Kingdom of Great Britain and Northern Ireland
-* HKG - Hong Kong
-* IDN - Indonesia
-* IND - India
-* IRL - Ireland
-* ITA - Italy
-* JPN - Japan
-* KOR - South Korea
-* LKA - Sri Lanka
-* MEX - Mexico
-* MYS - Malaysia
-* NGA - Nigeria
-* NLD - Netherlands
-* NOR - Norway
-* NZL - New Zealand
-* PHL - Philippine
-* POL - Poland
-* PRT - Portugal
-* SGP - Singapore
-* SWE - Sweden
-* THA - Thailand
-* TWN - Taiwan
-* UKR - Ukraine
-* USA - United States
-* VNM - Viet Nam
-* ZAF - South Africa
-* ZWE - Zimbabwe
+Here's the list of the countries we have implemented [Country List](https://microdataxyz.github.io/idnumbers/idnumbers/nationalid.html)
