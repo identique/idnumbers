@@ -17,10 +17,6 @@ class TestCHLNationalIDValidation(TestCase):
         self.assertIsNotNone(CHL.NationalID.METADATA)
         self.assertTrue(CHL.NationalID.METADATA.checksum)
 
-    def test_checksum(self):
-        self.assertTrue(CHL.NationalID.checksum('31.174.738-K'))
-        self.assertFalse(CHL.NationalID.checksum('31.174.737-K'))
-
 
 if __name__ == '__main__':
     main()

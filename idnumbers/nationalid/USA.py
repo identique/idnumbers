@@ -4,10 +4,9 @@ from types import SimpleNamespace
 from .util import validate_regexp
 
 
-class NationalID:
+class SocialSecurityNumber:
     """
-    United States national ID number format
-    Social Security number (SSN)
+    United States Social Security number (SSN) format
     https://en.wikipedia.org/wiki/National_identification_number#United_States
     https://www.geeksforgeeks.org/how-to-validate-ssn-social-security-number-using-regular-expression/
     """
@@ -27,6 +26,6 @@ class NationalID:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate USA id number
+        Validate USA Social Security number
         """
-        return validate_regexp(id_number, NationalID.METADATA.regexp)
+        return validate_regexp(id_number, SocialSecurityNumber.METADATA.regexp)

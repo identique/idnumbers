@@ -1,10 +1,10 @@
 import re
 from types import SimpleNamespace
-from .util import validate_regexp
+from .util import validate_regexp, weighted_modulus_digit
 
 
 def normalize(id_number):
-    return re.sub(r'[\-/]|[./]', '', id_number)
+    return re.sub(r'[-.]', '', id_number)
 
 
 class NationalID:
@@ -33,18 +33,16 @@ class NationalID:
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
-        return NationalID.checksum(id_number)
-
-    MAGIC_MULTIPLIER = [3, 2, 7, 6, 5, 4, 3, 2]
+        return NationalID.checksum(id_number) == id_number[-1]
 
     @staticmethod
-    def checksum(id_number: str) -> bool:
+    def checksum(id_number: str) -> str:
         """
+        Validate CHL national id number checksum
         https://gist.github.com/ryangreenberg/4531891
         """
-        normalized = normalize(id_number)
-        number_list = [int(char) for char in list(normalized[:-1])]
-        total = sum([value * NationalID.MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)])
-        checksum = 0 if (11 - total % 11) == 11 else 'K' if (11 - total % 11) == 10 else (11 - total % 11)
-        check_digit = normalized[-1]
-        return str(checksum) == check_digit
+        MOD = 11
+        MULTIPLIER = [3, 2, 7, 6, 5, 4, 3, 2]
+        number_list = [int(char) for char in list(normalize(id_number)[:-1])]
+        modulus = weighted_modulus_digit(number_list, MULTIPLIER, MOD)
+        return str(0 if modulus == 11 else 'K' if modulus == 10 else modulus)

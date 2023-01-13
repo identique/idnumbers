@@ -6,7 +6,7 @@ from .util import validate_regexp
 
 class SocialInsuranceNumber:
     """
-    Canada national ID number format
+    Canada social insurance number format
     https://en.wikipedia.org/wiki/National_identification_number#Canada
     """
     METADATA = SimpleNamespace(**{
@@ -34,9 +34,10 @@ class SocialInsuranceNumber:
     @staticmethod
     def checksum(id_number: str) -> bool:
         """
+        Validate social insurance number checksum digits
         http://www.straightlineinternational.com/docs/vaildating_canadian_sin.pdf
         """
-        MAGIC_MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2, 1]
+        MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2, 1]
         number_list = [int(char) for char in list(id_number)]
-        multiplied_list = [value * MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)]
+        multiplied_list = [value * MULTIPLIER[index] for (index, value) in enumerate(number_list)]
         return sum([sum(divmod(num, 10)) for num in multiplied_list]) % 10 == 0
