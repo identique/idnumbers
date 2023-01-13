@@ -7,6 +7,7 @@ class NationalID:
     """
     Turkey National ID number
     https://en.wikipedia.org/wiki/National_identification_number#Turkey
+    https://stackoverflow.com/questions/53610208/turkish-identity-number-verification
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'TR',
@@ -30,8 +31,7 @@ class NationalID:
     @staticmethod
     def checksum(id_number: str) -> str:
         """
-        https://stackoverflow.com/questions/53610208/turkish-identity-number-verification
-        Calculate the checksum (the last two digits)
+        Calculate the checksum e.g. digit 10 and digit 11
         """
         MOD = 10
         MULTIPLIERS = [7, -1, 7, -1, 7, -1, 7, -1, 7]
