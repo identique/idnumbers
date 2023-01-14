@@ -2,7 +2,7 @@
 name: Bug report
 about: Create a report to help us improve
 title: "[BUG] XXX country issue"
-labels: bug
+labels: bug, enhancement
 assignees: microdataxyz
 
 ---
