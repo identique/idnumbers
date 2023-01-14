@@ -4,6 +4,7 @@ from .util import validate_regexp, ean13_digit
 
 
 def normalize(id_number: str) -> str:
+    """strip out useless characters/whitespaces"""
     return re.sub(r'\.', '', id_number)
 
 
@@ -25,10 +26,12 @@ class SocialSecurityNumber:
 
     @staticmethod
     def validate(id_number: str) -> bool:
+        """validate the number"""
         return SocialSecurityNumber.checksum(id_number)
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """use EAN-13 to validate the number"""
         if not validate_regexp(id_number, SocialSecurityNumber.METADATA.regexp):
             return False
         numbers = [int(char) for char in normalize(id_number)]

@@ -1,9 +1,11 @@
 import re
 from types import SimpleNamespace
-from .util import validate_regexp
+from typing import Optional
+from .util import CHECK_DIGIT, validate_regexp
 
 
 def normalize(id_number):
+    """strip out useless characters/whitespaces"""
     return re.sub(r'[ \-/]', '', id_number)
 
 
@@ -30,6 +32,7 @@ class TaxFileNumber:
     })
 
     MAGIC_MULTIPLIER = [1, 4, 3, 7, 5, 8, 6, 9, 10]
+    """The magic multiplier for checksum"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -38,10 +41,13 @@ class TaxFileNumber:
         """
         if not validate_regexp(id_number, TaxFileNumber.METADATA.regexp):
             return False
-        return TaxFileNumber.checksum(id_number) % 11 == 0
+        return TaxFileNumber.checksum(id_number) == 0
 
     @staticmethod
-    def checksum(id_number: str) -> bool:
+    def checksum(id_number: str) -> Optional[int]:
+        if not validate_regexp(id_number, TaxFileNumber.METADATA.regexp):
+            return None
+        """algorithm: https://en.wikipedia.org/wiki/Tax_file_number#Check_digit"""
         normalized = normalize(id_number)
         if len(normalized) == 8:
             normalized = normalized[0:7] + '0' + normalized[7]
@@ -74,6 +80,7 @@ class DriverLicenseNumber:
     })
 
     BLACK_TRAILING_NUMBER = ['00000', '11111', '22222', '33333', '44444', '55555', '66666', '77777', '88888', '99999']
+    """black list for some numbers"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -109,6 +116,7 @@ class MedicareNumber:
     })
 
     MAGIC_MULTIPLIER = [1, 3, 7, 9, 1, 3, 7, 9]
+    """magic multiplier for checksum"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -118,10 +126,14 @@ class MedicareNumber:
         if not validate_regexp(id_number, MedicareNumber.METADATA.regexp):
             return False
         normalized = normalize(id_number)
-        return MedicareNumber.checksum(id_number) == int(normalized[8])
+        checksum = MedicareNumber.checksum(id_number)
+        return checksum is not None and checksum == int(normalized[8])
 
     @staticmethod
-    def checksum(id_number: str) -> int:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
+        if not validate_regexp(id_number, MedicareNumber.METADATA.regexp):
+            return None
+        """algorithm: https://stackoverflow.com/questions/3589345/how-do-i-validate-an-australian-medicare-number."""
         normalized = normalize(id_number)
         # only validate first 8 digits
         number_list = [int(char) for char in list(normalized)][:8]

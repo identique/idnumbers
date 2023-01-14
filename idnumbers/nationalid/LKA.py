@@ -7,13 +7,19 @@ from .constant import Citizenship, Gender
 
 
 class ParseResult(TypedDict):
+    """parse result for the national id"""
     yyyymmdd: date
+    """birthday"""
     gender: Gender
+    """gender, possible value: male, female"""
     sn: str
+    """serial number"""
     checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    """check digits"""
 
 
 class OldIDParseResult(ParseResult):
+    """old format contains more info"""
     citizenship: Citizenship
 
 
@@ -37,6 +43,7 @@ class NationalID:
     })
 
     MAGIC_MULTIPLIER = [8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2]
+    """multiplier for the checksum"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -49,6 +56,7 @@ class NationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """parse the result"""
         match_obj = NationalID.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
@@ -69,6 +77,7 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number) -> bool:
+        """algorithm: https://lk.linkedin.com/posts/nuwansenaratna_srilanka-activity-6926883712584335360-E_69"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         # it uses modulus 11 algorithm with magic numbers
@@ -98,6 +107,7 @@ class OldNationalID:
 
     @staticmethod
     def to_new(id_number: str) -> Optional[str]:
+        """convert the old format to the new format"""
         match_obj = OldNationalID.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
@@ -110,7 +120,7 @@ class OldNationalID:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the TWN id number
+        Validate the old format id numbers
         """
         if not id_number:
             return False
@@ -121,6 +131,7 @@ class OldNationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[OldIDParseResult]:
+        """it converts to new format and parse the extra citizen value"""
         new_id_num = OldNationalID.to_new(id_number)
         if not new_id_num:
             return None
@@ -135,6 +146,7 @@ class OldNationalID:
 
     @staticmethod
     def checksum(id_number) -> bool:
+        """use new format to check the checksum"""
         new_id_num = OldNationalID.to_new(id_number)
         if not new_id_num:
             return False

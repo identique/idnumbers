@@ -5,11 +5,13 @@ from .util import validate_regexp
 
 
 def normalize(id_number):
+    """strip out useless characters/whitespaces"""
     return re.sub(r'-', '', id_number)
 
 
 BLACK_TRAILING_NUMBER = ['000000', '111111', '222222', '333333', '444444', '555555', '666666', '777777', '888888',
                          '999999']
+"""blacklist for the trailing numbers"""
 
 
 class DriverLicenseNumber:
@@ -98,12 +100,13 @@ class InlandRevenueDepartmentNumber:
         """
         Validate the NZL IRD number
         """
-        if not validate_regexp(id_number, InlandRevenueDepartmentNumber.METADATA.regexp):
-            return False
         return InlandRevenueDepartmentNumber.checksum(id_number)
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """algorithm: https://github.com/jarden-digital/nz-ird-validator"""
+        if not validate_regexp(id_number, InlandRevenueDepartmentNumber.METADATA.regexp):
+            return False
         normalized = normalize(id_number)
         if len(normalized) == 8:
             # pre-pad a 0 if it is the short one
@@ -158,12 +161,13 @@ class NationalHealthIndexNumber:
         """
         Validate the NZL NHI number
         """
-        if not validate_regexp(id_number, NationalHealthIndexNumber.METADATA.regexp):
-            return False
         return NationalHealthIndexNumber.checksum(id_number)
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """algorithm: https://gist.github.com/mcshaz/b41dc6bd4aa3104d54da677e2b4f6b45"""
+        if not validate_regexp(id_number, NationalHealthIndexNumber.METADATA.regexp):
+            return False
         check_digit = id_number[-1]
         source_list = list(id_number[:-1])
         total = 0

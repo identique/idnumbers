@@ -3,7 +3,7 @@ from types import SimpleNamespace
 from .util import validate_regexp
 
 
-class NationalID:
+class DNI:
     """
     Spain National ID number
     Documento Nacional de Identidad (DNI)
@@ -26,13 +26,19 @@ class NationalID:
         """
         Validate the Spain national id number
         """
-        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+        if not validate_regexp(id_number, DNI.METADATA.regexp):
             return False
-        return NationalID.checksum(id_number)
+        return DNI.checksum(id_number)
 
     MAGIC_LETTERS = "TRWAGMYFPDXBNJZSQVHLCKE"
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """algorithm: https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Spain)#Number"""
+        if not validate_regexp(id_number, DNI.METADATA.regexp):
+            return False
         idx = int(id_number[:-1]) % 23
-        return NationalID.MAGIC_LETTERS[idx] == id_number[-1]
+        return DNI.MAGIC_LETTERS[idx] == id_number[-1]
+
+
+NationalID = DNI

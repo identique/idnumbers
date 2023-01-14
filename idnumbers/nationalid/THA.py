@@ -6,36 +6,44 @@ from .util import weighted_modulus_digit, modulus_overflow_mod10, validate_regex
 
 
 class ThaiCitizenship(Enum):
-    # Not used for Thai nationals, occasionally on other cards
+    """Thailand's citizenship type"""
     OTHER = 0
-    # Thai Nationals. Born after 1st Jan 1984
+    # Not used for Thai nationals, occasionally on other cards
     CITIZEN_AFTER_1984 = 1
-    # Thai Nationals. Born after 1st Jan 1984. Birth notified late
+    # Thai Nationals. Born after 1st Jan 1984
     CITIZEN_AFTER_1984_LATE_REGISTERED = 2
-    # Thai Nationals. Born & registered before 1st Jan 1984
+    # Thai Nationals. Born after 1st Jan 1984. Birth notified late
     CITIZEN_BEFORE_1984 = 3
-    # Thai Nationals. Born before 1st Jan 1984. Registered late.
+    # Thai Nationals. Born & registered before 1st Jan 1984
     CITIZEN_BEFORE_1984_LATE_REGISTERED = 4
-    # Thai Nationals. Missed census or special cases.
+    # Thai Nationals. Born before 1st Jan 1984. Registered late.
     CITIZEN_SPECIAL_CASE = 5
-    # Foreign Nationals living temporarily, or illegal migrants.
+    # Thai Nationals. Missed census or special cases.
     FOREIGN_RESIDENT = 6
-    # Children of #6 who were born in Thailand.
+    # Foreign Nationals living temporarily, or illegal migrants.
     FOREIGN_RESIDENT_CHILDREN = 7
-    # Foreign Nationals living permanently, or Thai nationals by naturalisation.
+    # Children of #6 who were born in Thailand.
     PERMANENT_RESIDENT = 8
+    # Foreign Nationals living permanently, or Thai nationals by naturalisation.
 
 
 def normalize(id_number):
+    """strip out useless characters/whitespaces"""
     return re.sub(r'[ \-/]', '', id_number)
 
 
 class ParseResult(TypedDict):
+    """parse result of national id"""
     citizenship: ThaiCitizenship
+    """Thailand specialized citizenship"""
     province_code: str
-    distinct_code: str
+    """registration province"""
+    district_code: str
+    """registration district"""
     sn: str
+    """serial number"""
     checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    """check digit"""
 
 
 class NationalID:
@@ -54,7 +62,7 @@ class NationalID:
         'checksum': True,
         'regexp': re.compile(r'^(?P<citizenship>[0-8])[ -]?'
                              r'(?P<province>\d{2})'
-                             r'(?P<distinct>\d{2})[ -]?'
+                             r'(?P<district>\d{2})[ -]?'
                              r'(?P<sn>\d{5}[ -]?\d{2})[ -]?'
                              r'(?P<checksum>\d)$')
     })
@@ -68,7 +76,8 @@ class NationalID:
                      '70', '71', '72', '73', '74', '75', '76', '77',
                      '80', '81', '82', '83', '84', '85', '86',
                      '90', '91', '92', '93', '94', '95', '96']
-    DISTINCT_MAX_VALUE = {
+    """possible province value"""
+    DISTRICT_MAX_VALUE = {
         '10': 50, '11': 6, '12': 6, '13': 7, '14': 46, '15': 7, '16': 11, '17': 9, '18': 8, '19': 12,
         '20': 11, '21': 8, '22': 10, '23': 7, '24': 11, '25': 9, '26': 4, '27': 9,
         '30': 32, '31': 23, '32': 17, '33': 22, '34': 25, '35': 9, '36': 16, '37': 6, '38': 8, '39': 6,
@@ -79,9 +88,12 @@ class NationalID:
         '80': 23, '81': 8, '82': 8, '83': 3, '84': 19, '85': 4, '86': 8,
         '90': 16, '91': 7, '92': 10, '93': 11, '94': 11, '95': 8, '96': 13,
     }
+    """possible district max value"""
     DISTINCT_SPECIAL_CASE = {'44': [95]}
+    """44 can have a special value"""
 
     MAGIC_MULTIPLIER = [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
+    """magic numbers for the checksum"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -94,17 +106,18 @@ class NationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """parse the result"""
         match_obj = NationalID.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
         citizenship = match_obj.group('citizenship')
         province = match_obj.group('province')
-        distinct = match_obj.group('distinct')
+        district = match_obj.group('district')
         sn = normalize(match_obj.group('sn'))
         checksum = NationalID.checksum(id_number)
         if not NationalID.check_province_code(province):
             return None
-        if not NationalID.check_distinct_code(province, distinct):
+        if not NationalID.check_district_code(province, district):
             return None
         if not checksum:
             return None
@@ -112,13 +125,14 @@ class NationalID:
             return {
                 'citizenship': ThaiCitizenship(int(citizenship)),
                 'province_code': province,
-                'distinct_code': distinct,
+                'district_code': district,
                 'sn': sn,
                 'checksum': int(match_obj.group('checksum'))
             }
 
     @staticmethod
     def checksum(id_number) -> bool:
+        """algorithm: https://github.com/awcode/thai-laravel"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         # it uses modulus 11 algorithm with magic numbers
@@ -128,15 +142,17 @@ class NationalID:
 
     @staticmethod
     def check_province_code(province_code: str) -> bool:
+        """check the province code"""
         return province_code in NationalID.PROVINCE_LIST
 
     @staticmethod
-    def check_distinct_code(province_code: str, distinct_code: str) -> bool:
-        if distinct_code == '99':
+    def check_district_code(province_code: str, district_code: str) -> bool:
+        """check the district code"""
+        if district_code == '99':
             return True
-        distinct_int = int(distinct_code)
-        if distinct_int <= NationalID.DISTINCT_MAX_VALUE[province_code]:
+        district_int = int(district_code)
+        if district_int <= NationalID.DISTRICT_MAX_VALUE[province_code]:
             return True
         if province_code not in NationalID.DISTINCT_SPECIAL_CASE:
             return False
-        return distinct_int in NationalID.DISTINCT_SPECIAL_CASE[province_code]
+        return district_int in NationalID.DISTINCT_SPECIAL_CASE[province_code]

@@ -7,13 +7,18 @@ from .constant import Gender
 
 
 def normalize(id_number):
+    """strip out useless characters/whitespaces"""
     return re.sub(r'[+-]', '', id_number)
 
 
 class ParseResult(TypedDict):
+    """parse result of PersonalIdentityNumber"""
     gender: Gender
+    """gender, possible value: male, female"""
     yyyymmdd: datetime.date
+    """dob"""
     checksum: str
+    """checksum digit"""
 
 
 class PersonalIdentityNumber:
@@ -69,10 +74,12 @@ class PersonalIdentityNumber:
         }
 
     @staticmethod
-    def checksum(id_number: str) -> int:
-        normalized = normalize(id_number)
-        '''
-        https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)#Checksum
+    def checksum(id_number: str) -> Optional[int]:
+        """
+        algorithm: https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)#Checksum
         Multiplier start by 2
-        '''
+        """
+        if not validate_regexp(id_number, PersonalIdentityNumber.METADATA.regexp):
+            return None
+        normalized = normalize(id_number)
         return luhn_digit([int(char) for char in normalized[:-1]], True)

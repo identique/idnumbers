@@ -7,19 +7,28 @@ from .constant import Citizenship, Gender
 
 
 def normalize(id_number):
+    """strip out useless characters/whitespaces"""
     return re.sub(r'-', '', id_number)
 
 
 class ParseResult(TypedDict):
+    """parse result for national id"""
     yyyymmdd: date
+    """birthday"""
     gender: Gender
+    """gender, possible value: male, female"""
     citizenship: Citizenship
+    """citizenship"""
     sn: str
+    """serial number if two persons born on the same date"""
 
 
 class OldIDParseResult(ParseResult):
+    """Old format contains more information"""
     location: str
+    """registration location"""
     checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    """check digits"""
 
 
 class NationalID:
@@ -47,11 +56,12 @@ class NationalID:
         2: Citizenship.CITIZEN,
         3: Citizenship.CITIZEN,
         4: Citizenship.CITIZEN,
-        5: Citizenship.FOREIGNER,
-        6: Citizenship.FOREIGNER,
-        7: Citizenship.FOREIGNER,
-        8: Citizenship.FOREIGNER
+        5: Citizenship.RESIDENT,
+        6: Citizenship.RESIDENT,
+        7: Citizenship.RESIDENT,
+        8: Citizenship.RESIDENT
     }
+    """citizenship map"""
 
     DOB_BASE_MAP = {
         9: 1800,
@@ -65,6 +75,7 @@ class NationalID:
         7: 2000,
         8: 2000
     }
+    """dob base year map"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -77,6 +88,7 @@ class NationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """parse the result"""
         match_obj = NationalID.METADATA.regexp.match(id_number)
         return NationalID.build_parse_result(match_obj)
 
@@ -125,11 +137,12 @@ class OldNationalID(NationalID):
     })
 
     MAGIC_MULTIPLIER = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5]
+    """multiplier for the checksum"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the KOR id number
+        Validate the old KOR id number
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
@@ -137,6 +150,7 @@ class OldNationalID(NationalID):
 
     @staticmethod
     def parse(id_number: str) -> Optional[OldIDParseResult]:
+        """prase the result"""
         match_obj = re.match(OldNationalID.METADATA.regexp, id_number)
         new_result = NationalID.parse(id_number)
         if not new_result:
@@ -152,6 +166,7 @@ class OldNationalID(NationalID):
 
     @staticmethod
     def checksum(id_number) -> bool:
+        """multiply the magic number and find the modulus"""
         if not validate_regexp(id_number, OldNationalID.METADATA.regexp):
             return False
         normalized = normalize(id_number)

@@ -3,15 +3,21 @@ from datetime import date
 from typing import Optional, TypedDict
 from types import SimpleNamespace
 from .constant import Citizenship, Gender
-from .util import luhn_digit
+from .util import CHECK_DIGIT, luhn_digit
 
 
-class NationalIDParseResult(TypedDict):
+class ParseResult(TypedDict):
+    """parse result of national id"""
     yyyymmdd: date
+    """birthday"""
     sn: str
+    """serial number"""
     gender: Gender
+    """gender, possible value: male, female"""
     citizenship: Citizenship
-    checksum: int
+    """citizenship"""
+    checksum: CHECK_DIGIT
+    """check digit"""
 
 
 class NationalID:
@@ -47,11 +53,12 @@ class NationalID:
         return NationalID.parse(id_number) is not None
 
     @staticmethod
-    def parse(id_number: str) -> Optional[NationalIDParseResult]:
+    def parse(id_number: str) -> Optional[ParseResult]:
         match_obj = NationalID.METADATA.regexp.match(id_number)
+        check_digit = NationalID.checksum(id_number)
         if not match_obj:
             return None
-        elif NationalID.checksum(id_number) != int(id_number[-1:]):
+        elif check_digit != int(id_number[-1:]):
             return None
         else:
             year = int(match_obj.group('yy'))
@@ -61,11 +68,11 @@ class NationalID:
                 'sn': match_obj.group('sn'),
                 'gender': Gender.MALE if int(match_obj.group('sn')[0]) > 4 else Gender.FEMALE,
                 'citizenship': Citizenship.CITIZEN if match_obj.group('citizenship') == '0' else Citizenship.RESIDENT,
-                'checksum': int(id_number[-1:])
+                'checksum': check_digit
             }
 
     @staticmethod
-    def checksum(id_number: str) -> int:
+    def checksum(id_number: str) -> CHECK_DIGIT:
         """
         use Luhn algorithm.
         """

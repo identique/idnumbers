@@ -23,7 +23,7 @@ class TestTHAValidation(TestCase):
         result = THA.NationalID.parse('3 4117 00830 33 4')
         self.assertEqual(THA.ThaiCitizenship.CITIZEN_BEFORE_1984, result['citizenship'])
         self.assertEqual('41', result['province_code'])
-        self.assertEqual('17', result['distinct_code'])
+        self.assertEqual('17', result['district_code'])
         self.assertEqual('0083033', result['sn'])
         self.assertEqual(4, result['checksum'])
 

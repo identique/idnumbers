@@ -7,16 +7,24 @@ from .constant import Gender
 
 
 class ParseResult(TypedDict):
+    """The parse result of CURP"""
     name_initial_chars: str
+    """initial chars of name"""
     name_consonants: str
+    """consonants of name"""
     yyyymmdd: date
+    """dob"""
     gender: Gender
+    """gender, possible value: male, female, non-binary"""
     location: str
+    """registration location"""
     sn: str
+    """serial number"""
     checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    """check digit"""
 
 
-class NationalID:
+class CURP:
     """
     Mexico National ID number format, CURP
     https://en.wikipedia.org/wiki/Unique_Population_Registry_Code
@@ -39,11 +47,13 @@ class NationalID:
     })
 
     ID_CHARS = '0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'
+    """chars index for checksum"""
     GENDER_MAP = {
         'H': Gender.MALE,
         'M': Gender.FEMALE,
         'X': Gender.NON_BINARY
     }
+    """code to gender map"""
 
     ALLOW_LOCATIONS = ['AS', 'BC', 'BS', 'CC', 'CH', 'CL',
                        'CM', 'CS', 'DF', 'DG', 'GR', 'GT',
@@ -51,23 +61,26 @@ class NationalID:
                        'NL', 'NT', 'OC', 'PL', 'QR', 'QT',
                        'SL', 'SP', 'SR', 'TC', 'TL', 'TS',
                        'VZ', 'YN', 'ZS']
+    """possible registration location"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
-        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+        """validate CURP"""
+        if not validate_regexp(id_number, CURP.METADATA.regexp):
             return False
-        return NationalID.parse(id_number) is not None
+        return CURP.parse(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        """parse the result"""
+        match_obj = CURP.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
         location = match_obj.group('location')
-        checksum = NationalID.checksum(id_number)
+        checksum = CURP.checksum(id_number)
         if not checksum:
             return None
-        elif location not in NationalID.ALLOW_LOCATIONS:
+        elif location not in CURP.ALLOW_LOCATIONS:
             return None
         else:
             yy = int(match_obj.group('yy'))
@@ -80,7 +93,7 @@ class NationalID:
                 'name_initial_chars': match_obj.group('initial'),
                 'name_consonants': match_obj.group('consonant'),
                 'yyyymmdd': date(yy + year_base, mm, dd),
-                'gender': NationalID.GENDER_MAP[gender],
+                'gender': CURP.GENDER_MAP[gender],
                 'location': match_obj.group('location'),
                 'sn': sn,
                 'checksum': int(match_obj.group('checksum'))
@@ -88,10 +101,12 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number) -> bool:
-        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+        """check the checksum"""
+        if not validate_regexp(id_number, CURP.METADATA.regexp):
             return False
-        check = sum(NationalID.ID_CHARS.index(c) * (18 - i) for i, c in enumerate(id_number[:17]))
+        check = sum(CURP.ID_CHARS.index(c) * (18 - i) for i, c in enumerate(id_number[:17]))
         return int(id_number[17]) == (10 - check % 10) % 10
 
 
-CURP = NationalID
+NationalID = CURP
+"""alias of CURP"""

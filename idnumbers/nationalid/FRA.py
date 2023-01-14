@@ -6,21 +6,29 @@ from .constant import Gender
 
 
 class BirthDepartment(TypedDict):
+    """the commune of origin"""
     department: str
     city: str
     country: str
 
 
 class ParseResult(TypedDict):
+    """parse result of INSEE"""
     gender: Gender
+    """gender, possible value: male, female"""
     yy: str
+    """year of birth"""
     mm: str
+    """month of birth"""
+    birth_department: BirthDepartment
+    """the commune of origin"""
     checksum: str
+    """checksum string"""
 
 
-class NationalID:
+class INSEE:
     """
-    France National ID number
+    France National ID number, INSEE
     https://en.wikipedia.org/wiki/National_identification_number#France
     https://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR
     """
@@ -45,18 +53,19 @@ class NationalID:
         """
         Validate the FRA id number
         """
-        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+        if not validate_regexp(id_number, INSEE.METADATA.regexp):
             return False
-        if not NationalID.parse(id_number):
+        if not INSEE.parse(id_number):
             return False
-        return NationalID.checksum(id_number)
+        return INSEE.checksum(id_number)
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        match_obj = INSEE.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
-        if not NationalID.validate_birth_department(match_obj.group('birth_department')):
+        birth_department = INSEE.validate_birth_department(match_obj.group('birth_department'))
+        if not birth_department:
             return None
         gender = match_obj.group('gender')
         yy = match_obj.group('yy')
@@ -66,11 +75,13 @@ class NationalID:
             'gender': Gender.MALE if gender == '1' else Gender.FEMALE,
             'yy': yy,
             'mm': mm,
+            'birth_department': birth_department,
             'checksum': control_key,
         }
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """algorithm: https://en.wikipedia.org/wiki/INSEE_code#National_identification_numbers"""
         normalized = id_number.upper().replace('2A', '19').replace('2B', '18')
         return 97 - int(normalized[:-2]) % 97 == int(normalized[-2:])
 
@@ -96,3 +107,6 @@ class NationalID:
                 "country": birth_department[2:]
             }
         return None
+
+
+NationalID = INSEE

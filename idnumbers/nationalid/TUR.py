@@ -19,6 +19,9 @@ class NationalID:
         'regexp': re.compile(r'^[1-9]\d{10}$')
     })
 
+    MULTIPLIERS = [7, -1, 7, -1, 7, -1, 7, -1, 7]
+    """multiplier for the checksum"""
+
     @staticmethod
     def validate(id_number: str) -> bool:
         """
@@ -33,9 +36,7 @@ class NationalID:
         """
         Calculate the checksum e.g. digit 10 and digit 11
         """
-        MOD = 10
-        MULTIPLIERS = [7, -1, 7, -1, 7, -1, 7, -1, 7]
         numbers_list = [int(i) for i in id_number]
-        digit_ten = weighted_modulus_digit(numbers_list[:-2], MULTIPLIERS, MOD, True)
-        digit_eleven = sum(numbers_list[:-1]) % MOD
+        digit_ten = weighted_modulus_digit(numbers_list[:-2], NationalID.MULTIPLIERS, 10, True)
+        digit_eleven = sum(numbers_list[:-1]) % 10
         return f'{digit_ten}{digit_eleven}'

@@ -5,6 +5,7 @@ from .util import CHECK_DIGIT, mn_modulus_digit, modulus_overflow_mod10, validat
 
 
 def normalize(id_number):
+    """strip out useless characters/whitespaces"""
     return re.sub(r' ', '', id_number)
 
 
