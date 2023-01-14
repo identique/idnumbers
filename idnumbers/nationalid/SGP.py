@@ -6,9 +6,9 @@ from .util import weighted_modulus_digit, validate_regexp
 class NationalID:
     """
     SGP National ID number format, UIN, FIN
-    # https://en.wikipedia.org/wiki/National_identification_number#Singapore
-    # https://www.ngiam.net/NRIC/NRIC_numbers.pdf
-    # python version of https://github.com/IonBazan/NRIC
+    https://en.wikipedia.org/wiki/National_identification_number#Singapore
+    https://www.ngiam.net/NRIC/NRIC_numbers.pdf
+    python version of https://github.com/IonBazan/NRIC
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'SG',
@@ -41,6 +41,11 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number) -> bool:
+        """
+        algorithm from:
+        https://www.ngiam.net/NRIC/NRIC_numbers.pdf
+        https://github.com/IonBazan/NRIC
+        """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         series = id_number[0]

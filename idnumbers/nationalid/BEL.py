@@ -7,14 +7,20 @@ from .constant import Gender
 
 
 def normalize(id_number: str) -> str:
+    """strip out useless characters/whitespaces"""
     return re.sub(r'[.-]', '', id_number)
 
 
 class ParseResult(TypedDict):
+    """The parse result of Belgium NationalID"""
     yyyymmdd: date
+    """birthday"""
     gender: Gender
+    """gender, possible value: male and female"""
     sn: str
+    """serial number"""
     checksum: int
+    """checksum digits, two digits"""
 
 
 class NationalID:
@@ -36,12 +42,14 @@ class NationalID:
 
     @staticmethod
     def validate(id_number: str) -> bool:
+        """validate the id"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         return NationalID.parse(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """parse the result"""
         match_obj = NationalID.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
@@ -63,6 +71,10 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number) -> bool:
+        """
+        calculated as the remainder of dividing xxxxxxxxxx by 97
+        (if the remainder is 0, the check number is set to 97)
+        """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         normalized = normalize(id_number)

@@ -1,22 +1,27 @@
 import re
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict
-from .util import luhn_digit, validate_regexp
+from typing import Optional, TypedDict
+from .util import CHECK_DIGIT, luhn_digit, validate_regexp
 
 
 def normalize(id_number):
+    """strip out useless characters/whitespaces"""
     return re.sub(r'[ \-/]', '', id_number)
 
 
 class ParseResult(TypedDict):
+    """Parse result of EmiratesID"""
     yyyy: int
+    """year of birth"""
     sn: int
-    checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    """serial number"""
+    checksum: CHECK_DIGIT
+    """check digits"""
 
 
 class EmiratesIDNumber:
     """
-    UAE Emirates/Resident ID number format
+    ARE Emirates/Resident ID number format
     https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates
     This is the python version of https://gist.github.com/geordee/e51d111426de675c0c0f8503c2003047
     """
@@ -35,7 +40,7 @@ class EmiratesIDNumber:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the UAE id number
+        Validate the ARE id number
         """
         if not id_number:
             return False
@@ -46,6 +51,7 @@ class EmiratesIDNumber:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """parse the result"""
         match_obj = EmiratesIDNumber.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
@@ -63,8 +69,13 @@ class EmiratesIDNumber:
             }
 
     @staticmethod
-    def checksum(id_number) -> Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]:
+    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+        """use luhn algorithm to calculate the check digit"""
         if not validate_regexp(id_number, EmiratesIDNumber.METADATA.regexp):
             return None
         normalized = normalize(id_number)
         return luhn_digit([int(char) for char in normalized[:-1]])
+
+
+NationalID = EmiratesIDNumber
+"""alias of EmiratesIDNumber"""

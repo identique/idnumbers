@@ -2,13 +2,13 @@ from enum import Enum
 
 
 class Gender(Enum):
+    """general gender enum"""
     MALE = 'male'
     FEMALE = 'female'
     NON_BINARY = 'non_binary'
+    """not all countries have this gender type."""
 
 
 class Citizenship(Enum):
     CITIZEN = 'citizen'
     RESIDENT = 'resident'
-    # In some countries, foreigners are the same as resident. But in other countries, they are not the same.
-    FOREIGNER = 'foreigner'

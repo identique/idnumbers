@@ -8,9 +8,13 @@ from .constant import Gender
 
 
 class ParseResult(TypedDict):
+    """parse result of National ID"""
     gender: Gender
+    """gender, possible value: male, female"""
     yyyymmdd: date
+    """dob"""
     checksum: str
+    """checksum, 2 digits"""
 
 
 class NationalID:
@@ -46,6 +50,7 @@ class NationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """parse the result"""
         match_obj = NationalID.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
@@ -75,6 +80,9 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """algorithm: https://en.wikipedia.org/wiki/National_identity_number_(Norway)#Check_digits"""
+        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+            return False
         number_list = [int(char) for char in id_number]
         # Digit 10th
         first_total = sum([value * number_list[idx] for (idx, value) in enumerate(NationalID.FIRST_MAGIC_MULTIPLIER)])

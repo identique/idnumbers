@@ -7,6 +7,7 @@ from .util import validate_regexp
 
 
 class TaxpayerIDParseResult(TypedDict):
+    """parse result of the taxpayer id"""
     yyyymmdd: date
     gender: Gender
     checksum: int
@@ -33,12 +34,13 @@ class TaxpayerIDNumber:
     })
 
     MAGIC_MULTIPLIER: List[int] = [-1, 5, 7, 9, 4, 6, 10, 5, 7]
+    """multiplier for the checksum"""
     BIRTHDAY_BASE: date = date(1900, 1, 1)
 
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the ZAF id number
+        Validate the id number
         """
         if not validate_regexp(id_number, TaxpayerIDNumber.METADATA.regexp):
             return False
@@ -47,6 +49,7 @@ class TaxpayerIDNumber:
 
     @staticmethod
     def parse(id_number: str) -> Optional[TaxpayerIDParseResult]:
+        """parse the result"""
         if TaxpayerIDNumber.checksum(id_number) != int(id_number[9]):
             return None
         # according to the PHP implementation, we need to minus 1, maybe the tail and head values included.
@@ -59,7 +62,10 @@ class TaxpayerIDNumber:
         }
 
     @staticmethod
-    def checksum(id_number: str) -> int:
+    def checksum(id_number: str) -> Optional[int]:
+        """algorithm: https://github.com/therezor/ua-tax-number/blob/main/src/Decoder.php"""
+        if not validate_regexp(id_number, TaxpayerIDNumber.METADATA.regexp):
+            return None
         number_list = [int(char) for char in list(id_number)]
         source_list = number_list[:9]
         total = sum([value * TaxpayerIDNumber.MAGIC_MULTIPLIER[index] for (index, value) in enumerate(source_list)])
@@ -94,14 +100,17 @@ class EntityIDNumber:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the NZL IRD number
+        Validate the EDRPOU
         """
         if not validate_regexp(id_number, EntityIDNumber.METADATA.regexp):
             return False
         return EntityIDNumber.checksum(id_number) == int(id_number[7])
 
     @staticmethod
-    def checksum(id_number: str) -> int:
+    def checksum(id_number: str) -> Optional[int]:
+        """algorithm: https://1cinfo.com.ua/Article/Detail/Proverka_koda_po_EDRPOU/"""
+        if not validate_regexp(id_number, EntityIDNumber.METADATA.regexp):
+            return None
         number_list = [int(char) for char in list(id_number)]
         source_list = number_list[:7]
         if source_list[0] < 3 or source_list[0] > 6:

@@ -4,6 +4,7 @@ from .util import validate_regexp, weighted_modulus_digit, letter_to_number
 
 
 def normalize(id_number: str) -> str:
+    """strip out useless characters/whitespaces"""
     return id_number.replace('/', '')
 
 
@@ -35,6 +36,7 @@ class PersonalPublicServiceNumber:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """algorithm: https://en.wikipedia.org/wiki/Personal_Public_Service_Number#Check_character"""
         normalized = normalize(id_number)
         number_list = [int(i) for i in normalized[:7]]
         if len(normalized) == 9 and normalized[-1] not in [' ', 'W']:

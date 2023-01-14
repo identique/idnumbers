@@ -7,18 +7,25 @@ from .util import validate_regexp
 
 
 def normalize(id_number: str) -> str:
+    """strip out useless characters/whitespaces"""
     return id_number.upper() if id_number else None
 
 
 class ParseResult(TypedDict):
+    """The parse result of Resident ID"""
     address_code: str
+    """registration address code"""
     yyyymmdd: date
-    sn: int
+    """birthday"""
+    sn: str
+    """serial number"""
     gender: Gender
+    """gender, possible value: male, female"""
     checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']
+    """checksum digit, numbers or 'X'"""
 
 
-class ResidentIDNumber:
+class ResidentID:
     """
     China Resident ID number format
     https://en.wikipedia.org/wiki/Resident_Identity_Card
@@ -34,7 +41,7 @@ class ResidentIDNumber:
                              r'(?P<mm>0[1-9]|1[12])'
                              r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>(?:\d|X))$')
+                             r'(?P<checksum>(\d|X))$')
     })
 
     @staticmethod
@@ -47,17 +54,18 @@ class ResidentIDNumber:
 
         if not isinstance(id_number, str):
             id_number = repr(id_number)
-        return ResidentIDNumber.parse(id_number) is not None
+        return ResidentID.parse(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        match_obj = ResidentIDNumber.METADATA.regexp.match(id_number)
+        """parse the data"""
+        match_obj = ResidentID.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
         address_code = match_obj.group('address_code')
         sn = match_obj.group('sn')
         checksum_str = match_obj.group('checksum')
-        checksum = ResidentIDNumber.checksum(id_number)
+        checksum = ResidentID.checksum(id_number)
         if checksum is None or str(checksum) != checksum_str:
             return None
         else:
@@ -71,7 +79,8 @@ class ResidentIDNumber:
 
     @staticmethod
     def checksum(id_number) -> Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']]:
-        if not validate_regexp(id_number, ResidentIDNumber.METADATA.regexp):
+        """algorithm: https://en.wikipedia.org/wiki/Resident_Identity_Card#Identity_card_number"""
+        if not validate_regexp(id_number, ResidentID.METADATA.regexp):
             return None
         normalized = normalize(id_number)
         source_list = [int(char) for char in normalized[:-1]]

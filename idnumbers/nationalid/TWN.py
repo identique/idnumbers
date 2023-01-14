@@ -38,8 +38,10 @@ class NationalID:
                     [1, 7], [3, 4], [1, 8], [1, 9], [2, 0], [2, 1], [2, 2],
                     [3, 5], [2, 3], [2, 4], [2, 5], [2, 6], [2, 7], [2, 8],
                     [2, 9], [3, 2], [3, 0], [3, 1], [3, 3]]
+    """A-Z to numbers by index"""
 
     MAGIC_MULTIPLIER = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+    """multiplier for checksum"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -52,6 +54,7 @@ class NationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """parse the value"""
         match_obj = NationalID.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
@@ -71,6 +74,10 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number) -> bool:
+        """
+        algorithm:
+        https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%B0%91%E8%BA%AB%E5%88%86%E8%AD%89#%E6%9C%89%E6%95%88%E7%A2%BC
+        """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         # it uses modulus 10 algorithm with magic numbers

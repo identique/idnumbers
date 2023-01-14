@@ -4,6 +4,7 @@ from .util import validate_regexp, verhoeff_check
 
 
 def normalize(id_number: str) -> str:
+    """strip out useless characters/whitespaces"""
     return re.sub(r'[ -]', '', id_number)
 
 
@@ -32,6 +33,7 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number) -> bool:
+        """use verhoeff checksum"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         return verhoeff_check([int(char) for char in normalize(id_number)])

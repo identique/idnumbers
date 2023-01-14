@@ -4,6 +4,7 @@ from .util import validate_regexp, weighted_modulus_digit
 
 
 def normalize(id_number):
+    """strip out useless characters/whitespaces"""
     return re.sub(r'[-.]', '', id_number)
 
 

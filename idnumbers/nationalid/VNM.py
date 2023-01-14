@@ -6,14 +6,20 @@ from .constant import Gender
 
 
 def normalize(id_number: str) -> str:
+    """make all characters to upper case"""
     return id_number.upper() if id_number else None
 
 
 class ParseResult(TypedDict):
+    """parse result for NationalID"""
     province_country_code: str
+    """registration province/country code"""
     yyyy: int
-    sn: int
+    """year of birthday"""
+    sn: str
+    """serial number"""
     gender: Gender
+    """gender, possible value: male, female"""
 
 
 class NationalID:
@@ -48,6 +54,7 @@ class NationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """parse the result"""
         match_obj = NationalID.METADATA.regexp.match(id_number)
         if not match_obj:
             return None

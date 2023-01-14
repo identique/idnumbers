@@ -24,6 +24,9 @@ class NationalID:
         'regexp': re.compile(r"^(\d{12}$)")
     })
 
+    MULTIPLIER = [6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
+    """multiplier for checksum"""
+
     @staticmethod
     def validate(id_number: str) -> bool:
         """
@@ -37,6 +40,5 @@ class NationalID:
     def checksum(id_number: str) -> str:
         """Calculate Japan national id checksum"""
         arr = [int(i) for i in id_number[:11]]
-        MULTIPLIER = [6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
-        rem = weighted_modulus_digit(arr, MULTIPLIER, 11, True)
+        rem = weighted_modulus_digit(arr, NationalID.MULTIPLIER, 11, True)
         return str(0 if rem <= 1 else (11 - rem))

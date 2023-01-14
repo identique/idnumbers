@@ -59,12 +59,13 @@ class TaxIDNumber:
         Validate the Tax ID number
         https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Portugal-TIN.pdf
         """
-        if not validate_regexp(id_number, TaxIDNumber.METADATA.regexp):
-            return False
         return TaxIDNumber.checksum(id_number)
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """check the checksum"""
+        if not validate_regexp(id_number, TaxIDNumber.METADATA.regexp):
+            return False
         multipliers = [9, 8, 7, 6, 5, 4, 3, 2]
         mod = weighted_modulus_digit([int(i) for i in id_number[:-1]], multipliers, 11, True)
         calculated_checksum = 0 if mod == 0 or mod == 1 else (11 - mod)

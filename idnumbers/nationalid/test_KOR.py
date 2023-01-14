@@ -32,7 +32,7 @@ class TestKORValidation(TestCase):
         self.assertEqual(5, result['yyyymmdd'].month)
         self.assertEqual(26, result['yyyymmdd'].day)
         self.assertEqual(Gender.FEMALE, result['gender'])
-        self.assertEqual(Citizenship.FOREIGNER, result['citizenship'])
+        self.assertEqual(Citizenship.RESIDENT, result['citizenship'])
         self.assertEqual('260197', result['sn'])
 
         result = KOR.OldNationalID.parse('510724-1057122')
