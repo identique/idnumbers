@@ -1,5 +1,5 @@
 from unittest import TestCase, main
-from .constant import Gender
+from idnumbers.nationalid.constant import Gender
 
 from idnumbers.nationalid import SWE
 

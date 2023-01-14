@@ -2,7 +2,7 @@ from unittest import TestCase, main
 from datetime import date
 
 from idnumbers.nationalid import NOR
-from .constant import Gender
+from idnumbers.nationalid.constant import Gender
 
 
 class TestNORValidation(TestCase):
