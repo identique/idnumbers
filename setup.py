@@ -25,7 +25,7 @@ setup(
         'Source': 'https://github.com/microdataxyz/idnumbers',
         'Tracker': 'https://github.com/microdataxyz/idnumbers/issues',
     },
-    packages=find_packages(exclude=['test_*']),
+    packages=find_packages(exclude=['*tests*']),
     data_files=[('version', ['VERSION'])],
     python_requires='>=3.9',
     install_requires=[],
