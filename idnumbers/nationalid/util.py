@@ -1,5 +1,5 @@
 from re import Pattern
-from typing import List, Literal, cast
+from typing import List, Literal, cast, Type
 
 VERHOEFF = {
     'D_TABLE': [
@@ -28,7 +28,7 @@ VERHOEFF = {
 }
 """[Table](https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm) for the Verhoeff algorithm"""
 
-CHECK_DIGIT = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+CHECK_DIGIT: Type[int] = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 """Check digit type. Numeric check digits are only allowed in 0 to 9"""
 
 CHECK_ALPHA = Literal['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
