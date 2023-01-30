@@ -60,7 +60,7 @@ pip install idnumbers==<version>
 Alternatively, you can install from source by cloning the git repository and installing it via
 
 ```shell
-git clone https://github.com/microdataxyz/idnumbers.git
+git clone https://github.com/Identique/idnumbers.git
 cd idnumbers
 pip install .
 ```
@@ -183,7 +183,7 @@ it is an actual issued ID number.
 # Supported Countries
 
 Here's the list of the countries we have
-implemented [Country List](https://microdataxyz.github.io/idnumbers/idnumbers/nationalid.html)
+implemented [Country List](https://identique.github.io/idnumbers/idnumbers/nationalid.html)
 
 # Contribution
 
@@ -193,18 +193,18 @@ several ways you can contribute to the project:
 1. **Use the library**: The best way to contribute to the project is by using the library and providing feedback. This
    will help us understand how the library is being used and identify areas for improvement.
 2. **Raise feature requests**: If you have an idea for a new feature or an improvement,
-   please [raise an issue](https://github.com/microdataxyz/idnumbers/issues/new/choose) on GitHub.
+   please [raise an issue](https://github.com/identique/idnumbers/issues/new/choose) on GitHub.
    This will allow us to discuss the feature and plan its implementation.
 3. **Implement new ID number parsers or validators**: The library currently supports several countries, but there is
    always room for more. If you want to add support for a new country, you can submit a pull request with the
    implementation. Before that, please raise
-   a [new ID number reqeust](https://github.com/microdataxyz/idnumbers/issues/new?assignees=microdataxyz&labels=enhancement&template=new-national-id-requests.md&title=%5BNationalID%5D)
+   a [new ID number reqeust](https://github.com/identique/idnumbers/issues/new?assignees=microdataxyz&labels=enhancement&template=new-national-id-requests.md&title=%5BNationalID%5D)
    to us.
 4. **Report bugs**: If you find a bug in the library, please
-   raise [an issue](https://github.com/microdataxyz/idnumbers/issues/new?assignees=microdataxyz&labels=bug%2C+enhancement&template=bug_report.md&title=%5BBUG%5D+XXX+country+issue)
+   raise [an issue](https://github.com/identique/idnumbers/issues/new?assignees=microdataxyz&labels=bug%2C+enhancement&template=bug_report.md&title=%5BBUG%5D+XXX+country+issue)
    on GitHub with a detailed description of the
    problem.
-5. **Improve documentation**: The library has a [well-documented API](https://microdataxyz.github.io/idnumbers/), but
+5. **Improve documentation**: The library has a [well-documented API](https://identique.github.io/idnumbers/), but
    there is always room for improvement. If you
    find any errors or inconsistencies in the documentation, you can submit a pull request with the changes.
 
@@ -213,7 +213,7 @@ any questions or need help getting started, please feel free to reach out to us.
 
 # License
 
-The idnumbers project is released in [MIT license](https://github.com/microdataxyz/idnumbers/blob/main/LICENSE).
+The idnumbers project is released in [MIT license](https://github.com/identique/idnumbers/blob/main/LICENSE).
 
 # Thank You!
 The idnumbers project provides a python3 library for verifying and parsing national ID numbers. It supports multiple countries and provides a simple and well-documented API. The library is open-source, and contributions from the community are always welcome. Whether you're using the library and providing feedback, raising feature requests, implementing new ID number parsers or validators or reporting bugs, you're helping the project to be better.

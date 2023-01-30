@@ -31,17 +31,17 @@ git push --tags
 
 ### Create release
 
-We can go to [release page](https://github.com/microdataxyz/idnumbers/releases/new) to make a new release with the pushed tag. We could use `Generate release notes` button to generate from the predefined release notes.
+We can go to [release page](https://github.com/identique/idnumbers/releases/new) to make a new release with the pushed tag. We could use `Generate release notes` button to generate from the predefined release notes.
 
 *Please don't forget to check `Create a discussion for this release` checkbox*
 
 ## GitHub Actions Release
 
 ### Bump-up version
-We could trigger the [GitHub action](https://github.com/microdataxyz/idnumbers/actions/workflows/bump_version.yml) to create a PR for Bump-up version.
+We could trigger the [GitHub action](https://github.com/Identique/idnumbers/actions/workflows/bump_version.yml) to create a PR for Bump-up version.
 
 ### Publish release
-We could trigger the [GitHub action](https://github.com/microdataxyz/idnumbers/actions/workflows/release_to_pypi.yml) to publish a release.
+We could trigger the [GitHub action](https://github.com/Identique/idnumbers/actions/workflows/release_to_pypi.yml) to publish a release.
 
 It uses the PyPI API token, a private repo secret, to push the release.
 
@@ -57,6 +57,6 @@ git push --tags
 ### Create release
 *TODO: we could create a GitHub action to create the release with the pushed tag.*
 
-We can go to [release page](https://github.com/microdataxyz/idnumbers/releases/new) to make a new release with the pushed tag. We could use `Generate release notes` button to generate from the predefined release notes.
+We can go to [release page](https://github.com/Identique/idnumbers/releases/new) to make a new release with the pushed tag. We could use `Generate release notes` button to generate from the predefined release notes.
 
 *Please don't forget to check `Create a discussion for this release` checkbox*

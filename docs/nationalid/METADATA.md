@@ -2,7 +2,7 @@
 
 All ID validators/parsers have one class-based `METADATA` object for hinting users how to use it.
 
-The `METADATA` structure are the same among all classes. If you find any inconsistency or insufficient, please [file a ticket](https://github.com/microdataxyz/idnumbers/issues) and tag us, @microdataxyz.
+The `METADATA` structure are the same among all classes. If you find any inconsistency or insufficient, please [file a ticket](https://github.com/Identique/idnumbers/issues) and tag us, @microdataxyz.
 
 ## Data structure
 
