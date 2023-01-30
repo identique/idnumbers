@@ -23,7 +23,7 @@ class NationalID:
     python version of http://www2.lssh.tp.edu.tw/~hlf/class-1/lang-c/id/index.htm
     """
     METADATA = SimpleNamespace(**{
-        'iso3166_alpha2': 'Tw',
+        'iso3166_alpha2': 'TW',
         'min_length': 10,
         'max_length': 10,
         'parsable': True,
