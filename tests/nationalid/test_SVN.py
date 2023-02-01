@@ -5,6 +5,9 @@ from idnumbers.nationalid.constant import Gender
 
 
 class TestSVNValidation(TestCase):
+    """
+    It tests for SVN, SRB, MKD
+    """
     def test_normal_case(self):
         self.assertTrue(SVN.UniqueMasterCitizenNumber.validate('0101006500006'))
         self.assertTrue(SVN.UniqueMasterCitizenNumber.validate('0101001735005'))
