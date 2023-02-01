@@ -6,16 +6,16 @@ from idnumbers.nationalid.constant import Gender
 
 class TestSVNValidation(TestCase):
     def test_normal_case(self):
-        self.assertTrue(SVN.JMBG.validate('0101006500006'))
-        self.assertTrue(SVN.JMBG.validate('0101001735005'))
-        self.assertTrue(SVN.JMBG.validate('1905983710332'))
-        self.assertTrue(SVN.JMBG.validate('2908004303910'))
+        self.assertTrue(SVN.UniqueMasterCitizenNumber.validate('0101006500006'))
+        self.assertTrue(SVN.UniqueMasterCitizenNumber.validate('0101001735005'))
+        self.assertTrue(SVN.UniqueMasterCitizenNumber.validate('1905983710332'))
+        self.assertTrue(SVN.UniqueMasterCitizenNumber.validate('2908004303910'))
 
     def test_error_case(self):
-        self.assertFalse(SVN.JMBG.validate('0101006500007'))
+        self.assertFalse(SVN.UniqueMasterCitizenNumber.validate('0101006500007'))
 
     def test_parse(self):
-        result = SVN.JMBG.parse('0101006500006')
+        result = SVN.UniqueMasterCitizenNumber.parse('0101006500006')
         self.assertEqual(2006, result['yyyymmdd'].year)
         self.assertEqual(1, result['yyyymmdd'].month)
         self.assertEqual(1, result['yyyymmdd'].day)
