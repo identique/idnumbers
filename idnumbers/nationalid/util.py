@@ -1,5 +1,5 @@
 from re import Pattern
-from typing import List, Literal, cast, Type
+from typing import List, Literal, Optional, Type, cast
 
 VERHOEFF = {
     'D_TABLE': [
@@ -76,16 +76,20 @@ def verhoeff_check(digits: List[int]) -> bool:
     return c == 0
 
 
-def weighted_modulus_digit(numbers: List[int], weights: List[int], divider: int, modulus_only: bool = False) -> int:
+def weighted_modulus_digit(numbers: List[int], weights: Optional[List[int]], divider: int,
+                           modulus_only: bool = False) -> int:
     """
     It metrix-multiples numbers and weights and calculate the modulus by the divider.
     :param numbers: the numbers list.
-    :param weights: the weights list which will used in matrix multiplications.
+    :param weights: the weights list which will used in matrix multiplications. If weights is none, we use the
+                    [1] * len(numbers) as the weights.
     :param divider: the divider used for calculating modulus.
     :param modulus_only: If True, it returns the modulus calculated by divider,
                          otherwise it returns divider - modulus. The default is False.
     :return: the value
     """
+    if weights is None:
+        weights = [1] * len(numbers)
     assert len(numbers) <= len(weights), 'numbers length must be less than or equal to weights length'
     modulus = sum([value * weights[index] for (index, value) in enumerate(numbers)]) % divider
     return modulus if modulus_only else divider - modulus
@@ -93,7 +97,7 @@ def weighted_modulus_digit(numbers: List[int], weights: List[int], divider: int,
 
 def mn_modulus_digit(numbers: List[int], m: int, n: int) -> int:
     """
-    MN modulus check, (official name TBD)
+    MN modulus check, (official name TBD) ISO 7064 mod 11 (n), 10 (m)?
     1. (adds numbers and product) mod by m
     2. next product = (2 * total) mod by n
     3. return n - product
