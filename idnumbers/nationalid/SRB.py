@@ -4,16 +4,16 @@ from .constant import Citizenship
 
 from .yugoslavia import ParseResult, UniqueMasterCitizenNumber as YugoslaviaJMBG
 
-SVN_METADATA = copy(YugoslaviaJMBG.METADATA)
-SVN_METADATA.iso3166_alpha2 = 'SI'
+SRB_METADATA = copy(YugoslaviaJMBG.METADATA)
+SRB_METADATA.iso3166_alpha2 = 'RS'
 
 
 class UniqueMasterCitizenNumber(YugoslaviaJMBG):
     """
-    Slovenia Unique Master Citizen Number format, JMBG
+    Serbia Unique Master Citizen Number format, JMBG
     https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number
     """
-    METADATA = SVN_METADATA
+    METADATA = SRB_METADATA
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
@@ -30,11 +30,13 @@ class UniqueMasterCitizenNumber(YugoslaviaJMBG):
 
     @staticmethod
     def check_location(location: str) -> Optional[Tuple[Citizenship, str]]:
+        result = YugoslaviaJMBG.check_location(location)
+        if not result:
+            return None
         """
-        Since the Slovenia is an independent country, they share the same id code base. So, the citizenship is only for
-        location in 50.
+        Since the Serbia is an independent country, they share the same id code base. So, the citizenship location > 70
         """
-        if location == '50':
+        if int(location) > 70:
             return Citizenship.CITIZEN, location
         return Citizenship.RESIDENT, location
 
