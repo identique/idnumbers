@@ -1,0 +1,112 @@
+import re
+from datetime import date
+from typing import Optional, TypedDict
+from types import SimpleNamespace
+
+from .constant import Gender
+from .util import validate_regexp
+
+
+class BirthNumberParseResult(TypedDict):
+    yyyymmdd: date
+    """birthday of this ID, there is no way to know the century of the birthday. So, yy < 50 is 20yy else 19yy."""
+    gender: Gender
+    """only male or female"""
+    sn: str
+    """serial number"""
+
+
+class BirthNumber:
+    """
+    Slovakia Birth Number format, rodné číslo (RČ)
+    https://en.wikipedia.org/wiki/National_identification_number#Slovakia
+    """
+    METADATA = SimpleNamespace(**{
+        'iso3166_alpha2': 'SK',
+        'min_length': 10,
+        'max_length': 10,
+        # length without insignificant chars
+        'parsable': True,
+        # has parse function
+        'checksum': True,
+        # has checksum function
+        'regexp': re.compile(r'^(?P<yy>\d{2})'
+                             r'(?P<mm>\d{2})'
+                             r'(?P<dd>\d{2})/?'
+                             r'(?P<sn>\d{4})$')
+        # regular expression to validate the id
+    })
+
+    @staticmethod
+    def validate(id_number: str) -> bool:
+        """
+        Validate birth number
+        """
+        if not validate_regexp(id_number, BirthNumber.METADATA.regexp):
+            return False
+        return BirthNumber.parse(id_number) is not None
+
+    @staticmethod
+    def parse(id_number: str) -> Optional[BirthNumberParseResult]:
+        """
+        parse the id number
+        """
+        match_obj = BirthNumber.METADATA.regexp.match(id_number)
+        if not match_obj:
+            return None
+
+        if not BirthNumber.checksum(id_number):
+            return None
+
+        yy = int(match_obj.group('yy'))
+        mm_code = int(match_obj.group('mm'))
+        dd = int(match_obj.group('dd'))
+        mm = mm_code if mm_code < 50 else mm_code - 50
+        year_base = 2000 if yy < 50 else 1900
+        sn = match_obj.group('sn')
+        return {
+            'yyyymmdd': date(year_base + yy, mm, dd),
+            'gender': Gender.MALE if mm_code < 50 else Gender.FEMALE,
+            'sn': sn
+        }
+
+    @staticmethod
+    def checksum(id_number: str) -> bool:
+        """
+        Calculate SVK BirthNumber checksum digit
+        """
+        if not validate_regexp(id_number, BirthNumber.METADATA.regexp):
+            return False
+        return int(BirthNumber.normalize(id_number)) % 11 == 0
+
+    @staticmethod
+    def normalize(id_number: str) -> str:
+        """remove the / out"""
+        return re.sub(r'/', '', id_number)
+
+
+class CitizenIDNumber:
+    """
+    Slovakia Citizen Identification Card Number format, Číslo občianskeho preukazu (ČOP)
+    https://en.wikipedia.org/wiki/National_identification_number#Slovakia
+    https://en.wikipedia.org/wiki/Slovak_identity_card
+    """
+    METADATA = SimpleNamespace(**{
+        'iso3166_alpha2': 'SK',
+        'min_length': 8,
+        'max_length': 8,
+        # length without insignificant chars
+        'parsable': False,
+        # has parse function
+        'checksum': False,
+        # has checksum function
+        'regexp': re.compile(r'^[A-Z]{2} ?\d{6}$')
+        # regular expression to validate the id
+    })
+
+    @staticmethod
+    def validate(id_number: str) -> bool:
+        """
+        Validate CitizenIDNumber
+        """
+        return validate_regexp(id_number, CitizenIDNumber.METADATA.regexp)
