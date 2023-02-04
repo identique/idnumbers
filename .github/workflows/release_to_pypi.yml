@@ -7,6 +7,9 @@ on:
         description: "Please type yes to publish to pypi.org, otherwise go to test.pypi.org"
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   release:
     runs-on: ubuntu-latest

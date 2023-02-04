@@ -6,6 +6,10 @@ on:
         description: 'Version value'
         required: true
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   bump-version:
     name: Bump setup.py version
