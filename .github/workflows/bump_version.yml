@@ -6,6 +6,10 @@ on:
         description: 'Version value'
         required: true
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   bump-version:
     name: Bump setup.py version
@@ -22,8 +26,9 @@ jobs:
           git add VERSION
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v4.2.3
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Bump version to ${{ inputs.version }}
           committer: Microdata Bot <microdataxyz@outlook.com>
           title: Bump version to ${{ inputs.version }}
