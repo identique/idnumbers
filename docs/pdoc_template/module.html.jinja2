@@ -1,0 +1,26 @@
+{% extends "default/module.html.jinja2" %}
+{% set version = version_text or 'dev' %}
+{% block nav_title %}
+    <p class="versions">
+        <!-- Version: {{ env['version'] or 'dev' }} -->
+        Version: <select id="version-switch" name="version">
+            <option value="dev">dev</option>
+            {% include 'version.html.jinja2' %}
+        </select>
+        <script>
+            document.getElementById('version-switch').onchange = function() {
+                let version = document.getElementById('version-switch').value;
+                if ( version === 'dev') {
+                    window.location = '/idnumbers';
+                } else {
+                    window.location = `/idnumbers/v${version}`;
+                }
+            };
+        </script>
+    </p>
+    {% if logo %}
+        {% if logo_link %}<a href="{{ logo_link }}">{% endif %}
+        <img src="{{ logo }}" class="logo" alt="project logo"/>
+        {% if logo_link %}</a>{% endif %}
+    {% endif %}
+{% endblock %}
