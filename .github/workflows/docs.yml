@@ -9,6 +9,11 @@ on:
     inputs:
       version:
         description: 'Version value'
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version value'
+        type: string
 
 # security: restrict permissions for CI jobs.
 permissions:
