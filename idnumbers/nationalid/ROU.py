@@ -76,14 +76,17 @@ class PersonalNumericalCode:
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
         sn = match_obj.group('sn')
-        return {
-            'yyyymmdd': date(year_base + yy, mm, dd),
-            'location': location,
-            'gender': gender,
-            'citizenship': citizenship,
-            'sn': sn,
-            'checksum': int(match_obj.group('checksum'))
-        }
+        try:
+            return {
+                'yyyymmdd': date(year_base + yy, mm, dd),
+                'location': location,
+                'gender': gender,
+                'citizenship': citizenship,
+                'sn': sn,
+                'checksum': int(match_obj.group('checksum'))
+            }
+        except ValueError:
+            return None
 
     @staticmethod
     def get_gender_citizenship_year_base(gender_century: int, yy: int) -> Optional[Tuple[Gender, Citizenship, int]]:

@@ -75,14 +75,17 @@ class UniqueMasterCitizenNumber:
         dd = int(match_obj.group('dd'))
         year_base = 2000 if yyy < 800 else 1000
         sn = match_obj.group('sn')
-        return {
-            'yyyymmdd': date(year_base + yyy, mm, dd),
-            'location': location,
-            'citizenship': citizenship,
-            'gender': Gender.MALE if int(sn) < 500 else Gender.FEMALE,
-            'sn': sn,
-            'checksum': int(match_obj.group('checksum'))
-        }
+        try:
+            return {
+                'yyyymmdd': date(year_base + yyy, mm, dd),
+                'location': location,
+                'citizenship': citizenship,
+                'gender': Gender.MALE if int(sn) < 500 else Gender.FEMALE,
+                'sn': sn,
+                'checksum': int(match_obj.group('checksum'))
+            }
+        except ValueError:
+            return None
 
     @staticmethod
     def checksum(id_number) -> bool:

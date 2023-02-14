@@ -68,7 +68,7 @@ class ResidentID:
         checksum = ResidentID.checksum(id_number)
         if checksum is None or str(checksum) != checksum_str:
             return None
-        else:
+        try:
             return {
                 'address_code': address_code,
                 'yyyymmdd': date(int(match_obj.group('yyyy')), int(match_obj.group('mm')), int(match_obj.group('dd'))),
@@ -76,6 +76,8 @@ class ResidentID:
                 'gender': Gender.FEMALE if int(sn) % 2 == 0 else Gender.MALE,
                 'checksum': checksum
             }
+        except ValueError:
+            return None
 
     @staticmethod
     def checksum(id_number) -> Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']]:

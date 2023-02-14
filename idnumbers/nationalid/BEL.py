@@ -62,12 +62,15 @@ class NationalID:
             dd = int(match_obj.group('dd'))
             sn = match_obj.group('sn')
             year_base = 1900 if yy > 50 else 2000
-            return {
-                'yyyymmdd': date(yy + year_base, mm, dd),
-                'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
-                'sn': sn,
-                'checksum': int(match_obj.group('checksum'))
-            }
+            try:
+                return {
+                    'yyyymmdd': date(yy + year_base, mm, dd),
+                    'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
+                    'sn': sn,
+                    'checksum': int(match_obj.group('checksum'))
+                }
+            except ValueError:
+                return None
 
     @staticmethod
     def checksum(id_number) -> bool:

@@ -85,12 +85,15 @@ class PersonalIdentityCode:
         century = match_obj.group('century')
         sn = match_obj.group('sn')
         yyyy_base = PersonalIdentityCode.DOB_BASE_MAP[century]
-        return {
-            'yyyymmdd': date(yyyy_base + yy, mm, dd),
-            'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
-            'sn': sn,
-            'checksum': match_obj.group('check')
-        }
+        try:
+            return {
+                'yyyymmdd': date(yyyy_base + yy, mm, dd),
+                'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
+                'sn': sn,
+                'checksum': match_obj.group('check')
+            }
+        except ValueError:
+            return None
 
     @staticmethod
     def checksum(id_number: str) -> bool:

@@ -67,13 +67,15 @@ class NRIC:
             return None
         sn = match_obj.group('sn')
         yyyy_base = 1900 if int(sn[0]) > 4 else 2000
-
-        return {
-            'yyyymmdd': date(yyyy_base + yy, mm, dd),
-            'location': location,
-            'citizenship': Citizenship.CITIZEN if int(location) < 60 else Citizenship.RESIDENT,
-            'sn': sn
-        }
+        try:
+            return {
+                'yyyymmdd': date(yyyy_base + yy, mm, dd),
+                'location': location,
+                'citizenship': Citizenship.CITIZEN if int(location) < 60 else Citizenship.RESIDENT,
+                'sn': sn
+            }
+        except ValueError:
+            return None
 
     @staticmethod
     def check_location_code(location_code: str) -> bool:

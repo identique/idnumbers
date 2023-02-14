@@ -65,11 +65,14 @@ class UniformCivilNumber:
             yyyy = yy + 1800
         else:
             yyyy = yy + 1900
-        return {
-            'yyyymmdd': date(yyyy, mm, dd),
-            "checksum": int(checksum),
-            'gender': Gender.MALE if int(match_obj.group("gender")) % 2 == 0 else Gender.FEMALE
-        }
+        try:
+            return {
+                'yyyymmdd': date(yyyy, mm, dd),
+                "checksum": int(checksum),
+                'gender': Gender.MALE if int(match_obj.group("gender")) % 2 == 0 else Gender.FEMALE
+            }
+        except ValueError:
+            return None
 
     MULTIPLIER = [2, 4, 8, 5, 10, 9, 7, 3, 6]
 

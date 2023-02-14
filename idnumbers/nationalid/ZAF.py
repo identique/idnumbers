@@ -60,9 +60,10 @@ class NationalID:
             return None
         elif check_digit != int(id_number[-1:]):
             return None
-        else:
-            year = int(match_obj.group('yy'))
-            year += 2000 if year < 50 else 1900
+
+        year = int(match_obj.group('yy'))
+        year += 2000 if year < 50 else 1900
+        try:
             return {
                 'yyyymmdd': date(year, int(match_obj.group('mm')), int(match_obj.group('dd'))),
                 'sn': match_obj.group('sn'),
@@ -70,6 +71,8 @@ class NationalID:
                 'citizenship': Citizenship.CITIZEN if match_obj.group('citizenship') == '0' else Citizenship.RESIDENT,
                 'checksum': check_digit
             }
+        except ValueError:
+            return None
 
     @staticmethod
     def checksum(id_number: str) -> CHECK_DIGIT:

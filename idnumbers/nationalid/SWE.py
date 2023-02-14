@@ -1,5 +1,5 @@
-import datetime
 import re
+from datetime import date
 from types import SimpleNamespace
 from .util import validate_regexp, luhn_digit
 from typing import Optional, TypedDict
@@ -15,7 +15,7 @@ class ParseResult(TypedDict):
     """parse result of PersonalIdentityNumber"""
     gender: Gender
     """gender, possible value: male, female"""
-    yyyymmdd: datetime.date
+    yyyymmdd: date
     """dob"""
     checksum: str
     """checksum digit"""
@@ -57,21 +57,24 @@ class PersonalIdentityNumber:
         match_obj = PersonalIdentityNumber.METADATA.regexp.match(id_number)
         if not match_obj:
             return None
+        checksum = match_obj.group('checksum')
+        if PersonalIdentityNumber.checksum(id_number) != int(checksum):
+            return None
         yy = match_obj.group('yy')
         mm = match_obj.group('mm')
         dd = match_obj.group('dd')
         birth_number = match_obj.group('birth_number')
         sep = match_obj.group('sep')
-        base_year = datetime.datetime.now().year if sep == '-' else datetime.datetime.now().year - 100
+        base_year = date.today().year if sep == '-' else date.today().year - 100
         yyyy = int((base_year - ((base_year - int(yy)) % 100)) / 100) * 100 + int(yy)
-        checksum = match_obj.group('checksum')
-        if PersonalIdentityNumber.checksum(id_number) != int(checksum):
+        try:
+            return {
+                "gender": Gender.FEMALE if int(birth_number) % 2 == 0 else Gender.MALE,
+                "yyyymmdd": date(yyyy, int(mm), int(dd)),
+                'checksum': match_obj.group('checksum')
+            }
+        except ValueError:
             return None
-        return {
-            "gender": Gender.FEMALE if int(birth_number) % 2 == 0 else Gender.MALE,
-            "yyyymmdd": datetime.date(yyyy, int(mm), int(dd)),
-            'checksum': match_obj.group('checksum')
-        }
 
     @staticmethod
     def checksum(id_number: str) -> Optional[int]:
