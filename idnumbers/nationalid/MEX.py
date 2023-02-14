@@ -82,13 +82,14 @@ class CURP:
             return None
         elif location not in CURP.ALLOW_LOCATIONS:
             return None
-        else:
-            yy = int(match_obj.group('yy'))
-            mm = int(match_obj.group('mm'))
-            dd = int(match_obj.group('dd'))
-            sn = match_obj.group('sn')
-            year_base = 1900 if ord(sn) < 65 else 2000
-            gender = match_obj.group('gender')
+
+        yy = int(match_obj.group('yy'))
+        mm = int(match_obj.group('mm'))
+        dd = int(match_obj.group('dd'))
+        sn = match_obj.group('sn')
+        year_base = 1900 if ord(sn) < 65 else 2000
+        gender = match_obj.group('gender')
+        try:
             return {
                 'name_initial_chars': match_obj.group('initial'),
                 'name_consonants': match_obj.group('consonant'),
@@ -98,6 +99,8 @@ class CURP:
                 'sn': sn,
                 'checksum': int(match_obj.group('checksum'))
             }
+        except ValueError:
+            return None
 
     @staticmethod
     def checksum(id_number) -> bool:

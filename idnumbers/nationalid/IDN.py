@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import date
 from types import SimpleNamespace
 from typing import Optional, TypedDict
 from .util import validate_regexp
@@ -69,8 +69,8 @@ class NIK:
 
         # Validate the date
         try:
-            datetime(int(f'20{yy}'), int(mm), int(dd))
-            datetime(int(f'19{yy}'), int(mm), int(dd))
+            date(int(f'20{yy}'), int(mm), int(dd))
+            date(int(f'19{yy}'), int(mm), int(dd))
         except ValueError:
             return None
 

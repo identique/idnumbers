@@ -64,11 +64,14 @@ class BirthNumber:
         mm = mm_code if mm_code < 50 else mm_code - 50
         year_base = 2000 if yy < 50 else 1900
         sn = match_obj.group('sn')
-        return {
-            'yyyymmdd': date(year_base + yy, mm, dd),
-            'gender': Gender.MALE if mm_code < 50 else Gender.FEMALE,
-            'sn': sn
-        }
+        try:
+            return {
+                'yyyymmdd': date(year_base + yy, mm, dd),
+                'gender': Gender.MALE if mm_code < 50 else Gender.FEMALE,
+                'sn': sn
+            }
+        except ValueError:
+            return None
 
     @staticmethod
     def checksum(id_number: str) -> bool:

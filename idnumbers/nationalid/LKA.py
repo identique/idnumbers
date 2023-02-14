@@ -66,7 +66,7 @@ class NationalID:
         checksum = NationalID.checksum(id_number)
         if not checksum:
             return None
-        else:
+        try:
             yyyymmdd = date(year, 1, 1) + timedelta(days - 501 if days > 500 else days - 1)
             return {
                 'yyyymmdd': yyyymmdd,
@@ -74,6 +74,8 @@ class NationalID:
                 'sn': sn,
                 'checksum': int(match_obj.group('checksum'))
             }
+        except ValueError:
+            return None
 
     @staticmethod
     def checksum(id_number) -> bool:

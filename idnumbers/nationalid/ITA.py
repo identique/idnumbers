@@ -158,7 +158,10 @@ class FiscalCode:
         mm = FiscalCode.MONTH_MAP[m]
         day = dd if dd < 40 else dd - 40
         gender = Gender.MALE if dd < 40 else Gender.FEMALE
-        return date(year_base + yy, mm, day), gender
+        try:
+            return date(year_base + yy, mm, day), gender
+        except ValueError:
+            return None
 
     @staticmethod
     def sterilize_numbers(source: str) -> Optional[str]:

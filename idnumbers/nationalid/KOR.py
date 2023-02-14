@@ -102,13 +102,15 @@ class NationalID:
         gender = int(match_obj.group('gender'))
         sn = match_obj.group('sn')
         yyyy_base = NationalID.DOB_BASE_MAP[gender]
-
-        return {
-            'yyyymmdd': date(yyyy_base + yy, mm, dd),
-            'gender': Gender.MALE if gender % 2 == 1 else Gender.FEMALE,
-            'citizenship': NationalID.CITIZENSHIP_MAP[gender],
-            'sn': sn
-        }
+        try:
+            return {
+                'yyyymmdd': date(yyyy_base + yy, mm, dd),
+                'gender': Gender.MALE if gender % 2 == 1 else Gender.FEMALE,
+                'citizenship': NationalID.CITIZENSHIP_MAP[gender],
+                'sn': sn
+            }
+        except ValueError:
+            return None
 
 
 """

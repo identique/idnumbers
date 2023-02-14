@@ -71,12 +71,15 @@ class PESEL:
         dd = int(match_obj.group('dd'))
         year_base, mm = PESEL.get_year_base_month(mm_coded)
         sn = match_obj.group('sn')
-        return {
-            'yyyymmdd': date(year_base + yy, mm, dd),
-            'gender': Gender.MALE if int(sn[-1]) % 2 == 1 else Gender.FEMALE,
-            'sn': sn,
-            'checksum': checksum
-        }
+        try:
+            return {
+                'yyyymmdd': date(year_base + yy, mm, dd),
+                'gender': Gender.MALE if int(sn[-1]) % 2 == 1 else Gender.FEMALE,
+                'sn': sn,
+                'checksum': checksum
+            }
+        except ValueError:
+            return None
 
     @staticmethod
     def get_year_base_month(month: int) -> YEAR_MONTH_TYPE:
