@@ -21,7 +21,7 @@ class NationalID:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r"^(\d{12}$)")
+        'regexp': re.compile(r'^(\d{12}$)')
     })
 
     MULTIPLIER = [6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]
