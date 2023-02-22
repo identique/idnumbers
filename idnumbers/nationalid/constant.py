@@ -12,3 +12,5 @@ class Gender(Enum):
 class Citizenship(Enum):
     CITIZEN = 'citizen'
     RESIDENT = 'resident'
+    FOREIGN = 'foreign'
+    """foreign may be naturalized citizen or a resident"""
