@@ -63,6 +63,9 @@
                         <li>
                                 <a class="variable" href="#BirthNumberParseResult.sn">sn</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#BirthNumberParseResult.checksum">checksum</a>
+                        </li>
                 </ul>
 
             </li>
@@ -93,6 +96,9 @@
                 </ul>
 
             </li>
+            <li>
+                    <a class="variable" href="#NationalID">NationalID</a>
+            </li>
     </ul>
 
 
@@ -121,7 +127,7 @@
 </span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
 </span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a>
 </span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="kn">from</span> <span class="nn">.constant</span> <span class="kn">import</span> <span class="n">Gender</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">validate_regexp</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">CHECK_DIGIT</span><span class="p">,</span> <span class="n">validate_regexp</span>
 </span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>
 </span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a>
 </span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="k">class</span> <span class="nc">BirthNumberParseResult</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
@@ -131,105 +137,119 @@
 </span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;only male or female&quot;&quot;&quot;</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>    <span class="n">sn</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;serial number&quot;&quot;&quot;</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>
-</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a><span class="k">class</span> <span class="nc">BirthNumber</span><span class="p">:</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="sd">    Slovakia Birth Number format, rodné číslo (RČ)</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">    https://en.wikipedia.org/wiki/National_identification_number#Slovakia</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>    <span class="n">METADATA</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>        <span class="s1">&#39;iso3166_alpha2&#39;</span><span class="p">:</span> <span class="s1">&#39;SK&#39;</span><span class="p">,</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>        <span class="s1">&#39;min_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>        <span class="c1"># length without insignificant chars</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>        <span class="c1"># has parse function</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>        <span class="c1"># has checksum function</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(?P&lt;yy&gt;\d</span><span class="si">{2}</span><span class="s1">)&#39;</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;mm&gt;\d</span><span class="si">{2}</span><span class="s1">)&#39;</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;dd&gt;\d</span><span class="si">{2}</span><span class="s1">)/?&#39;</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;sn&gt;\d</span><span class="si">{4}</span><span class="s1">)$&#39;</span><span class="p">)</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>        <span class="c1"># regular expression to validate the id</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>    <span class="p">})</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>
-</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">        Validate birth number</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>        <span class="k">return</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>
-</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BirthNumberParseResult</span><span class="p">]:</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a><span class="sd">        parse the id number</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>        <span class="n">match_obj</span> <span class="o">=</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">match_obj</span><span class="p">:</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>
-</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">):</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>    <span class="n">checksum</span><span class="p">:</span> <span class="n">CHECK_DIGIT</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;checksum&quot;&quot;&quot;</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a><span class="k">class</span> <span class="nc">BirthNumber</span><span class="p">:</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">    Slovakia Birth Number format, rodné číslo (RČ)</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">    https://en.wikipedia.org/wiki/National_identification_number#Slovakia</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">METADATA</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>        <span class="s1">&#39;iso3166_alpha2&#39;</span><span class="p">:</span> <span class="s1">&#39;SK&#39;</span><span class="p">,</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>        <span class="s1">&#39;min_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>        <span class="c1"># length without insignificant chars</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>        <span class="c1"># has parse function</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>        <span class="c1"># has checksum function</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(?P&lt;yy&gt;\d</span><span class="si">{2}</span><span class="s1">)&#39;</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;mm&gt;\d</span><span class="si">{2}</span><span class="s1">)&#39;</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;dd&gt;\d</span><span class="si">{2}</span><span class="s1">)/?&#39;</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;sn&gt;\d</span><span class="si">{3}</span><span class="s1">)&#39;</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;checksum&gt;\d)$&#39;</span><span class="p">)</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a>        <span class="c1"># regular expression to validate the id</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>    <span class="p">})</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a><span class="sd">        Validate birth number</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>        <span class="k">return</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BirthNumberParseResult</span><span class="p">]:</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a><span class="sd">        parse the id number</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a>        <span class="n">match_obj</span> <span class="o">=</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">match_obj</span><span class="p">:</span>
 </span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a>            <span class="k">return</span> <span class="kc">None</span>
 </span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a>
-</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;yy&#39;</span><span class="p">))</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>        <span class="n">mm_code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;mm&#39;</span><span class="p">))</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>        <span class="n">dd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;dd&#39;</span><span class="p">))</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm_code</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">mm_code</span> <span class="o">-</span> <span class="mi">50</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>        <span class="n">year_base</span> <span class="o">=</span> <span class="mi">2000</span> <span class="k">if</span> <span class="n">yy</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="mi">1900</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="n">sn</span> <span class="o">=</span> <span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;sn&#39;</span><span class="p">)</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a>            <span class="k">return</span> <span class="p">{</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a>                <span class="s1">&#39;yyyymmdd&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">(</span><span class="n">year_base</span> <span class="o">+</span> <span class="n">yy</span><span class="p">,</span> <span class="n">mm</span><span class="p">,</span> <span class="n">dd</span><span class="p">),</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a>                <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">Gender</span><span class="o">.</span><span class="n">MALE</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">Gender</span><span class="o">.</span><span class="n">FEMALE</span><span class="p">,</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a>                <span class="s1">&#39;sn&#39;</span><span class="p">:</span> <span class="n">sn</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a>            <span class="p">}</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
-</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>    <span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">        Calculate SVK BirthNumber checksum digit</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">BirthNumber</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">))</span> <span class="o">%</span> <span class="mi">11</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>
-</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;remove the / out&quot;&quot;&quot;</span>
-</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a>        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">id_number</span><span class="p">)</span>
-</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>
-</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>
-</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a><span class="k">class</span> <span class="nc">CitizenIDNumber</span><span class="p">:</span>
-</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a><span class="sd">    Slovakia Citizen Identification Card Number format, Číslo občianskeho preukazu (ČOP)</span>
-</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a><span class="sd">    https://en.wikipedia.org/wiki/National_identification_number#Slovakia</span>
-</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="sd">    https://en.wikipedia.org/wiki/Slovak_identity_card</span>
-</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>    <span class="n">METADATA</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
-</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="s1">&#39;iso3166_alpha2&#39;</span><span class="p">:</span> <span class="s1">&#39;SK&#39;</span><span class="p">,</span>
-</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>        <span class="s1">&#39;min_length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a>        <span class="c1"># length without insignificant chars</span>
-</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>        <span class="c1"># has parse function</span>
-</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>        <span class="c1"># has checksum function</span>
-</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[A-Z]</span><span class="si">{2}</span><span class="s1"> ?\d</span><span class="si">{6}</span><span class="s1">$&#39;</span><span class="p">)</span>
-</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>        <span class="c1"># regular expression to validate the id</span>
-</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>    <span class="p">})</span>
-</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>
-</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        Validate CitizenIDNumber</span>
-</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">CitizenIDNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">):</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a>        <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;yy&#39;</span><span class="p">))</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>        <span class="n">mm_code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;mm&#39;</span><span class="p">))</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a>        <span class="n">dd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;dd&#39;</span><span class="p">))</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm_code</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">mm_code</span> <span class="o">-</span> <span class="mi">50</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">        from https://en.wikipedia.org/wiki/National_identification_number#Czech_Republic_and_Slovakia</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">        In a law that took place in the year 2004, a failsafe system has been implemented, where in case</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">        all valid serial numbers get depleted for a day, the number 20 gets added to the value of XX.</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">        This means that XX can get up to 32 for males, and 82 for females.</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm</span> <span class="o">-</span> <span class="mi">20</span> <span class="k">if</span> <span class="n">mm</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="k">else</span> <span class="n">mm</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>        <span class="n">year_base</span> <span class="o">=</span> <span class="mi">2000</span> <span class="k">if</span> <span class="n">yy</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="mi">1900</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a>        <span class="k">try</span><span class="p">:</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a>            <span class="k">return</span> <span class="p">{</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>                <span class="s1">&#39;yyyymmdd&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">(</span><span class="n">year_base</span> <span class="o">+</span> <span class="n">yy</span><span class="p">,</span> <span class="n">mm</span><span class="p">,</span> <span class="n">dd</span><span class="p">),</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a>                <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">Gender</span><span class="o">.</span><span class="n">MALE</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">Gender</span><span class="o">.</span><span class="n">FEMALE</span><span class="p">,</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>                <span class="s1">&#39;sn&#39;</span><span class="p">:</span> <span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;sn&#39;</span><span class="p">),</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a>                <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;checksum&#39;</span><span class="p">))</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a>            <span class="p">}</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a>        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a>    <span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a><span class="sd">        Calculate SVK BirthNumber checksum digit</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">BirthNumber</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">))</span> <span class="o">%</span> <span class="mi">11</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;remove the / out&quot;&quot;&quot;</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">id_number</span><span class="p">)</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="k">class</span> <span class="nc">CitizenIDNumber</span><span class="p">:</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a><span class="sd">    Slovakia Citizen Identification Card Number format, Číslo občianskeho preukazu (ČOP)</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a><span class="sd">    https://en.wikipedia.org/wiki/National_identification_number#Slovakia</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a><span class="sd">    https://en.wikipedia.org/wiki/Slovak_identity_card</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="n">METADATA</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a>        <span class="s1">&#39;iso3166_alpha2&#39;</span><span class="p">:</span> <span class="s1">&#39;SK&#39;</span><span class="p">,</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a>        <span class="s1">&#39;min_length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a>        <span class="c1"># length without insignificant chars</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a>        <span class="c1"># has parse function</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>        <span class="c1"># has checksum function</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[A-Z]</span><span class="si">{2}</span><span class="s1"> ?\d</span><span class="si">{6}</span><span class="s1">$&#39;</span><span class="p">)</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="c1"># regular expression to validate the id</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>    <span class="p">})</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a><span class="sd">        Validate CitizenIDNumber</span>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">CitizenIDNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a><span class="n">NationalID</span> <span class="o">=</span> <span class="n">BirthNumber</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a><span class="sd">&quot;&quot;&quot;alias of BirthNumber&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -252,6 +272,8 @@
 </span><span id="BirthNumberParseResult-15"><a href="#BirthNumberParseResult-15"><span class="linenos">15</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;only male or female&quot;&quot;&quot;</span>
 </span><span id="BirthNumberParseResult-16"><a href="#BirthNumberParseResult-16"><span class="linenos">16</span></a>    <span class="n">sn</span><span class="p">:</span> <span class="nb">str</span>
 </span><span id="BirthNumberParseResult-17"><a href="#BirthNumberParseResult-17"><span class="linenos">17</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;serial number&quot;&quot;&quot;</span>
+</span><span id="BirthNumberParseResult-18"><a href="#BirthNumberParseResult-18"><span class="linenos">18</span></a>    <span class="n">checksum</span><span class="p">:</span> <span class="n">CHECK_DIGIT</span>
+</span><span id="BirthNumberParseResult-19"><a href="#BirthNumberParseResult-19"><span class="linenos">19</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;checksum&quot;&quot;&quot;</span>
 </span></pre></div>
 
 
@@ -296,6 +318,19 @@
 
 
                             </div>
+                            <div id="BirthNumberParseResult.checksum" class="classattr">
+                                <div class="attr variable">
+            <span class="name">checksum</span><span class="annotation">: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
+
+        
+    </div>
+    <a class="headerlink" href="#BirthNumberParseResult.checksum"></a>
+    
+            <div class="docstring"><p>checksum</p>
+</div>
+
+
+                            </div>
                 </section>
                 <section id="BirthNumber">
                             <input id="BirthNumber-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -308,76 +343,84 @@
 
     </div>
     <a class="headerlink" href="#BirthNumber"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber-20"><a href="#BirthNumber-20"><span class="linenos">20</span></a><span class="k">class</span> <span class="nc">BirthNumber</span><span class="p">:</span>
-</span><span id="BirthNumber-21"><a href="#BirthNumber-21"><span class="linenos">21</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="BirthNumber-22"><a href="#BirthNumber-22"><span class="linenos">22</span></a><span class="sd">    Slovakia Birth Number format, rodné číslo (RČ)</span>
-</span><span id="BirthNumber-23"><a href="#BirthNumber-23"><span class="linenos">23</span></a><span class="sd">    https://en.wikipedia.org/wiki/National_identification_number#Slovakia</span>
-</span><span id="BirthNumber-24"><a href="#BirthNumber-24"><span class="linenos">24</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="BirthNumber-25"><a href="#BirthNumber-25"><span class="linenos">25</span></a>    <span class="n">METADATA</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
-</span><span id="BirthNumber-26"><a href="#BirthNumber-26"><span class="linenos">26</span></a>        <span class="s1">&#39;iso3166_alpha2&#39;</span><span class="p">:</span> <span class="s1">&#39;SK&#39;</span><span class="p">,</span>
-</span><span id="BirthNumber-27"><a href="#BirthNumber-27"><span class="linenos">27</span></a>        <span class="s1">&#39;min_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-</span><span id="BirthNumber-28"><a href="#BirthNumber-28"><span class="linenos">28</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-</span><span id="BirthNumber-29"><a href="#BirthNumber-29"><span class="linenos">29</span></a>        <span class="c1"># length without insignificant chars</span>
-</span><span id="BirthNumber-30"><a href="#BirthNumber-30"><span class="linenos">30</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="BirthNumber-31"><a href="#BirthNumber-31"><span class="linenos">31</span></a>        <span class="c1"># has parse function</span>
-</span><span id="BirthNumber-32"><a href="#BirthNumber-32"><span class="linenos">32</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-</span><span id="BirthNumber-33"><a href="#BirthNumber-33"><span class="linenos">33</span></a>        <span class="c1"># has checksum function</span>
-</span><span id="BirthNumber-34"><a href="#BirthNumber-34"><span class="linenos">34</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(?P&lt;yy&gt;\d</span><span class="si">{2}</span><span class="s1">)&#39;</span>
-</span><span id="BirthNumber-35"><a href="#BirthNumber-35"><span class="linenos">35</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;mm&gt;\d</span><span class="si">{2}</span><span class="s1">)&#39;</span>
-</span><span id="BirthNumber-36"><a href="#BirthNumber-36"><span class="linenos">36</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;dd&gt;\d</span><span class="si">{2}</span><span class="s1">)/?&#39;</span>
-</span><span id="BirthNumber-37"><a href="#BirthNumber-37"><span class="linenos">37</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;sn&gt;\d</span><span class="si">{4}</span><span class="s1">)$&#39;</span><span class="p">)</span>
-</span><span id="BirthNumber-38"><a href="#BirthNumber-38"><span class="linenos">38</span></a>        <span class="c1"># regular expression to validate the id</span>
-</span><span id="BirthNumber-39"><a href="#BirthNumber-39"><span class="linenos">39</span></a>    <span class="p">})</span>
-</span><span id="BirthNumber-40"><a href="#BirthNumber-40"><span class="linenos">40</span></a>
-</span><span id="BirthNumber-41"><a href="#BirthNumber-41"><span class="linenos">41</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="BirthNumber-42"><a href="#BirthNumber-42"><span class="linenos">42</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="BirthNumber-43"><a href="#BirthNumber-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="BirthNumber-44"><a href="#BirthNumber-44"><span class="linenos">44</span></a><span class="sd">        Validate birth number</span>
-</span><span id="BirthNumber-45"><a href="#BirthNumber-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="BirthNumber-46"><a href="#BirthNumber-46"><span class="linenos">46</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
-</span><span id="BirthNumber-47"><a href="#BirthNumber-47"><span class="linenos">47</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="BirthNumber-48"><a href="#BirthNumber-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-</span><span id="BirthNumber-49"><a href="#BirthNumber-49"><span class="linenos">49</span></a>
-</span><span id="BirthNumber-50"><a href="#BirthNumber-50"><span class="linenos">50</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="BirthNumber-51"><a href="#BirthNumber-51"><span class="linenos">51</span></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BirthNumberParseResult</span><span class="p">]:</span>
-</span><span id="BirthNumber-52"><a href="#BirthNumber-52"><span class="linenos">52</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="BirthNumber-53"><a href="#BirthNumber-53"><span class="linenos">53</span></a><span class="sd">        parse the id number</span>
-</span><span id="BirthNumber-54"><a href="#BirthNumber-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="BirthNumber-55"><a href="#BirthNumber-55"><span class="linenos">55</span></a>        <span class="n">match_obj</span> <span class="o">=</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span>
-</span><span id="BirthNumber-56"><a href="#BirthNumber-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">match_obj</span><span class="p">:</span>
-</span><span id="BirthNumber-57"><a href="#BirthNumber-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="BirthNumber-58"><a href="#BirthNumber-58"><span class="linenos">58</span></a>
-</span><span id="BirthNumber-59"><a href="#BirthNumber-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber-22"><a href="#BirthNumber-22"><span class="linenos">22</span></a><span class="k">class</span> <span class="nc">BirthNumber</span><span class="p">:</span>
+</span><span id="BirthNumber-23"><a href="#BirthNumber-23"><span class="linenos">23</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber-24"><a href="#BirthNumber-24"><span class="linenos">24</span></a><span class="sd">    Slovakia Birth Number format, rodné číslo (RČ)</span>
+</span><span id="BirthNumber-25"><a href="#BirthNumber-25"><span class="linenos">25</span></a><span class="sd">    https://en.wikipedia.org/wiki/National_identification_number#Slovakia</span>
+</span><span id="BirthNumber-26"><a href="#BirthNumber-26"><span class="linenos">26</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="BirthNumber-27"><a href="#BirthNumber-27"><span class="linenos">27</span></a>    <span class="n">METADATA</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
+</span><span id="BirthNumber-28"><a href="#BirthNumber-28"><span class="linenos">28</span></a>        <span class="s1">&#39;iso3166_alpha2&#39;</span><span class="p">:</span> <span class="s1">&#39;SK&#39;</span><span class="p">,</span>
+</span><span id="BirthNumber-29"><a href="#BirthNumber-29"><span class="linenos">29</span></a>        <span class="s1">&#39;min_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span id="BirthNumber-30"><a href="#BirthNumber-30"><span class="linenos">30</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span id="BirthNumber-31"><a href="#BirthNumber-31"><span class="linenos">31</span></a>        <span class="c1"># length without insignificant chars</span>
+</span><span id="BirthNumber-32"><a href="#BirthNumber-32"><span class="linenos">32</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="BirthNumber-33"><a href="#BirthNumber-33"><span class="linenos">33</span></a>        <span class="c1"># has parse function</span>
+</span><span id="BirthNumber-34"><a href="#BirthNumber-34"><span class="linenos">34</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="BirthNumber-35"><a href="#BirthNumber-35"><span class="linenos">35</span></a>        <span class="c1"># has checksum function</span>
+</span><span id="BirthNumber-36"><a href="#BirthNumber-36"><span class="linenos">36</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(?P&lt;yy&gt;\d</span><span class="si">{2}</span><span class="s1">)&#39;</span>
+</span><span id="BirthNumber-37"><a href="#BirthNumber-37"><span class="linenos">37</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;mm&gt;\d</span><span class="si">{2}</span><span class="s1">)&#39;</span>
+</span><span id="BirthNumber-38"><a href="#BirthNumber-38"><span class="linenos">38</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;dd&gt;\d</span><span class="si">{2}</span><span class="s1">)/?&#39;</span>
+</span><span id="BirthNumber-39"><a href="#BirthNumber-39"><span class="linenos">39</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;sn&gt;\d</span><span class="si">{3}</span><span class="s1">)&#39;</span>
+</span><span id="BirthNumber-40"><a href="#BirthNumber-40"><span class="linenos">40</span></a>                             <span class="sa">r</span><span class="s1">&#39;(?P&lt;checksum&gt;\d)$&#39;</span><span class="p">)</span>
+</span><span id="BirthNumber-41"><a href="#BirthNumber-41"><span class="linenos">41</span></a>        <span class="c1"># regular expression to validate the id</span>
+</span><span id="BirthNumber-42"><a href="#BirthNumber-42"><span class="linenos">42</span></a>    <span class="p">})</span>
+</span><span id="BirthNumber-43"><a href="#BirthNumber-43"><span class="linenos">43</span></a>
+</span><span id="BirthNumber-44"><a href="#BirthNumber-44"><span class="linenos">44</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BirthNumber-45"><a href="#BirthNumber-45"><span class="linenos">45</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="BirthNumber-46"><a href="#BirthNumber-46"><span class="linenos">46</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber-47"><a href="#BirthNumber-47"><span class="linenos">47</span></a><span class="sd">        Validate birth number</span>
+</span><span id="BirthNumber-48"><a href="#BirthNumber-48"><span class="linenos">48</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="BirthNumber-49"><a href="#BirthNumber-49"><span class="linenos">49</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
+</span><span id="BirthNumber-50"><a href="#BirthNumber-50"><span class="linenos">50</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="BirthNumber-51"><a href="#BirthNumber-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</span><span id="BirthNumber-52"><a href="#BirthNumber-52"><span class="linenos">52</span></a>
+</span><span id="BirthNumber-53"><a href="#BirthNumber-53"><span class="linenos">53</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BirthNumber-54"><a href="#BirthNumber-54"><span class="linenos">54</span></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BirthNumberParseResult</span><span class="p">]:</span>
+</span><span id="BirthNumber-55"><a href="#BirthNumber-55"><span class="linenos">55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber-56"><a href="#BirthNumber-56"><span class="linenos">56</span></a><span class="sd">        parse the id number</span>
+</span><span id="BirthNumber-57"><a href="#BirthNumber-57"><span class="linenos">57</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="BirthNumber-58"><a href="#BirthNumber-58"><span class="linenos">58</span></a>        <span class="n">match_obj</span> <span class="o">=</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span>
+</span><span id="BirthNumber-59"><a href="#BirthNumber-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">match_obj</span><span class="p">:</span>
 </span><span id="BirthNumber-60"><a href="#BirthNumber-60"><span class="linenos">60</span></a>            <span class="k">return</span> <span class="kc">None</span>
 </span><span id="BirthNumber-61"><a href="#BirthNumber-61"><span class="linenos">61</span></a>
-</span><span id="BirthNumber-62"><a href="#BirthNumber-62"><span class="linenos">62</span></a>        <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;yy&#39;</span><span class="p">))</span>
-</span><span id="BirthNumber-63"><a href="#BirthNumber-63"><span class="linenos">63</span></a>        <span class="n">mm_code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;mm&#39;</span><span class="p">))</span>
-</span><span id="BirthNumber-64"><a href="#BirthNumber-64"><span class="linenos">64</span></a>        <span class="n">dd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;dd&#39;</span><span class="p">))</span>
-</span><span id="BirthNumber-65"><a href="#BirthNumber-65"><span class="linenos">65</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm_code</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">mm_code</span> <span class="o">-</span> <span class="mi">50</span>
-</span><span id="BirthNumber-66"><a href="#BirthNumber-66"><span class="linenos">66</span></a>        <span class="n">year_base</span> <span class="o">=</span> <span class="mi">2000</span> <span class="k">if</span> <span class="n">yy</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="mi">1900</span>
-</span><span id="BirthNumber-67"><a href="#BirthNumber-67"><span class="linenos">67</span></a>        <span class="n">sn</span> <span class="o">=</span> <span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;sn&#39;</span><span class="p">)</span>
-</span><span id="BirthNumber-68"><a href="#BirthNumber-68"><span class="linenos">68</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="BirthNumber-69"><a href="#BirthNumber-69"><span class="linenos">69</span></a>            <span class="k">return</span> <span class="p">{</span>
-</span><span id="BirthNumber-70"><a href="#BirthNumber-70"><span class="linenos">70</span></a>                <span class="s1">&#39;yyyymmdd&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">(</span><span class="n">year_base</span> <span class="o">+</span> <span class="n">yy</span><span class="p">,</span> <span class="n">mm</span><span class="p">,</span> <span class="n">dd</span><span class="p">),</span>
-</span><span id="BirthNumber-71"><a href="#BirthNumber-71"><span class="linenos">71</span></a>                <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">Gender</span><span class="o">.</span><span class="n">MALE</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">Gender</span><span class="o">.</span><span class="n">FEMALE</span><span class="p">,</span>
-</span><span id="BirthNumber-72"><a href="#BirthNumber-72"><span class="linenos">72</span></a>                <span class="s1">&#39;sn&#39;</span><span class="p">:</span> <span class="n">sn</span>
-</span><span id="BirthNumber-73"><a href="#BirthNumber-73"><span class="linenos">73</span></a>            <span class="p">}</span>
-</span><span id="BirthNumber-74"><a href="#BirthNumber-74"><span class="linenos">74</span></a>        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-</span><span id="BirthNumber-75"><a href="#BirthNumber-75"><span class="linenos">75</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="BirthNumber-76"><a href="#BirthNumber-76"><span class="linenos">76</span></a>
-</span><span id="BirthNumber-77"><a href="#BirthNumber-77"><span class="linenos">77</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="BirthNumber-78"><a href="#BirthNumber-78"><span class="linenos">78</span></a>    <span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="BirthNumber-79"><a href="#BirthNumber-79"><span class="linenos">79</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="BirthNumber-80"><a href="#BirthNumber-80"><span class="linenos">80</span></a><span class="sd">        Calculate SVK BirthNumber checksum digit</span>
-</span><span id="BirthNumber-81"><a href="#BirthNumber-81"><span class="linenos">81</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="BirthNumber-82"><a href="#BirthNumber-82"><span class="linenos">82</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
-</span><span id="BirthNumber-83"><a href="#BirthNumber-83"><span class="linenos">83</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="BirthNumber-84"><a href="#BirthNumber-84"><span class="linenos">84</span></a>        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">BirthNumber</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">))</span> <span class="o">%</span> <span class="mi">11</span> <span class="o">==</span> <span class="mi">0</span>
-</span><span id="BirthNumber-85"><a href="#BirthNumber-85"><span class="linenos">85</span></a>
-</span><span id="BirthNumber-86"><a href="#BirthNumber-86"><span class="linenos">86</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="BirthNumber-87"><a href="#BirthNumber-87"><span class="linenos">87</span></a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="BirthNumber-88"><a href="#BirthNumber-88"><span class="linenos">88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;remove the / out&quot;&quot;&quot;</span>
-</span><span id="BirthNumber-89"><a href="#BirthNumber-89"><span class="linenos">89</span></a>        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">id_number</span><span class="p">)</span>
+</span><span id="BirthNumber-62"><a href="#BirthNumber-62"><span class="linenos">62</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">):</span>
+</span><span id="BirthNumber-63"><a href="#BirthNumber-63"><span class="linenos">63</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="BirthNumber-64"><a href="#BirthNumber-64"><span class="linenos">64</span></a>
+</span><span id="BirthNumber-65"><a href="#BirthNumber-65"><span class="linenos">65</span></a>        <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;yy&#39;</span><span class="p">))</span>
+</span><span id="BirthNumber-66"><a href="#BirthNumber-66"><span class="linenos">66</span></a>        <span class="n">mm_code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;mm&#39;</span><span class="p">))</span>
+</span><span id="BirthNumber-67"><a href="#BirthNumber-67"><span class="linenos">67</span></a>        <span class="n">dd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;dd&#39;</span><span class="p">))</span>
+</span><span id="BirthNumber-68"><a href="#BirthNumber-68"><span class="linenos">68</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm_code</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">mm_code</span> <span class="o">-</span> <span class="mi">50</span>
+</span><span id="BirthNumber-69"><a href="#BirthNumber-69"><span class="linenos">69</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber-70"><a href="#BirthNumber-70"><span class="linenos">70</span></a><span class="sd">        from https://en.wikipedia.org/wiki/National_identification_number#Czech_Republic_and_Slovakia</span>
+</span><span id="BirthNumber-71"><a href="#BirthNumber-71"><span class="linenos">71</span></a><span class="sd">        In a law that took place in the year 2004, a failsafe system has been implemented, where in case</span>
+</span><span id="BirthNumber-72"><a href="#BirthNumber-72"><span class="linenos">72</span></a><span class="sd">        all valid serial numbers get depleted for a day, the number 20 gets added to the value of XX.</span>
+</span><span id="BirthNumber-73"><a href="#BirthNumber-73"><span class="linenos">73</span></a><span class="sd">        This means that XX can get up to 32 for males, and 82 for females.</span>
+</span><span id="BirthNumber-74"><a href="#BirthNumber-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="BirthNumber-75"><a href="#BirthNumber-75"><span class="linenos">75</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm</span> <span class="o">-</span> <span class="mi">20</span> <span class="k">if</span> <span class="n">mm</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="k">else</span> <span class="n">mm</span>
+</span><span id="BirthNumber-76"><a href="#BirthNumber-76"><span class="linenos">76</span></a>        <span class="n">year_base</span> <span class="o">=</span> <span class="mi">2000</span> <span class="k">if</span> <span class="n">yy</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="mi">1900</span>
+</span><span id="BirthNumber-77"><a href="#BirthNumber-77"><span class="linenos">77</span></a>        <span class="k">try</span><span class="p">:</span>
+</span><span id="BirthNumber-78"><a href="#BirthNumber-78"><span class="linenos">78</span></a>            <span class="k">return</span> <span class="p">{</span>
+</span><span id="BirthNumber-79"><a href="#BirthNumber-79"><span class="linenos">79</span></a>                <span class="s1">&#39;yyyymmdd&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">(</span><span class="n">year_base</span> <span class="o">+</span> <span class="n">yy</span><span class="p">,</span> <span class="n">mm</span><span class="p">,</span> <span class="n">dd</span><span class="p">),</span>
+</span><span id="BirthNumber-80"><a href="#BirthNumber-80"><span class="linenos">80</span></a>                <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">Gender</span><span class="o">.</span><span class="n">MALE</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">Gender</span><span class="o">.</span><span class="n">FEMALE</span><span class="p">,</span>
+</span><span id="BirthNumber-81"><a href="#BirthNumber-81"><span class="linenos">81</span></a>                <span class="s1">&#39;sn&#39;</span><span class="p">:</span> <span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;sn&#39;</span><span class="p">),</span>
+</span><span id="BirthNumber-82"><a href="#BirthNumber-82"><span class="linenos">82</span></a>                <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;checksum&#39;</span><span class="p">))</span>
+</span><span id="BirthNumber-83"><a href="#BirthNumber-83"><span class="linenos">83</span></a>            <span class="p">}</span>
+</span><span id="BirthNumber-84"><a href="#BirthNumber-84"><span class="linenos">84</span></a>        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+</span><span id="BirthNumber-85"><a href="#BirthNumber-85"><span class="linenos">85</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="BirthNumber-86"><a href="#BirthNumber-86"><span class="linenos">86</span></a>
+</span><span id="BirthNumber-87"><a href="#BirthNumber-87"><span class="linenos">87</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BirthNumber-88"><a href="#BirthNumber-88"><span class="linenos">88</span></a>    <span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="BirthNumber-89"><a href="#BirthNumber-89"><span class="linenos">89</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber-90"><a href="#BirthNumber-90"><span class="linenos">90</span></a><span class="sd">        Calculate SVK BirthNumber checksum digit</span>
+</span><span id="BirthNumber-91"><a href="#BirthNumber-91"><span class="linenos">91</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="BirthNumber-92"><a href="#BirthNumber-92"><span class="linenos">92</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
+</span><span id="BirthNumber-93"><a href="#BirthNumber-93"><span class="linenos">93</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="BirthNumber-94"><a href="#BirthNumber-94"><span class="linenos">94</span></a>        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">BirthNumber</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">))</span> <span class="o">%</span> <span class="mi">11</span> <span class="o">==</span> <span class="mi">0</span>
+</span><span id="BirthNumber-95"><a href="#BirthNumber-95"><span class="linenos">95</span></a>
+</span><span id="BirthNumber-96"><a href="#BirthNumber-96"><span class="linenos">96</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BirthNumber-97"><a href="#BirthNumber-97"><span class="linenos">97</span></a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="BirthNumber-98"><a href="#BirthNumber-98"><span class="linenos">98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;remove the / out&quot;&quot;&quot;</span>
+</span><span id="BirthNumber-99"><a href="#BirthNumber-99"><span class="linenos">99</span></a>        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">id_number</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -398,14 +441,14 @@
 
     </div>
     <a class="headerlink" href="#BirthNumber.validate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber.validate-41"><a href="#BirthNumber.validate-41"><span class="linenos">41</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="BirthNumber.validate-42"><a href="#BirthNumber.validate-42"><span class="linenos">42</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="BirthNumber.validate-43"><a href="#BirthNumber.validate-43"><span class="linenos">43</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="BirthNumber.validate-44"><a href="#BirthNumber.validate-44"><span class="linenos">44</span></a><span class="sd">        Validate birth number</span>
-</span><span id="BirthNumber.validate-45"><a href="#BirthNumber.validate-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="BirthNumber.validate-46"><a href="#BirthNumber.validate-46"><span class="linenos">46</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
-</span><span id="BirthNumber.validate-47"><a href="#BirthNumber.validate-47"><span class="linenos">47</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="BirthNumber.validate-48"><a href="#BirthNumber.validate-48"><span class="linenos">48</span></a>        <span class="k">return</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber.validate-44"><a href="#BirthNumber.validate-44"><span class="linenos">44</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BirthNumber.validate-45"><a href="#BirthNumber.validate-45"><span class="linenos">45</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="BirthNumber.validate-46"><a href="#BirthNumber.validate-46"><span class="linenos">46</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber.validate-47"><a href="#BirthNumber.validate-47"><span class="linenos">47</span></a><span class="sd">        Validate birth number</span>
+</span><span id="BirthNumber.validate-48"><a href="#BirthNumber.validate-48"><span class="linenos">48</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="BirthNumber.validate-49"><a href="#BirthNumber.validate-49"><span class="linenos">49</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
+</span><span id="BirthNumber.validate-50"><a href="#BirthNumber.validate-50"><span class="linenos">50</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="BirthNumber.validate-51"><a href="#BirthNumber.validate-51"><span class="linenos">51</span></a>        <span class="k">return</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -426,32 +469,39 @@
 
     </div>
     <a class="headerlink" href="#BirthNumber.parse"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber.parse-50"><a href="#BirthNumber.parse-50"><span class="linenos">50</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="BirthNumber.parse-51"><a href="#BirthNumber.parse-51"><span class="linenos">51</span></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BirthNumberParseResult</span><span class="p">]:</span>
-</span><span id="BirthNumber.parse-52"><a href="#BirthNumber.parse-52"><span class="linenos">52</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="BirthNumber.parse-53"><a href="#BirthNumber.parse-53"><span class="linenos">53</span></a><span class="sd">        parse the id number</span>
-</span><span id="BirthNumber.parse-54"><a href="#BirthNumber.parse-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="BirthNumber.parse-55"><a href="#BirthNumber.parse-55"><span class="linenos">55</span></a>        <span class="n">match_obj</span> <span class="o">=</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span>
-</span><span id="BirthNumber.parse-56"><a href="#BirthNumber.parse-56"><span class="linenos">56</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">match_obj</span><span class="p">:</span>
-</span><span id="BirthNumber.parse-57"><a href="#BirthNumber.parse-57"><span class="linenos">57</span></a>            <span class="k">return</span> <span class="kc">None</span>
-</span><span id="BirthNumber.parse-58"><a href="#BirthNumber.parse-58"><span class="linenos">58</span></a>
-</span><span id="BirthNumber.parse-59"><a href="#BirthNumber.parse-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber.parse-53"><a href="#BirthNumber.parse-53"><span class="linenos">53</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BirthNumber.parse-54"><a href="#BirthNumber.parse-54"><span class="linenos">54</span></a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BirthNumberParseResult</span><span class="p">]:</span>
+</span><span id="BirthNumber.parse-55"><a href="#BirthNumber.parse-55"><span class="linenos">55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber.parse-56"><a href="#BirthNumber.parse-56"><span class="linenos">56</span></a><span class="sd">        parse the id number</span>
+</span><span id="BirthNumber.parse-57"><a href="#BirthNumber.parse-57"><span class="linenos">57</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="BirthNumber.parse-58"><a href="#BirthNumber.parse-58"><span class="linenos">58</span></a>        <span class="n">match_obj</span> <span class="o">=</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">id_number</span><span class="p">)</span>
+</span><span id="BirthNumber.parse-59"><a href="#BirthNumber.parse-59"><span class="linenos">59</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">match_obj</span><span class="p">:</span>
 </span><span id="BirthNumber.parse-60"><a href="#BirthNumber.parse-60"><span class="linenos">60</span></a>            <span class="k">return</span> <span class="kc">None</span>
 </span><span id="BirthNumber.parse-61"><a href="#BirthNumber.parse-61"><span class="linenos">61</span></a>
-</span><span id="BirthNumber.parse-62"><a href="#BirthNumber.parse-62"><span class="linenos">62</span></a>        <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;yy&#39;</span><span class="p">))</span>
-</span><span id="BirthNumber.parse-63"><a href="#BirthNumber.parse-63"><span class="linenos">63</span></a>        <span class="n">mm_code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;mm&#39;</span><span class="p">))</span>
-</span><span id="BirthNumber.parse-64"><a href="#BirthNumber.parse-64"><span class="linenos">64</span></a>        <span class="n">dd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;dd&#39;</span><span class="p">))</span>
-</span><span id="BirthNumber.parse-65"><a href="#BirthNumber.parse-65"><span class="linenos">65</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm_code</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">mm_code</span> <span class="o">-</span> <span class="mi">50</span>
-</span><span id="BirthNumber.parse-66"><a href="#BirthNumber.parse-66"><span class="linenos">66</span></a>        <span class="n">year_base</span> <span class="o">=</span> <span class="mi">2000</span> <span class="k">if</span> <span class="n">yy</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="mi">1900</span>
-</span><span id="BirthNumber.parse-67"><a href="#BirthNumber.parse-67"><span class="linenos">67</span></a>        <span class="n">sn</span> <span class="o">=</span> <span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;sn&#39;</span><span class="p">)</span>
-</span><span id="BirthNumber.parse-68"><a href="#BirthNumber.parse-68"><span class="linenos">68</span></a>        <span class="k">try</span><span class="p">:</span>
-</span><span id="BirthNumber.parse-69"><a href="#BirthNumber.parse-69"><span class="linenos">69</span></a>            <span class="k">return</span> <span class="p">{</span>
-</span><span id="BirthNumber.parse-70"><a href="#BirthNumber.parse-70"><span class="linenos">70</span></a>                <span class="s1">&#39;yyyymmdd&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">(</span><span class="n">year_base</span> <span class="o">+</span> <span class="n">yy</span><span class="p">,</span> <span class="n">mm</span><span class="p">,</span> <span class="n">dd</span><span class="p">),</span>
-</span><span id="BirthNumber.parse-71"><a href="#BirthNumber.parse-71"><span class="linenos">71</span></a>                <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">Gender</span><span class="o">.</span><span class="n">MALE</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">Gender</span><span class="o">.</span><span class="n">FEMALE</span><span class="p">,</span>
-</span><span id="BirthNumber.parse-72"><a href="#BirthNumber.parse-72"><span class="linenos">72</span></a>                <span class="s1">&#39;sn&#39;</span><span class="p">:</span> <span class="n">sn</span>
-</span><span id="BirthNumber.parse-73"><a href="#BirthNumber.parse-73"><span class="linenos">73</span></a>            <span class="p">}</span>
-</span><span id="BirthNumber.parse-74"><a href="#BirthNumber.parse-74"><span class="linenos">74</span></a>        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-</span><span id="BirthNumber.parse-75"><a href="#BirthNumber.parse-75"><span class="linenos">75</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="BirthNumber.parse-62"><a href="#BirthNumber.parse-62"><span class="linenos">62</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">):</span>
+</span><span id="BirthNumber.parse-63"><a href="#BirthNumber.parse-63"><span class="linenos">63</span></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="BirthNumber.parse-64"><a href="#BirthNumber.parse-64"><span class="linenos">64</span></a>
+</span><span id="BirthNumber.parse-65"><a href="#BirthNumber.parse-65"><span class="linenos">65</span></a>        <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;yy&#39;</span><span class="p">))</span>
+</span><span id="BirthNumber.parse-66"><a href="#BirthNumber.parse-66"><span class="linenos">66</span></a>        <span class="n">mm_code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;mm&#39;</span><span class="p">))</span>
+</span><span id="BirthNumber.parse-67"><a href="#BirthNumber.parse-67"><span class="linenos">67</span></a>        <span class="n">dd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;dd&#39;</span><span class="p">))</span>
+</span><span id="BirthNumber.parse-68"><a href="#BirthNumber.parse-68"><span class="linenos">68</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm_code</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">mm_code</span> <span class="o">-</span> <span class="mi">50</span>
+</span><span id="BirthNumber.parse-69"><a href="#BirthNumber.parse-69"><span class="linenos">69</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber.parse-70"><a href="#BirthNumber.parse-70"><span class="linenos">70</span></a><span class="sd">        from https://en.wikipedia.org/wiki/National_identification_number#Czech_Republic_and_Slovakia</span>
+</span><span id="BirthNumber.parse-71"><a href="#BirthNumber.parse-71"><span class="linenos">71</span></a><span class="sd">        In a law that took place in the year 2004, a failsafe system has been implemented, where in case</span>
+</span><span id="BirthNumber.parse-72"><a href="#BirthNumber.parse-72"><span class="linenos">72</span></a><span class="sd">        all valid serial numbers get depleted for a day, the number 20 gets added to the value of XX.</span>
+</span><span id="BirthNumber.parse-73"><a href="#BirthNumber.parse-73"><span class="linenos">73</span></a><span class="sd">        This means that XX can get up to 32 for males, and 82 for females.</span>
+</span><span id="BirthNumber.parse-74"><a href="#BirthNumber.parse-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="BirthNumber.parse-75"><a href="#BirthNumber.parse-75"><span class="linenos">75</span></a>        <span class="n">mm</span> <span class="o">=</span> <span class="n">mm</span> <span class="o">-</span> <span class="mi">20</span> <span class="k">if</span> <span class="n">mm</span> <span class="o">&gt;</span> <span class="mi">20</span> <span class="k">else</span> <span class="n">mm</span>
+</span><span id="BirthNumber.parse-76"><a href="#BirthNumber.parse-76"><span class="linenos">76</span></a>        <span class="n">year_base</span> <span class="o">=</span> <span class="mi">2000</span> <span class="k">if</span> <span class="n">yy</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="mi">1900</span>
+</span><span id="BirthNumber.parse-77"><a href="#BirthNumber.parse-77"><span class="linenos">77</span></a>        <span class="k">try</span><span class="p">:</span>
+</span><span id="BirthNumber.parse-78"><a href="#BirthNumber.parse-78"><span class="linenos">78</span></a>            <span class="k">return</span> <span class="p">{</span>
+</span><span id="BirthNumber.parse-79"><a href="#BirthNumber.parse-79"><span class="linenos">79</span></a>                <span class="s1">&#39;yyyymmdd&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">(</span><span class="n">year_base</span> <span class="o">+</span> <span class="n">yy</span><span class="p">,</span> <span class="n">mm</span><span class="p">,</span> <span class="n">dd</span><span class="p">),</span>
+</span><span id="BirthNumber.parse-80"><a href="#BirthNumber.parse-80"><span class="linenos">80</span></a>                <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="n">Gender</span><span class="o">.</span><span class="n">MALE</span> <span class="k">if</span> <span class="n">mm_code</span> <span class="o">&lt;</span> <span class="mi">50</span> <span class="k">else</span> <span class="n">Gender</span><span class="o">.</span><span class="n">FEMALE</span><span class="p">,</span>
+</span><span id="BirthNumber.parse-81"><a href="#BirthNumber.parse-81"><span class="linenos">81</span></a>                <span class="s1">&#39;sn&#39;</span><span class="p">:</span> <span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;sn&#39;</span><span class="p">),</span>
+</span><span id="BirthNumber.parse-82"><a href="#BirthNumber.parse-82"><span class="linenos">82</span></a>                <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">match_obj</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s1">&#39;checksum&#39;</span><span class="p">))</span>
+</span><span id="BirthNumber.parse-83"><a href="#BirthNumber.parse-83"><span class="linenos">83</span></a>            <span class="p">}</span>
+</span><span id="BirthNumber.parse-84"><a href="#BirthNumber.parse-84"><span class="linenos">84</span></a>        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+</span><span id="BirthNumber.parse-85"><a href="#BirthNumber.parse-85"><span class="linenos">85</span></a>            <span class="k">return</span> <span class="kc">None</span>
 </span></pre></div>
 
 
@@ -472,14 +522,14 @@
 
     </div>
     <a class="headerlink" href="#BirthNumber.checksum"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber.checksum-77"><a href="#BirthNumber.checksum-77"><span class="linenos">77</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="BirthNumber.checksum-78"><a href="#BirthNumber.checksum-78"><span class="linenos">78</span></a>    <span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="BirthNumber.checksum-79"><a href="#BirthNumber.checksum-79"><span class="linenos">79</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="BirthNumber.checksum-80"><a href="#BirthNumber.checksum-80"><span class="linenos">80</span></a><span class="sd">        Calculate SVK BirthNumber checksum digit</span>
-</span><span id="BirthNumber.checksum-81"><a href="#BirthNumber.checksum-81"><span class="linenos">81</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="BirthNumber.checksum-82"><a href="#BirthNumber.checksum-82"><span class="linenos">82</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
-</span><span id="BirthNumber.checksum-83"><a href="#BirthNumber.checksum-83"><span class="linenos">83</span></a>            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="BirthNumber.checksum-84"><a href="#BirthNumber.checksum-84"><span class="linenos">84</span></a>        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">BirthNumber</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">))</span> <span class="o">%</span> <span class="mi">11</span> <span class="o">==</span> <span class="mi">0</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber.checksum-87"><a href="#BirthNumber.checksum-87"><span class="linenos">87</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BirthNumber.checksum-88"><a href="#BirthNumber.checksum-88"><span class="linenos">88</span></a>    <span class="k">def</span> <span class="nf">checksum</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="BirthNumber.checksum-89"><a href="#BirthNumber.checksum-89"><span class="linenos">89</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="BirthNumber.checksum-90"><a href="#BirthNumber.checksum-90"><span class="linenos">90</span></a><span class="sd">        Calculate SVK BirthNumber checksum digit</span>
+</span><span id="BirthNumber.checksum-91"><a href="#BirthNumber.checksum-91"><span class="linenos">91</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="BirthNumber.checksum-92"><a href="#BirthNumber.checksum-92"><span class="linenos">92</span></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">BirthNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">):</span>
+</span><span id="BirthNumber.checksum-93"><a href="#BirthNumber.checksum-93"><span class="linenos">93</span></a>            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="BirthNumber.checksum-94"><a href="#BirthNumber.checksum-94"><span class="linenos">94</span></a>        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">BirthNumber</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">))</span> <span class="o">%</span> <span class="mi">11</span> <span class="o">==</span> <span class="mi">0</span>
 </span></pre></div>
 
 
@@ -500,10 +550,10 @@
 
     </div>
     <a class="headerlink" href="#BirthNumber.normalize"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber.normalize-86"><a href="#BirthNumber.normalize-86"><span class="linenos">86</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="BirthNumber.normalize-87"><a href="#BirthNumber.normalize-87"><span class="linenos">87</span></a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="BirthNumber.normalize-88"><a href="#BirthNumber.normalize-88"><span class="linenos">88</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;remove the / out&quot;&quot;&quot;</span>
-</span><span id="BirthNumber.normalize-89"><a href="#BirthNumber.normalize-89"><span class="linenos">89</span></a>        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">id_number</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="BirthNumber.normalize-96"><a href="#BirthNumber.normalize-96"><span class="linenos">96</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="BirthNumber.normalize-97"><a href="#BirthNumber.normalize-97"><span class="linenos">97</span></a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="BirthNumber.normalize-98"><a href="#BirthNumber.normalize-98"><span class="linenos">98</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;remove the / out&quot;&quot;&quot;</span>
+</span><span id="BirthNumber.normalize-99"><a href="#BirthNumber.normalize-99"><span class="linenos">99</span></a>        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">id_number</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -524,31 +574,31 @@
 
     </div>
     <a class="headerlink" href="#CitizenIDNumber"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CitizenIDNumber-92"><a href="#CitizenIDNumber-92"><span class="linenos"> 92</span></a><span class="k">class</span> <span class="nc">CitizenIDNumber</span><span class="p">:</span>
-</span><span id="CitizenIDNumber-93"><a href="#CitizenIDNumber-93"><span class="linenos"> 93</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CitizenIDNumber-94"><a href="#CitizenIDNumber-94"><span class="linenos"> 94</span></a><span class="sd">    Slovakia Citizen Identification Card Number format, Číslo občianskeho preukazu (ČOP)</span>
-</span><span id="CitizenIDNumber-95"><a href="#CitizenIDNumber-95"><span class="linenos"> 95</span></a><span class="sd">    https://en.wikipedia.org/wiki/National_identification_number#Slovakia</span>
-</span><span id="CitizenIDNumber-96"><a href="#CitizenIDNumber-96"><span class="linenos"> 96</span></a><span class="sd">    https://en.wikipedia.org/wiki/Slovak_identity_card</span>
-</span><span id="CitizenIDNumber-97"><a href="#CitizenIDNumber-97"><span class="linenos"> 97</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="CitizenIDNumber-98"><a href="#CitizenIDNumber-98"><span class="linenos"> 98</span></a>    <span class="n">METADATA</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
-</span><span id="CitizenIDNumber-99"><a href="#CitizenIDNumber-99"><span class="linenos"> 99</span></a>        <span class="s1">&#39;iso3166_alpha2&#39;</span><span class="p">:</span> <span class="s1">&#39;SK&#39;</span><span class="p">,</span>
-</span><span id="CitizenIDNumber-100"><a href="#CitizenIDNumber-100"><span class="linenos">100</span></a>        <span class="s1">&#39;min_length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-</span><span id="CitizenIDNumber-101"><a href="#CitizenIDNumber-101"><span class="linenos">101</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-</span><span id="CitizenIDNumber-102"><a href="#CitizenIDNumber-102"><span class="linenos">102</span></a>        <span class="c1"># length without insignificant chars</span>
-</span><span id="CitizenIDNumber-103"><a href="#CitizenIDNumber-103"><span class="linenos">103</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="CitizenIDNumber-104"><a href="#CitizenIDNumber-104"><span class="linenos">104</span></a>        <span class="c1"># has parse function</span>
-</span><span id="CitizenIDNumber-105"><a href="#CitizenIDNumber-105"><span class="linenos">105</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="CitizenIDNumber-106"><a href="#CitizenIDNumber-106"><span class="linenos">106</span></a>        <span class="c1"># has checksum function</span>
-</span><span id="CitizenIDNumber-107"><a href="#CitizenIDNumber-107"><span class="linenos">107</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[A-Z]</span><span class="si">{2}</span><span class="s1"> ?\d</span><span class="si">{6}</span><span class="s1">$&#39;</span><span class="p">)</span>
-</span><span id="CitizenIDNumber-108"><a href="#CitizenIDNumber-108"><span class="linenos">108</span></a>        <span class="c1"># regular expression to validate the id</span>
-</span><span id="CitizenIDNumber-109"><a href="#CitizenIDNumber-109"><span class="linenos">109</span></a>    <span class="p">})</span>
-</span><span id="CitizenIDNumber-110"><a href="#CitizenIDNumber-110"><span class="linenos">110</span></a>
-</span><span id="CitizenIDNumber-111"><a href="#CitizenIDNumber-111"><span class="linenos">111</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="CitizenIDNumber-112"><a href="#CitizenIDNumber-112"><span class="linenos">112</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="CitizenIDNumber-113"><a href="#CitizenIDNumber-113"><span class="linenos">113</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CitizenIDNumber-114"><a href="#CitizenIDNumber-114"><span class="linenos">114</span></a><span class="sd">        Validate CitizenIDNumber</span>
-</span><span id="CitizenIDNumber-115"><a href="#CitizenIDNumber-115"><span class="linenos">115</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CitizenIDNumber-116"><a href="#CitizenIDNumber-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">CitizenIDNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CitizenIDNumber-102"><a href="#CitizenIDNumber-102"><span class="linenos">102</span></a><span class="k">class</span> <span class="nc">CitizenIDNumber</span><span class="p">:</span>
+</span><span id="CitizenIDNumber-103"><a href="#CitizenIDNumber-103"><span class="linenos">103</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CitizenIDNumber-104"><a href="#CitizenIDNumber-104"><span class="linenos">104</span></a><span class="sd">    Slovakia Citizen Identification Card Number format, Číslo občianskeho preukazu (ČOP)</span>
+</span><span id="CitizenIDNumber-105"><a href="#CitizenIDNumber-105"><span class="linenos">105</span></a><span class="sd">    https://en.wikipedia.org/wiki/National_identification_number#Slovakia</span>
+</span><span id="CitizenIDNumber-106"><a href="#CitizenIDNumber-106"><span class="linenos">106</span></a><span class="sd">    https://en.wikipedia.org/wiki/Slovak_identity_card</span>
+</span><span id="CitizenIDNumber-107"><a href="#CitizenIDNumber-107"><span class="linenos">107</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="CitizenIDNumber-108"><a href="#CitizenIDNumber-108"><span class="linenos">108</span></a>    <span class="n">METADATA</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="o">**</span><span class="p">{</span>
+</span><span id="CitizenIDNumber-109"><a href="#CitizenIDNumber-109"><span class="linenos">109</span></a>        <span class="s1">&#39;iso3166_alpha2&#39;</span><span class="p">:</span> <span class="s1">&#39;SK&#39;</span><span class="p">,</span>
+</span><span id="CitizenIDNumber-110"><a href="#CitizenIDNumber-110"><span class="linenos">110</span></a>        <span class="s1">&#39;min_length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+</span><span id="CitizenIDNumber-111"><a href="#CitizenIDNumber-111"><span class="linenos">111</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+</span><span id="CitizenIDNumber-112"><a href="#CitizenIDNumber-112"><span class="linenos">112</span></a>        <span class="c1"># length without insignificant chars</span>
+</span><span id="CitizenIDNumber-113"><a href="#CitizenIDNumber-113"><span class="linenos">113</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="CitizenIDNumber-114"><a href="#CitizenIDNumber-114"><span class="linenos">114</span></a>        <span class="c1"># has parse function</span>
+</span><span id="CitizenIDNumber-115"><a href="#CitizenIDNumber-115"><span class="linenos">115</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="CitizenIDNumber-116"><a href="#CitizenIDNumber-116"><span class="linenos">116</span></a>        <span class="c1"># has checksum function</span>
+</span><span id="CitizenIDNumber-117"><a href="#CitizenIDNumber-117"><span class="linenos">117</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[A-Z]</span><span class="si">{2}</span><span class="s1"> ?\d</span><span class="si">{6}</span><span class="s1">$&#39;</span><span class="p">)</span>
+</span><span id="CitizenIDNumber-118"><a href="#CitizenIDNumber-118"><span class="linenos">118</span></a>        <span class="c1"># regular expression to validate the id</span>
+</span><span id="CitizenIDNumber-119"><a href="#CitizenIDNumber-119"><span class="linenos">119</span></a>    <span class="p">})</span>
+</span><span id="CitizenIDNumber-120"><a href="#CitizenIDNumber-120"><span class="linenos">120</span></a>
+</span><span id="CitizenIDNumber-121"><a href="#CitizenIDNumber-121"><span class="linenos">121</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="CitizenIDNumber-122"><a href="#CitizenIDNumber-122"><span class="linenos">122</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="CitizenIDNumber-123"><a href="#CitizenIDNumber-123"><span class="linenos">123</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CitizenIDNumber-124"><a href="#CitizenIDNumber-124"><span class="linenos">124</span></a><span class="sd">        Validate CitizenIDNumber</span>
+</span><span id="CitizenIDNumber-125"><a href="#CitizenIDNumber-125"><span class="linenos">125</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CitizenIDNumber-126"><a href="#CitizenIDNumber-126"><span class="linenos">126</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">CitizenIDNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -570,12 +620,12 @@
 
     </div>
     <a class="headerlink" href="#CitizenIDNumber.validate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="CitizenIDNumber.validate-111"><a href="#CitizenIDNumber.validate-111"><span class="linenos">111</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="CitizenIDNumber.validate-112"><a href="#CitizenIDNumber.validate-112"><span class="linenos">112</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="CitizenIDNumber.validate-113"><a href="#CitizenIDNumber.validate-113"><span class="linenos">113</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="CitizenIDNumber.validate-114"><a href="#CitizenIDNumber.validate-114"><span class="linenos">114</span></a><span class="sd">        Validate CitizenIDNumber</span>
-</span><span id="CitizenIDNumber.validate-115"><a href="#CitizenIDNumber.validate-115"><span class="linenos">115</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="CitizenIDNumber.validate-116"><a href="#CitizenIDNumber.validate-116"><span class="linenos">116</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">CitizenIDNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="CitizenIDNumber.validate-121"><a href="#CitizenIDNumber.validate-121"><span class="linenos">121</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="CitizenIDNumber.validate-122"><a href="#CitizenIDNumber.validate-122"><span class="linenos">122</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="CitizenIDNumber.validate-123"><a href="#CitizenIDNumber.validate-123"><span class="linenos">123</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="CitizenIDNumber.validate-124"><a href="#CitizenIDNumber.validate-124"><span class="linenos">124</span></a><span class="sd">        Validate CitizenIDNumber</span>
+</span><span id="CitizenIDNumber.validate-125"><a href="#CitizenIDNumber.validate-125"><span class="linenos">125</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="CitizenIDNumber.validate-126"><a href="#CitizenIDNumber.validate-126"><span class="linenos">126</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">CitizenIDNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -584,6 +634,20 @@
 
 
                             </div>
+                </section>
+                <section id="NationalID">
+                    <div class="attr variable">
+            <span class="name">NationalID</span>        =
+<span class="default_value">&lt;class &#39;<a href="#BirthNumber">idnumbers.nationalid.SVK.BirthNumber</a>&#39;&gt;</span>
+
+        
+    </div>
+    <a class="headerlink" href="#NationalID"></a>
+    
+            <div class="docstring"><p>alias of BirthNumber</p>
+</div>
+
+
                 </section>
     </main>
 <script>
