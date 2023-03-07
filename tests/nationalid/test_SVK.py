@@ -20,7 +20,8 @@ class TestSVKValidation(TestCase):
         self.assertEqual(2, result['yyyymmdd'].month)
         self.assertEqual(29, result['yyyymmdd'].day)
         self.assertEqual(Gender.FEMALE, result['gender'])
-        self.assertEqual('9011', result['sn'])
+        self.assertEqual('901', result['sn'])
+        self.assertEqual(1, result['checksum'])
 
 
 if __name__ == '__main__':
