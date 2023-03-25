@@ -21,8 +21,8 @@ jobs:
           echo "==== before update ========================="
           cat VERSION
           echo "${{ inputs.version }}" > VERSION
-          echo "<option {{ 'selected' if env['version'] == '${{ inputs.version }}' else '' }} value=\"${{ inputs.version }}\">${{ inputs.version }}</option>" \
-               >> docs/pdoc_template/version.html.jinja2
+          sed -i -e "1i <option {{ 'selected' if env['version'] == '${{ inputs.version }}' else '' }} value=\"${{ inputs.version }}\">${{ inputs.version }}</option>" \
+              docs/pdoc_template/version.html.jinja2
           echo "==== after update ========================="
           cat VERSION
           git add VERSION
