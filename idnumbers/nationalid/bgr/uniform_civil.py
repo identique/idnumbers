@@ -34,7 +34,14 @@ class UniformCivilNumber:
                              r'(?P<dd>\d{2})'
                              r'\d{2}'
                              r'(?P<gender>\d)'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Uniform civil number',
+                  'Единен граждански номер',
+                  'Edinen grazhdanski nomer',
+                  'ЕГН',
+                  'EGN'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bulgaria']
     })
 
     @staticmethod

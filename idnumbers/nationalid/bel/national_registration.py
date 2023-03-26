@@ -37,7 +37,14 @@ class NationalRegistrationNumber:
         'checksum': True,
         'regexp': re.compile(r'^(?P<yy>\d{2})\.?(?P<mm>\d{2})\.?(?P<dd>\d{2})-?'
                              r'(?P<sn>\d{3})\.?'
-                             r'(?P<checksum>\d{2})$')
+                             r'(?P<checksum>\d{2})$'),
+        'alias_of': None,
+        'names': ['National registration number',
+                  'Belgian identity card',
+                  'Identiteitskaart',
+                  'Carte d’identité',
+                  'Personalausweis'],
+        'links': ['https://en.wikipedia.org/wiki/Belgian_identity_card']
     })
 
     @staticmethod

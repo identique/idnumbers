@@ -1,11 +1,11 @@
 from .alb.identity_number import IdentityNumber
+from .util import alias_of
 
-
-NationalID = IdentityNumber
+NationalID = alias_of(IdentityNumber)
 """alias of IdentityNumber"""
-NISH = IdentityNumber
+NISH = alias_of(IdentityNumber)
 """alias of IdentityNumber"""
-NIPT = IdentityNumber
+NIPT = alias_of(IdentityNumber)
 """alias of IdentityNumber"""
-NID = IdentityNumber
+NID = alias_of(IdentityNumber)
 """alias of IdentityNumber"""

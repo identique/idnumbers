@@ -40,7 +40,18 @@ class UniqueMasterCitizenNumber:
                              r'(?P<yyy>\d{3})'
                              r'(?P<location>\d{2})'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Unique  master citizen number',
+                  'JMBG',
+                  'Jedinstveni matični broj građana',
+                  'Јединствени матични број грађана',
+                  'ЈМБГ',
+                  'Единствен матичен број на граѓанинот',
+                  'ЕМБГ',
+                  'Enotna matična številka občana,',
+                  'EMŠO'],
+        'links': ['https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number']
     })
 
     MAGIC_MULTIPLIER = [7, 6, 5, 4, 3, 2]

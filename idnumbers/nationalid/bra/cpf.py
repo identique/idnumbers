@@ -16,7 +16,11 @@ class CPFNumber:
         'max_length': 11,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^(\d{3}\.?\d{3}\.?\d{3}-?\d{2})$')
+        'regexp': re.compile(r'^(\d{3}\.?\d{3}\.?\d{3}-?\d{2})$'),
+        'alias_of': None,
+        'names': ['CPF number',
+                  'Cadastro de Pessoas Físicas'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil']
     })
 
     MULTIPLIER1 = [10, 9, 8, 7, 6, 5, 4, 3, 2]

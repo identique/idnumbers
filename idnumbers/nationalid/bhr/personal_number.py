@@ -27,7 +27,16 @@ class PersonalNumber:
         'checksum': False,
         'regexp': re.compile(r'^(?P<yymm>\d{2}(?:0[1-9]|1[012]))'
                              r'(?P<sn>\d{4})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Personal number',
+                  'Identification card number',
+                  'بطاقة الهوية',
+                  'الرقم الشخصي',
+                  'Central population registration number',
+                  'CPR',
+                  'الرقم السكاني'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bahrain']
     })
 
     @staticmethod

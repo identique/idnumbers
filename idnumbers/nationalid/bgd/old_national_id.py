@@ -46,7 +46,16 @@ class OldNationalID:
                              r'(?P<rmo>\d)'
                              r'(?P<police>\d{2})'
                              r'(?P<union>\d{2})'
-                             r'(?P<sn>\d{6})$')
+                             r'(?P<sn>\d{6})$'),
+        'alias_of': None,
+        'names': ['Bangladesh national ID number',
+                  'জাতীয় পরিচয়পত্র',
+                  'NID',
+                  'BD'],
+        'links': [
+            'https://en.wikipedia.org/wiki/National_identity_card_(Bangladesh)',
+            'http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html',
+            'https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3']
     })
 
     RMO_MAP = {

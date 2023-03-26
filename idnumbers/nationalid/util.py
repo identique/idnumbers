@@ -1,3 +1,4 @@
+from copy import copy
 from re import Pattern
 from typing import List, Literal, Optional, Type, cast
 
@@ -151,3 +152,14 @@ def ean13_digit(numbers: List[int]) -> CHECK_DIGIT:
     modulus = total % 10
     return cast(CHECK_DIGIT,
                 0 if modulus == 0 else (10 - modulus))
+
+
+def alias_of(cls: Type) -> Type:
+    assert hasattr(cls, 'METADATA'), f'the type {cls} must have METADATA attribute'
+    metadata = copy(cls.METADATA)
+    metadata.alias_of = cls
+
+    class AliasType(cls):
+        METADATA = metadata
+
+    return AliasType

@@ -1,4 +1,5 @@
 from .aut.tax_id import TaxIDNumber
+from .util import alias_of
 
-NationalID = TaxIDNumber
+NationalID = alias_of(TaxIDNumber)
 """alias of TaxIDNumber"""
