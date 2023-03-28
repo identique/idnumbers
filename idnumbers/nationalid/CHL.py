@@ -1,6 +1,7 @@
 from .chl.national_id import NationalID
+from .util import alias_of
 
-RUN = NationalID
+RUN = alias_of(NationalID)
 """alias of NationalID"""
-RUT = NationalID
+RUT = alias_of(NationalID)
 """alias of NationalID"""

@@ -41,7 +41,13 @@ class ResidentID:
                              r'(?P<mm>0[1-9]|1[12])'
                              r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>(\d|X))$')
+                             r'(?P<checksum>(\d|X))$'),
+        'alias_of': None,
+        'names': ['Resident Identity Number',
+                  '居民身份证',
+                  'Jūmín Shēnfènzhèng'],
+        'links': ['https://en.wikipedia.org/wiki/Resident_Identity_Card',
+                  'https://en.wikipedia.org/wiki/National_identification_number#China']
     })
 
     @staticmethod
