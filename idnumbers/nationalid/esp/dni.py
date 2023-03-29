@@ -18,7 +18,12 @@ class DNI:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^(\d{8})([A-Z])$')
+        'regexp': re.compile(r'^(\d{8})([A-Z])$'),
+        'alias_of': None,
+        'names': ['Documento Nacional de Identidad',
+                  'DNI'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Spain',
+                  'https://es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal']
     })
 
     @staticmethod

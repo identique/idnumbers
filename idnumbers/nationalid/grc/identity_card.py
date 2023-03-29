@@ -14,8 +14,11 @@ class IdentityCard:
         'max_length': 7,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩABEZHIKMNOPTYX]{2}-?\d{6}$')
+        'regexp': re.compile(r'^[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩABEZHIKMNOPTYX]{2}-?\d{6}$'),
         # They are two different char set, the former is Greek alphabet, the latter is Latin alphabet
+        'alias_of': None,
+        'names': ['Identity Card Number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece']
     })
 
     @staticmethod

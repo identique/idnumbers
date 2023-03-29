@@ -34,7 +34,12 @@ class IcelandicID:
         'regexp': re.compile(r'^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})-?'
                              r'(?P<sn>\d{2})'
                              r'(?P<checksum>\d)'
-                             r'(?P<century>\d)$')
+                             r'(?P<century>\d)$'),
+        'alias_of': None,
+        'names': ['Icelandic identification number',
+                  'kennitala',
+                  'kt.'],
+        'links': ['https://en.wikipedia.org/wiki/Icelandic_identification_number']
     })
 
     WEIGHTS = [3, 2, 7, 6, 5, 4, 3, 2]

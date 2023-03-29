@@ -33,7 +33,12 @@ class PersonalID:
         'regexp': re.compile(r'^(?P<gender_century>\d)'
                              r'(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Personal ID Number',
+                  'isikukood'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Estonia',
+                  'https://et.wikipedia.org/wiki/Isikukood']
     })
 
     WEIGHTS1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1]

@@ -21,7 +21,13 @@ class NationalID:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{9})$')
+        'regexp': re.compile(r'^(\d{9})$'),
+        'alias_of': None,
+        'names': ['Identity Number',
+                  'מספר זהות',
+                  'Mispar Zehut'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Israel',
+                  'https://taxid.pro/docs/countries/israel']
     })
 
     @staticmethod

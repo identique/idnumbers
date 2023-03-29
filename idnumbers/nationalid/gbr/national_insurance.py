@@ -15,7 +15,13 @@ class NationalInsuranceNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^[A-Z]{2}\d{6}[A-Z]$')
+        'regexp': re.compile(r'^[A-Z]{2}\d{6}[A-Z]$'),
+        'alias_of': None,
+        'names': ['National Insurance Number',
+                  'NI No',
+                  'NINO'],
+        'links': ['https://en.wikipedia.org/wiki/National_Insurance_number',
+                  'https://www.gov.uk/hmrc-internal-manuals/national-insurance-manual/nim39110']
     })
 
     @staticmethod

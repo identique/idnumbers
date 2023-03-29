@@ -22,7 +22,16 @@ class TaxID:
         'max_length': 11,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{2} ?\d{3} ?\d{3} ?\d{3}$')
+        'regexp': re.compile(r'^\d{2} ?\d{3} ?\d{3} ?\d{3}$'),
+        'alias_of': None,
+        'names': ['Tax ID',
+                  'Steuerliche Identifikationsnummer',
+                  'Persönliche Identificationsnummer',
+                  'Identifikationsnummer',
+                  'Steuer-IdNr.',
+                  'IdNr',
+                  'Steuer-ID'],
+        'links': ['https://allaboutberlin.com/guides/german-tax-id-steuernummer']
     })
 
     @staticmethod
@@ -82,7 +91,3 @@ class TaxID:
             if normalized[index] == normalized[index + 1] and normalized[index] == normalized[index + 2]:
                 return False
         return True
-
-
-IdNr = TaxID
-"""alias of TaxID"""

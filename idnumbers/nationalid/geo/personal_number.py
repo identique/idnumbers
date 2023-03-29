@@ -14,7 +14,10 @@ class PersonalNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^\d{9}$')
+        'regexp': re.compile(r'^\d{9}$'),
+        'alias_of': None,
+        'names': ['personal number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Georgia']
     })
 
     @staticmethod

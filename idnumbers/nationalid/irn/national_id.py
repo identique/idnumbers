@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional
-from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, letter_to_number
+from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit
 
 
 def normalize(id_number: str) -> str:
@@ -20,7 +20,12 @@ class NationalID:
         'max_length': 10,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{3}-?\d{6}-?\d$')
+        'regexp': re.compile(r'^\d{3}-?\d{6}-?\d$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'kart-e-meli',
+                  'کارت ملی'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of']
     })
 
     MULTIPLIER = [10, 9, 8, 7, 6, 5, 4, 3, 2]

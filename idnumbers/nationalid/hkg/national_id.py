@@ -21,7 +21,13 @@ class NationalID:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r"^[A-Z]{1,2}[0-9]{6}[0-9A]$")
+        'regexp': re.compile(r"^[A-Z]{1,2}[0-9]{6}[0-9A]$"),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  '香港身份證'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Hong_Kong',
+                  'https://pinkylam.me/playground/hkid/']
+
     })
 
     @staticmethod

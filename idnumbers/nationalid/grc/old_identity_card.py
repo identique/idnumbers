@@ -14,7 +14,10 @@ class OldIdentityCard:
         'max_length': 7,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]-?\d{6}$')
+        'regexp': re.compile(r'^[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]-?\d{6}$'),
+        'alias_of': None,
+        'names': ['Identity Card Number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece']
     })
 
     @staticmethod

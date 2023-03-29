@@ -40,7 +40,12 @@ class FiscalCode:
                              r'(?P<m>[A-EHLMPR-T])'
                              r'(?P<dd>[0-9A-Z]{2})'
                              r'(?P<area_code>[A-Z][0-9A-Z]{3})'
-                             r'(?P<checksum>[A-Z])$')
+                             r'(?P<checksum>[A-Z])$'),
+        'alias_of': None,
+        'names': ['Fiscal Code',
+                  'Codice fiscale'],
+        'links': ['https://en.wikipedia.org/wiki/Italian_fiscal_code',
+                  'https://en.wikipedia.org/wiki/National_identification_number#Italy']
     })
 
     MONTH_MAP = {'A': 1, 'B': 2, 'C': 3, 'D': 4,
