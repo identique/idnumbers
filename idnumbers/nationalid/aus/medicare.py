@@ -25,7 +25,16 @@ class MedicareNumber:
                              r'[2-6]\d{9}|[2-6]\d{9}([-/]\d)?|'
                              r'[2-6]\d{3} \d{5} \d([-/]\d)?|[2-6]\d{3}-\d{5}-\d([-/]\d)?|'
                              r'[2-6]\d{3} \d{5} \d \d|[2-6]\d{3}-\d{5}-\d-\d'
-                             r')$')
+                             r')$'),
+        'alias_of': None,
+        'names': ['Medicare Number', 'Medicare No'],
+        'links': [
+            'https://techdocs.broadcom.com/us/en/symantec-security-software/'
+            'information-security/data-loss-prevention/15-8/'
+            'about-data-loss-prevention-policies-v27576413-d327e9'
+            '/library-of-system-data-identifiers-v95989112-d327e56315/'
+            'australian-medicare-number-v115447646-d327e57399.html'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER = [1, 3, 7, 9, 1, 3, 7, 9]

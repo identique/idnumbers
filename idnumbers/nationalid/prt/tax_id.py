@@ -16,7 +16,13 @@ class TaxIDNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^([12356][0-9]|45|7[012]|9[0189])\d{7}$')
+        'regexp': re.compile(r'^([12356][0-9]|45|7[012]|9[0189])\d{7}$'),
+        'alias_of': None,
+        'names': ['Tax ID Number',
+                  'Número de identificação fiscal'
+                  'NIF'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Portugal'],
+        'deprecated': False
     })
 
     @staticmethod

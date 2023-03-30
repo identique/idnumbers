@@ -17,7 +17,13 @@ class RGNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^(\d{2}[.]\d{3}[.]\d{3}[-][\d|X])$')
+        'regexp': re.compile(r'^(\d{2}\.\d{3}\.\d{3}-[\d|X])$'),
+        'alias_of': None,
+        'names': ['RG number',
+                  'Registro Geral number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil',
+                  'https://en.wikipedia.org/wiki/Brazilian_identity_cards'],
+        'deprecated': False
     })
 
     @staticmethod

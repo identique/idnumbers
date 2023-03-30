@@ -18,8 +18,14 @@ class SocialSecurityNumber:
         # has parse function
         'checksum': False,
         # has checksum function
-        'regexp': re.compile(r'^\d{9}$')
+        'regexp': re.compile(r'^\d{9}$'),
         # regular expression to validate the id
+        'alias_of': None,
+        'names': ['Social Security Number',
+                  'SSI'],
+        'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
+                  'tax-identification-numbers/San-Marino-TIN.pdf'],
+        'deprecated': False
     })
 
     @staticmethod

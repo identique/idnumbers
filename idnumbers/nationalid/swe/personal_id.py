@@ -39,7 +39,15 @@ class PersonalIdentityNumber:
         'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})'
                              r'(?P<sep>[+|-])'
                              r'(?!000)(?P<birth_number>\d{3})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Personal Identity Number',
+                  'personnummer'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Sweden',
+                  'https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)',
+                  'https://swedish.identityinfo.net/',
+                  'https://personnummer.dev/'],
+        'deprecated': False
 
     })
 

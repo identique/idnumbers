@@ -19,7 +19,11 @@ class SocialInsuranceNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^\d{9}$')
+        'regexp': re.compile(r'^\d{9}$'),
+        'alias_of': None,
+        'names': ['Social Insurance Number',
+                  'SIN'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Canada']
     })
 
     MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2, 1]

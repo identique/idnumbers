@@ -33,7 +33,14 @@ class PersonalCode:
         'regexp': re.compile(r'^(?P<g>\d)'
                              r'(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Personal Code',
+                  'asmens kodas'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Lithuania',
+                  'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
+                  'tax-identification-numbers/Lithuania-TIN.pdf'],
+        'deprecated': False
     })
 
     @staticmethod

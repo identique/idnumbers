@@ -4,6 +4,7 @@ from ..svk.birth_number import BirthNumber as SVKBirthNumber
 
 CZE_METADATA = copy(SVKBirthNumber.METADATA)
 CZE_METADATA.iso3166_alpha2 = 'CZ'
+CZE_METADATA.links = ['https://en.wikipedia.org/wiki/National_identification_number#Czech_Republic_and_Slovakia']
 
 
 class BirthNumber(SVKBirthNumber):

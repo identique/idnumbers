@@ -1,6 +1,7 @@
 from typing import Union
 from .lva.personal_code import PersonalCode
 from .lva.old_personal_code import OldPersonalCode
+from .util import alias_of
 
 
 def get_validator(id_number: str) -> Union[type[PersonalCode], type[OldPersonalCode]]:
@@ -12,5 +13,5 @@ def get_validator(id_number: str) -> Union[type[PersonalCode], type[OldPersonalC
         return OldPersonalCode
 
 
-NationalID = PersonalCode
+NationalID = alias_of(PersonalCode)
 """alias of PersonalCode"""

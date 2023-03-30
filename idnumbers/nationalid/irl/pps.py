@@ -20,7 +20,16 @@ class PersonalPublicServiceNumber:
         'parsable': False,
         'checksum': True,
         'regexp': re.compile(r'^\d{7}[A-W][A-W\s]?$|'
-                             r'^\d{7}[A-W]/[A-W\s]?$')
+                             r'^\d{7}[A-W]/[A-W\s]?$'),
+        'alias_of': None,
+        'names': ['Personal Public Service Number',
+                  'PPS',
+                  'Uimhir Phearsanta Seirbhíse Poiblí',
+                  'Uimh. PSP',
+                  'Revenue and Social Insurance Number',
+                  'RSI No'],
+        'links': ['https://en.wikipedia.org/wiki/Personal_Public_Service_Number'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER = [8, 7, 6, 5, 4, 3, 2, 9]

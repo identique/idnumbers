@@ -40,7 +40,15 @@ class UniquePersonalID:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{2,3}\.?\d{3}\.?\d{3}-?\d)$')
+        'regexp': re.compile(r'^(\d{2,3}\.?\d{3}\.?\d{3}-?\d)$'),
+        'alias_of': None,
+        'names': ['Unique Personal ID',
+                  'NUIP',
+                  'Número único de identidad personal'],
+        'links': ['https://en.wikipedia.org/wiki/Colombian_identity_card',
+                  'https://en.wikipedia.org/wiki/National_identification_number#Colombia',
+                  'https://validatetin.com/colombia/#'],
+        'deprecated': False
     })
 
     WEIGHTS = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]
@@ -59,7 +67,3 @@ class UniquePersonalID:
         if not validate_regexp(id_number, UniquePersonalID.METADATA.regexp):
             return False
         return colombia_checksum(id_number)
-
-
-NUIP = UniquePersonalID
-"""alias of UniquePersonalID"""

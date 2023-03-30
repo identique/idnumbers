@@ -1,4 +1,5 @@
 from .fra.insee import INSEE
+from .util import alias_of
 
-NationalID = INSEE
+NationalID = alias_of(INSEE)
 """alias of INSEE"""

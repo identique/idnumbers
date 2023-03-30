@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional
-from ..util import CHECK_DIGIT, validate_regexp
+from ..util import CHECK_DIGIT, alias_of, validate_regexp
 from .util import normalize
 
 
@@ -24,10 +24,19 @@ class TaxFileNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{9}|\d{8})$')
+        'regexp': re.compile(r'^(\d{9}|\d{8})$'),
+        'alias_of': None,
+        'names': ['Tax file number',
+                  'TFN'],
+        'links': [
+            'https://en.wikipedia.org/wiki/National_identification_number#Australia',
+            'https://en.wikipedia.org/wiki/Tax_file_number',
+            'https://www.ato.gov.au/General/What-is-a-tax-file-number----Easy-Read/',
+            'https://en-academic.com/dic.nsf/enwiki/436130'],
+        'deprecated': False
     })
 
-    MAGIC_MULTIPLIER = [1, 4, 3, 7, 5, 8, 6, 9, 10]
+    MULTIPLIER = [1, 4, 3, 7, 5, 8, 6, 9, 10]
     """The magic multiplier for checksum"""
 
     @staticmethod
@@ -48,4 +57,8 @@ class TaxFileNumber:
         if len(normalized) == 8:
             normalized = normalized[0:7] + '0' + normalized[7]
         number_list = [int(char) for char in list(normalized)]
-        return sum([value * TaxFileNumber.MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)]) % 11
+        return sum([value * TaxFileNumber.MULTIPLIER[index] for (index, value) in enumerate(number_list)]) % 11
+
+
+TFN = alias_of(TaxFileNumber)
+"""alias of TaxFileNumber"""

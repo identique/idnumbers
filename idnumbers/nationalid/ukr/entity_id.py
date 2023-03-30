@@ -22,7 +22,14 @@ class EntityIDNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^\d{8}$')
+        'regexp': re.compile(r'^\d{8}$'),
+        'alias_of': None,
+        'names': ['Legal Entity ID Number',
+                  'EDRPOU',
+                  'ЄДРПОУ'],
+        'links': ['https://uk.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4_%D0%84%D0%94%D0%A0%D0%9F%D0%9E%D0%A3',
+                  'https://1cinfo.com.ua/Article/Detail/Proverka_koda_po_EDRPOU/'],
+        'deprecated': False
     })
 
     PHASE1_MULTIPLIER = [1, 2, 3, 4, 5, 6, 7]

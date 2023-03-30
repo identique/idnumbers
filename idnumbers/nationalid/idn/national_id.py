@@ -37,7 +37,13 @@ class NIK:
                              r'(?P<dd>[0-7]\d)'
                              r'(?P<mm>(0[1-9]|1[012]))'
                              r'(?P<yy>\d{2})'
-                             r'(?!0000)\d{4}$')
+                             r'(?!0000)\d{4}$'),
+        'alias_of': None,
+        'names': ['ID Number',
+                  'NIK',
+                  'Nomor Induk Kependudukan'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Indonesia'],
+        'deprecated': False
     })
 
     @staticmethod

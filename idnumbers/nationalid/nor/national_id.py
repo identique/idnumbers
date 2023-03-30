@@ -34,7 +34,15 @@ class NationalID:
                              r'(?P<mm>\d{2})'
                              r'(?P<yy>\d{2})'
                              r'(?P<individual_number>\d{3})'
-                             r'(?P<checksum>\d{2})$')
+                             r'(?P<checksum>\d{2})$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'fødselsnummer',
+                  'birth number',
+                  'riegádannummir'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Norway',
+                  'https://en.wikipedia.org/wiki/National_identity_number_(Norway)'],
+        'deprecated': False
     })
 
     @staticmethod

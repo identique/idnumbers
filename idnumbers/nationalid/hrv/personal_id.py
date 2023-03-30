@@ -15,7 +15,14 @@ class PersonalID:
         'max_length': 11,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r"^\d{11}$")
+        'regexp': re.compile(r"^\d{11}$"),
+        'alias_of': None,
+        'names': ['Personal ID Number',
+                  'Osobni identifikacijski broj',
+                  'OIB'],
+        'links': ['https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)'],
+        'deprecated': False
+
     })
 
     @staticmethod
@@ -35,9 +42,3 @@ class PersonalID:
         numbers = [int(char) for char in id_number]
         checksum = modulus_overflow_mod10(mn_modulus_digit(numbers[:-1], 10, 11))
         return numbers[-1] == checksum
-
-
-OIB = PersonalID
-"""
-alias of PersonalID
-"""

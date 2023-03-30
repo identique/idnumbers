@@ -1,4 +1,5 @@
 from .mda.personal_code import PersonalCode
+from .util import alias_of
 
-NationalID = PersonalCode
+NationalID = alias_of(PersonalCode)
 """alias of PersonalCode"""

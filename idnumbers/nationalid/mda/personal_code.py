@@ -19,7 +19,12 @@ class PersonalCode:
         # has checksum function
         'checksum': False,
         # regular expression to validate the id
-        'regexp': re.compile(r'^\d{13}$')
+        'regexp': re.compile(r'^\d{13}$'),
+        'alias_of': None,
+        'names': ['Personal Code',
+                  'IDNP'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Moldova'],
+        'deprecated': False
     })
 
     @staticmethod

@@ -16,7 +16,13 @@ class NationalID:
         'max_length': 8,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^(\d{2}\.?\d{3}\.?\d{3})$')
+        'regexp': re.compile(r'^(\d{2}\.?\d{3}\.?\d{3})$'),
+        'alias_of': None,
+        'names': ['Documento Nacional de Identidad',
+                  'DNI'],
+        'links': ['https://www.protecto.ai/argentina-national-identity-number-download-sample-data-for-testing/',
+                  'https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Argentina)'],
+        'deprecated': False
 
     })
 

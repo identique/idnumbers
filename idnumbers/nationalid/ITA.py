@@ -1,4 +1,5 @@
 from .ita.fiscal_code import FiscalCode
+from .util import alias_of
 
-NationalID = FiscalCode
+NationalID = alias_of(FiscalCode)
 """alias of FiscalCode"""

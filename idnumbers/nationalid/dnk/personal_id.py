@@ -25,7 +25,13 @@ class PersonalIdentityNumber:
         'parsable': True,
         'checksum': False,
         'regexp': re.compile(r'^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})-?'
-                             r'(?P<sn>\d{4})$')
+                             r'(?P<sn>\d{4})$'),
+        'alias_of': None,
+        'names': ['personal identity number',
+                  'CPR',
+                  'Det Centrale Personregister'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Denmark'],
+        'deprecated': False
     })
 
     @staticmethod
@@ -55,7 +61,3 @@ class PersonalIdentityNumber:
             }
         except ValueError:
             return None
-
-
-CPR = PersonalIdentityNumber
-"""alias of PersonalIdentityNumber"""

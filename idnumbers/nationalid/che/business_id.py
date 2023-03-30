@@ -15,7 +15,15 @@ class BusinessID:
         'max_length': 12,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^CHE-?\d{3}\.?\d{3}\.?\d{3}$')
+        'regexp': re.compile(r'^CHE-?\d{3}\.?\d{3}\.?\d{3}$'),
+        'alias_of': None,
+        'names': ['business identification number',
+                  'UID'],
+        'links': [
+            'https://www.bfs.admin.ch/bfs/en/home/registers/enterprise-register/'
+            'enterprise-identification/uid-general.html'
+        ],
+        'deprecated': False
     })
 
     @staticmethod

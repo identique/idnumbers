@@ -1,4 +1,5 @@
 from .gbr.national_insurance import NationalInsuranceNumber
+from .util import alias_of
 
-NationalID = NationalInsuranceNumber
+NationalID = alias_of(NationalInsuranceNumber)
 """alias of NationalInsuranceNumber"""

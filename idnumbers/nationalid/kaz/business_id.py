@@ -36,7 +36,12 @@ class BusinessIDNumber:
                              r'(?P<type>[4-6])'
                              r'(?P<division>[0-3])'
                              r'(?P<sn>\d{5})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Business Identification Number',
+                  'Бизнес-идентификационный номер'],
+        'links': ['https://korgan-zan.kz/en/obtaining-iin-and-bin-in-kazakhstan/'],
+        'deprecated': False
     })
 
     ENTITY_TYPE_MAP = {

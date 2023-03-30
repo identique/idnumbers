@@ -28,7 +28,13 @@ class InlandRevenueDepartmentNumber:
         'regexp': re.compile(r'^('
                              r'\d{9}|\d{3}-\d{3}-\d{3}|'
                              r'\d{8}|\d{2}-\d{3}-\d{3}'
-                             r')$')
+                             r')$'),
+        'alias_of': None,
+        'names': ['Inland Revenue Department Number',
+                  'IRD'],
+        'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
+                  'tax-identification-numbers/New%20Zealand-TIN.pdf'],
+        'deprecated': False
     })
 
     PHASE1_MULTIPLIER = [3, 2, 7, 6, 5, 4, 3, 2]

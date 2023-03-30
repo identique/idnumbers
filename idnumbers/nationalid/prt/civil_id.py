@@ -17,7 +17,15 @@ class CivilIDNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^(\d{9})$')
+        'regexp': re.compile(r'^(\d{9})$'),
+        'alias_of': None,
+        'names': ['Civil ID Number',
+                  'Número de identificação civil',
+                  'NIC',
+                  'BI'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Portugal',
+                  'https://www.atractor.pt/mat/alg_controlo/bifm2-_en.html'],
+        'deprecated': False
     })
 
     @staticmethod

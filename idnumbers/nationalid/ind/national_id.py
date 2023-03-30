@@ -21,7 +21,14 @@ class NationalID:
         'max_length': 12,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^[2-9]\d{3}[ -]?\d{4}[ -]?\d{4}$')
+        'regexp': re.compile(r'^[2-9]\d{3}[ -]?\d{4}[ -]?\d{4}$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'Unique Identification Number',
+                  'UID'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#India',
+                  'https://archive.org/details/Aadhaar_numbering_scheme/page/n12/mode/1up?view=theater'],
+        'deprecated': False
     })
 
     @staticmethod
@@ -37,5 +44,3 @@ class NationalID:
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         return verhoeff_check([int(char) for char in normalize(id_number)])
-
-UID = NationalID

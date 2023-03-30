@@ -1,4 +1,5 @@
-from .national_id import NationalID
+from .resident_registration import ResidentRegistration
+from ..util import alias_of
 
-ARC = NationalID
-"""alias of NationalID"""
+ARC = alias_of(ResidentRegistration)
+"""alias of ResidentRegistration"""

@@ -20,7 +20,13 @@ class SocialSecurityNumber:
         'max_length': 13,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^756\.\d{4}\.\d{4}.\d{2}$')
+        'regexp': re.compile(r'^756\.\d{4}\.\d{4}.\d{2}$'),
+        'alias_of': None,
+        'names': ['Social Security Number',
+                  'AHV-Nr.',
+                  'No AVS'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Switzerland'],
+        'deprecated': False
 
     })
 

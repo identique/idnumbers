@@ -39,7 +39,12 @@ class PersonalIdentityCode:
         'regexp': re.compile(r'^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})'
                              r'(?P<century>[-+ABCDEFUVWXY])'
                              r'(?P<sn>\d{3})'
-                             r'(?P<check>[0-9A-Z])$')
+                             r'(?P<check>[0-9A-Z])$'),
+        'alias_of': None,
+        'names': ['personal identity code',
+                  'HETU'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Finland'],
+        'deprecated': False
     })
 
     DOB_BASE_MAP = {
@@ -104,7 +109,3 @@ class PersonalIdentityCode:
         numbers = int(match_obj.group('dd') + match_obj.group('mm') + match_obj.group('yy') + match_obj.group('sn'))
         check_digit = PersonalIdentityCode.CHECKSUM_LIST[numbers % 31]
         return match_obj.group('check') == check_digit
-
-
-HETU = PersonalIdentityCode
-"""alias of PersonalIdentityCode"""

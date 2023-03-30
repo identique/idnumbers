@@ -32,7 +32,18 @@ class NationalID:
         'checksum': False,
         'regexp': re.compile(r'^(?P<location>\d{5})-?'
                              r'(?P<sn>\d{7})-?'
-                             r'(?P<gender>\d)$')
+                             r'(?P<gender>\d)$'),
+        'alias_of': None,
+        'names': ['National ID Card Number',
+                  'CNIC',
+                  'NIC',
+                  'قومی شناختی کارڈ'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Pakistan',
+                  'https://en.wikipedia.org/wiki/CNIC_(Pakistan)#Security_features',
+                  'https://www.geo.tv/latest/250118-mystery-behind-13-digit-cnic-number',
+                  'https://www.informationpk.com/'
+                  'interesting-information-about-or-meaning-of-nadra-cnic-13-digits-number/'],
+        'deprecated': False
     })
     """metadata of this id"""
 

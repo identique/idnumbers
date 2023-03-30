@@ -1,4 +1,5 @@
 from .rou.personal_code import PersonalNumericalCode
+from .util import alias_of
 
-NationalID = PersonalNumericalCode
+NationalID = alias_of(PersonalNumericalCode)
 """ alias of PersonalNumericalCode """

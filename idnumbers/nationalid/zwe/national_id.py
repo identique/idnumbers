@@ -28,7 +28,11 @@ class NationalID:
         'regexp': re.compile(r'^(?P<register_office_code>\d{2})'
                              r'(?P<national_num>(\d{6}|\d{7}))'
                              r'(?P<checksum>[A-Z])'
-                             r'(?P<district_code>\d{2}$)')
+                             r'(?P<district_code>\d{2}$)'),
+        'alias_of': None,
+        'names': ['National ID Number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Zimbabwe'],
+        'deprecated': False
     })
 
     @staticmethod

@@ -34,7 +34,15 @@ class NationalID:
         'regexp': re.compile(r'^(?P<location>[A-Z])'
                              r'(?P<gender>[12])'
                              r'(?P<sn>\d{7})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  '國民身分證統一編號',
+                  '身分證字號'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Taiwan',
+                  'https://zh.wikipedia.org/wiki/'
+                  '%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%B0%91%E8%BA%AB%E5%88%86%E8%AD%89'],
+        'deprecated': False
     })
 
     LOCATION_NUM = [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6],

@@ -30,7 +30,14 @@ class TaxpayerIDNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^\d{10}$')
+        'regexp': re.compile(r'^\d{10}$'),
+        'alias_of': None,
+        'names': ['Taxpayer ID Number',
+                  'RNTRC',
+                  'РНОКПП',
+                  'taxpayer registration number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Ukraine'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER: List[int] = [-1, 5, 7, 9, 4, 6, 10, 5, 7]

@@ -34,7 +34,13 @@ class EmiratesIDNumber:
         'regexp': re.compile(r'^784[ -]?'
                              r'(?P<yyyy>\d{4})[ -]?'
                              r'(?P<sn>\d{7})[ -]?'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Emirates ID',
+                  'Resident ID',
+                  'رقم الهوية'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates'],
+        'deprecated': False
     })
 
     @staticmethod

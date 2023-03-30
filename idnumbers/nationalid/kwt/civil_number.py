@@ -31,7 +31,13 @@ class CivilNumber:
                              r'(?P<mm>\d{2})'
                              r'(?P<dd>\d{2})'
                              r'(?P<sn>\d{4})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Civil Number',
+                  'الرقم المدني'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Kuwait',
+                  'https://prakhar.me/articles/kuwait-civil-id-checksum/'],
+        'deprecated': False
     })
 
     MULTIPLIER = [2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]

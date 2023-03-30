@@ -32,7 +32,16 @@ class IdentityNumber:
         'checksum': False,  # There is a checksum algorithm. But we cannot find it.
         'regexp': re.compile(r'^(?P<yy>[0-9A-T]\d)(?P<mm>\d{2})(?P<dd>\d{2})'
                              r'(?P<sn>\d{3})[ -]?'
-                             r'(?P<checksum>[A-W])$')
+                             r'(?P<checksum>[A-W])$'),
+        'alias_of': None,
+        'names': ['Albania Identity Number',
+                  'Numri i Identitetit',
+                  'NID',
+                  'Numri i Identitetit të Shtetasit'
+                  'NISH',
+                  'NIPT'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Albania'],
+        'deprecated': False
     })
 
     BASE_YEAR_MAP = '0123456789ABCDEFGHIJKLMNOPQRST'

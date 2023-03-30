@@ -44,7 +44,16 @@ class INSEE:
                              r'(?P<mm>(0[1-9]|1[0-2]|[2-3][0-9]|4[0-2]|[5-9][0-9]))'
                              r'(?P<birth_department>((\d{2}|2[AaBb])\d{3}))'
                              r'(?P<cert_number>((?!000)\d{3}))'
-                             r'(?P<control_key>((?!(00|98|99))\d{2}))$')
+                             r'(?P<control_key>((?!(00|98|99))\d{2}))$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'INSEE',
+                  'NIR',
+                  'NIRPP'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#France',
+                  'https://fr.wikipedia.org/wiki/'
+                  'Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR'],
+        'deprecated': False
 
     })
 

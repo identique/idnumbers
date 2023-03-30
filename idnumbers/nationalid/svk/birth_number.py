@@ -36,8 +36,14 @@ class BirthNumber:
                              r'(?P<mm>\d{2})'
                              r'(?P<dd>\d{2})/?'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
         # regular expression to validate the id
+        'alias_of': None,
+        'names': ['Birth Number',
+                  'rodné číslo',
+                  'RČ'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Slovakia'],
+        'deprecated': False
     })
 
     @staticmethod

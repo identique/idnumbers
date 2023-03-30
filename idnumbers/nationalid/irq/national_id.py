@@ -4,7 +4,7 @@ from ..util import validate_regexp
 
 
 class NationalID:
-    """s
+    """
     Iraq National Card number. not enough docs to research.
     https://en.wikipedia.org/wiki/Iraq_National_Card
     """
@@ -14,7 +14,13 @@ class NationalID:
         'max_length': 12,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^\d{12}$')
+        'regexp': re.compile(r'^\d{12}$'),
+        'alias_of': None,
+        'names': ['National Card Number',
+                  'البطاقة الوطنية',
+                  'كارتى نيشتمانى'],
+        'links': ['https://en.wikipedia.org/wiki/Iraq_National_Card'],
+        'deprecated': False
     })
 
     @staticmethod

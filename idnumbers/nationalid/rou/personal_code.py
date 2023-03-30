@@ -38,7 +38,15 @@ class PersonalNumericalCode:
                              r'(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})'
                              r'(?P<location>\d{2})'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Personal Numerical Code',
+                  'Cod Numeric Personal',
+                  'CNP',
+                  'Carte de identitate'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Romania',
+                  'https://en.wikipedia.org/wiki/Romanian_identity_card'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9]

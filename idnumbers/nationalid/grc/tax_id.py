@@ -15,7 +15,11 @@ class TaxIdentityNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{9}$')
+        'regexp': re.compile(r'^\d{9}$'),
+        'alias_of': None,
+        'names': ['Tax Identity Number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece'],
+        'deprecated': False
     })
 
     MULTIPLIER = [256, 128, 64, 32, 16, 8, 4, 2]

@@ -8,7 +8,7 @@ from .util import normalize
 
 class PersonalCode:
     """
-    Latvia national ID number format, personas kods
+    Latvia Personal Code format, personas kods
     https://en.wikipedia.org/wiki/National_identification_number#Latvia
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Latvia-TIN.pdf
     """
@@ -22,7 +22,14 @@ class PersonalCode:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{6}-?\d{5}$)')
+        'regexp': re.compile(r'^(\d{6}-?\d{5}$)'),
+        'alias_of': None,
+        'names': ['Personal Code',
+                  'personas kods'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Latvia',
+                  'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
+                  'tax-identification-numbers/Latvia-TIN.pdf'],
+        'deprecated': False
     })
 
     MULTIPLIER = [1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
