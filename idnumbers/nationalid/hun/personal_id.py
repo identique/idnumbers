@@ -42,7 +42,8 @@ class PersonalID:
                              r'(?P<checksum>\d)$'),
         'alias_of': None,
         'names': ['Personal ID Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Hungary']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Hungary'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

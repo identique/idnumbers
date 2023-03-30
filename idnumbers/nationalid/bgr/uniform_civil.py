@@ -41,7 +41,8 @@ class UniformCivilNumber:
                   'Edinen grazhdanski nomer',
                   'ЕГН',
                   'EGN'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bulgaria']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bulgaria'],
+        'deprecated': False
     })
 
     @staticmethod

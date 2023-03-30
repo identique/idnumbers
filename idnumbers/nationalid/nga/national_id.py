@@ -18,7 +18,12 @@ class NationalID:
         # has checksum function
         'checksum': False,
         # regular expression to validate the id
-        'regexp': re.compile(r'^\d{11}$')
+        'regexp': re.compile(r'^\d{11}$'),
+        'alias_of': None,
+        'names': ['National Identification Number',
+                  'NIN'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Nigeria'],
+        'deprecated': False
     })
 
     @staticmethod

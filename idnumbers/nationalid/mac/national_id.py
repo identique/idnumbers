@@ -42,7 +42,17 @@ class NationalID:
         'checksum': False,
         'regexp': re.compile(r'^(?P<doc_type>[01578])'
                              r'(?P<sn>\d{6})'
-                             r'\(?(?P<extra>\d)\)?$')
+                             r'\(?(?P<extra>\d)\)?$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'Permanent Resident Identity Card',
+                  'BIRP',
+                  'Non-Permanent Resident Identity Card',
+                  'BIRNP'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Macau',
+                  'https://en.wikipedia.org/wiki/Macau_Resident_Identity_Card',
+                  'https://validatetin.com/macao/'],
+        'deprecated': False
     })
 
     TYPE_MAP = {'0': DocType.CI, '1': DocType.FIRST_GEN, '5': DocType.MCA, '7': DocType.MPSP, '8': DocType.ENTITY}
@@ -73,7 +83,3 @@ class NationalID:
             }
         except ValueError:
             return None
-
-
-BIRP = NationalID
-"""alias of NationalID"""

@@ -1,4 +1,5 @@
 from .mex.curp import CURP
+from .util import alias_of
 
-NationalID = CURP
+NationalID = alias_of(CURP)
 """alias of CURP"""

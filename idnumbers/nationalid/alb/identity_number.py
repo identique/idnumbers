@@ -40,7 +40,8 @@ class IdentityNumber:
                   'Numri i Identitetit të Shtetasit'
                   'NISH',
                   'NIPT'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Albania']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Albania'],
+        'deprecated': False
     })
 
     BASE_YEAR_MAP = '0123456789ABCDEFGHIJKLMNOPQRST'

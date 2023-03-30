@@ -22,7 +22,15 @@ class BSN:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'(?!0000.00.000)^\d{4}\.\d{2}\.\d{3}$')
+        'regexp': re.compile(r'(?!0000.00.000)^\d{4}\.\d{2}\.\d{3}$'),
+        'alias_of': None,
+        'names': ['Burgerservicenummer',
+                  'BSN',
+                  'Citizen Service Number',
+                  'Personal Number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Netherlands',
+                  'https://nl.wikipedia.org/wiki/Burgerservicenummer'],
+        'deprecated': False
 
     })
 

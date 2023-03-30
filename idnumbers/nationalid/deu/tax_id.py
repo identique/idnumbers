@@ -31,7 +31,8 @@ class TaxID:
                   'Steuer-IdNr.',
                   'IdNr',
                   'Steuer-ID'],
-        'links': ['https://allaboutberlin.com/guides/german-tax-id-steuernummer']
+        'links': ['https://allaboutberlin.com/guides/german-tax-id-steuernummer'],
+        'deprecated': False
     })
 
     @staticmethod

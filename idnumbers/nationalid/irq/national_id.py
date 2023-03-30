@@ -19,7 +19,8 @@ class NationalID:
         'names': ['National Card Number',
                   'البطاقة الوطنية',
                   'كارتى نيشتمانى'],
-        'links': ['https://en.wikipedia.org/wiki/Iraq_National_Card']
+        'links': ['https://en.wikipedia.org/wiki/Iraq_National_Card'],
+        'deprecated': False
     })
 
     @staticmethod

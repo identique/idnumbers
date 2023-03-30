@@ -36,7 +36,13 @@ class NRIC:
         'checksum': False,
         'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})-?'
                              r'(?P<pb>\d{2})-?'
-                             r'(?P<sn>\d{4})$')
+                             r'(?P<sn>\d{4})$'),
+        'alias_of': None,
+        'names': ['National Registration Identity Card Number',
+                  'NRIC'],
+        'links': ['https://en.wikipedia.org/wiki/Malaysian_identity_card#'
+                  'Structure_of_the_National_Registration_Identity_Card_Number_(NRIC)'],
+        'deprecated': False
     })
 
     WRONG_PB_CODE = ['00', '17', '18', '19', '20',

@@ -27,7 +27,8 @@ class NationalID:
                   'Unique Identification Number',
                   'UID'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#India',
-                  'https://archive.org/details/Aadhaar_numbering_scheme/page/n12/mode/1up?view=theater']
+                  'https://archive.org/details/Aadhaar_numbering_scheme/page/n12/mode/1up?view=theater'],
+        'deprecated': False
     })
 
     @staticmethod

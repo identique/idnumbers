@@ -26,7 +26,13 @@ class FiscalInformationNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^[VEJPG]-?\d{8}-?\d$')
+        'regexp': re.compile(r'^[VEJPG]-?\d{8}-?\d$'),
+        'alias_of': None,
+        'names': ['Fiscal Information Number',
+                  'RIF',
+                  'Registro de Informacion Fiscal'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Venezuela'],
+        'deprecated': False
     })
 
     WEIGHTS = [1, 3, 2, 7, 6, 5, 4, 3, 2]

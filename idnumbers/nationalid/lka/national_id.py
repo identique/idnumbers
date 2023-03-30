@@ -34,7 +34,12 @@ class NationalID:
         'regexp': re.compile(r'^(?P<year>\d{4})'
                              r'(?P<days>\d{3})'
                              r'(?P<sn>\d{4})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['National ID Number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka',
+                  'https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER = [8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2]

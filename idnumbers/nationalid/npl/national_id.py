@@ -19,8 +19,14 @@ class NationalID:
         # has parse function
         'checksum': False,
         # has checksum function
-        'regexp': re.compile(r'^\d{11}$')
+        'regexp': re.compile(r'^\d{11}$'),
         # regular expression to validate the id
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'NIN'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Nepal',
+                  'https://nimc.gov.ng/about-nin/'],
+        'deprecated': False
     })
 
     @staticmethod
@@ -29,9 +35,3 @@ class NationalID:
         Validate
         """
         return validate_regexp(id_number, NationalID.METADATA.regexp)
-
-
-NIN = NationalID
-"""
-alias of https://nimc.gov.ng/about-nin/
-"""

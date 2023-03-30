@@ -43,7 +43,15 @@ class CURP:
                              r'(?P<location>[A-Z]{2})'
                              r'(?P<consonant>[A-Z]{3})'
                              r'(?P<sn>[0-9A-Z])'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['CURP',
+                  'Clave Única de Registro de Población',
+                  'Unique Population Registry Code',
+                  'Personal ID Code Number'],
+        'links': ['https://en.wikipedia.org/wiki/Unique_Population_Registry_Code',
+                  'http://sistemas.uaeh.edu.mx/dce/admisiones/docs/guia_CURP.pdf'],
+        'deprecated': False
     })
 
     ID_CHARS = '0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'

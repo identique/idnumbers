@@ -26,9 +26,9 @@ class OldIDParseResult(ParseResult):
     """check digits"""
 
 
-class NationalID:
+class ResidentRegistration:
     """
-    KOR National ID number format. The ARC is the same as NationalID. KOR removed the checksum and location
+    KOR resident registration number format. The ARC is the same as ResidentRegistration. KOR removed the checksum and location
     from Oct. 2020 to protect privacy.
     # https://en.wikipedia.org/wiki/Resident_registration_number
     # https://centers.ibs.re.kr/html/living_en/overview/arc.html
@@ -41,7 +41,16 @@ class NationalID:
         'checksum': False,
         'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})-'
                              r'(?P<gender>\d)'
-                             r'(?P<sn>\d{6})$')
+                             r'(?P<sn>\d{6})$'),
+        'alias_of': None,
+        'names': ['Resident Registration Number',
+                  '주민등록번호',
+                  'RRN',
+                  '住民登錄番號',
+                  'Jumin Deungnok Beonho'],
+        'links': ['https://en.wikipedia.org/wiki/Resident_registration_number',
+                  'https://centers.ibs.re.kr/html/living_en/overview/arc.html'],
+        'deprecated': False
     })
 
     CITIZENSHIP_MAP = {
@@ -77,15 +86,15 @@ class NationalID:
         """
         Validate the KOR id number
         """
-        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+        if not validate_regexp(id_number, ResidentRegistration.METADATA.regexp):
             return False
-        return NationalID.parse(id_number) is not None
+        return ResidentRegistration.parse(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = NationalID.METADATA.regexp.match(id_number)
-        return NationalID.build_parse_result(match_obj)
+        match_obj = ResidentRegistration.METADATA.regexp.match(id_number)
+        return ResidentRegistration.build_parse_result(match_obj)
 
     @staticmethod
     def build_parse_result(match_obj: re.Match[str]) -> Optional[ParseResult]:
@@ -96,12 +105,12 @@ class NationalID:
         dd = int(match_obj.group('dd'))
         gender = int(match_obj.group('gender'))
         sn = match_obj.group('sn')
-        yyyy_base = NationalID.DOB_BASE_MAP[gender]
+        yyyy_base = ResidentRegistration.DOB_BASE_MAP[gender]
         try:
             return {
                 'yyyymmdd': date(yyyy_base + yy, mm, dd),
                 'gender': Gender.MALE if gender % 2 == 1 else Gender.FEMALE,
-                'citizenship': NationalID.CITIZENSHIP_MAP[gender],
+                'citizenship': ResidentRegistration.CITIZENSHIP_MAP[gender],
                 'sn': sn
             }
         except ValueError:

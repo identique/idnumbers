@@ -9,14 +9,14 @@ class TestKORValidation(TestCase):
         self.assertTrue(KOR.NationalID.validate('820701-2409184'))
         self.assertTrue(KOR.NationalID.validate('850408-5761193'))
         self.assertTrue(KOR.NationalID.validate('860121-4500147'))
-        self.assertTrue(KOR.OldNationalID.validate('510724-1057122'))
-        self.assertTrue(KOR.OldNationalID.validate('690212-1148921'))
-        self.assertTrue(KOR.OldNationalID.validate('731228-2686181'))
+        self.assertTrue(KOR.OldResidentRegistration.validate('510724-1057122'))
+        self.assertTrue(KOR.OldResidentRegistration.validate('690212-1148921'))
+        self.assertTrue(KOR.OldResidentRegistration.validate('731228-2686181'))
         self.assertTrue(KOR.ARC.validate('850526-6260197'))
         self.assertTrue(KOR.ARC.validate('840609-5260291'))
 
     def test_error_case(self):
-        self.assertFalse(KOR.OldNationalID.validate('820701-2409184'))
+        self.assertFalse(KOR.OldResidentRegistration.validate('820701-2409184'))
         self.assertFalse(KOR.NationalID.validate('8207012409184'))
 
     def test_parse(self):
@@ -35,7 +35,7 @@ class TestKORValidation(TestCase):
         self.assertEqual(Citizenship.RESIDENT, result['citizenship'])
         self.assertEqual('260197', result['sn'])
 
-        result = KOR.OldNationalID.parse('510724-1057122')
+        result = KOR.OldResidentRegistration.parse('510724-1057122')
         self.assertEqual(1951, result['yyyymmdd'].year)
         self.assertEqual(7, result['yyyymmdd'].month)
         self.assertEqual(24, result['yyyymmdd'].day)

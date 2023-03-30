@@ -47,7 +47,8 @@ class ResidentID:
                   '居民身份证',
                   'Jūmín Shēnfènzhèng'],
         'links': ['https://en.wikipedia.org/wiki/Resident_Identity_Card',
-                  'https://en.wikipedia.org/wiki/National_identification_number#China']
+                  'https://en.wikipedia.org/wiki/National_identification_number#China'],
+        'deprecated': False
     })
 
     @staticmethod

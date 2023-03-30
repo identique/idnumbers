@@ -21,7 +21,8 @@ class NationalID:
         'names': ['Documento Nacional de Identidad',
                   'DNI'],
         'links': ['https://www.protecto.ai/argentina-national-identity-number-download-sample-data-for-testing/',
-                  'https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Argentina)']
+                  'https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Argentina)'],
+        'deprecated': False
 
     })
 

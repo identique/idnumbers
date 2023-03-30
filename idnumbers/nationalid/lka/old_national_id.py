@@ -26,7 +26,12 @@ class OldNationalID:
                              r'(?P<days>\d{3})'
                              r'(?P<sn>\d{3})'
                              r'(?P<checksum>\d)'
-                             r'(?P<citizenship>[XxVv])$')
+                             r'(?P<citizenship>[XxVv])$'),
+        'alias_of': None,
+        'names': ['National ID Number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka',
+                  'https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html'],
+        'deprecated': True
     })
 
     @staticmethod

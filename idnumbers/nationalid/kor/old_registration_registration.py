@@ -2,7 +2,7 @@ import re
 from types import SimpleNamespace
 from typing import Literal, Optional
 from ..util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp
-from .national_id import NationalID, ParseResult
+from .resident_registration import ResidentRegistration, ParseResult
 
 
 def normalize(id_number):
@@ -18,7 +18,7 @@ class OldIDParseResult(ParseResult):
     """check digits"""
 
 
-class OldNationalID(NationalID):
+class OldResidentRegistration(ResidentRegistration):
     """
     KOR National ID number format. The ARC is the same as NationalID.
     # https://en.wikipedia.org/wiki/Resident_registration_number
@@ -34,7 +34,16 @@ class OldNationalID(NationalID):
                              r'(?P<gender>\d)'
                              r'(?P<location>\d{4})'
                              r'(?P<sn>\d)'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Resident Registration Number',
+                  '주민등록번호',
+                  'RRN',
+                  '住民登錄番號',
+                  'Jumin Deungnok Beonho'],
+        'links': ['https://en.wikipedia.org/wiki/Resident_registration_number',
+                  'https://centers.ibs.re.kr/html/living_en/overview/arc.html'],
+        'deprecated': True
     })
 
     MAGIC_MULTIPLIER = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5]
@@ -45,18 +54,18 @@ class OldNationalID(NationalID):
         """
         Validate the old KOR id number
         """
-        if not validate_regexp(id_number, OldNationalID.METADATA.regexp):
+        if not validate_regexp(id_number, OldResidentRegistration.METADATA.regexp):
             return False
-        return OldNationalID.parse(id_number) is not None
+        return OldResidentRegistration.parse(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[OldIDParseResult]:
         """prase the result"""
-        match_obj = re.match(OldNationalID.METADATA.regexp, id_number)
-        new_result = NationalID.parse(id_number)
+        match_obj = re.match(OldResidentRegistration.METADATA.regexp, id_number)
+        new_result = ResidentRegistration.parse(id_number)
         if not new_result:
             return None
-        if not OldNationalID.checksum(id_number):
+        if not OldResidentRegistration.checksum(id_number):
             return None
         return {
             **new_result,
@@ -68,10 +77,11 @@ class OldNationalID(NationalID):
     @staticmethod
     def checksum(id_number) -> bool:
         """multiply the magic number and find the modulus"""
-        if not validate_regexp(id_number, OldNationalID.METADATA.regexp):
+        if not validate_regexp(id_number, OldResidentRegistration.METADATA.regexp):
             return False
         normalized = normalize(id_number)
         # it uses modulus 11 algorithm with magic numbers
         numbers = [int(char) for char in normalized]
-        modulus = modulus_overflow_mod10(weighted_modulus_digit(numbers[:-1], OldNationalID.MAGIC_MULTIPLIER, 11))
+        modulus = modulus_overflow_mod10(
+            weighted_modulus_digit(numbers[:-1], OldResidentRegistration.MAGIC_MULTIPLIER, 11))
         return modulus == numbers[-1]

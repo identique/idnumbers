@@ -37,7 +37,16 @@ class NationalID:
         'regexp': re.compile(r'^(?P<province_country_code>\d{3})'
                              r'(?P<gender>\d)'
                              r'(?P<yy>\d{2})'
-                             r'(?P<sn>\d{6})$')
+                             r'(?P<sn>\d{6})$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'Thẻ căn cước công dân',
+                  ],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Vietnam',
+                  'https://vietnaminsider.vn/what-do-the-12-digits-on-the-citizen-id-card-with-chip-mean/',
+                  'https://lawnet.vn/en/vb/Circular-07-2016-TT-BCA-detailing-Law-on-Citizen-Identification'
+                  '-137-2015-ND-CP-5CCC3.html'],
+        'deprecated': False
     })
 
     @staticmethod

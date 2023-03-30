@@ -32,7 +32,8 @@ class TaxFileNumber:
             'https://en.wikipedia.org/wiki/National_identification_number#Australia',
             'https://en.wikipedia.org/wiki/Tax_file_number',
             'https://www.ato.gov.au/General/What-is-a-tax-file-number----Easy-Read/',
-            'https://en-academic.com/dic.nsf/enwiki/436130']
+            'https://en-academic.com/dic.nsf/enwiki/436130'],
+        'deprecated': False
     })
 
     MULTIPLIER = [1, 4, 3, 7, 5, 8, 6, 9, 10]

@@ -28,7 +28,8 @@ class PersonalPublicServiceNumber:
                   'Uimh. PSP',
                   'Revenue and Social Insurance Number',
                   'RSI No'],
-        'links': ['https://en.wikipedia.org/wiki/Personal_Public_Service_Number']
+        'links': ['https://en.wikipedia.org/wiki/Personal_Public_Service_Number'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER = [8, 7, 6, 5, 4, 3, 2, 9]

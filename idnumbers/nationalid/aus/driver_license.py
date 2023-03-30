@@ -29,8 +29,13 @@ class DriverLicenseNumber:
         'alias_of': None,
         'names': ['Driver Licence Number'],
         'links': [
-            'https://learn.microsoft.com/en-us/microsoft-365/compliance/sit-defn-australia-drivers-license-number?view=o365-worldwide',
-            'https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/library-of-system-data-identifiers-v95989112-d327e56315/australia-driver-s-license-number-v130004514-d327e56830.html']
+            'https://learn.microsoft.com/en-us/microsoft-365/compliance/'
+            'sit-defn-australia-drivers-license-number?view=o365-worldwide',
+            'https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/'
+            'data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/'
+            'library-of-system-data-identifiers-v95989112-d327e56315/'
+            'australia-driver-s-license-number-v130004514-d327e56830.html'],
+        'deprecated': False
     })
 
     BLACK_TRAILING_NUMBER = ['00000', '11111', '22222', '33333', '44444', '55555', '66666', '77777', '88888', '99999']

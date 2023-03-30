@@ -18,7 +18,8 @@ class IdentityCard:
         # They are two different char set, the former is Greek alphabet, the latter is Latin alphabet
         'alias_of': None,
         'names': ['Identity Card Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece'],
+        'deprecated': False
     })
 
     @staticmethod

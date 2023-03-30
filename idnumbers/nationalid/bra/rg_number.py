@@ -22,7 +22,8 @@ class RGNumber:
         'names': ['RG number',
                   'Registro Geral number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil',
-                  'https://en.wikipedia.org/wiki/Brazilian_identity_cards']
+                  'https://en.wikipedia.org/wiki/Brazilian_identity_cards'],
+        'deprecated': False
     })
 
     @staticmethod

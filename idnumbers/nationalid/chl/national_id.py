@@ -29,7 +29,8 @@ class NationalID:
                   'RUN',
                   'Rol Único Tributario',
                   'RUT'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Chile']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Chile'],
+        'deprecated': False
     })
 
     MULTIPLIER = [3, 2, 7, 6, 5, 4, 3, 2]

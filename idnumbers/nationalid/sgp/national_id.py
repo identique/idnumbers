@@ -18,7 +18,15 @@ class NationalID:
         'checksum': True,
         'regexp': re.compile(r'^(?P<type>[STFGM])'
                              r'(?P<sn>\d{7})'
-                             r'(?P<checksum>[A-Z])$')
+                             r'(?P<checksum>[A-Z])$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'NRIC',
+                  'UIN',
+                  'FIN'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Singapore',
+                  'https://www.ngiam.net/NRIC/NRIC_numbers.pdf'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER = [2, 7, 6, 5, 4, 3, 2]

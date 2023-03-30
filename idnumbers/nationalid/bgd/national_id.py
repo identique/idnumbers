@@ -39,7 +39,8 @@ class NationalID(OldNationalID):
         'links': [
             'https://en.wikipedia.org/wiki/National_identity_card_(Bangladesh)',
             'http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html',
-            'https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3']
+            'https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3'],
+        'deprecated': False
     })
 
     @staticmethod

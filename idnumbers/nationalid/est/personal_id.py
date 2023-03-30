@@ -38,7 +38,8 @@ class PersonalID:
         'names': ['Personal ID Number',
                   'isikukood'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Estonia',
-                  'https://et.wikipedia.org/wiki/Isikukood']
+                  'https://et.wikipedia.org/wiki/Isikukood'],
+        'deprecated': False
     })
 
     WEIGHTS1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1]

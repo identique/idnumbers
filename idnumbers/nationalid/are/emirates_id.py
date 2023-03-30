@@ -39,7 +39,8 @@ class EmiratesIDNumber:
         'names': ['Emirates ID',
                   'Resident ID',
                   'رقم الهوية'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates'],
+        'deprecated': False
     })
 
     @staticmethod

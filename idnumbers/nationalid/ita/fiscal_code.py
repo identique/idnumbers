@@ -45,7 +45,8 @@ class FiscalCode:
         'names': ['Fiscal Code',
                   'Codice fiscale'],
         'links': ['https://en.wikipedia.org/wiki/Italian_fiscal_code',
-                  'https://en.wikipedia.org/wiki/National_identification_number#Italy']
+                  'https://en.wikipedia.org/wiki/National_identification_number#Italy'],
+        'deprecated': False
     })
 
     MONTH_MAP = {'A': 1, 'B': 2, 'C': 3, 'D': 4,

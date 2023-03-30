@@ -185,6 +185,10 @@ it is an actual issued ID number.
 Here's the list of the countries we have
 implemented [Country List](https://identique.github.io/idnumbers/idnumbers/nationalid.html)
 
+# Metadata Structure of each ID
+
+Here's the metadata definitions and how to use it in idnumbers: [METADATA](https://github.com/identique/idnumbers/blob/main/docs/nationalid/METADATA.md)
+
 # Contribution
 
 The idnumbers project is an open-source project and contributions from the community are always welcome. There are

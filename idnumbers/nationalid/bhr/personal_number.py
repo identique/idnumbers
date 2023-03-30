@@ -36,7 +36,8 @@ class PersonalNumber:
                   'Central population registration number',
                   'CPR',
                   'الرقم السكاني'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bahrain']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bahrain'],
+        'deprecated': False
     })
 
     @staticmethod

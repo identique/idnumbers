@@ -39,7 +39,8 @@ class IcelandicID:
         'names': ['Icelandic identification number',
                   'kennitala',
                   'kt.'],
-        'links': ['https://en.wikipedia.org/wiki/Icelandic_identification_number']
+        'links': ['https://en.wikipedia.org/wiki/Icelandic_identification_number'],
+        'deprecated': False
     })
 
     WEIGHTS = [3, 2, 7, 6, 5, 4, 3, 2]

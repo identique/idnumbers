@@ -44,7 +44,8 @@ class NationalRegistrationNumber:
                   'Identiteitskaart',
                   'Carte d’identité',
                   'Personalausweis'],
-        'links': ['https://en.wikipedia.org/wiki/Belgian_identity_card']
+        'links': ['https://en.wikipedia.org/wiki/Belgian_identity_card'],
+        'deprecated': False
     })
 
     @staticmethod

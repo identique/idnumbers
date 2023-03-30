@@ -25,7 +25,8 @@ class NationalID:
         'names': ['National ID Number',
                   'kart-e-meli',
                   'کارت ملی'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of'],
+        'deprecated': False
     })
 
     MULTIPLIER = [10, 9, 8, 7, 6, 5, 4, 3, 2]

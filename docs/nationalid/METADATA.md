@@ -14,6 +14,10 @@ The `METADATA` structure are the same among all classes. If you find any inconsi
 | parsable       | boolean                                                                         | To indicate if we could parse information from ID. If it is true, the class supports `parse` function.        |
 | checksum       | boolean                                                                         | To indicate if the ID supports checksum in its design. If it is true, the class supports `checksum` function. |
 | regexp         | [Pattern](https://docs.python.org/3/library/re.html#regular-expression-objects) | The pattern object for validate the ID.                                                                       | 
+| alias_of       | Python Cls                                                                      | The original class of this ID number. It is none if it is not an alias                                        |
+| names          | Array of string                                                                 | The possible names we could see in the ID cards or other places.                                              |
+| links          | Array of string                                                                 | The reference links of this ID                                                                                |
+| deprecated     | boolean                                                                         | To indicate if the ID is deprecated by the country of not. New or Old version.                                |
 
 ## Use properties
 

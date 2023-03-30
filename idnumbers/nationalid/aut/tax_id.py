@@ -26,7 +26,9 @@ class TaxIDNumber:
         'regexp': re.compile(r'^(\d{2}-?\d{3}/?\d{4})$'),
         'alias_of': None,
         'names': ['Tax ID number'],
-        'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Austria-TIN.pdf']
+        'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
+                  'tax-identification-numbers/Austria-TIN.pdf'],
+        'deprecated': False
     })
 
     MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2]

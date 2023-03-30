@@ -16,7 +16,13 @@ class NationalID:
         'max_length': 11,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^[1-9]\d{10}$')
+        'regexp': re.compile(r'^[1-9]\d{10}$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'Türkiye Cumhuriyeti Kimlik Numarası',
+                  'T.C. Kimlik No.'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Turkey'],
+        'deprecated': False
     })
 
     MULTIPLIERS = [7, -1, 7, -1, 7, -1, 7, -1, 7]

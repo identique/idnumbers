@@ -26,7 +26,8 @@ class NationalID:
         'names': ['National ID Number',
                   '香港身份證'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Hong_Kong',
-                  'https://pinkylam.me/playground/hkid/']
+                  'https://pinkylam.me/playground/hkid/'],
+        'deprecated': False
 
     })
 

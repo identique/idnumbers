@@ -21,7 +21,8 @@ class NationalInsuranceNumber:
                   'NI No',
                   'NINO'],
         'links': ['https://en.wikipedia.org/wiki/National_Insurance_number',
-                  'https://www.gov.uk/hmrc-internal-manuals/national-insurance-manual/nim39110']
+                  'https://www.gov.uk/hmrc-internal-manuals/national-insurance-manual/nim39110'],
+        'deprecated': False
     })
 
     @staticmethod

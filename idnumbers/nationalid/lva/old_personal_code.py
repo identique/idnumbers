@@ -19,7 +19,7 @@ class OldParseResult(TypedDict):
 
 class OldPersonalCode:
     """
-    Old Latvia national ID number format, personas kods
+    Old Latvia personal code format, personas kods
     https://en.wikipedia.org/wiki/National_identification_number#Latvia
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Latvia-TIN.pdf
     """
@@ -36,7 +36,14 @@ class OldPersonalCode:
         'regexp': re.compile(r'^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})-?'
                              r'(?P<century>\d)'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['Personal Code',
+                  'personas kods'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Latvia',
+                  'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
+                  'tax-identification-numbers/Latvia-TIN.pdf'],
+        'deprecated': True
     })
 
     MULTIPLIER = [1, 6, 3, 7, 9, 10, 5, 8, 4, 2]

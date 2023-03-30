@@ -20,8 +20,10 @@ class BusinessID:
         'names': ['business identification number',
                   'UID'],
         'links': [
-            'https://www.bfs.admin.ch/bfs/en/home/registers/enterprise-register/enterprise-identification/uid-general.html'
-        ]
+            'https://www.bfs.admin.ch/bfs/en/home/registers/enterprise-register/'
+            'enterprise-identification/uid-general.html'
+        ],
+        'deprecated': False
     })
 
     @staticmethod

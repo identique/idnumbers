@@ -20,7 +20,8 @@ class CPFNumber:
         'alias_of': None,
         'names': ['CPF number',
                   'Cadastro de Pessoas Físicas'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil'],
+        'deprecated': False
     })
 
     MULTIPLIER1 = [10, 9, 8, 7, 6, 5, 4, 3, 2]

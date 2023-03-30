@@ -42,7 +42,8 @@ class BirthNumber:
         'names': ['Birth Number',
                   'rodné číslo',
                   'RČ'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Slovakia']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Slovakia'],
+        'deprecated': False
     })
 
     @staticmethod

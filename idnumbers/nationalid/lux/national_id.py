@@ -32,7 +32,13 @@ class NationalID:
         'regexp': re.compile(r'^(?P<yyyy>\d{4})(?P<mm>\d{2})(?P<dd>\d{2})'
                              r'(?P<sn>\d{3})'
                              r'(?P<checksum1>\d)'
-                             r'(?P<checksum2>\d)$')
+                             r'(?P<checksum2>\d)$'),
+        'alias_of': None,
+        'names': ['National ID Number'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Luxembourg',
+                  'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
+                  'tax-identification-numbers/Luxembourg-TIN.pdf'],
+        'deprecated': False
     })
 
     @staticmethod

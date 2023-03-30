@@ -17,7 +17,8 @@ class OldIdentityCard:
         'regexp': re.compile(r'^[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]-?\d{6}$'),
         'alias_of': None,
         'names': ['Identity Card Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece'],
+        'deprecated': True
     })
 
     @staticmethod

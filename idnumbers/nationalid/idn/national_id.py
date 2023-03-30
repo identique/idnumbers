@@ -42,7 +42,8 @@ class NIK:
         'names': ['ID Number',
                   'NIK',
                   'Nomor Induk Kependudukan'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Indonesia']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Indonesia'],
+        'deprecated': False
     })
 
     @staticmethod

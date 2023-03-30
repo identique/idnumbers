@@ -47,7 +47,8 @@ class UniquePersonalID:
                   'Número único de identidad personal'],
         'links': ['https://en.wikipedia.org/wiki/Colombian_identity_card',
                   'https://en.wikipedia.org/wiki/National_identification_number#Colombia',
-                  'https://validatetin.com/colombia/#']
+                  'https://validatetin.com/colombia/#'],
+        'deprecated': False
     })
 
     WEIGHTS = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]

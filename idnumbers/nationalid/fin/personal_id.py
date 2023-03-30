@@ -43,7 +43,8 @@ class PersonalIdentityCode:
         'alias_of': None,
         'names': ['personal identity code',
                   'HETU'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Finland']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Finland'],
+        'deprecated': False
     })
 
     DOB_BASE_MAP = {

@@ -23,7 +23,16 @@ class NationalHealthIndexNumber:
         'regexp': re.compile(r'^('
                              r'[A-HJ-NP-Z]{3}\d{4}|'
                              r'[A-HJ-NP-Z]{3}\d{2}[A-HJ-NP-Z]{2}|'
-                             r')$')
+                             r')$'),
+        'alias_of': None,
+        'names': ['National Health Index Number',
+                  'NHI'],
+        'links': ['https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/'
+                  'data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/'
+                  'library-of-system-data-identifiers-v95989112-d327e56315/'
+                  'new-zealand-national-health-index-number-v117807810-d327e90250/'
+                  'new-zealand-national-health-index-number-narrow-br-v117808786-d327e90350.html'],
+        'deprecated': False
     })
 
     ALPHABET_LIST = list('ABCDEFGHJKLMNPQRSTUVWXYZ')

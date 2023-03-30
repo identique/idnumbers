@@ -17,7 +17,8 @@ class PersonalNumber:
         'regexp': re.compile(r'^\d{9}$'),
         'alias_of': None,
         'names': ['personal number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Georgia']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Georgia'],
+        'deprecated': False
     })
 
     @staticmethod

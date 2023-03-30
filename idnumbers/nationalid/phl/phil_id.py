@@ -3,9 +3,9 @@ from types import SimpleNamespace
 from ..util import validate_regexp
 
 
-class NationalID:
+class PhilID:
     """
-    Philippines National ID number, PCN
+    Philippines PhilID Card Number, PCN
     https://en.wikipedia.org/wiki/National_identification_number#Philippines
     """
     METADATA = SimpleNamespace(**{
@@ -15,7 +15,14 @@ class NationalID:
         'max_length': 12,
         'parsable': False,
         'checksum': False,
-        'regexp': re.compile(r'^(\d{4}[ -]?\d{7}[ -]?\d)$')
+        'regexp': re.compile(r'^(\d{4}[ -]?\d{7}[ -]?\d)$'),
+        'alias_of': None,
+        'names': ['PhilID Card Number',
+                  'PCN',
+                  'PhilSys'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Philippines',
+                  'https://en.wikipedia.org/wiki/Philippine_national_identity_card'],
+        'deprecated': False
 
     })
 
@@ -24,4 +31,4 @@ class NationalID:
         """
         Validate the PHL id number
         """
-        return validate_regexp(id_number, NationalID.METADATA.regexp)
+        return validate_regexp(id_number, PhilID.METADATA.regexp)

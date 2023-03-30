@@ -25,7 +25,8 @@ class SocialSecurityNumber:
         'names': ['Social Security Number',
                   'AHV-Nr.',
                   'No AVS'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Switzerland']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Switzerland'],
+        'deprecated': False
 
     })
 

@@ -51,7 +51,8 @@ class UniqueMasterCitizenNumber:
                   'ЕМБГ',
                   'Enotna matična številka občana,',
                   'EMŠO'],
-        'links': ['https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number']
+        'links': ['https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number'],
+        'deprecated': False
     })
 
     MAGIC_MULTIPLIER = [7, 6, 5, 4, 3, 2]

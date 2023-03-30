@@ -30,7 +30,8 @@ class PersonalIdentityNumber:
         'names': ['personal identity number',
                   'CPR',
                   'Det Centrale Personregister'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Denmark']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Denmark'],
+        'deprecated': False
     })
 
     @staticmethod

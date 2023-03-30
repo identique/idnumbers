@@ -23,7 +23,8 @@ class DNI:
         'names': ['Documento Nacional de Identidad',
                   'DNI'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Spain',
-                  'https://es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal']
+                  'https://es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal'],
+        'deprecated': False
     })
 
     @staticmethod

@@ -51,7 +51,9 @@ class INSEE:
                   'NIR',
                   'NIRPP'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#France',
-                  'https://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR']
+                  'https://fr.wikipedia.org/wiki/'
+                  'Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR'],
+        'deprecated': False
 
     })
 

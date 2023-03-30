@@ -36,7 +36,14 @@ class PESEL:
                              r'(?P<mm>\d{2})'
                              r'(?P<dd>\d{2})'
                              r'(?P<sn>\d{4})'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['PESEL',
+                  'Powszechny Elektroniczny System Ewidencji Ludności',
+                  'Universal Electronic System for Registration of the Population'],
+        'links': ['https://en.wikipedia.org/wiki/PESEL',
+                  'https://en.wikipedia.org/wiki/National_identification_number#Poland'],
+        'deprecated': False
     })
 
     MAGIC_NUMBERS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]

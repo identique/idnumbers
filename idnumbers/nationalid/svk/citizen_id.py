@@ -26,7 +26,8 @@ class CitizenIDNumber:
                   'Číslo občianskeho preukazu',
                   'ČOP'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Slovakia',
-                  'https://en.wikipedia.org/wiki/Slovak_identity_card']
+                  'https://en.wikipedia.org/wiki/Slovak_identity_card'],
+        'deprecated': False
     })
 
     @staticmethod

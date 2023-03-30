@@ -64,7 +64,16 @@ class NationalID:
                              r'(?P<province>\d{2})'
                              r'(?P<district>\d{2})[ -]?'
                              r'(?P<sn>\d{5}[ -]?\d{2})[ -]?'
-                             r'(?P<checksum>\d)$')
+                             r'(?P<checksum>\d)$'),
+        'alias_of': None,
+        'names': ['National ID Number',
+                  'Population Identification Code',
+                  'บัตรประชาชน',
+                  'รหัสบัตรประชาชน'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Thailand',
+                  'https://learn.microsoft.com/en-us/microsoft-365/compliance/'
+                  'sit-defn-thai-population-identification-code?view=o365-worldwide'],
+        'deprecated': False
     })
 
     PROVINCE_LIST = ['10', '11', '12', '13', '14', '15', '16', '17', '18', '19',

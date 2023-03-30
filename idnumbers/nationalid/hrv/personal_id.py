@@ -20,7 +20,8 @@ class PersonalID:
         'names': ['Personal ID Number',
                   'Osobni identifikacijski broj',
                   'OIB'],
-        'links': ['https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)']
+        'links': ['https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)'],
+        'deprecated': False
 
     })
 
