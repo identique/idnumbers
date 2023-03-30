@@ -101,15 +101,19 @@
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d</span><span class="si">{9}</span><span class="s1">$&#39;</span><span class="p">)</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="p">})</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">        Validate personal number</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">PersonalNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d</span><span class="si">{9}</span><span class="s1">$&#39;</span><span class="p">),</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="s1">&#39;alias_of&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;personal number&#39;</span><span class="p">],</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;https://en.wikipedia.org/wiki/National_identification_number#Georgia&#39;</span><span class="p">],</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="s1">&#39;deprecated&#39;</span><span class="p">:</span> <span class="kc">False</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>    <span class="p">})</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="sd">        Validate personal number</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">PersonalNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -136,15 +140,19 @@
 </span><span id="PersonalNumber-15"><a href="#PersonalNumber-15"><span class="linenos">15</span></a>        <span class="s1">&#39;max_length&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
 </span><span id="PersonalNumber-16"><a href="#PersonalNumber-16"><span class="linenos">16</span></a>        <span class="s1">&#39;parsable&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="PersonalNumber-17"><a href="#PersonalNumber-17"><span class="linenos">17</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-</span><span id="PersonalNumber-18"><a href="#PersonalNumber-18"><span class="linenos">18</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d</span><span class="si">{9}</span><span class="s1">$&#39;</span><span class="p">)</span>
-</span><span id="PersonalNumber-19"><a href="#PersonalNumber-19"><span class="linenos">19</span></a>    <span class="p">})</span>
-</span><span id="PersonalNumber-20"><a href="#PersonalNumber-20"><span class="linenos">20</span></a>
-</span><span id="PersonalNumber-21"><a href="#PersonalNumber-21"><span class="linenos">21</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="PersonalNumber-22"><a href="#PersonalNumber-22"><span class="linenos">22</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="PersonalNumber-23"><a href="#PersonalNumber-23"><span class="linenos">23</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="PersonalNumber-24"><a href="#PersonalNumber-24"><span class="linenos">24</span></a><span class="sd">        Validate personal number</span>
-</span><span id="PersonalNumber-25"><a href="#PersonalNumber-25"><span class="linenos">25</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="PersonalNumber-26"><a href="#PersonalNumber-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">PersonalNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+</span><span id="PersonalNumber-18"><a href="#PersonalNumber-18"><span class="linenos">18</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\d</span><span class="si">{9}</span><span class="s1">$&#39;</span><span class="p">),</span>
+</span><span id="PersonalNumber-19"><a href="#PersonalNumber-19"><span class="linenos">19</span></a>        <span class="s1">&#39;alias_of&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="PersonalNumber-20"><a href="#PersonalNumber-20"><span class="linenos">20</span></a>        <span class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;personal number&#39;</span><span class="p">],</span>
+</span><span id="PersonalNumber-21"><a href="#PersonalNumber-21"><span class="linenos">21</span></a>        <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;https://en.wikipedia.org/wiki/National_identification_number#Georgia&#39;</span><span class="p">],</span>
+</span><span id="PersonalNumber-22"><a href="#PersonalNumber-22"><span class="linenos">22</span></a>        <span class="s1">&#39;deprecated&#39;</span><span class="p">:</span> <span class="kc">False</span>
+</span><span id="PersonalNumber-23"><a href="#PersonalNumber-23"><span class="linenos">23</span></a>    <span class="p">})</span>
+</span><span id="PersonalNumber-24"><a href="#PersonalNumber-24"><span class="linenos">24</span></a>
+</span><span id="PersonalNumber-25"><a href="#PersonalNumber-25"><span class="linenos">25</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="PersonalNumber-26"><a href="#PersonalNumber-26"><span class="linenos">26</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="PersonalNumber-27"><a href="#PersonalNumber-27"><span class="linenos">27</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PersonalNumber-28"><a href="#PersonalNumber-28"><span class="linenos">28</span></a><span class="sd">        Validate personal number</span>
+</span><span id="PersonalNumber-29"><a href="#PersonalNumber-29"><span class="linenos">29</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PersonalNumber-30"><a href="#PersonalNumber-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">PersonalNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -165,12 +173,12 @@
 
     </div>
     <a class="headerlink" href="#PersonalNumber.validate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PersonalNumber.validate-21"><a href="#PersonalNumber.validate-21"><span class="linenos">21</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="PersonalNumber.validate-22"><a href="#PersonalNumber.validate-22"><span class="linenos">22</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="PersonalNumber.validate-23"><a href="#PersonalNumber.validate-23"><span class="linenos">23</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="PersonalNumber.validate-24"><a href="#PersonalNumber.validate-24"><span class="linenos">24</span></a><span class="sd">        Validate personal number</span>
-</span><span id="PersonalNumber.validate-25"><a href="#PersonalNumber.validate-25"><span class="linenos">25</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="PersonalNumber.validate-26"><a href="#PersonalNumber.validate-26"><span class="linenos">26</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">PersonalNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PersonalNumber.validate-25"><a href="#PersonalNumber.validate-25"><span class="linenos">25</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="PersonalNumber.validate-26"><a href="#PersonalNumber.validate-26"><span class="linenos">26</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="PersonalNumber.validate-27"><a href="#PersonalNumber.validate-27"><span class="linenos">27</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PersonalNumber.validate-28"><a href="#PersonalNumber.validate-28"><span class="linenos">28</span></a><span class="sd">        Validate personal number</span>
+</span><span id="PersonalNumber.validate-29"><a href="#PersonalNumber.validate-29"><span class="linenos">29</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PersonalNumber.validate-30"><a href="#PersonalNumber.validate-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">PersonalNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
 </span></pre></div>
 
 

@@ -106,15 +106,20 @@
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="c1"># has checksum function</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="c1"># regular expression to validate the id</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^V ?\d</span><span class="si">{2}</span><span class="s1">\.?\d</span><span class="si">{3}</span><span class="s1">\.?\d</span><span class="si">{3}</span><span class="s1">$&#39;</span><span class="p">)</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>    <span class="p">})</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="sd">        Validate</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">IDCardNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^V ?\d</span><span class="si">{2}</span><span class="s1">\.?\d</span><span class="si">{3}</span><span class="s1">\.?\d</span><span class="si">{3}</span><span class="s1">$&#39;</span><span class="p">),</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="s1">&#39;alias_of&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ID Card Number&#39;</span><span class="p">,</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>                  <span class="s1">&#39;Cédula de Identidad&#39;</span><span class="p">],</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;https://en.wikipedia.org/wiki/National_identification_number#Venezuela&#39;</span><span class="p">],</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>        <span class="s1">&#39;deprecated&#39;</span><span class="p">:</span> <span class="kc">False</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="p">})</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        Validate</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">IDCardNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -145,15 +150,20 @@
 </span><span id="IDCardNumber-20"><a href="#IDCardNumber-20"><span class="linenos">20</span></a>        <span class="c1"># has checksum function</span>
 </span><span id="IDCardNumber-21"><a href="#IDCardNumber-21"><span class="linenos">21</span></a>        <span class="s1">&#39;checksum&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="IDCardNumber-22"><a href="#IDCardNumber-22"><span class="linenos">22</span></a>        <span class="c1"># regular expression to validate the id</span>
-</span><span id="IDCardNumber-23"><a href="#IDCardNumber-23"><span class="linenos">23</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^V ?\d</span><span class="si">{2}</span><span class="s1">\.?\d</span><span class="si">{3}</span><span class="s1">\.?\d</span><span class="si">{3}</span><span class="s1">$&#39;</span><span class="p">)</span>
-</span><span id="IDCardNumber-24"><a href="#IDCardNumber-24"><span class="linenos">24</span></a>    <span class="p">})</span>
-</span><span id="IDCardNumber-25"><a href="#IDCardNumber-25"><span class="linenos">25</span></a>
-</span><span id="IDCardNumber-26"><a href="#IDCardNumber-26"><span class="linenos">26</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="IDCardNumber-27"><a href="#IDCardNumber-27"><span class="linenos">27</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="IDCardNumber-28"><a href="#IDCardNumber-28"><span class="linenos">28</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="IDCardNumber-29"><a href="#IDCardNumber-29"><span class="linenos">29</span></a><span class="sd">        Validate</span>
-</span><span id="IDCardNumber-30"><a href="#IDCardNumber-30"><span class="linenos">30</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="IDCardNumber-31"><a href="#IDCardNumber-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">IDCardNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+</span><span id="IDCardNumber-23"><a href="#IDCardNumber-23"><span class="linenos">23</span></a>        <span class="s1">&#39;regexp&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^V ?\d</span><span class="si">{2}</span><span class="s1">\.?\d</span><span class="si">{3}</span><span class="s1">\.?\d</span><span class="si">{3}</span><span class="s1">$&#39;</span><span class="p">),</span>
+</span><span id="IDCardNumber-24"><a href="#IDCardNumber-24"><span class="linenos">24</span></a>        <span class="s1">&#39;alias_of&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="IDCardNumber-25"><a href="#IDCardNumber-25"><span class="linenos">25</span></a>        <span class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ID Card Number&#39;</span><span class="p">,</span>
+</span><span id="IDCardNumber-26"><a href="#IDCardNumber-26"><span class="linenos">26</span></a>                  <span class="s1">&#39;Cédula de Identidad&#39;</span><span class="p">],</span>
+</span><span id="IDCardNumber-27"><a href="#IDCardNumber-27"><span class="linenos">27</span></a>        <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;https://en.wikipedia.org/wiki/National_identification_number#Venezuela&#39;</span><span class="p">],</span>
+</span><span id="IDCardNumber-28"><a href="#IDCardNumber-28"><span class="linenos">28</span></a>        <span class="s1">&#39;deprecated&#39;</span><span class="p">:</span> <span class="kc">False</span>
+</span><span id="IDCardNumber-29"><a href="#IDCardNumber-29"><span class="linenos">29</span></a>    <span class="p">})</span>
+</span><span id="IDCardNumber-30"><a href="#IDCardNumber-30"><span class="linenos">30</span></a>
+</span><span id="IDCardNumber-31"><a href="#IDCardNumber-31"><span class="linenos">31</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="IDCardNumber-32"><a href="#IDCardNumber-32"><span class="linenos">32</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="IDCardNumber-33"><a href="#IDCardNumber-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IDCardNumber-34"><a href="#IDCardNumber-34"><span class="linenos">34</span></a><span class="sd">        Validate</span>
+</span><span id="IDCardNumber-35"><a href="#IDCardNumber-35"><span class="linenos">35</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IDCardNumber-36"><a href="#IDCardNumber-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">IDCardNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -174,12 +184,12 @@
 
     </div>
     <a class="headerlink" href="#IDCardNumber.validate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="IDCardNumber.validate-26"><a href="#IDCardNumber.validate-26"><span class="linenos">26</span></a>    <span class="nd">@staticmethod</span>
-</span><span id="IDCardNumber.validate-27"><a href="#IDCardNumber.validate-27"><span class="linenos">27</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="IDCardNumber.validate-28"><a href="#IDCardNumber.validate-28"><span class="linenos">28</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="IDCardNumber.validate-29"><a href="#IDCardNumber.validate-29"><span class="linenos">29</span></a><span class="sd">        Validate</span>
-</span><span id="IDCardNumber.validate-30"><a href="#IDCardNumber.validate-30"><span class="linenos">30</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="IDCardNumber.validate-31"><a href="#IDCardNumber.validate-31"><span class="linenos">31</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">IDCardNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="IDCardNumber.validate-31"><a href="#IDCardNumber.validate-31"><span class="linenos">31</span></a>    <span class="nd">@staticmethod</span>
+</span><span id="IDCardNumber.validate-32"><a href="#IDCardNumber.validate-32"><span class="linenos">32</span></a>    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="n">id_number</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+</span><span id="IDCardNumber.validate-33"><a href="#IDCardNumber.validate-33"><span class="linenos">33</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="IDCardNumber.validate-34"><a href="#IDCardNumber.validate-34"><span class="linenos">34</span></a><span class="sd">        Validate</span>
+</span><span id="IDCardNumber.validate-35"><a href="#IDCardNumber.validate-35"><span class="linenos">35</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="IDCardNumber.validate-36"><a href="#IDCardNumber.validate-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="n">validate_regexp</span><span class="p">(</span><span class="n">id_number</span><span class="p">,</span> <span class="n">IDCardNumber</span><span class="o">.</span><span class="n">METADATA</span><span class="o">.</span><span class="n">regexp</span><span class="p">)</span>
 </span></pre></div>
 
 
