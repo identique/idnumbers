@@ -29,17 +29,22 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: pip install pdoc
+      - run: pip install pydoctor
       - name: build dev build
         if: inputs.version == ''
-        run: pdoc --template-directory ./docs/pdoc_template -o pdocs --footer-text "idnumbers $(cat ./VERSION)+, dev version included" idnumbers
+        run: |
+          pydoctor --make-html --html-output=pydocs/dev --project-name="idnumbers" --project-version=dev --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
+          echo "window._CURRENT_VERSION = 'dev';" > pydoc/dev/current_version.js
       - name: build prod build
         if: inputs.version != ''
-        run: pdoc --template-directory ./docs/pdoc_template -o pdocs --footer-text "idnumbers ${{ inputs.version }}" idnumbers
+        run: |
+          pydoctor --make-html --html-output=pydocs/v${{ inputs.version }} --project-name="idnumbers" --project-version=${{ inputs.version }} --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
+          echo "window._CURRENT_VERSION = '${{ inputs.version }}';" > pydoc/dev/current_version.js
+      - run: cp docs/versions.js pydocs/
       - uses: actions/upload-artifact@v3
         with:
           name: apidoc
-          path: pdocs
+          path: pydocs
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -50,21 +55,22 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: apidoc
-          path: pdocs
+          path: pydocs
       - run: git config --local user.email "microdataxyz@outlook.com"
       - run: git config --local user.name "Microdata Bot"
       - name: deploy dev apidoc
         if: inputs.version == ''
         run: |
-          ls pdocs
-          cp -rf pdocs/* ./docs
+          ls pydocs
+          cp -rf pydocs/* ./docs
           git add ./docs
           git diff-index --quiet HEAD || git commit -m "Update dev doc"
       - name: deploy prod apidoc
         if: inputs.version != ''
         run: |
-          ls pdocs
-          cp -rf pdocs ./docs/v${{ inputs.version }}
+          ls pydocs
+          cp -rf pydocs ./docs/v${{ inputs.version }}
+          cp pydocs/versions.json ./docs/versions.json
           git add ./docs
           git diff-index --quiet HEAD || git commit -m "Add release doc v${{ inputs.version }}"
       - run: git push origin gh-pages

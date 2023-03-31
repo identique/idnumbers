@@ -1,0 +1,50 @@
+<head xmlns:t="http://twistedmatrix.com/ns/twisted.web.template/0.1">
+    <meta name="pydoctor-template-version" content="2" />
+    <script type="text/javascript" src="current_version.js"/>
+    <script type="text/javascript" src="../versions.js"/>
+    <script type="text/javascript">
+        window.addEventListener("load", function init() {
+            // change the container style
+            const container = document.getElementById("search-box-container").parentNode;
+            // version text
+            const textSpan = document.createElement("span");
+            textSpan.textContent = "Versions:";
+            textSpan.style.paddingRight = "12px";
+
+            // use div as a group for version dropdown
+            const div = document.createElement("div");
+            div.style.alignSelf = "center";
+            div.style.paddingLeft = "12px";
+            div.classList.add("input-group");
+            // create the select dropdown
+            const select = document.createElement("select");
+            select.classList.add("form-control");
+            select.araLabel= "version dropdown";
+            select.title = "version dropdown";
+            select.style.display = "inline-block";
+            select.style.width = "90px";
+            select.style.float = "none";
+            // dev is always there
+            const devOption = document.createElement("option");
+            devOption.value = "dev";
+            devOption.textContent = "Dev"
+            devOption.selected = window._CURRENT_VERSION === "dev";
+            select.appendChild(devOption);
+            (window._VERSIONS || []).forEach(function(version) {
+                const verOption = document.createElement("option");
+                verOption.value = version;
+                verOption.textContent = version;
+                verOption.selected = window._CURRENT_VERSION === version;
+                select.appendChild(verOption);
+            });
+            select.addEventListener("change", function handleChange(evt) {
+                const version = evt.target.value;
+                window.location = `../v${version}/`;
+            });
+            // put all of them
+            div.appendChild(textSpan);
+            div.appendChild(select);
+            container.insertBefore(div, document.getElementById("search-box-container"));
+        });
+    </script>
+</head>
