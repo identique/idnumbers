@@ -69,6 +69,6 @@ jobs:
   call-docs:
     if: inputs.to-prod == 'yes'
     needs: publish-doc
-    uses: microdataxyz/idnumbers/.github/workflows/docs.yml@main
+    uses: identique/idnumbers/.github/workflows/docs.yml@main
     with:
       version: "${{ needs.publish-doc.outputs.version }}"
