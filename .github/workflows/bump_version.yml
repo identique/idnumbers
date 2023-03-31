@@ -21,10 +21,11 @@ jobs:
           echo "==== before update ========================="
           cat VERSION
           echo "${{ inputs.version }}" > VERSION
-          sed -i -e "1i <option {{ 'selected' if env['version'] == '${{ inputs.version }}' else '' }} value=\"${{ inputs.version }}\">${{ inputs.version }}</option>" \
-              docs/pdoc_template/version.html.jinja2
+          echo "window._VERSIONS.push('${{ inputs.version }}');" >> docs/template/versions.js
           echo "==== after update ========================="
           cat VERSION
+          echo "==== versions.js ========================="
+          cat docs/template/versions.js
           git add VERSION
       - name: Create Pull Request
         id: cpr

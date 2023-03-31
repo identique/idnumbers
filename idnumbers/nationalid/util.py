@@ -83,10 +83,10 @@ def weighted_modulus_digit(numbers: List[int], weights: Optional[List[int]], div
     It metrix-multiples numbers and weights and calculate the modulus by the divider.
     :param numbers: the numbers list.
     :param weights: the weights list which will used in matrix multiplications. If weights is none, we use the
-                    [1] * len(numbers) as the weights.
+    [1] * len(numbers) as the weights.
     :param divider: the divider used for calculating modulus.
-    :param modulus_only: If True, it returns the modulus calculated by divider,
-                         otherwise it returns divider - modulus. The default is False.
+    :param modulus_only: If True, it returns the modulus calculated by divider, otherwise it returns divider - modulus.
+    The default is False.
     :return: the value
     """
     if weights is None:
