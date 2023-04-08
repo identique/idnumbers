@@ -39,7 +39,7 @@ jobs:
         if: inputs.version != ''
         run: |
           pydoctor --make-html --html-output=pydocs/v${{ inputs.version }} --project-name="idnumbers" --project-version=${{ inputs.version }} --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
-          echo "window._CURRENT_VERSION = '${{ inputs.version }}';" > pydocs/dev/current_version.js
+          echo "window._CURRENT_VERSION = '${{ inputs.version }}';" > pydocs/v${{ inputs.version }}/current_version.js
       - run: cp docs/template/versions.js pydocs/
       - uses: actions/upload-artifact@v3
         with:
@@ -69,8 +69,8 @@ jobs:
         if: inputs.version != ''
         run: |
           ls pydocs
-          cp -rf pydocs ./docs/v${{ inputs.version }}
-          cp pydocs/versions.json ./docs/versions.json
+          cp -rf pydocs/v${{ inputs.version }} ./docs/v${{ inputs.version }}
+          cp pydocs/versions.js ./docs/versions.js
           git add ./docs
           git diff-index --quiet HEAD || git commit -m "Add release doc v${{ inputs.version }}"
       - run: git push origin gh-pages
