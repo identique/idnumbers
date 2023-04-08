@@ -9,3 +9,4 @@ window._VERSIONS.push('1.6.0');
 window._VERSIONS.push('1.7.0');
 window._VERSIONS.push('1.8.0');
 window._VERSIONS.push('1.9.0');
+window._VERSIONS.push('1.9.1');
