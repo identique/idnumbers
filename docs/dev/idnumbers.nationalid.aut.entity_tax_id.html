@@ -6,7 +6,7 @@
 
   <head>
     
-    <title>idnumbers.nationalid.npl.national_id</title>
+    <title>idnumbers.nationalid.aut.entity_tax_id</title>
     <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
@@ -191,7 +191,7 @@
 
       <div class="thingTitle">
         <span>Module</span>
-        <code class="thisobject"><a href="idnumbers.nationalid.npl.national_id.html" class="internal-link" title="This module">national<wbr></wbr>_id</a></code> 
+        <code class="thisobject"><a href="idnumbers.nationalid.aut.entity_tax_id.html" class="internal-link" title="This module">entity<wbr></wbr>_tax<wbr></wbr>_id</a></code> 
       </div>
       
       <div>
@@ -209,15 +209,28 @@
         
 
         
-            <div class="itemName"><code><a href="idnumbers.nationalid.npl.national_id.NationalID.html" class="internal-link" title="idnumbers.nationalid.npl.national_id.NationalID"><wbr></wbr>National<wbr></wbr>ID</a></code>
+            <div class="itemName"><code><a href="idnumbers.nationalid.aut.entity_tax_id.EntityTaxIDNumber.html" class="internal-link" title="idnumbers.nationalid.aut.entity_tax_id.EntityTaxIDNumber"><wbr></wbr>Entity<wbr></wbr>Tax<wbr></wbr>IDNumber</a></code>
             </div>
         
 
     </li>
 </ul>
 
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="#normalize" class="internal-link" title="idnumbers.nationalid.aut.entity_tax_id.normalize">normalize</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -233,7 +246,7 @@
 
       <div class="thingTitle">
         <span>Package</span>
-        <code><a href="idnumbers.nationalid.npl.html" class="internal-link" title="The parent of this module">npl</a></code> 
+        <code><a href="idnumbers.nationalid.aut.html" class="internal-link" title="The parent of this module">aut</a></code> 
       </div>
       
       <div>
@@ -248,7 +261,17 @@
         
 
         
-            <div class="itemName"><code><a href="idnumbers.nationalid.npl.national_id.html" class="internal-link" title="idnumbers.nationalid.npl.national_id">national<wbr></wbr>_id</a></code>
+            <div class="itemName"><code><a href="idnumbers.nationalid.aut.entity_tax_id.html" class="internal-link" title="idnumbers.nationalid.aut.entity_tax_id">entity<wbr></wbr>_tax<wbr></wbr>_id</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.aut.tax_id.html" class="internal-link" title="idnumbers.nationalid.aut.tax_id">tax<wbr></wbr>_id</a></code>
             </div>
         
 
@@ -289,7 +312,7 @@
         
 
         <div class="page-header">
-          <h1 class="module"><code><code><a href="index.html" class="internal-link">idnumbers</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.html" class="internal-link" title="idnumbers.nationalid">nationalid</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.npl.html" class="internal-link" title="idnumbers.nationalid.npl">npl</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.npl.national_id.html" class="internal-link" title="idnumbers.nationalid.npl.national_id">national_id</a></code></code></h1>
+          <h1 class="module"><code><code><a href="index.html" class="internal-link">idnumbers</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.html" class="internal-link" title="idnumbers.nationalid">nationalid</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.aut.html" class="internal-link" title="idnumbers.nationalid.aut">aut</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.aut.entity_tax_id.html" class="internal-link" title="idnumbers.nationalid.aut.entity_tax_id">entity_tax_id</a></code></code></h1>
           <div id="showPrivate">
             <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
           </div>
@@ -309,14 +332,19 @@
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id302">
+          <table class="children sortable" id="id81">
   
   
   <tr class="class">
     
     <td>Class</td>
-    <td><code><a href="idnumbers.nationalid.npl.national_id.NationalID.html" class="internal-link" title="idnumbers.nationalid.npl.national_id.NationalID"><wbr></wbr>National<wbr></wbr>ID</a></code></td>
-    <td>Nepal national identity card number, NIN https://en.wikipedia.org/wiki/National_identification_number#Nepal https://nimc.gov.ng/about-nin/</td>
+    <td><code><a href="idnumbers.nationalid.aut.entity_tax_id.EntityTaxIDNumber.html" class="internal-link" title="idnumbers.nationalid.aut.entity_tax_id.EntityTaxIDNumber"><wbr></wbr>Entity<wbr></wbr>Tax<wbr></wbr>IDNumber</a></code></td>
+    <td>Austria tax id number format https://validatetin.com/austria/</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#normalize" class="internal-link" title="idnumbers.nationalid.aut.entity_tax_id.normalize">normalize</a></code></td>
+    <td>strip out useless characters/whitespaces</td>
   </tr>
 </table>
           
@@ -325,7 +353,31 @@
         </div>
 
         <div id="childList">
-          
+          <div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.aut.entity_tax_id.normalize">
+    
+  </a>
+  <a name="normalize">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">normalize</span>(id_number):
+    
+    <a class="headerLink" href="#normalize" title="idnumbers.nationalid.aut.entity_tax_id.normalize">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>strip out useless characters/whitespaces</p>
+</div>
+  </div>
+</div>
         </div>
       
       </div>
