@@ -40,24 +40,10 @@ jobs:
         run: |
           pydoctor --make-html --html-output=pydocs/v${{ inputs.version }} --project-name="idnumbers" --project-version=${{ inputs.version }} --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
           echo "window._CURRENT_VERSION = '${{ inputs.version }}';" > pydocs/v${{ inputs.version }}/current_version.js
-      - run: cp docs/template/versions.js pydocs/
-      - uses: actions/upload-artifact@v3
-        with:
-          name: apidoc
-          path: pydocs
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: gh-pages
-      - uses: actions/download-artifact@v3
-        with:
-          name: apidoc
-          path: pydocs
-      - run: git config --local user.email "microdataxyz@outlook.com"
-      - run: git config --local user.name "Microdata Bot"
+          cp docs/template/versions.js pydocs/
+          ls pydocs/
+          git config --local user.email "microdataxyz@outlook.com"
+          git config --local user.name "Microdata Bot"
       - name: deploy dev apidoc
         if: inputs.version == ''
         run: |
