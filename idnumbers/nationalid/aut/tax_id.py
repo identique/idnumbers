@@ -25,9 +25,11 @@ class TaxIDNumber:
         # regular expression to validate the id
         'regexp': re.compile(r'^(\d{2}-?\d{3}/?\d{4})$'),
         'alias_of': None,
-        'names': ['Tax ID number'],
+        'names': ['Tax ID number', 'ATIN', 'Abgabenkontonummer'],
         'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
-                  'tax-identification-numbers/Austria-TIN.pdf'],
+                  'tax-identification-numbers/Austria-TIN.pdf',
+                  'https://www.glasbenamatica.org/wp-content/uploads/2017/05/TIN_-_country_sheet_AT_en.pdf',
+                  'https://taxid.pro/docs/countries/austria'],
         'deprecated': False
     })
 
@@ -55,7 +57,6 @@ class TaxIDNumber:
     def checksum(id_number: str) -> bool:
         if not validate_regexp(id_number, TaxIDNumber.METADATA.regexp):
             return False
-        """algorithm: https://en.wikipedia.org/wiki/Tax_file_number#Check_digit"""
         normalized = normalize(id_number)
         numbers = [int(char) for char in list(normalized)]
         total = 0
