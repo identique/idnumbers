@@ -57,7 +57,7 @@
             });
             select.addEventListener("change", function handleChange(evt) {
                 const version = evt.target.value;
-                window.location = `../v${version}/`;
+                window.location = version === 'dev' ? '../dev/' : `../v${version}/`;
             });
             // put all of them
             div.appendChild(textSpan);
