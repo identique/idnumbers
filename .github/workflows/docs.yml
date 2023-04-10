@@ -21,11 +21,13 @@ permissions:
   pages: write
 
 jobs:
-  # Build the documentation and upload the static HTML files as an artifact.
-  build:
+  # Build and Deploy the documentation and upload the static HTML files as an artifact.
+  build_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
@@ -40,28 +42,16 @@ jobs:
         run: |
           pydoctor --make-html --html-output=pydocs/v${{ inputs.version }} --project-name="idnumbers" --project-version=${{ inputs.version }} --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
           echo "window._CURRENT_VERSION = '${{ inputs.version }}';" > pydocs/v${{ inputs.version }}/current_version.js
-      - run: cp docs/template/versions.js pydocs/
-      - uses: actions/upload-artifact@v3
-        with:
-          name: apidoc
-          path: pydocs
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: gh-pages
-      - uses: actions/download-artifact@v3
-        with:
-          name: apidoc
-          path: pydocs
-      - run: git config --local user.email "microdataxyz@outlook.com"
-      - run: git config --local user.name "Microdata Bot"
+      - name: prepare for deploy
+        run: |
+          cp docs/template/versions.js pydocs/
+          ls pydocs/
+          git checkout origin/gh-pages -b gh-pages
+          git config --local user.email "microdataxyz@outlook.com"
+          git config --local user.name "Microdata Bot"
       - name: deploy dev apidoc
         if: inputs.version == ''
         run: |
-          ls pydocs
           cp -rf pydocs/* ./docs
           git add ./docs
           git diff-index --quiet HEAD || git commit -m "Update dev doc"
@@ -69,6 +59,7 @@ jobs:
         if: inputs.version != ''
         run: |
           ls pydocs
+          rm -rf ./docs/v${{ inputs.version }}
           cp -rf pydocs/v${{ inputs.version }} ./docs/v${{ inputs.version }}
           cp pydocs/versions.js ./docs/versions.js
           git add ./docs
