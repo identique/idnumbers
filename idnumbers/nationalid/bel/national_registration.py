@@ -4,11 +4,7 @@ from types import SimpleNamespace
 from typing import Optional, TypedDict
 from ..util import validate_regexp
 from ..constant import Gender
-
-
-def normalize(id_number: str) -> str:
-    """strip out useless characters/whitespaces"""
-    return re.sub(r'[.-]', '', id_number)
+from .util import calc_check_digits, normalize
 
 
 class ParseResult(TypedDict):
@@ -40,11 +36,13 @@ class NationalRegistrationNumber:
                              r'(?P<checksum>\d{2})$'),
         'alias_of': None,
         'names': ['National registration number',
+                  'NN',
                   'Belgian identity card',
                   'Identiteitskaart',
                   'Carte d’identité',
                   'Personalausweis'],
-        'links': ['https://en.wikipedia.org/wiki/Belgian_identity_card'],
+        'links': ['https://en.wikipedia.org/wiki/Belgian_identity_card',
+                  'https://www.checkdoc.be/CheckDoc/homepage.do'],
         'deprecated': False
     })
 
@@ -89,11 +87,6 @@ class NationalRegistrationNumber:
         if not validate_regexp(id_number, NationalRegistrationNumber.METADATA.regexp):
             return False
         normalized = normalize(id_number)
-        check_digits = normalized[-2:]
-        if int(normalized[0:2]) < 50:
-            # the person should be born after 2000
-            check = 97 - (2000000000 + int(normalized[:-2])) % 97
-        else:
-            check = 97 - int(normalized[:-2]) % 97
-
-        return int(check_digits) == check
+        # the person born after 2000 add 2000000000
+        check = calc_check_digits(2000000000 if int(normalized[0:2]) < 50 else 0 + int(normalized[:-2]))
+        return int(normalized[-2:]) == check

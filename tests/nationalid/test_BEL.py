@@ -1,4 +1,4 @@
-from unittest import TestCase, main
+from unittest import TestCase
 
 from idnumbers.nationalid import BEL
 from idnumbers.nationalid.constant import Gender
@@ -22,6 +22,9 @@ class TestBELValidation(TestCase):
         self.assertEqual('223', result['sn'])
         self.assertEqual(61, result['checksum'])
 
-
-if __name__ == '__main__':
-    main()
+    def test_tin_cases(self):
+        self.assertTrue(BEL.TIN.individual.validate('93051822361'))
+        self.assertTrue(BEL.TIN.entity.validate('0440966354'))
+        self.assertTrue(BEL.TIN.entity.validate('0831797467'))
+        self.assertTrue(BEL.TIN.entity.validate('831797467'))
+        self.assertFalse(BEL.TIN.entity.validate('0440966353'))
