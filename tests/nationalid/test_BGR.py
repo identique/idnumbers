@@ -1,4 +1,4 @@
-from unittest import TestCase, main
+from unittest import TestCase
 from datetime import date
 
 from idnumbers.nationalid import BGR
@@ -25,6 +25,9 @@ class TestBGRValidation(TestCase):
         self.assertEqual(Gender.MALE, result['gender'])
         self.assertEqual(5, result['checksum'])
 
-
-if __name__ == '__main__':
-    main()
+    def test_tin_cases(self):
+        self.assertTrue(BGR.TIN.individual.validate('7501020018'))
+        # test cases: https://papagal.bg/bg/
+        self.assertTrue(BGR.TIN.entity.validate('207258749'))
+        self.assertTrue(BGR.TIN.entity.validate('207271885'))
+        self.assertTrue(BGR.TIN.entity.validate('114635815'))
