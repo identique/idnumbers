@@ -1,4 +1,4 @@
-from unittest import TestCase, main
+from unittest import TestCase
 from idnumbers.nationalid import HRV
 
 
@@ -11,6 +11,6 @@ class TestHRVValidation(TestCase):
         self.assertFalse(HRV.PersonalID.validate('6943515153'))
         self.assertFalse(HRV.PersonalID.validate('69435151531'))
 
-
-if __name__ == '__main__':
-    main()
+    def test_tin_cases(self):
+        self.assertTrue(HRV.TIN.individual.validate('94577403194'))
+        self.assertTrue(HRV.TIN.entity.validate('23961056387'))

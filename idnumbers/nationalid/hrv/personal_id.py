@@ -19,8 +19,10 @@ class PersonalID:
         'alias_of': None,
         'names': ['Personal ID Number',
                   'Osobni identifikacijski broj',
-                  'OIB'],
-        'links': ['https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)'],
+                  'OIB',
+                  'PIN'],
+        'links': ['https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)',
+                  'https://www.porezna-uprava.hr/en/Pages/PIN.aspx'],
         'deprecated': False
 
     })
