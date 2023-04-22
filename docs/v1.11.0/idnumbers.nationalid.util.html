@@ -1,0 +1,2391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>idnumbers.nationalid.util</title>
+    <meta name="generator" content="pydoctor 22.9.1"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+</head>
+
+  <body>
+
+    <head>
+    
+    <script type="text/javascript" src="current_version.js"></script>
+    <script type="text/javascript" src="../versions.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", function init() {
+            // change the container style
+            const container = document.getElementById("search-box-container").parentNode;
+            // version text
+            const textSpan = document.createElement("span");
+            textSpan.textContent = "Versions:";
+            textSpan.style.paddingRight = "12px";
+
+            // use div as a group for version dropdown
+            const div = document.createElement("div");
+            div.style.alignSelf = "center";
+            div.style.paddingLeft = "12px";
+            div.classList.add("input-group");
+            // create the select dropdown
+            const select = document.createElement("select");
+            select.classList.add("form-control");
+            select.araLabel= "version dropdown";
+            select.title = "version dropdown";
+            select.style.display = "inline-block";
+            select.style.width = "90px";
+            select.style.float = "none";
+            // dev is always there
+            const devOption = document.createElement("option");
+            devOption.value = "dev";
+            devOption.textContent = "Dev"
+            devOption.selected = window._CURRENT_VERSION === "dev";
+            select.appendChild(devOption);
+            (window._VERSIONS || []).forEach(function(version) {
+                const verOption = document.createElement("option");
+                verOption.value = version;
+                verOption.textContent = version;
+                verOption.selected = window._CURRENT_VERSION === version;
+                select.appendChild(verOption);
+            });
+            select.addEventListener("change", function handleChange(evt) {
+                const version = evt.target.value;
+                window.location = version === 'dev' ? '../dev/' : `../v${version}/`;
+            });
+            // put all of them
+            div.appendChild(textSpan);
+            div.appendChild(select);
+            container.insertBefore(div, document.getElementById("search-box-container"));
+        });
+    </script>
+</head>
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a> <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div class="hint" id="search-help-box">
+          <p class="rst-last">
+      
+            Search bar offers the following options:
+            <ul>   
+                <li>
+                  <strong>Term presence.</strong> The below example searches for documents that 
+                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
+                </li> 
+
+                <li>
+                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
+                </li> 
+
+                <li>
+                  <strong>Search in specific fields.</strong> The following search matches all objects 
+                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
+
+                  <p>
+                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
+                    Last two fields are only applicable if "search in docstrings" is enabled.
+                  </p>
+                </li>
+
+                <li>
+                  <strong>Fuzzy matches.</strong> The following search matches all documents 
+                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
+                </li>
+            </ul>
+
+          </p>
+        </div>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 8px;">
+          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code class="thisobject"><a href="idnumbers.nationalid.util.html" class="internal-link" title="This module">util</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#alias_of" class="internal-link" title="idnumbers.nationalid.util.alias_of">alias<wbr></wbr>_of</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#ean13_digit" class="internal-link" title="idnumbers.nationalid.util.ean13_digit">ean13<wbr></wbr>_digit</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#letter_to_number" class="internal-link" title="idnumbers.nationalid.util.letter_to_number">letter<wbr></wbr>_to<wbr></wbr>_number</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#luhn_digit" class="internal-link" title="idnumbers.nationalid.util.luhn_digit">luhn<wbr></wbr>_digit</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#mn_modulus_digit" class="internal-link" title="idnumbers.nationalid.util.mn_modulus_digit">mn<wbr></wbr>_modulus<wbr></wbr>_digit</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#modulus_overflow_mod10" class="internal-link" title="idnumbers.nationalid.util.modulus_overflow_mod10">modulus<wbr></wbr>_overflow<wbr></wbr>_mod10</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#validate_regexp" class="internal-link" title="idnumbers.nationalid.util.validate_regexp">validate<wbr></wbr>_regexp</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#verhoeff_check" class="internal-link" title="idnumbers.nationalid.util.verhoeff_check">verhoeff<wbr></wbr>_check</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#weighted_modulus_digit" class="internal-link" title="idnumbers.nationalid.util.weighted_modulus_digit">weighted<wbr></wbr>_modulus<wbr></wbr>_digit</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#VERHOEFF" class="internal-link" title="idnumbers.nationalid.util.VERHOEFF">VERHOEFF</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#CHECK_ALPHA" class="internal-link" title="idnumbers.nationalid.util.CHECK_ALPHA">CHECK<wbr></wbr>_ALPHA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK<wbr></wbr>_DIGIT</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Package</span>
+        <code><a href="idnumbers.nationalid.html" class="internal-link" title="The parent of this module">nationalid</a></code> 
+      </div>
+      
+      <div>
+        
+
+        <div class="childrenKindTitle">Modules</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.alb.html" class="internal-link" title="idnumbers.nationalid.alb">alb</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.are.html" class="internal-link" title="idnumbers.nationalid.are">are</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.arg.html" class="internal-link" title="idnumbers.nationalid.arg">arg</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.aus.html" class="internal-link" title="idnumbers.nationalid.aus">aus</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.aut.html" class="internal-link" title="idnumbers.nationalid.aut">aut</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.bel.html" class="internal-link" title="idnumbers.nationalid.bel">bel</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.bgd.html" class="internal-link" title="idnumbers.nationalid.bgd">bgd</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.bgr.html" class="internal-link" title="idnumbers.nationalid.bgr">bgr</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.bhr.html" class="internal-link" title="idnumbers.nationalid.bhr">bhr</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.bih.html" class="internal-link" title="idnumbers.nationalid.bih">bih</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.bra.html" class="internal-link" title="idnumbers.nationalid.bra">bra</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.can.html" class="internal-link" title="idnumbers.nationalid.can">can</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.che.html" class="internal-link" title="idnumbers.nationalid.che">che</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.chl.html" class="internal-link" title="idnumbers.nationalid.chl">chl</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.chn.html" class="internal-link" title="idnumbers.nationalid.chn">chn</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.col.html" class="internal-link" title="idnumbers.nationalid.col">col</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.cze.html" class="internal-link" title="idnumbers.nationalid.cze">cze</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.deu.html" class="internal-link" title="idnumbers.nationalid.deu">deu</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.dnk.html" class="internal-link" title="idnumbers.nationalid.dnk">dnk</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.esp.html" class="internal-link" title="idnumbers.nationalid.esp">esp</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.est.html" class="internal-link" title="idnumbers.nationalid.est">est</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.fin.html" class="internal-link" title="idnumbers.nationalid.fin">fin</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.fra.html" class="internal-link" title="idnumbers.nationalid.fra">fra</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.gbr.html" class="internal-link" title="idnumbers.nationalid.gbr">gbr</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.geo.html" class="internal-link" title="idnumbers.nationalid.geo">geo</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.grc.html" class="internal-link" title="idnumbers.nationalid.grc">grc</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.hkg.html" class="internal-link" title="idnumbers.nationalid.hkg">hkg</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.hrv.html" class="internal-link" title="idnumbers.nationalid.hrv">hrv</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.hun.html" class="internal-link" title="idnumbers.nationalid.hun">hun</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.idn.html" class="internal-link" title="idnumbers.nationalid.idn">idn</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ind.html" class="internal-link" title="idnumbers.nationalid.ind">ind</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.irl.html" class="internal-link" title="idnumbers.nationalid.irl">irl</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.irn.html" class="internal-link" title="idnumbers.nationalid.irn">irn</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.irq.html" class="internal-link" title="idnumbers.nationalid.irq">irq</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.isl.html" class="internal-link" title="idnumbers.nationalid.isl">isl</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.isr.html" class="internal-link" title="idnumbers.nationalid.isr">isr</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ita.html" class="internal-link" title="idnumbers.nationalid.ita">ita</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.jpn.html" class="internal-link" title="idnumbers.nationalid.jpn">jpn</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.kaz.html" class="internal-link" title="idnumbers.nationalid.kaz">kaz</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.kor.html" class="internal-link" title="idnumbers.nationalid.kor">kor</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.kwt.html" class="internal-link" title="idnumbers.nationalid.kwt">kwt</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.lka.html" class="internal-link" title="idnumbers.nationalid.lka">lka</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ltu.html" class="internal-link" title="idnumbers.nationalid.ltu">ltu</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.lux.html" class="internal-link" title="idnumbers.nationalid.lux">lux</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.lva.html" class="internal-link" title="idnumbers.nationalid.lva">lva</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.mac.html" class="internal-link" title="idnumbers.nationalid.mac">mac</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.mda.html" class="internal-link" title="idnumbers.nationalid.mda">mda</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.mex.html" class="internal-link" title="idnumbers.nationalid.mex">mex</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.mkd.html" class="internal-link" title="idnumbers.nationalid.mkd">mkd</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.mne.html" class="internal-link" title="idnumbers.nationalid.mne">mne</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.mys.html" class="internal-link" title="idnumbers.nationalid.mys">mys</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.nga.html" class="internal-link" title="idnumbers.nationalid.nga">nga</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.nld.html" class="internal-link" title="idnumbers.nationalid.nld">nld</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.nor.html" class="internal-link" title="idnumbers.nationalid.nor">nor</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.npl.html" class="internal-link" title="idnumbers.nationalid.npl">npl</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.nzl.html" class="internal-link" title="idnumbers.nationalid.nzl">nzl</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.pak.html" class="internal-link" title="idnumbers.nationalid.pak">pak</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.phl.html" class="internal-link" title="idnumbers.nationalid.phl">phl</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.png.html" class="internal-link" title="idnumbers.nationalid.png">png</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.pol.html" class="internal-link" title="idnumbers.nationalid.pol">pol</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.prt.html" class="internal-link" title="idnumbers.nationalid.prt">prt</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.rou.html" class="internal-link" title="idnumbers.nationalid.rou">rou</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.sgp.html" class="internal-link" title="idnumbers.nationalid.sgp">sgp</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.smr.html" class="internal-link" title="idnumbers.nationalid.smr">smr</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.srb.html" class="internal-link" title="idnumbers.nationalid.srb">srb</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.svk.html" class="internal-link" title="idnumbers.nationalid.svk">svk</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.svn.html" class="internal-link" title="idnumbers.nationalid.svn">svn</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.swe.html" class="internal-link" title="idnumbers.nationalid.swe">swe</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.tha.html" class="internal-link" title="idnumbers.nationalid.tha">tha</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.tur.html" class="internal-link" title="idnumbers.nationalid.tur">tur</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.twn.html" class="internal-link" title="idnumbers.nationalid.twn">twn</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ukr.html" class="internal-link" title="idnumbers.nationalid.ukr">ukr</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.usa.html" class="internal-link" title="idnumbers.nationalid.usa">usa</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ven.html" class="internal-link" title="idnumbers.nationalid.ven">ven</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.vnm.html" class="internal-link" title="idnumbers.nationalid.vnm">vnm</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.zaf.html" class="internal-link" title="idnumbers.nationalid.zaf">zaf</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.zwe.html" class="internal-link" title="idnumbers.nationalid.zwe">zwe</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ALB.html" class="internal-link" title="idnumbers.nationalid.ALB">ALB</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ARE.html" class="internal-link" title="idnumbers.nationalid.ARE">ARE</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ARG.html" class="internal-link" title="idnumbers.nationalid.ARG">ARG</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.AUS.html" class="internal-link" title="idnumbers.nationalid.AUS">AUS</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.AUT.html" class="internal-link" title="idnumbers.nationalid.AUT">AUT</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.BEL.html" class="internal-link" title="idnumbers.nationalid.BEL">BEL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.BGD.html" class="internal-link" title="idnumbers.nationalid.BGD">BGD</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.BGR.html" class="internal-link" title="idnumbers.nationalid.BGR">BGR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.BHR.html" class="internal-link" title="idnumbers.nationalid.BHR">BHR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.BIH.html" class="internal-link" title="idnumbers.nationalid.BIH">BIH</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.BRA.html" class="internal-link" title="idnumbers.nationalid.BRA">BRA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.CAN.html" class="internal-link" title="idnumbers.nationalid.CAN">CAN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.CHE.html" class="internal-link" title="idnumbers.nationalid.CHE">CHE</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.CHL.html" class="internal-link" title="idnumbers.nationalid.CHL">CHL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.CHN.html" class="internal-link" title="idnumbers.nationalid.CHN">CHN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.COL.html" class="internal-link" title="idnumbers.nationalid.COL">COL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.constant.html" class="internal-link" title="idnumbers.nationalid.constant">constant</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.CZE.html" class="internal-link" title="idnumbers.nationalid.CZE">CZE</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.DEU.html" class="internal-link" title="idnumbers.nationalid.DEU">DEU</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.DNK.html" class="internal-link" title="idnumbers.nationalid.DNK">DNK</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ESP.html" class="internal-link" title="idnumbers.nationalid.ESP">ESP</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.EST.html" class="internal-link" title="idnumbers.nationalid.EST">EST</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.FIN.html" class="internal-link" title="idnumbers.nationalid.FIN">FIN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.FRA.html" class="internal-link" title="idnumbers.nationalid.FRA">FRA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.GBR.html" class="internal-link" title="idnumbers.nationalid.GBR">GBR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.GEO.html" class="internal-link" title="idnumbers.nationalid.GEO">GEO</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.GRC.html" class="internal-link" title="idnumbers.nationalid.GRC">GRC</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.HKG.html" class="internal-link" title="idnumbers.nationalid.HKG">HKG</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.HRV.html" class="internal-link" title="idnumbers.nationalid.HRV">HRV</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.HUN.html" class="internal-link" title="idnumbers.nationalid.HUN">HUN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.IDN.html" class="internal-link" title="idnumbers.nationalid.IDN">IDN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.IND.html" class="internal-link" title="idnumbers.nationalid.IND">IND</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.IRL.html" class="internal-link" title="idnumbers.nationalid.IRL">IRL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.IRN.html" class="internal-link" title="idnumbers.nationalid.IRN">IRN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.IRQ.html" class="internal-link" title="idnumbers.nationalid.IRQ">IRQ</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ISL.html" class="internal-link" title="idnumbers.nationalid.ISL">ISL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ISR.html" class="internal-link" title="idnumbers.nationalid.ISR">ISR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ITA.html" class="internal-link" title="idnumbers.nationalid.ITA">ITA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.JPN.html" class="internal-link" title="idnumbers.nationalid.JPN">JPN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.KAZ.html" class="internal-link" title="idnumbers.nationalid.KAZ">KAZ</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.KOR.html" class="internal-link" title="idnumbers.nationalid.KOR">KOR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.KWT.html" class="internal-link" title="idnumbers.nationalid.KWT">KWT</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.LKA.html" class="internal-link" title="idnumbers.nationalid.LKA">LKA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.LTU.html" class="internal-link" title="idnumbers.nationalid.LTU">LTU</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.LUX.html" class="internal-link" title="idnumbers.nationalid.LUX">LUX</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.LVA.html" class="internal-link" title="idnumbers.nationalid.LVA">LVA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.MAC.html" class="internal-link" title="idnumbers.nationalid.MAC">MAC</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.MDA.html" class="internal-link" title="idnumbers.nationalid.MDA">MDA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.MEX.html" class="internal-link" title="idnumbers.nationalid.MEX">MEX</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.MKD.html" class="internal-link" title="idnumbers.nationalid.MKD">MKD</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.MNE.html" class="internal-link" title="idnumbers.nationalid.MNE">MNE</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.MYS.html" class="internal-link" title="idnumbers.nationalid.MYS">MYS</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.NGA.html" class="internal-link" title="idnumbers.nationalid.NGA">NGA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.NLD.html" class="internal-link" title="idnumbers.nationalid.NLD">NLD</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.NOR.html" class="internal-link" title="idnumbers.nationalid.NOR">NOR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.NPL.html" class="internal-link" title="idnumbers.nationalid.NPL">NPL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.NZL.html" class="internal-link" title="idnumbers.nationalid.NZL">NZL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.PAK.html" class="internal-link" title="idnumbers.nationalid.PAK">PAK</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.PHL.html" class="internal-link" title="idnumbers.nationalid.PHL">PHL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.PNG.html" class="internal-link" title="idnumbers.nationalid.PNG">PNG</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.POL.html" class="internal-link" title="idnumbers.nationalid.POL">POL</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.PRT.html" class="internal-link" title="idnumbers.nationalid.PRT">PRT</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ROU.html" class="internal-link" title="idnumbers.nationalid.ROU">ROU</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.SGP.html" class="internal-link" title="idnumbers.nationalid.SGP">SGP</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.SMR.html" class="internal-link" title="idnumbers.nationalid.SMR">SMR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.SRB.html" class="internal-link" title="idnumbers.nationalid.SRB">SRB</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.SVK.html" class="internal-link" title="idnumbers.nationalid.SVK">SVK</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.SVN.html" class="internal-link" title="idnumbers.nationalid.SVN">SVN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.SWE.html" class="internal-link" title="idnumbers.nationalid.SWE">SWE</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.THA.html" class="internal-link" title="idnumbers.nationalid.THA">THA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.TUR.html" class="internal-link" title="idnumbers.nationalid.TUR">TUR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.TWN.html" class="internal-link" title="idnumbers.nationalid.TWN">TWN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.UKR.html" class="internal-link" title="idnumbers.nationalid.UKR">UKR</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.USA.html" class="internal-link" title="idnumbers.nationalid.USA">USA</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.util.html" class="internal-link" title="idnumbers.nationalid.util">util</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.VEN.html" class="internal-link" title="idnumbers.nationalid.VEN">VEN</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.VNM.html" class="internal-link" title="idnumbers.nationalid.VNM">VNM</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.yugoslavia.html" class="internal-link" title="idnumbers.nationalid.yugoslavia">yugoslavia</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ZAF.html" class="internal-link" title="idnumbers.nationalid.ZAF">ZAF</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.ZWE.html" class="internal-link" title="idnumbers.nationalid.ZWE">ZWE</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+        
+
+        
+         
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="module"><code><code><a href="index.html" class="internal-link">idnumbers</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.html" class="internal-link" title="idnumbers.nationalid">nationalid</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.util.html" class="internal-link" title="idnumbers.nationalid.util">util</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          module documentation
+        </div>
+
+        <div class="extrasDocstring">
+          
+          <p></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p class="undocumented">Undocumented</p></div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id389">
+  
+  
+  <tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#alias_of" class="internal-link" title="idnumbers.nationalid.util.alias_of">alias<wbr></wbr>_of</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#ean13_digit" class="internal-link" title="idnumbers.nationalid.util.ean13_digit">ean13<wbr></wbr>_digit</a></code></td>
+    <td>The EAN-13 validation. The EAN-13 is a [barcode format](https://boxshot.com/barcode/tutorials/ean-13-barcodes/). This is the check digit of EAN-13. https://boxshot.com/barcode/tutorials/ean-13-calculator/...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#letter_to_number" class="internal-link" title="idnumbers.nationalid.util.letter_to_number">letter<wbr></wbr>_to<wbr></wbr>_number</a></code></td>
+    <td>English letter to its index. A = 1, B = 2...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#luhn_digit" class="internal-link" title="idnumbers.nationalid.util.luhn_digit">luhn<wbr></wbr>_digit</a></code></td>
+    <td>implement the algorithm of Luhn. https://en.wikipedia.org/wiki/Luhn_algorithm :param multipliers_start_by_two: Multipliers start by two :param digits: digits for calculating the check digit :return: checksum...</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#mn_modulus_digit" class="internal-link" title="idnumbers.nationalid.util.mn_modulus_digit">mn<wbr></wbr>_modulus<wbr></wbr>_digit</a></code></td>
+    <td>MN modulus check, (official name TBD) ISO 7064 mod 11 (n), 10 (m)?</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#modulus_overflow_mod10" class="internal-link" title="idnumbers.nationalid.util.modulus_overflow_mod10">modulus<wbr></wbr>_overflow<wbr></wbr>_mod10</a></code></td>
+    <td>get the units digit of a modulus. Some modulus may not be calculated with 10. In some cases, we need the units digit to be the ID.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#validate_regexp" class="internal-link" title="idnumbers.nationalid.util.validate_regexp">validate<wbr></wbr>_regexp</a></code></td>
+    <td>validate string again the regular expression</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#verhoeff_check" class="internal-link" title="idnumbers.nationalid.util.verhoeff_check">verhoeff<wbr></wbr>_check</a></code></td>
+    <td>implement the verhoeff algorithm in table format: https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#weighted_modulus_digit" class="internal-link" title="idnumbers.nationalid.util.weighted_modulus_digit">weighted<wbr></wbr>_modulus<wbr></wbr>_digit</a></code></td>
+    <td>It metrix-multiples numbers and weights and calculate the modulus by the divider. :param numbers: the numbers list. :param weights: the weights list which will used in matrix multiplications. If weights is none, we use the [1] * len(numbers) as the weights...</td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
+    <td><code><a href="#VERHOEFF" class="internal-link" title="idnumbers.nationalid.util.VERHOEFF">VERHOEFF</a></code></td>
+    <td>[Table](https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm) for the Verhoeff algorithm</td>
+  </tr><tr class="typealias">
+    
+    <td>Type Alias</td>
+    <td><code><a href="#CHECK_ALPHA" class="internal-link" title="idnumbers.nationalid.util.CHECK_ALPHA">CHECK<wbr></wbr>_ALPHA</a></code></td>
+    <td>Check digit type. Numeric check digits are only allowed in A to Z (all in upper cases)</td>
+  </tr><tr class="typealias">
+    
+    <td>Type Alias</td>
+    <td><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK<wbr></wbr>_DIGIT</a></code></td>
+    <td>Check digit type. Numeric check digits are only allowed in 0 to 9</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.alias_of">
+    
+  </a>
+  <a name="alias_of">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">alias_of</span>(cls):
+    
+    <a class="headerLink" href="#alias_of" title="idnumbers.nationalid.util.alias_of">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">cls:</span><code>Type</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Type</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.ean13_digit">
+    
+  </a>
+  <a name="ean13_digit">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">ean13_digit</span>(numbers):
+    
+    <a class="headerLink" href="#ean13_digit" title="idnumbers.nationalid.util.ean13_digit">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>The EAN-13 validation. The EAN-13 is a [barcode format](https://boxshot.com/barcode/tutorials/ean-13-barcodes/). This is the check digit of EAN-13. https://boxshot.com/barcode/tutorials/ean-13-calculator/</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">numbers:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.letter_to_number">
+    
+  </a>
+  <a name="letter_to_number">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">letter_to_number</span>(letter, capital=True):
+    
+    <a class="headerLink" href="#letter_to_number" title="idnumbers.nationalid.util.letter_to_number">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>English letter to its index. A = 1, B = 2...</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">letter:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">capital:</span><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.luhn_digit">
+    
+  </a>
+  <a name="luhn_digit">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">luhn_digit</span>(digits, multipliers_start_by_two=False):
+    
+    <a class="headerLink" href="#luhn_digit" title="idnumbers.nationalid.util.luhn_digit">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>implement the algorithm of Luhn. https://en.wikipedia.org/wiki/Luhn_algorithm :param multipliers_start_by_two: Multipliers start by two :param digits: digits for calculating the check digit :return: checksum</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">digits:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">multipliers<wbr></wbr>_start<wbr></wbr>_by<wbr></wbr>_two:</span><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.mn_modulus_digit">
+    
+  </a>
+  <a name="mn_modulus_digit">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">mn_modulus_digit</span>(numbers, m, n):
+    
+    <a class="headerLink" href="#mn_modulus_digit" title="idnumbers.nationalid.util.mn_modulus_digit">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>MN modulus check, (official name TBD) ISO 7064 mod 11 (n), 10 (m)?</p>
+<ol class="rst-simple">
+<li>(adds numbers and product) mod by m</li>
+<li>next product = (2 * total) mod by n</li>
+<li>return n - product :param numbers: numbers :param m: M value used by calculate the first step :param n: N value used by the 2nd and 3rd step :return: the digit</li>
+</ol>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">numbers:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">m:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">n:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.modulus_overflow_mod10">
+    
+  </a>
+  <a name="modulus_overflow_mod10">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">modulus_overflow_mod10</span>(modulus):
+    
+    <a class="headerLink" href="#modulus_overflow_mod10" title="idnumbers.nationalid.util.modulus_overflow_mod10">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>get the units digit of a modulus. Some modulus may not be calculated with 10. In some cases, we need the units digit to be the ID.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">modulus:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.validate_regexp">
+    
+  </a>
+  <a name="validate_regexp">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">validate_regexp</span>(id_number, regexp):
+    
+    <a class="headerLink" href="#validate_regexp" title="idnumbers.nationalid.util.validate_regexp">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>validate string again the regular expression</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">regexp:</span><code>Pattern[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.verhoeff_check">
+    
+  </a>
+  <a name="verhoeff_check">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">verhoeff_check</span>(digits):
+    
+    <a class="headerLink" href="#verhoeff_check" title="idnumbers.nationalid.util.verhoeff_check">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>implement the verhoeff algorithm in table format: https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">digits:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.weighted_modulus_digit">
+    
+  </a>
+  <a name="weighted_modulus_digit">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">weighted_modulus_digit</span>(numbers, weights, divider, modulus_only=False):
+    
+    <a class="headerLink" href="#weighted_modulus_digit" title="idnumbers.nationalid.util.weighted_modulus_digit">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>It metrix-multiples numbers and weights and calculate the modulus by the divider. :param numbers: the numbers list. :param weights: the weights list which will used in matrix multiplications. If weights is none, we use the [1] * len(numbers) as the weights. :param divider: the divider used for calculating modulus. :param modulus_only: If True, it returns the modulus calculated by divider, otherwise it returns divider - modulus. The default is False. :return: the value</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">numbers:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">weights:</span><code>Optional[<wbr></wbr>List[<wbr></wbr>int]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">divider:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">modulus<wbr></wbr>_only:</span><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="idnumbers.nationalid.util.VERHOEFF">
+    
+  </a>
+  <a name="VERHOEFF">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">VERHOEFF</span>: <code>dict[<wbr></wbr>str, <wbr></wbr>list]</code> =
+    
+    <a class="headerLink" href="#VERHOEFF" title="idnumbers.nationalid.util.VERHOEFF">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>[Table](https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm) for the Verhoeff algorithm</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">D_TABLE</span><span class="rst-variable-quote">'</span>: [<wbr></wbr>[<wbr></wbr>0, <wbr></wbr>1, <wbr></wbr>2, <wbr></wbr>3, <wbr></wbr>4, <wbr></wbr>5, <wbr></wbr>6, <wbr></wbr>7, <wbr></wbr>8, <wbr></wbr>9],
+             <wbr></wbr>[<wbr></wbr>1, <wbr></wbr>2, <wbr></wbr>3, <wbr></wbr>4, <wbr></wbr>0, <wbr></wbr>6, <wbr></wbr>7, <wbr></wbr>8, <wbr></wbr>9, <wbr></wbr>5],
+             <wbr></wbr>[<wbr></wbr>2, <wbr></wbr>3, <wbr></wbr>4, <wbr></wbr>0, <wbr></wbr>1, <wbr></wbr>7, <wbr></wbr>8, <wbr></wbr>9, <wbr></wbr>5, <wbr></wbr>6],
+             <wbr></wbr>[<wbr></wbr>3, <wbr></wbr>4, <wbr></wbr>0, <wbr></wbr>1, <wbr></wbr>2, <wbr></wbr>8, <wbr></wbr>9, <wbr></wbr>5, <wbr></wbr>6, <wbr></wbr>7],
+             <wbr></wbr>[<wbr></wbr>4, <wbr></wbr>0, <wbr></wbr>1, <wbr></wbr>2, <wbr></wbr>3, <wbr></wbr>9, <wbr></wbr>5, <wbr></wbr>6, <wbr></wbr>7, <wbr></wbr>8],
+             <wbr></wbr>[<wbr></wbr>5, <wbr></wbr>9, <wbr></wbr>8, <wbr></wbr>7, <wbr></wbr>6, <wbr></wbr>0, <wbr></wbr>4, <wbr></wbr>3, <wbr></wbr>2, <wbr></wbr>1],
+             <wbr></wbr>[<wbr></wbr>6, <wbr></wbr>5, <wbr></wbr>9, <wbr></wbr>8, <wbr></wbr>7, <wbr></wbr>1, <wbr></wbr>0, <wbr></wbr>4, <wbr></wbr>3, <wbr></wbr>2],
+<span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
+  </div>
+</div><div class="basetypealias">
+  
+  
+  <a name="idnumbers.nationalid.util.CHECK_ALPHA">
+    
+  </a>
+  <a name="CHECK_ALPHA">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">CHECK_ALPHA</span> =
+    
+    <a class="headerLink" href="#CHECK_ALPHA" title="idnumbers.nationalid.util.CHECK_ALPHA">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Check digit type. Numeric check digits are only allowed in A to Z (all in upper cases)</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>Literal[<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">A</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">B</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">C</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">D</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">E</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">F</span><span class="rst-variable-quote">'</span>,
+        <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">G</span><span class="rst-variable-quote">'</span>,
+<span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
+  </div>
+</div><div class="basetypealias">
+  
+  
+  <a name="idnumbers.nationalid.util.CHECK_DIGIT">
+    
+  </a>
+  <a name="CHECK_DIGIT">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">CHECK_DIGIT</span>: <code>Type[<wbr></wbr>int]</code> =
+    
+    <a class="headerLink" href="#CHECK_DIGIT" title="idnumbers.nationalid.util.CHECK_DIGIT">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Check digit type. Numeric check digits are only allowed in 0 to 9</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>Literal[<wbr></wbr>0, <wbr></wbr>1, <wbr></wbr>2, <wbr></wbr>3, <wbr></wbr>4, <wbr></wbr>5, <wbr></wbr>6, <wbr></wbr>7, <wbr></wbr>8, <wbr></wbr>9]</code></pre></td></tr></table>
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container">
+    <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    22.9.1 at 2023-04-22 06:10:31.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>
