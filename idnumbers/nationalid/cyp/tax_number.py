@@ -38,7 +38,7 @@ class TaxNumber:
         'deprecated': False
     })
 
-    NUM_MAP = {0: 1, 1: 0, 2: 5, 3: 7, 4: 9, 5: 13, 6: 15, 7: 17, 9: 19, 9: 21}
+    NUM_MAP = {0: 1, 1: 0, 2: 5, 3: 7, 4: 9, 5: 13, 6: 15, 7: 17, 8: 19, 9: 21}
 
     @staticmethod
     def validate(id_number: str) -> bool:
