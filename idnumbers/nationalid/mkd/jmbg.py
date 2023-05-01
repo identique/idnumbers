@@ -3,6 +3,7 @@ from typing import Optional, Tuple
 from ..constant import Citizenship
 
 from ..yugoslavia import ParseResult, UniqueMasterCitizenNumber as YugoslaviaJMBG
+from ..util import alias_of
 
 MKD_METADATA = copy(YugoslaviaJMBG.METADATA)
 MKD_METADATA.iso3166_alpha2 = 'MK'
@@ -42,7 +43,7 @@ class UniqueMasterCitizenNumber(YugoslaviaJMBG):
         return Citizenship.RESIDENT, location
 
 
-JMBG = UniqueMasterCitizenNumber
+JMBG = alias_of(UniqueMasterCitizenNumber)
 """
 Alias of UniqueMasterCitizenNumber
 """

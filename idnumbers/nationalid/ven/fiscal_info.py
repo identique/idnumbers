@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 
-from ..util import validate_regexp, weighted_modulus_digit
+from ..util import alias_of, validate_regexp, weighted_modulus_digit
 
 
 def normalize(id_number):
@@ -63,5 +63,5 @@ class FiscalInformationNumber:
         return modulus == numbers[-1]
 
 
-RIF = FiscalInformationNumber
+RIF = alias_of(FiscalInformationNumber)
 """alias of FiscalInformationNumber"""

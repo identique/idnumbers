@@ -2,7 +2,7 @@ import re
 from types import SimpleNamespace
 from typing import Optional, TypedDict
 from ..constant import Gender
-from ..util import validate_regexp
+from ..util import alias_of, validate_regexp
 
 
 class ParseResult(TypedDict):
@@ -71,5 +71,5 @@ class NationalID:
             return None
 
 
-CNIC = NationalID
+CNIC = alias_of(NationalID)
 """alias of NationalID"""

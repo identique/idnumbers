@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 
-from ..util import validate_regexp
+from ..util import alias_of, validate_regexp
 
 
 class SocialSecurityNumber:
@@ -36,5 +36,5 @@ class SocialSecurityNumber:
         return validate_regexp(id_number, SocialSecurityNumber.METADATA.regexp)
 
 
-SSI = SocialSecurityNumber
+SSI = alias_of(SocialSecurityNumber)
 """alias of SocialSecurityNumber"""

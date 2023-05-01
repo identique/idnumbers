@@ -1,3 +1,4 @@
+import argparse
 import importlib
 import inspect
 import json
@@ -27,7 +28,11 @@ def collect_ids(package_name, output_filename):
                 module = importlib.import_module(package_name + '.' + module_name)
                 module_metadata = []
                 for name, obj in inspect.getmembers(module):
-                    if inspect.isclass(obj) and hasattr(obj, 'METADATA') and obj.METADATA.alias_of is None:
+                    if inspect.isclass(obj) \
+                            and hasattr(obj, 'METADATA') \
+                            and obj.METADATA.iso3166_alpha2 is not None \
+                            and obj.METADATA.alias_of is None \
+                            and name[0:2] != '__':
                         cls_metadata = obj.METADATA.__dict__
                         if type(cls_metadata['regexp']) is not str:
                             cls_metadata['regexp'] = cls_metadata['regexp'].pattern
@@ -60,4 +65,8 @@ def collect_ids(package_name, output_filename):
 
 
 if __name__ == '__main__':
-    collect_ids('idnumbers.nationalid', 'result.json')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('pkg', help='the package to parse')
+    parser.add_argument('output_file', help='path to the output JSON file')
+    args = parser.parse_args()
+    collect_ids(args.pkg, args.output_file)
