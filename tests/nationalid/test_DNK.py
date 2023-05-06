@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 from idnumbers.nationalid import DNK
-from idnumbers.nationalid.constant import Gender
 
 
 class TestDNKValidation(TestCase):
@@ -17,3 +16,8 @@ class TestDNKValidation(TestCase):
         self.assertEqual(10, result['yyyymmdd'].month)
         self.assertEqual(6, result['yyyymmdd'].day)
         self.assertEqual('1178', result['sn'])
+
+    def test_tin(self):
+        self.assertTrue(DNK.TIN.individual.validate('0101801234'))
+        self.assertTrue(DNK.TIN.entity.validate('88146328'))
+        self.assertFalse(DNK.TIN.entity.validate('88146327'))
