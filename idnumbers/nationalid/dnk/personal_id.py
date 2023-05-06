@@ -17,6 +17,8 @@ class PersonalIdentityNumber:
     """
     Denmark personal identity number, CPR, Det Centrale Personregister
     https://en.wikipedia.org/wiki/National_identification_number#Denmark
+    CPR numbers issued after 1 October 2007 can have a different format meaning that the last digit is not a check digit
+    and can therefore not be verified on the TIN on Europa web portal.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'DK',
