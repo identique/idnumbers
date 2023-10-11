@@ -38,7 +38,7 @@ class ResidentID:
         'checksum': True,
         'regexp': re.compile(r'^(?P<address_code>\d{6})'
                              r'(?P<yyyy>\d{4})'
-                             r'(?P<mm>0[1-9]|1[12])'
+                             r'(?P<mm>0[1-9]|1[012])'
                              r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
                              r'(?P<sn>\d{3})'
                              r'(?P<checksum>(\d|X))$'),
