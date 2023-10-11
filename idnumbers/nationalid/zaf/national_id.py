@@ -36,7 +36,7 @@ class NationalID:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>0[1-9]|1[12])'
+        'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>0[1-9]|1[012])'
                              r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
                              r'(?P<sn>\d{4})'
                              r'(?P<citizenship>[01])([89])'
