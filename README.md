@@ -152,9 +152,6 @@ not if it is an actual issued ID number.
   sensitive. The `METADATA.regexp` of each type shows what it accepts.
 - `parse()` returns `None` for invalid input.
 
-Known issue: one type can still raise `ValueError` for some input. It is ZAF (non-numeric strings, #314), which has an
-open issue.
-
 ## Parse National IDs
 
 The idnumbers library supports the parse function for certain national ID numbers, which allows you to easily extract

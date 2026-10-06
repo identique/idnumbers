@@ -62,10 +62,10 @@ class NationalID:
         if not isinstance(id_number, str):
             return None
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
-        check_digit = NationalID.checksum(id_number)
         if not match_obj:
             return None
-        elif check_digit != int(id_number[-1:]):
+        check_digit = NationalID.checksum(id_number)
+        if check_digit != int(id_number[-1]):
             return None
 
         year = int(match_obj.group('yy'))
@@ -82,8 +82,10 @@ class NationalID:
             return None
 
     @staticmethod
-    def checksum(id_number: str) -> CHECK_DIGIT:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """
-        use Luhn algorithm.
+        use Luhn algorithm. Returns None when the input does not match the ID format.
         """
+        if not match_regexp(id_number, NationalID.METADATA.regexp):
+            return None
         return luhn_digit([int(char) for char in id_number[:-1]])
