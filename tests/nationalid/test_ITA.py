@@ -120,7 +120,7 @@ class TestITACentury(TestCase):
         # The checksum is covered by the fixed vectors in TestITAValidation and by the python-stdnum 2.2
         # comparison in PR #386 (0 disagreements over 139,016 codes).
         month_letter = {v: k for k, v in ITA.FiscalCode.MONTH_MAP.items()}[month]
-        base ='RSSMRA%02d%s%02dH501' % (yy, month_letter, day)
+        base = 'RSSMRA%02d%s%02dH501' % (yy, month_letter, day)
         return base + ITA.FiscalCode.checksum(base + 'A')
 
     def test_issue_vector_is_1940(self):
