@@ -13,7 +13,10 @@ class ParseResult(TypedDict):
     firstname_consonants: str
     """The 3 consonants chars of firstname"""
     yyyymmdd: date
-    """birthday of this ID"""
+    """
+    birthday of this ID. The code carries only the last two digits of the year, so the century is
+    chosen such that the date is not after today: 20yy if that date has already come, otherwise 19yy.
+    """
     gender: Gender
     """only male or female"""
     area_code: str
@@ -146,7 +149,12 @@ class FiscalCode:
 
     @staticmethod
     def extract_birthday(yy_str: str, m: str, dd_str: str) -> Optional[Tuple[date, Gender]]:
-        """sterilize the numbers and convert the str to DoB and gender"""
+        """
+        sterilize the numbers and convert the str to DoB and gender.
+
+        The code carries only the last two digits of the year. The century is chosen such that the birth
+        date is not after today: 20yy if that date is today or earlier, otherwise 19yy.
+        """
         if m not in FiscalCode.MONTH_MAP:
             return None
         sterilized_dd = FiscalCode.sterilize_numbers(dd_str)
@@ -157,12 +165,14 @@ class FiscalCode:
             return None
         yy = int(sterilized_yy)
         dd = int(sterilized_dd)
-        year_base = 2000 if yy < 50 else 1900
         mm = FiscalCode.MONTH_MAP[m]
         day = dd if dd < 40 else dd - 40
         gender = Gender.MALE if dd < 40 else Gender.FEMALE
         try:
-            return date(year_base + yy, mm, day), gender
+            birthday = date(2000 + yy, mm, day)
+            if birthday > date.today():
+                birthday = date(1900 + yy, mm, day)
+            return birthday, gender
         except ValueError:
             return None
 
@@ -176,7 +186,7 @@ class FiscalCode:
             if ord(char) > 64:
                 if char not in FiscalCode.NUMERIC_REPLACEMENT:
                     return None
-                result += char
+                result += FiscalCode.NUMERIC_REPLACEMENT[char]
             else:
                 result += char
 

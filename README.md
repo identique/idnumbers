@@ -152,9 +152,9 @@ not if it is an actual issued ID number.
   sensitive. The `METADATA.regexp` of each type shows what it accepts.
 - `parse()` returns `None` for invalid input.
 
-Known issues: five types can still raise `ValueError` or `IndexError` for some input. These are ITA (omocodia letters,
-#296), KWT (impossible birth dates, #298), NOR (impossible birth dates, #304), ROU (#308) and ZAF (non-numeric
-strings, #314). Each has an open issue.
+Known issues: four types can still raise `ValueError` or `IndexError` for some input. These are KWT (impossible birth
+dates, #298), NOR (impossible birth dates, #304), ROU (#308) and ZAF (non-numeric strings, #314). Each has an open
+issue.
 
 ## Parse National IDs
 
