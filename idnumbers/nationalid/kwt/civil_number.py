@@ -74,8 +74,13 @@ class CivilNumber:
         yy = int(match_obj.group('yy'))
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
+        try:
+            birthday = date(year_base + yy, mm, dd)
+        except ValueError:
+            # an impossible birth date, e.g. 29 Feb 1900 or month 13
+            return None
         return {
-            'yyyymmdd': date(year_base + yy, mm, dd),
+            'yyyymmdd': birthday,
             'sn': match_obj.group('sn'),
             'checksum': checksum
         }
