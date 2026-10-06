@@ -22,6 +22,16 @@ class NationalID:
     Norway National ID number
     https://en.wikipedia.org/wiki/National_identification_number#Norway
     https://en.wikipedia.org/wiki/National_identity_number_(Norway)
+
+    Besides the fødselsnummer proper, two variants that keep the 11-digit layout are accepted. Both add 4 to one digit
+    of the date, and the control digits are computed over the digits as written
+    (https://no.wikipedia.org/wiki/F%C3%B8dselsnummer):
+
+    - D-number (temporary number): 4 is added to the first digit of the day, so the day is 41-71.
+    - H-number (hjelpenummer): 4 is added to the third digit, so the month is 41-52.
+
+    A number that has both additions is not a defined type and is invalid. FH-numbers (first digit 8 or 9) carry no
+    birth date and are invalid as well.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'NO',
@@ -41,7 +51,8 @@ class NationalID:
                   'birth number',
                   'riegádannummir'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Norway',
-                  'https://en.wikipedia.org/wiki/National_identity_number_(Norway)'],
+                  'https://en.wikipedia.org/wiki/National_identity_number_(Norway)',
+                  'https://no.wikipedia.org/wiki/F%C3%B8dselsnummer'],
         'deprecated': False
     })
 
@@ -56,9 +67,17 @@ class NationalID:
             return False
         return NationalID.checksum(id_number)
 
+    NUMBER_OFFSET = 40
+    D_NUMBER_DAYS = range(41, 72)
+    H_NUMBER_MONTHS = range(41, 53)
+
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        """parse the result, None if the input is invalid or has no real calendar birth date"""
+        """
+        parse the result, None if the input is invalid or has no real calendar birth date
+
+        For a D-number or an H-number, yyyymmdd is the real birth date, with the 40 taken off again.
+        """
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
@@ -77,8 +96,19 @@ class NationalID:
         elif 900 <= individual_num < 1000 and int(yy) >= 40:
             birth_century = 19
 
+        day = int(dd)
+        month = int(mm)
+        is_d_number = day in NationalID.D_NUMBER_DAYS
+        is_h_number = month in NationalID.H_NUMBER_MONTHS
+        if is_d_number and is_h_number:
+            return None
+        if is_d_number:
+            day -= NationalID.NUMBER_OFFSET
+        elif is_h_number:
+            month -= NationalID.NUMBER_OFFSET
+
         try:
-            birth_date = date(int(f'{birth_century}{yy}'), int(mm), int(dd))
+            birth_date = date(int(f'{birth_century}{yy}'), month, day)
         except ValueError:
             return None
 
