@@ -3,7 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import Literal, Optional, TypedDict
 from ..constant import Gender
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 
 
 def normalize(id_number: str) -> str:
@@ -66,7 +66,7 @@ class ResidentID:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the data"""
-        match_obj = ResidentID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, ResidentID.METADATA.regexp)
         if not match_obj:
             return None
         address_code = match_obj.group('address_code')

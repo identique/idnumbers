@@ -3,6 +3,7 @@ from math import floor
 from types import SimpleNamespace
 from typing import Optional, TypedDict
 from ..constant import Gender
+from ..util import match_regexp
 
 
 def normalize(id_number: str) -> str:
@@ -64,7 +65,7 @@ class NationalID:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
         province_country_code = match_obj.group('province_country_code')

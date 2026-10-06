@@ -3,7 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import TypedDict, Optional
 
-from ..util import validate_regexp, CHECK_DIGIT, weighted_modulus_digit
+from ..util import validate_regexp, CHECK_DIGIT, weighted_modulus_digit, match_regexp
 from ..constant import Gender
 
 
@@ -59,7 +59,7 @@ class UniformCivilNumber:
         """
         Parse the result
         """
-        match_obj = UniformCivilNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, UniformCivilNumber.METADATA.regexp)
         checksum = int(match_obj.group("checksum"))
         yy = int(match_obj.group("yy"))
         mm = int(match_obj.group("mm"))

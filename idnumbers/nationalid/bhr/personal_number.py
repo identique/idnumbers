@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import CHECK_DIGIT
+from ..util import CHECK_DIGIT, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -57,7 +57,7 @@ class PersonalNumber:
         """
         parse the id number
         """
-        match_obj = PersonalNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, PersonalNumber.METADATA.regexp)
         if not match_obj:
             return None
 

@@ -2,7 +2,7 @@ import re
 from datetime import date
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 from ..constant import Gender
 from .util import calc_check_digits, normalize
 
@@ -56,7 +56,7 @@ class NationalRegistrationNumber:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = NationalRegistrationNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NationalRegistrationNumber.METADATA.regexp)
         if not match_obj:
             return None
         checksum = NationalRegistrationNumber.checksum(id_number)

@@ -3,7 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import Optional, Tuple, TypedDict
 from ..constant import Gender
-from ..util import CHECK_DIGIT, modulus_overflow_mod10, validate_regexp, weighted_modulus_digit
+from ..util import CHECK_DIGIT, modulus_overflow_mod10, validate_regexp, weighted_modulus_digit, match_regexp
 
 
 YEAR_MONTH_TYPE = Tuple[int, int]
@@ -65,7 +65,7 @@ class PESEL:
         """
         parse the id number
         """
-        match_obj = PESEL.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, PESEL.METADATA.regexp)
         if not match_obj:
             return None
 

@@ -3,7 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import Optional, TypedDict
 from ..constant import Gender
-from ..util import validate_regexp, luhn_digit
+from ..util import validate_regexp, luhn_digit, match_regexp
 
 
 def normalize(id_number):
@@ -62,7 +62,7 @@ class PersonalIdentityNumber:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        match_obj = PersonalIdentityNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, PersonalIdentityNumber.METADATA.regexp)
         if not match_obj:
             return None
         checksum = match_obj.group('checksum')

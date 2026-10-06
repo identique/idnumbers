@@ -4,7 +4,7 @@ from math import floor
 from types import SimpleNamespace
 from typing import Optional, Tuple, TypedDict
 from ..constant import Gender
-from ..util import CHECK_DIGIT, validate_regexp
+from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -60,7 +60,7 @@ class PersonalCode:
         """
         parse the id number
         """
-        match_obj = PersonalCode.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, PersonalCode.METADATA.regexp)
         if not match_obj:
             return None
 

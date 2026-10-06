@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Literal, Optional
-from ..util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp
+from ..util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
 from .resident_registration import ResidentRegistration, ParseResult
 
 
@@ -61,7 +61,7 @@ class OldResidentRegistration(ResidentRegistration):
     @staticmethod
     def parse(id_number: str) -> Optional[OldIDParseResult]:
         """prase the result"""
-        match_obj = re.match(OldResidentRegistration.METADATA.regexp, id_number)
+        match_obj = match_regexp(id_number, OldResidentRegistration.METADATA.regexp)
         new_result = ResidentRegistration.parse(id_number)
         if not new_result:
             return None

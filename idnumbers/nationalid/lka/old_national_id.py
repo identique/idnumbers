@@ -3,6 +3,7 @@ from types import SimpleNamespace
 from typing import Optional
 from ..constant import Citizenship
 from .national_id import NationalID, ParseResult
+from ..util import match_regexp
 
 
 class OldIDParseResult(ParseResult):
@@ -37,7 +38,7 @@ class OldNationalID:
     @staticmethod
     def to_new(id_number: str) -> Optional[str]:
         """convert the old format to the new format"""
-        match_obj = OldNationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, OldNationalID.METADATA.regexp)
         if not match_obj:
             return None
         year = match_obj.group('year')

@@ -2,7 +2,7 @@ import re
 from datetime import date
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp
+from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -59,7 +59,7 @@ class CivilNumber:
         """
         parse the id number
         """
-        match_obj = CivilNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, CivilNumber.METADATA.regexp)
         if not match_obj:
             return None
 

@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -49,7 +49,7 @@ class NationalID:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the ZWE national id"""
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
         register_office_code = match_obj.group('register_office_code')
@@ -72,7 +72,7 @@ class NationalID:
     @staticmethod
     def checksum(id_number) -> bool:
         """Validate checksum"""
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         register_office_code = match_obj.group('register_office_code')
         national_num = match_obj.group('national_num')
         checksum_code = match_obj.group('checksum')

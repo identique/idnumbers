@@ -1,5 +1,7 @@
+import re
 from copy import copy
-from re import Pattern
+from functools import lru_cache
+from re import Match, Pattern
 from typing import List, Literal, Optional, Type, cast
 
 VERHOEFF = {
@@ -38,10 +40,51 @@ CHECK_ALPHA = Literal['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
 """Check digit type. Numeric check digits are only allowed in A to Z (all in upper cases)"""
 
 
-def validate_regexp(id_number: str, regexp: Pattern[str]) -> bool:
-    """validate string again the regular expression"""
+@lru_cache(maxsize=256)
+def _ascii_pattern(regexp: Pattern) -> Pattern:
+    """
+    Build the ASCII-only twin of a compiled pattern.
+
+    A ``str`` pattern is compiled with ``re.UNICODE`` implicitly, and that flag cannot be combined
+    with ``re.ASCII``, so it is removed first. Every other flag, such as ``re.IGNORECASE``, is kept.
+    A ``bytes`` pattern is ASCII-only already and is returned untouched.
+    """
+    if isinstance(regexp.pattern, bytes):
+        return regexp
+    return re.compile(regexp.pattern, (regexp.flags & ~re.UNICODE) | re.ASCII)
+
+
+def match_regexp(id_number: str, regexp: Pattern[str]) -> Optional[Match[str]]:
+    """
+    Match the whole id number against the regular expression, in ASCII mode.
+
+    Python's ``re`` module has two traps that let malformed input through a pattern such as
+    ``^\\d{3}$`` (see https://docs.python.org/3/library/re.html):
+
+    - ``$`` matches at the end of the string *and just before a trailing newline*, so ``"123\\n"``
+      matches. ``Pattern.fullmatch`` only succeeds when the whole string is consumed.
+    - ``\\d`` (and ``\\w``, ``\\s``) on a ``str`` pattern match any Unicode decimal digit, such as
+      Arabic-Indic or full-width digits, unless ``re.ASCII`` is set. Those later crash ``int()``
+      based checksum code.
+
+    The compiled ``METADATA.regexp`` objects are left unchanged (``tools.collect_regexp`` dumps
+    them); the ASCII twin is built here and cached.
+
+    :param id_number: the id number, MUST be a str
+    :param regexp: compiled pattern, expected to describe the whole id number
+    :return: the match object (named groups are preserved), or None when the input does not match
+    """
     assert isinstance(id_number, str), 'id_number MUST be str'
-    return regexp.search(id_number) is not None
+    return _ascii_pattern(regexp).fullmatch(id_number)
+
+
+def validate_regexp(id_number: str, regexp: Pattern[str]) -> bool:
+    """
+    Validate that the whole string matches the regular expression, using ASCII digits only.
+
+    A trailing newline and non-ASCII digits are rejected, see :func:`match_regexp` for the reasons.
+    """
+    return match_regexp(id_number, regexp) is not None
 
 
 def luhn_digit(digits: List[int], multipliers_start_by_two: bool = False) -> CHECK_DIGIT:

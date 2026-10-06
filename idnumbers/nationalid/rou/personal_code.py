@@ -3,7 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import Optional, TypedDict, Tuple
 from ..constant import Citizenship, Gender
-from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp
+from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -66,7 +66,7 @@ class PersonalNumericalCode:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the value"""
-        match_obj = PersonalNumericalCode.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, PersonalNumericalCode.METADATA.regexp)
         if not match_obj:
             return None
         checksum = PersonalNumericalCode.checksum(id_number)

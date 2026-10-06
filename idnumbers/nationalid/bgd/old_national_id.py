@@ -3,7 +3,7 @@ from enum import Enum
 from types import SimpleNamespace
 from typing import TypedDict, Optional
 
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 
 
 class ResidentialType(Enum):
@@ -82,7 +82,7 @@ class OldNationalID:
         """
         Parse the result
         """
-        match_obj = OldNationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, OldNationalID.METADATA.regexp)
         if not match_obj:
             return None
 
