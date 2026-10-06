@@ -1,8 +1,8 @@
 from datetime import date
 from unittest import TestCase, main
 
-from idnumbers.nationalid.constant import Gender
 from idnumbers.nationalid import ITA
+from idnumbers.nationalid.constant import Gender
 
 
 class TestITAValidation(TestCase):
@@ -116,6 +116,9 @@ class TestITACentury(TestCase):
 
     @staticmethod
     def _code(yy: int, month: int, day: int) -> str:
+        # The check letter comes from FiscalCode.checksum itself, so these tests check the century only.
+        # The checksum is covered by the fixed vectors in TestITAValidation and by the python-stdnum 2.2
+        # comparison in PR #386 (0 disagreements over 139,016 codes).
         month_letter = {v: k for k, v in ITA.FiscalCode.MONTH_MAP.items()}[month]
         base = 'RSSMRA%02d%s%02dH501' % (yy, month_letter, day)
         return base + ITA.FiscalCode.checksum(base + 'A')
