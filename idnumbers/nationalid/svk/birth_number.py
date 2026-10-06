@@ -10,7 +10,10 @@ from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 
 class BirthNumberParseResult(TypedDict):
     yyyymmdd: date
-    """birthday of this ID, there is no way to know the century of the birthday. So, yy < 50 is 20yy else 19yy."""
+    """
+    birthday of this ID. The number has 10 digits only from 1954, so the century follows from that:
+    yy < 54 is 20yy else 19yy. A birthday after today is not valid.
+    """
     gender: Gender
     """only male or female"""
     sn: str
@@ -39,11 +42,13 @@ def _birth_date(match_obj: Match[str]) -> Optional[date]:
             return None
         year = 1900 + yy
     else:
-        year = (2000 if yy < 50 else 1900) + yy
+        # 10-digit numbers exist from 1954 only, so yy 00-53 is 2000-2053 and 54-99 is 1954-1999
+        year = (2000 if yy < 54 else 1900) + yy
     try:
-        return date(year, mm, dd)
+        birth_date = date(year, mm, dd)
     except ValueError:
         return None
+    return birth_date if birth_date <= date.today() else None
 
 
 class BirthNumber:
@@ -56,6 +61,11 @@ class BirthNumber:
     Check digit: the 10th digit is the remainder of the first nine digits divided by 11. When that
     remainder is 10 the check digit is 0, so such a number is *not* divisible by 11 as a whole
     (this was used for about 1,000 numbers per year until 1985). Every other number is divisible by 11.
+
+    Century: a 10-digit number only exists from 1954, so ``yy`` 54-99 is 1954-1999 and ``yy`` 00-53 is
+    2000-2053. A birth date after today is impossible, so such a number is not valid (this also rejects
+    10-digit numbers with ``yy`` 50-53 that used to be read as 1950-1953). The month offsets are +50 for
+    women and, since 2004, +20 when the serial numbers of a day run out; the +20 is accepted for any year.
 
     9-digit form: numbers given out up to and including 1953 have 9 digits (the date, a 3-digit serial
     number and no check digit); people who hold them are still alive. The 9-digit form is only valid for

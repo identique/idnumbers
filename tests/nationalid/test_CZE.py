@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from unittest import TestCase
 
 from idnumbers.nationalid.CZE import TIN, BirthNumber
@@ -73,6 +74,50 @@ class TestCZEBirthNumberNineDigits(TestCase):
     def test_ten_digits_are_unchanged(self):
         self.assertIsNotNone(BirthNumber.parse('7103192745'))
         self.assertIsNone(BirthNumber.parse('7103192746'))
+
+
+def _birth_number(birth_date: date, serial: str = '123', month_offset: int = 0) -> str:
+    """Build a 10-digit birth number with a correct check digit (synthetic, for the tests)."""
+    first_nine = '%02d%02d%02d%s' % (birth_date.year % 100, birth_date.month + month_offset, birth_date.day, serial)
+    return first_nine + str(int(first_nine) % 11 % 10)
+
+
+class TestCZEBirthNumberCentury(TestCase):
+    """10 digit numbers exist from 1954 only, so yy 00-53 is 20yy and a future date is invalid."""
+
+    def test_years_00_to_53_are_20yy(self):
+        # synthetic numbers: 1 Jan 2003 (male), 1 Jan 2003 (female), 1 Jan 1954
+        result = BirthNumber.parse('0301011238')
+        self.assertEqual(date(2003, 1, 1), result['yyyymmdd'])
+        self.assertEqual(Gender.MALE, result['gender'])
+        woman = BirthNumber.parse(_birth_number(date(2003, 1, 1), month_offset=50))
+        self.assertEqual(date(2003, 1, 1), woman['yyyymmdd'])
+        self.assertEqual(Gender.FEMALE, woman['gender'])
+        self.assertEqual(date(1954, 1, 1), BirthNumber.parse('5401011231')['yyyymmdd'])
+        self.assertEqual(date(1999, 12, 31), BirthNumber.parse('9912311233')['yyyymmdd'])
+
+    def test_extra_20_month_offset_is_kept(self):
+        # since 2004 the month gets +20 when the serial numbers of a day run out (synthetic number)
+        number = _birth_number(date(2005, 3, 4), month_offset=20)
+        self.assertEqual('05230412', number[:8])
+        self.assertEqual(date(2005, 3, 4), BirthNumber.parse(number)['yyyymmdd'])
+        number = _birth_number(date(2005, 3, 4), month_offset=70)
+        self.assertEqual(date(2005, 3, 4), BirthNumber.parse(number)['yyyymmdd'])
+        self.assertEqual(Gender.FEMALE, BirthNumber.parse(number)['gender'])
+
+    def test_years_50_to_53_are_not_read_as_1950s(self):
+        # issue #288: 5001010003 is not 1 Jan 1950 (a 10 digit number cannot exist then), it would be 2050
+        self.assertIsNone(BirthNumber.parse('5001010003'))
+        self.assertFalse(BirthNumber.validate('5001010003'))
+        self.assertFalse(BirthNumber.validate('5301010000'))
+
+    def test_future_date_is_invalid(self):
+        # relative to today so that the test does not depend on the clock (valid while the year is < 2054)
+        today = date.today()
+        self.assertTrue(BirthNumber.validate(_birth_number(today)))
+        self.assertTrue(BirthNumber.validate(_birth_number(today - timedelta(days=1))))
+        self.assertFalse(BirthNumber.validate(_birth_number(today + timedelta(days=1))))
+        self.assertIsNone(BirthNumber.parse(_birth_number(today + timedelta(days=1))))
 
 
 # the DIC of an individual is the birth number, except for 8 and 9 digit special cases
