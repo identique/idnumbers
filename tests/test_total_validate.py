@@ -4,12 +4,11 @@ validate() and parse() are total: they return a bool / None for any input instea
 The tests below feed every ID type
   1. a fixed list of hostile inputs (non-str values, empty and blank strings, very long strings, non-ASCII digits),
   2. a deterministic fuzz: every valid vector found in tests/nationalid/test_*.py, mutated position by position.
-The few crashes that other issues still own are listed in KNOWN_RAISES, see the comment there.
 """
 import ast
 import glob
 import os
-from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Set, Tuple
+from typing import Any, Callable, Iterator, List, Set, Tuple
 from unittest import TestCase, main
 
 from idnumbers.nationalid import BGR, BRA, CHE, CZE, EST, GRC, IRN, ISR, JPN, LKA, LVA, NZL, SWE, UKR, ZAF
@@ -31,32 +30,6 @@ holds the characters that regexps and checksum code mishandle: '|' and '.' (slop
 '²' and '①' (str.isdigit() is True, int() raises), a newline, an Arabic-Indic digit and '/'.
 """
 FUZZ_EXTENSIONS = '0A'
-
-
-class KnownRaise(NamedTuple):
-    issue: int
-    """the open issue that owns the crash"""
-    reason: str
-    applies: Callable[[str], bool]
-    """True for the inputs whose crash is tolerated for now; deliberately no broader than the cause"""
-    examples: Tuple[str, ...]
-    """inputs that raise today, test_known_raises_still_reproduce runs them"""
-
-
-KNOWN_RAISES: Dict[str, KnownRaise] = {
-    # Every entry is a crash that a LATER issue owns and fixes. When that fix lands, test_known_raises_still_
-    # reproduce fails on purpose: the PR that fixes the crash MUST delete its entry here, so the exemption
-    # never outlives the bug. Only issue #314 may be listed.
-    'idnumbers.nationalid.zaf.national_id.NationalID': KnownRaise(
-        314, 'checksum() runs int() on every character before the format is checked: ValueError',
-        lambda value: any(not char.isdecimal() for char in value[:-1]),
-        ('xxxxxxxxxxx', ' 207012409184', '-207012409184')),
-}
-
-
-def _known_raise(type_name: str, value: Any) -> bool:
-    entry = KNOWN_RAISES.get(type_name)
-    return entry is not None and isinstance(value, str) and entry.applies(value)
 
 
 def _string_literals() -> Set[str]:
@@ -118,8 +91,6 @@ class TestEveryIDTypeIsTotal(TestCase):
                 if length:
                     inputs += [ARABIC_INDIC_ONE * length, FULL_WIDTH_ONE * length, '\n' * length, ' ' * length]
             for value in inputs:
-                if _known_raise(name, value):
-                    continue
                 raised, result = _call(cls.validate, value)
                 if raised or result is not False:
                     failures.append(f'{name}.validate({_describe(value)}) -> {result!r}')
@@ -141,8 +112,6 @@ class TestEveryIDTypeIsTotal(TestCase):
                 candidates.update(_mutations(vector))
             parsable = getattr(cls.METADATA, 'parsable', False)
             for value in sorted(candidates):
-                if _known_raise(name, value):
-                    continue
                 checked += 1
                 raised, result = _call(cls.validate, value)
                 if raised or not isinstance(result, bool):
@@ -153,27 +122,6 @@ class TestEveryIDTypeIsTotal(TestCase):
                         failures.append(f'{name}.parse({_describe(value)}) raised {result!r}')
         self.assertGreater(checked, 10000)
         self.assertEqual([], failures)
-
-
-class TestKnownRaises(TestCase):
-    def test_entries_are_known_types_of_allowed_issues(self):
-        names = {name for name, _ in _discover_id_types()}
-        self.assertTrue(set(KNOWN_RAISES).issubset(names))
-        for name, entry in KNOWN_RAISES.items():
-            with self.subTest(id_type=name):
-                self.assertIn(entry.issue, {314})
-                self.assertTrue(entry.reason)
-                self.assertTrue(entry.examples)
-
-    def test_known_raises_still_reproduce(self):
-        # When this fails, the crash is fixed: delete the entry from KNOWN_RAISES (the fix PR does that).
-        types = dict(_discover_id_types())
-        for name, entry in KNOWN_RAISES.items():
-            for value in entry.examples:
-                with self.subTest(id_type=name, value=value):
-                    self.assertTrue(entry.applies(value))
-                    raised = [_call(types[name].validate, value)[0], _call(types[name].parse, value)[0]]
-                    self.assertTrue(any(raised), f'{name} no longer raises for {value!r}, delete its KNOWN_RAISES entry')
 
 
 class TestIssue278Regressions(TestCase):
