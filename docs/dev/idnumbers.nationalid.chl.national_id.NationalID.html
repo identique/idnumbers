@@ -363,12 +363,12 @@
     
     <td>Static Method</td>
     <td><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.chl.national_id.NationalID.checksum">checksum</a></code></td>
-    <td>Validate CHL national id number checksum https://gist.github.com/ryangreenberg/4531891</td>
+    <td>Calculate the CHL national id number check character (modulo 11).</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
     <td><code><a href="#validate" class="internal-link" title="idnumbers.nationalid.chl.national_id.NationalID.validate">validate</a></code></td>
-    <td>Validate the CHL id number https://codepen.io/alisteroz/pen/KEoqgQ</td>
+    <td>Validate the CHL id number. A lowercase k check character is accepted as equivalent to K. https://codepen.io/alisteroz/pen/KEoqgQ</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
@@ -408,7 +408,8 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Validate CHL national id number checksum https://gist.github.com/ryangreenberg/4531891</p>
+    <div><p>Calculate the CHL national id number check character (modulo 11).</p>
+<p>The digits of the body (the id without its check character) are weighted from the right with the repeating cycle 2, 3, 4, 5, 6, 7, 2, 3, ... so it works for both 7 and 8 digit bodies. The check character is 11 - (sum mod 11), where 11 is written as 0 and 10 as K. https://es.wikipedia.org/wiki/Rol_%C3%9Anico_Tributario#Algoritmo https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cl/rut.py</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -432,7 +433,7 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Validate the CHL id number https://codepen.io/alisteroz/pen/KEoqgQ</p>
+    <div><p>Validate the CHL id number. A lowercase k check character is accepted as equivalent to K. https://codepen.io/alisteroz/pen/KEoqgQ</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="baseconstant">
@@ -462,7 +463,7 @@
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">max_length</span><span class="rst-variable-quote">'</span>: 9,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">parsable</span><span class="rst-variable-quote">'</span>: False,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">checksum</span><span class="rst-variable-quote">'</span>: True,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">(</span>\d<span class="rst-re-op">{1,2}</span>\.\d<span class="rst-re-op">{3}</span>\.\d<span class="rst-re-op">{3}</span>-<span class="rst-re-group">[</span>\d\|K<span class="rst-re-group">]</span><span class="rst-re-group">)</span>$<span class="rst-variable-quote">'</span>),
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">(</span>\d<span class="rst-re-op">{1,2}</span>\.\d<span class="rst-re-op">{3}</span>\.\d<span class="rst-re-op">{3}</span>-<span class="rst-re-group">[</span>\dKk<span class="rst-re-group">]</span><span class="rst-re-group">)</span>$<span class="rst-variable-quote">'</span>),
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">alias_of</span><span class="rst-variable-quote">'</span>: None,
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
@@ -488,7 +489,7 @@
   <div class="functionBody">
     
     <div><p class="undocumented">Undocumented</p></div>
-    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr>3, <wbr></wbr>2, <wbr></wbr>7, <wbr></wbr>6, <wbr></wbr>5, <wbr></wbr>4, <wbr></wbr>3, <wbr></wbr>2]</code></pre></td></tr></table>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr>2, <wbr></wbr>3, <wbr></wbr>4, <wbr></wbr>5, <wbr></wbr>6, <wbr></wbr>7]</code></pre></td></tr></table>
   </div>
 </div>
         </div>
@@ -502,7 +503,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-06 14:35:15.
+    22.9.1 at 2026-10-06 15:02:25.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
