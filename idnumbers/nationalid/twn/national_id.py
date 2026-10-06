@@ -89,9 +89,9 @@ class NationalID:
         https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%B0%91%E8%BA%AB%E5%88%86%E8%AD%89#%E6%9C%89%E6%95%88%E7%A2%BC
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
-            return False
+            return None
         # it uses modulus 10 algorithm with magic numbers
         location = id_number[0]
         numbers = NationalID.LOCATION_NUM[ord(location) - 65] + [int(char) for char in id_number[1:]]
-        modulus = weighted_modulus_digit(numbers[:-1], NationalID.MAGIC_MULTIPLIER, 10)
-        return modulus
+        # a weighted sum that is a multiple of 10 gives check digit 0, not 10
+        return weighted_modulus_digit(numbers[:-1], NationalID.MAGIC_MULTIPLIER, 10) % 10
