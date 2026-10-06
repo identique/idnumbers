@@ -10,3 +10,6 @@ class TestISRValidation(TestCase):
 
     def test_error_case(self):
         self.assertFalse(ISR.NationalID.validate('523656782'))
+
+    def test_checksum_has_docstring(self):
+        self.assertIsNotNone(ISR.NationalID.checksum.__doc__)

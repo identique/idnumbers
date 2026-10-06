@@ -42,8 +42,8 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
+        """Calculate national id checksum, or None if the input does not match the format"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return None
-        """Calculate national id checksum"""
         numbers = [int(i) for i in id_number]
         return luhn_digit(numbers[:-1], False)

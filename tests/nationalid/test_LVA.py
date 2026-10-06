@@ -20,6 +20,9 @@ class TestLVAValidation(TestCase):
         self.assertEqual(5, result['checksum'])
         self.assertIsNone(LVA.OldPersonalCode.parse('323691-93794'))
 
+    def test_checksum_has_docstring(self):
+        self.assertIsNotNone(LVA.PersonalCode.checksum.__doc__)
+
 
 if __name__ == '__main__':
     main()
