@@ -2,7 +2,6 @@ import calendar
 import re
 from datetime import date
 from types import SimpleNamespace
-from re import Match
 from typing import Optional, TypedDict
 from ..util import validate_regexp, match_regexp
 from ..constant import Gender
@@ -43,7 +42,7 @@ def _century(normalized: str) -> Optional[int]:
     return None
 
 
-def _is_valid_birth_date(century: int, match_obj: Match[str]) -> bool:
+def _is_valid_birth_date(century: int, match_obj: re.Match[str]) -> bool:
     """
     Check the birth date part, which may be incomplete.
 
@@ -59,6 +58,7 @@ def _is_valid_birth_date(century: int, match_obj: Match[str]) -> bool:
     if month > 12:
         return False
     return day <= calendar.monthrange(year, month)[1]
+
 
 class NationalRegistrationNumber:
     """
