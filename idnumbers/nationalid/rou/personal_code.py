@@ -27,6 +27,7 @@ class PersonalNumericalCode:
     Personal Numerical Code (Cod Numeric Personal, CNP)
     https://en.wikipedia.org/wiki/National_identification_number#Romania
     https://en.wikipedia.org/wiki/Romanian_identity_card
+    https://github.com/vimishor/cnp-spec/blob/master/spec.md
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'RO',
@@ -45,7 +46,8 @@ class PersonalNumericalCode:
                   'CNP',
                   'Carte de identitate'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Romania',
-                  'https://en.wikipedia.org/wiki/Romanian_identity_card'],
+                  'https://en.wikipedia.org/wiki/Romanian_identity_card',
+                  'https://github.com/vimishor/cnp-spec/blob/master/spec.md'],
         'deprecated': False
     })
 
@@ -53,6 +55,11 @@ class PersonalNumericalCode:
     """multiplier for checksum"""
 
     YEAR_BASE_MAP = [1900, 1900, 1800, 1800, 2000, 2000]
+    """
+    century base of the first digit (sex and century) 1..6, so it is indexed by that digit minus 1:
+    1, 2 = 1900-1999; 3, 4 = 1800-1899; 5, 6 = 2000-2099. Residents (7, 8) are resolved from yy instead.
+    https://github.com/vimishor/cnp-spec/blob/master/spec.md
+    """
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -103,7 +110,7 @@ class PersonalNumericalCode:
         gender = Gender.MALE if gender_century % 2 == 1 else Gender.FEMALE
         citizenship = Citizenship.CITIZEN if gender_century < 7 else Citizenship.RESIDENT
         if gender_century < 7:
-            year_base = PersonalNumericalCode.YEAR_BASE_MAP[gender_century]
+            year_base = PersonalNumericalCode.YEAR_BASE_MAP[gender_century - 1]
         else:
             year_base = 2000 if yy < 50 else 1900
         return gender, citizenship, year_base
