@@ -50,11 +50,7 @@ def _is_ascii_digits(length: int) -> Callable[[str], bool]:
 KNOWN_RAISES: Dict[str, KnownRaise] = {
     # Every entry is a crash that a LATER issue owns and fixes. When that fix lands, test_known_raises_still_
     # reproduce fails on purpose: the PR that fixes the crash MUST delete its entry here, so the exemption
-    # never outlives the bug. Only issues #304, #308 and #314 may be listed.
-    'idnumbers.nationalid.nor.national_id.NationalID': KnownRaise(
-        304, 'an impossible birth date, e.g. 00000000000, makes date() raise ValueError',
-        _is_ascii_digits(11),
-        ('00000000000', '99999999999')),
+    # never outlives the bug. Only issues #308 and #314 may be listed.
     'idnumbers.nationalid.rou.personal_code.PersonalNumericalCode': KnownRaise(
         308, 'first digit 6 raises IndexError, impossible dates raise ValueError',
         _is_ascii_digits(13),
@@ -173,7 +169,7 @@ class TestKnownRaises(TestCase):
         self.assertTrue(set(KNOWN_RAISES).issubset(names))
         for name, entry in KNOWN_RAISES.items():
             with self.subTest(id_type=name):
-                self.assertIn(entry.issue, {304, 308, 314})
+                self.assertIn(entry.issue, {308, 314})
                 self.assertTrue(entry.reason)
                 self.assertTrue(entry.examples)
 
