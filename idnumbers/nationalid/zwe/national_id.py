@@ -18,6 +18,9 @@ class NationalID:
     """
     Zimbabwe National ID number format
     https://en.wikipedia.org/wiki/National_identification_number#Zimbabwe
+
+    The check letter rule (modulus 23) is described in Appendix 2 of
+    https://www.slideshare.net/slideshow/zimbabwe-2018-biometric-voters-roll-analysis-pachedu/106248017
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'ZW',
@@ -31,7 +34,8 @@ class NationalID:
                              r'(?P<district_code>\d{2}$)'),
         'alias_of': None,
         'names': ['National ID Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Zimbabwe'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Zimbabwe',
+                  'https://www.slideshare.net/slideshow/zimbabwe-2018-biometric-voters-roll-analysis-pachedu/106248017'],
         'deprecated': False
     })
 
@@ -81,11 +85,15 @@ class NationalID:
     @staticmethod
     def get_checksum(register_office_code: str, national_num: str) -> str:
         """
-        Implement the checksum rule by
-        https://www.slideshare.net/povonews/zimbabwe-2018-biometric-voters-roll-analysis-pachedu
-        page 56 Appendix 2
+        Compute the check letter from the register office code and the national number.
+
+        The first 8 (or 9) digits, that is the register office code followed by the
+        national number, are read as one integer and divided by 23. The remainder
+        is mapped to the check letter (0 is Z, 1 is A, and so on up to 22 which is Y).
+        Rule from Appendix 2 (slide 56) of
+        https://www.slideshare.net/slideshow/zimbabwe-2018-biometric-voters-roll-analysis-pachedu/106248017
         """
-        remainder = sum(int(d) for d in (register_office_code + national_num)) % 23
+        remainder = int(register_office_code + national_num) % 23
         checksum_list = ['Z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T',
                          'V', 'W', 'X', 'Y']
         return checksum_list[remainder]
