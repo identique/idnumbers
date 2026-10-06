@@ -1,5 +1,6 @@
 import re
 from types import SimpleNamespace
+from typing import Optional
 from ..util import validate_regexp, weighted_modulus_digit
 
 
@@ -49,9 +50,10 @@ class NationalID:
         return NationalID.checksum(id_number) == id_number[-1].upper()
 
     @staticmethod
-    def checksum(id_number: str) -> str:
+    def checksum(id_number: str) -> Optional[str]:
         """
         Calculate the CHL national id number check character (modulo 11).
+        Returns None when the input is not a well-formed id number.
 
         The digits of the body (the id without its check character) are weighted from the right with the
         repeating cycle 2, 3, 4, 5, 6, 7, 2, 3, ... so it works for both 7 and 8 digit bodies. The check
@@ -59,6 +61,8 @@ class NationalID:
         https://es.wikipedia.org/wiki/Rol_%C3%9Anico_Tributario#Algoritmo
         https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cl/rut.py
         """
+        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+            return None
         number_list = [int(char) for char in reversed(normalize(id_number)[:-1])]
         weights = [NationalID.MULTIPLIER[index % len(NationalID.MULTIPLIER)] for index in range(len(number_list))]
         modulus = weighted_modulus_digit(number_list, weights, 11)
