@@ -1,3 +1,4 @@
+import calendar
 import re
 from datetime import date
 from types import SimpleNamespace
@@ -42,19 +43,45 @@ def _century(normalized: str) -> Optional[int]:
     return None
 
 
-def _birth_date(century: int, match_obj: Match[str]) -> Optional[date]:
-    """Build the birth date, or return None if it is not a real calendar date."""
-    try:
-        return date(century + int(match_obj.group('yy')), int(match_obj.group('mm')), int(match_obj.group('dd')))
-    except ValueError:
-        return None
+def _is_valid_birth_date(century: int, match_obj: Match[str]) -> bool:
+    """
+    Check the birth date part, which may be incomplete.
 
+    A month of 00 (only the year is known, or the day counter of an unknown month ran out) is valid
+    with any day. A valid month with the day 00 is valid too. Otherwise the day must exist in that month
+    of the inferred century (IT000; python-stdnum stdnum/be/nn.py).
+    """
+    year = century + int(match_obj.group('yy'))
+    month = int(match_obj.group('mm'))
+    day = int(match_obj.group('dd'))
+    if month == 0:
+        return True
+    if month > 12:
+        return False
+    return day <= calendar.monthrange(year, month)[1]
 
 class NationalRegistrationNumber:
     """
     Belgium National register number format
     https://en.wikipedia.org/wiki/Belgian_identity_card
 
+    The number is the birth date (``yymmdd``), a 3-digit serial number (odd for men, even for women)
+    and 2 check digits. The check digits are ``97 - (the first nine digits mod 97)``; for a person
+    born from 2000 the digit 2 is put in front of the nine digits. The century of birth can therefore
+    only be found by computing the check digits, and ``parse()`` returns the century that matches.
+    A 20xx birth year in the future is not accepted.
+
+    The birth date may be incomplete: when only the year, or the year and month, were known, the
+    unknown parts are zeroes (for example ``40 00 00 953 81``), and when that serial range runs out
+    the day counts up from 01 with the month still 00. A number with an unknown birth date uses the
+    fictitious date 00 00 01. Such a number is valid, so ``validate()`` is True, but ``parse()``
+    returns None because there is no complete birth date to put in ``yyyymmdd``.
+    A day that does not exist in its month (for example 30 February) is still invalid.
+
+    Bis numbers (month + 20 or + 40) are a different ID type and are not supported.
+
+    Sources: the official Rijksregister instruction IT000 "Het identificatienummer" (15.05.2016)
+    and python-stdnum ``stdnum/be/nn.py``.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'BE',
@@ -73,7 +100,9 @@ class NationalRegistrationNumber:
                   'Carte d’identité',
                   'Personalausweis'],
         'links': ['https://en.wikipedia.org/wiki/Belgian_identity_card',
-                  'https://www.checkdoc.be/CheckDoc/homepage.do'],
+                  'https://www.checkdoc.be/CheckDoc/homepage.do',
+                  'https://www.ibz.rrn.fgov.be/sites/default/files/documents/nl/rijksregister/onderrichtingen/'
+                  'IT-lijst/IT000_Rijksregisternummer.pdf'],
         'deprecated': False
     })
 
@@ -86,7 +115,7 @@ class NationalRegistrationNumber:
         century = _century(normalize(id_number))
         if century is None:
             return False
-        return _birth_date(century, match_obj) is not None
+        return _is_valid_birth_date(century, match_obj)
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
@@ -97,12 +126,17 @@ class NationalRegistrationNumber:
         century = _century(normalize(id_number))
         if century is None:
             return None
-        birth_date = _birth_date(century, match_obj)
-        if birth_date is None:
+        if not _is_valid_birth_date(century, match_obj):
+            return None
+        yy = int(match_obj.group('yy'))
+        mm = int(match_obj.group('mm'))
+        dd = int(match_obj.group('dd'))
+        if mm == 0 or dd == 0:
+            # incomplete birth date: the number is valid, but there is no date to return
             return None
         sn = match_obj.group('sn')
         return {
-            'yyyymmdd': birth_date,
+            'yyyymmdd': date(century + yy, mm, dd),
             'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
             'sn': sn,
             'checksum': int(match_obj.group('checksum'))
