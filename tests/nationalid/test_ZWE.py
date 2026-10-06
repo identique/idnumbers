@@ -3,8 +3,9 @@ from unittest import TestCase, main
 from idnumbers.nationalid import ZWE
 
 
-class TestNGAValidation(TestCase):
+class TestZWEValidation(TestCase):
     def test_normal_case(self):
+        # does not tell the digit-sum rule from the whole-number rule (both give remainder 16, R); the other vectors do
         self.assertTrue(ZWE.NationalID.validate('75191961R00'))
         self.assertTrue(ZWE.NationalID.validate('751919620J86'))
         # real IDs reported in issue #277 (modulus 23 of the first 9 digits)
