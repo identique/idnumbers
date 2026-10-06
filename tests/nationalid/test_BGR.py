@@ -59,3 +59,41 @@ class TestBGRValidation(TestCase):
         self.assertTrue(BGR.TIN.entity.validate('207258749'))
         self.assertTrue(BGR.TIN.entity.validate('207271885'))
         self.assertTrue(BGR.TIN.entity.validate('114635815'))
+
+
+class TestBGRUnifiedIdCode(TestCase):
+    def test_nine_digit_cases(self):
+        # test cases: https://papagal.bg/bg/
+        for number in ('207258749', '207271885', '114635815', '011480629'):
+            self.assertTrue(BGR.UnifiedIdCode.validate(number), number)
+        self.assertFalse(BGR.UnifiedIdCode.validate('207258740'))
+        self.assertFalse(BGR.UnifiedIdCode.validate('011480628'))
+
+    def test_thirteen_digit_check_is_over_digits_9_to_12(self):
+        # from the issue #283 report: 011480629 is a valid 9-digit EIK, and the 13th digit follows from
+        # digits 9 to 12 (9, 1, 6, 8) with weights 2, 7, 3, 5: 83 mod 11 = 6
+        # (mirovit/eik-validator, https://tsvetanv.wordpress.com/2011/04/01/eik/)
+        self.assertTrue(BGR.UnifiedIdCode.validate('0114806291686'))
+        self.assertEqual(6, BGR.UnifiedIdCode.checksum('0114806291686'))
+        self.assertFalse(BGR.UnifiedIdCode.validate('0114806291688'))
+
+    def test_thirteen_digit_second_weights(self):
+        # synthetic: digits 9 to 12 are 9, 0, 0, 5. The first weights (2, 7, 3, 5) give 43 mod 11 = 10,
+        # so the second weights (4, 9, 5, 7) are used: 71 mod 11 = 5.
+        self.assertTrue(BGR.UnifiedIdCode.validate('0114806290055'))
+        self.assertEqual(5, BGR.UnifiedIdCode.checksum('0114806290055'))
+        self.assertFalse(BGR.UnifiedIdCode.validate('0114806290054'))
+
+    def test_thirteen_digit_final_zero(self):
+        # synthetic: digits 9 to 12 are 9, 0, 9, 4. Both weightings give 10 mod 11 (65 and 109),
+        # so the check digit is 0.
+        self.assertTrue(BGR.UnifiedIdCode.validate('0114806290940'))
+        self.assertEqual(0, BGR.UnifiedIdCode.checksum('0114806290940'))
+        self.assertFalse(BGR.UnifiedIdCode.validate('0114806290941'))
+
+    def test_thirteen_digit_requires_valid_nine_digit_prefix(self):
+        # synthetic: 011480639 is not a valid 9-digit EIK, although the 13th digit (6) is the right check digit
+        # for digits 9 to 12 (9, 1, 6, 8)
+        self.assertFalse(BGR.UnifiedIdCode.validate('011480639'))
+        self.assertEqual(6, BGR.UnifiedIdCode.checksum('0114806391686'))
+        self.assertFalse(BGR.UnifiedIdCode.validate('0114806391686'))
