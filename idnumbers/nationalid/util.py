@@ -97,6 +97,7 @@ def luhn_digit(digits: List[int], multipliers_start_by_two: bool = False) -> CHE
     """
     implement the algorithm of Luhn.
     https://en.wikipedia.org/wiki/Luhn_algorithm
+
     :param multipliers_start_by_two: Multipliers start by two
     :param digits: digits for calculating the check digit
     :return: checksum
@@ -130,12 +131,13 @@ def weighted_modulus_digit(numbers: List[int], weights: Optional[List[int]], div
                            modulus_only: bool = False) -> int:
     """
     It metrix-multiples numbers and weights and calculate the modulus by the divider.
+
     :param numbers: the numbers list.
     :param weights: the weights list which will used in matrix multiplications. If weights is none, we use the
-    [1] * len(numbers) as the weights.
+        [1] * len(numbers) as the weights.
     :param divider: the divider used for calculating modulus.
     :param modulus_only: If True, it returns the modulus calculated by divider, otherwise it returns divider - modulus.
-    The default is False.
+        The default is False.
     :return: the value
     """
     if weights is None:
@@ -148,9 +150,11 @@ def weighted_modulus_digit(numbers: List[int], weights: Optional[List[int]], div
 def mn_modulus_digit(numbers: List[int], m: int, n: int) -> int:
     """
     MN modulus check, (official name TBD) ISO 7064 mod 11 (n), 10 (m)?
-    1. (adds numbers and product) mod by m
-    2. next product = (2 * total) mod by n
-    3. return n - product
+
+      1. (adds numbers and product) mod by m
+      2. next product = (2 * total) mod by n
+      3. return n - product
+
     :param numbers: numbers
     :param m: M value used by calculate the first step
     :param n: N value used by the 2nd and 3rd step

@@ -15,7 +15,7 @@ pip install pydoctor
 
 And run it:
 ```shell
-pydoctor --make-html --html-output=docs/$(cat ./VERSION) --project-name="idnumbers" --project-version=$(cat ./VERSION) --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
+pydoctor --docformat=restructuredtext --make-html --html-output=docs/$(cat ./VERSION) --project-name="idnumbers" --project-version=$(cat ./VERSION) --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
 ```
 
 It outputs the API docs to a folder named `docs/version`. Have fun with it!
