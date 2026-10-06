@@ -41,8 +41,9 @@ class TestCHLNationalIDValidation(TestCase):
         self.assertFalse(CHL.NationalID.validate('6.123.456-0'))
 
     def test_invalid_check_character(self):
-        # '|' was admitted by the old regexp class [\d|K]; other lowercase letters are not valid either.
-        self.assertFalse(CHL.NationalID.validate('10.000.013-|'))
+        # The old regexp class [\d|K] admitted '|'. validate() was already False for it through the checksum
+        # comparison, so assert on the regexp to pin the tightening; other lowercase letters are not valid either.
+        self.assertIsNone(CHL.NationalID.METADATA.regexp.match('10.000.013-|'))
         self.assertFalse(CHL.NationalID.validate('10.000.013-x'))
         self.assertFalse(CHL.NationalID.validate('10.000.013-9'))
         self.assertFalse(CHL.NationalID.validate('6.123.456-k '))
