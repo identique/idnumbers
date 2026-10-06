@@ -19,8 +19,8 @@ class PersonalPublicServiceNumber:
         'max_length': 10,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{7}[A-W][A-W\s]?$|'
-                             r'^\d{7}[A-W]/[A-W\s]?$'),
+        'regexp': re.compile(r'^\d{7}[A-W][A-W ]?$|'
+                             r'^\d{7}[A-W]/[A-W ]?$'),
         'alias_of': None,
         'names': ['Personal Public Service Number',
                   'PPS',
@@ -28,7 +28,8 @@ class PersonalPublicServiceNumber:
                   'Uimh. PSP',
                   'Revenue and Social Insurance Number',
                   'RSI No'],
-        'links': ['https://en.wikipedia.org/wiki/Personal_Public_Service_Number'],
+        'links': ['https://en.wikipedia.org/wiki/Personal_Public_Service_Number',
+                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ie/pps.py'],
         'deprecated': False
     })
 

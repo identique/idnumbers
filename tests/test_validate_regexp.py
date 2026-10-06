@@ -6,7 +6,7 @@ from typing import Dict, List, Tuple, Type
 from unittest import TestCase, main
 
 import idnumbers.nationalid as nationalid_package
-from idnumbers.nationalid import CHN, DEU, ESP, FRA, IND, ITA, KOR, MEX, NLD, POL, SWE, TWN, USA
+from idnumbers.nationalid import CHN, DEU, ESP, FRA, IND, IRL, ITA, KOR, MEX, NLD, POL, SWE, TWN, USA
 from idnumbers.nationalid.util import match_regexp, validate_regexp
 
 ARABIC_INDIC_ONE = '١'
@@ -175,6 +175,7 @@ class TestKnownGoodVectorsRejectTrailingNewline(TestCase):
         (DEU.TaxID, '65929970489'),  # tests/nationalid/test_DEU.py
         (NLD.NationalID, '1234.56.782'),  # tests/nationalid/test_NLD.py
         (MEX.NationalID, 'HEGG560427MVZRRL04'),  # tests/nationalid/test_MEX.py
+        (IRL.PersonalPublicServiceNumber, '1234567T'),  # tests/nationalid/test_IRL.py (3rd assertTrue)
     ]
 
     def test_vector_is_valid_and_newline_variant_is_not(self):
@@ -191,6 +192,33 @@ class TestKnownGoodVectorsRejectTrailingNewline(TestCase):
             with self.subTest(id_type=f'{cls.METADATA.iso3166_alpha2}.{cls.__qualname__}', vector=vector):
                 self.assertIsNotNone(cls.parse(vector))
                 self.assertIsNone(cls.parse(vector + '\n'))
+
+
+class TestIRLTrailingWhitespace(TestCase):
+    """
+    The IRL pattern has an optional trailing character class. It used to be `[A-W\\s]`, and `\\s` matches
+    "\\n" and "\\t" (also under re.ASCII), so a trailing newline passed the format check and the checksum
+    code then raised. Only a plain space is allowed there now (the old format, see test_IRL.py).
+    The sweep above cannot see this, because it only feeds digits.
+    """
+    PPS = IRL.PersonalPublicServiceNumber
+
+    def test_trailing_space_is_still_valid(self):
+        self.assertTrue(self.PPS.validate('1234567T '))  # tests/nationalid/test_IRL.py
+        self.assertTrue(self.PPS.validate('1234567TW'))
+        self.assertTrue(self.PPS.validate('1234567F/A'))
+        self.assertTrue(self.PPS.validate('1234567FA'))
+
+    def test_trailing_newline_tab_and_other_whitespace_are_rejected(self):
+        for candidate in ('1234567T\n', '1234567T\t', '1234567T\r', '1234567T\x0b', '1234567T\x0c',
+                          '1234567TW\n', '1234567T \n', '1234567T\n\n', '1234567F/A\n', '1234567F/\n',
+                          '1234567F/\t', '1234567T\u00a0', '1234567T\u2003'):
+            with self.subTest(candidate=candidate):
+                self.assertFalse(self.PPS.validate(candidate))
+
+    def test_checksum_with_trailing_space(self):
+        self.assertTrue(self.PPS.checksum('1234567T '))
+        self.assertTrue(self.PPS.checksum('1234567F/A'))
 
 
 if __name__ == '__main__':
