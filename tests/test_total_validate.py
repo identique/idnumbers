@@ -43,18 +43,10 @@ class KnownRaise(NamedTuple):
     """inputs that raise today, test_known_raises_still_reproduce runs them"""
 
 
-def _is_ascii_digits(length: int) -> Callable[[str], bool]:
-    return lambda value: len(value) == length and value.isascii() and value.isdigit()
-
-
 KNOWN_RAISES: Dict[str, KnownRaise] = {
     # Every entry is a crash that a LATER issue owns and fixes. When that fix lands, test_known_raises_still_
     # reproduce fails on purpose: the PR that fixes the crash MUST delete its entry here, so the exemption
-    # never outlives the bug. Only issues #308 and #314 may be listed.
-    'idnumbers.nationalid.rou.personal_code.PersonalNumericalCode': KnownRaise(
-        308, 'first digit 6 raises IndexError, impossible dates raise ValueError',
-        _is_ascii_digits(13),
-        ('6541109065956',)),
+    # never outlives the bug. Only issue #314 may be listed.
     'idnumbers.nationalid.zaf.national_id.NationalID': KnownRaise(
         314, 'checksum() runs int() on every character before the format is checked: ValueError',
         lambda value: any(not char.isdecimal() for char in value[:-1]),
@@ -169,7 +161,7 @@ class TestKnownRaises(TestCase):
         self.assertTrue(set(KNOWN_RAISES).issubset(names))
         for name, entry in KNOWN_RAISES.items():
             with self.subTest(id_type=name):
-                self.assertIn(entry.issue, {308, 314})
+                self.assertIn(entry.issue, {314})
                 self.assertTrue(entry.reason)
                 self.assertTrue(entry.examples)
 

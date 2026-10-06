@@ -152,8 +152,8 @@ not if it is an actual issued ID number.
   sensitive. The `METADATA.regexp` of each type shows what it accepts.
 - `parse()` returns `None` for invalid input.
 
-Known issues: two types can still raise `ValueError` or `IndexError` for some input. These are ROU (#308) and ZAF
-(non-numeric strings, #314). Each has an open issue.
+Known issue: one type can still raise `ValueError` for some input. It is ZAF (non-numeric strings, #314), which has an
+open issue.
 
 ## Parse National IDs
 
