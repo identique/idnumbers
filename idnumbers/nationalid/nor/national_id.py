@@ -25,10 +25,9 @@ class NationalID:
 
     Besides the fødselsnummer proper, two variants that keep the 11-digit layout are accepted. Both add 4 to one digit
     of the date, and the control digits are computed over the digits as written
-    (https://no.wikipedia.org/wiki/F%C3%B8dselsnummer):
-
-    - D-number (temporary number): 4 is added to the first digit of the day, so the day is 41-71.
-    - H-number (hjelpenummer): 4 is added to the third digit, so the month is 41-52.
+    (https://no.wikipedia.org/wiki/F%C3%B8dselsnummer).
+    A D-number (temporary number) adds 4 to the first digit of the day, so the day is 41-71.
+    An H-number (hjelpenummer) adds 4 to the third digit, so the month is 41-52.
 
     A number that has both additions is not a defined type and is invalid. FH-numbers (first digit 8 or 9) carry no
     birth date and are invalid as well.
