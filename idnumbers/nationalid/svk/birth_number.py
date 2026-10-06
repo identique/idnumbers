@@ -22,6 +22,15 @@ class BirthNumber:
     """
     Slovakia Birth Number format, rodné číslo (RČ)
     https://en.wikipedia.org/wiki/National_identification_number#Slovakia
+
+    The Czech Republic uses the same system, so ``CZE.BirthNumber`` is a subclass of this class.
+
+    Check digit: the 10th digit is the remainder of the first nine digits divided by 11. When that
+    remainder is 10 the check digit is 0, so such a number is *not* divisible by 11 as a whole
+    (this was used for about 1,000 numbers per year until 1985). Every other number is divisible by 11.
+
+    Sources: Czech Wikipedia "Rodné číslo" (citing law no. 133/2000 Sb.) and python-stdnum
+    ``stdnum/cz/rc.py``, which checks ``int(number[:9]) % 11 % 10``.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'SK',
@@ -42,7 +51,9 @@ class BirthNumber:
         'names': ['Birth Number',
                   'rodné číslo',
                   'RČ'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Slovakia'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Slovakia',
+                  'https://cs.wikipedia.org/wiki/Rodn%C3%A9_%C4%8D%C3%ADslo',
+                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cz/rc.py'],
         'deprecated': False
     })
 
@@ -92,11 +103,15 @@ class BirthNumber:
     @staticmethod
     def checksum(id_number: str) -> bool:
         """
-        Calculate SVK BirthNumber checksum digit
+        Check the check digit: it is ``int(first nine digits) % 11 % 10``.
+
+        This is the same as "the whole number is divisible by 11", except when the first nine digits
+        leave remainder 10: the check digit is then 0, and the whole number is not divisible by 11.
         """
         if not validate_regexp(id_number, BirthNumber.METADATA.regexp):
             return False
-        return int(BirthNumber.normalize(id_number)) % 11 == 0
+        digits = BirthNumber.normalize(id_number)
+        return int(digits[:9]) % 11 % 10 == int(digits[9])
 
     @staticmethod
     def normalize(id_number: str) -> str:
