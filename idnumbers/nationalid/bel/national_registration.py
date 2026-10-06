@@ -2,7 +2,7 @@ import calendar
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Optional, Tuple, TypedDict
 from ..util import validate_regexp, match_regexp
 from ..constant import Gender
 from .util import calc_check_digits, normalize
@@ -60,6 +60,24 @@ def _is_valid_birth_date(century: int, match_obj: re.Match[str]) -> bool:
     return day <= calendar.monthrange(year, month)[1]
 
 
+def _match_valid(id_number: str) -> Optional[Tuple[int, re.Match[str]]]:
+    """
+    Match the number against the regexp and check the century and the birth date part.
+
+    :param id_number: the national registration number, with or without separators
+    :return: the century and the regexp match, or None if the format, the check digits or the birth date is invalid
+    """
+    match_obj = match_regexp(id_number, NationalRegistrationNumber.METADATA.regexp)
+    if not match_obj:
+        return None
+    century = _century(normalize(id_number))
+    if century is None:
+        return None
+    if not _is_valid_birth_date(century, match_obj):
+        return None
+    return century, match_obj
+
+
 class NationalRegistrationNumber:
     """
     Belgium National register number format
@@ -109,25 +127,15 @@ class NationalRegistrationNumber:
     @staticmethod
     def validate(id_number: str) -> bool:
         """validate the id"""
-        match_obj = match_regexp(id_number, NationalRegistrationNumber.METADATA.regexp)
-        if not match_obj:
-            return False
-        century = _century(normalize(id_number))
-        if century is None:
-            return False
-        return _is_valid_birth_date(century, match_obj)
+        return _match_valid(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = match_regexp(id_number, NationalRegistrationNumber.METADATA.regexp)
-        if not match_obj:
+        matched = _match_valid(id_number)
+        if matched is None:
             return None
-        century = _century(normalize(id_number))
-        if century is None:
-            return None
-        if not _is_valid_birth_date(century, match_obj):
-            return None
+        century, match_obj = matched
         yy = int(match_obj.group('yy'))
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
