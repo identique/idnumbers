@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import TypedDict, Optional
+from typing import TypedDict, Optional, cast
 
 from ..util import validate_regexp, CHECK_DIGIT, weighted_modulus_digit, match_regexp
 from ..constant import Gender
@@ -41,7 +41,9 @@ class UniformCivilNumber:
                   'Edinen grazhdanski nomer',
                   'ЕГН',
                   'EGN'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bulgaria'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bulgaria',
+                  'https://en.wikipedia.org/wiki/Unique_citizenship_number',
+                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/bg/egn.py'],
         'deprecated': False
     })
 
@@ -91,9 +93,16 @@ class UniformCivilNumber:
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """
         Get the checksum digit, or None when the input is not a well-formed BGR id number
-        https://en.wikipedia.org/wiki/Unique_citizenship_number
+
+        The check digit is the weighted sum of the first nine digits (weights 2, 4, 8, 5, 10, 9, 7, 3, 6)
+        modulo 11. When that remainder is 10 the check digit is 0, so the result is always 0..9.
+
+        Sources:
+        https://en.wikipedia.org/wiki/Unique_citizenship_number ("If the result is 10, the check digit becomes 0")
+        https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/bg/egn.py (calc_check_digit: sum % 11 % 10)
         """
         if not validate_regexp(id_number, UniformCivilNumber.METADATA.regexp):
             return None
         digits_numbers = [int(i) for i in id_number[:-1]]
-        return weighted_modulus_digit(digits_numbers, UniformCivilNumber.MULTIPLIER, 11, True)
+        remainder = weighted_modulus_digit(digits_numbers, UniformCivilNumber.MULTIPLIER, 11, True)
+        return cast(CHECK_DIGIT, remainder % 10)
