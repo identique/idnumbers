@@ -108,5 +108,72 @@ class TestITAOmocodia(TestCase):
             self.assertEqual(plain['gender'], parsed['gender'])
 
 
+class TestITACentury(TestCase):
+    """
+    The code carries only two year digits. The century is chosen so that the birth date is not after today:
+    20yy if that date is today or earlier, otherwise 19yy. A valid code always gives a past date.
+    """
+
+    @staticmethod
+    def _code(yy: int, month: int, day: int) -> str:
+        month_letter = {v: k for k, v in ITA.FiscalCode.MONTH_MAP.items()}[month]
+        base = 'RSSMRA%02d%s%02dH501' % (yy, month_letter, day)
+        return base + ITA.FiscalCode.checksum(base + 'A')
+
+    def test_issue_vector_is_1940(self):
+        # 2040 is in the future (issue #296)
+        self.assertTrue(ITA.FiscalCode.validate('RSSMRA40M01H501B'))
+        result = ITA.FiscalCode.parse('RSSMRA40M01H501B')
+        self.assertEqual(date(1940, 8, 1), result['yyyymmdd'])
+
+    def test_years_after_the_current_one_are_1900s(self):
+        today = date.today()
+        for yy in range(today.year % 100 + 1, 100):
+            with self.subTest(yy=yy):
+                code = self._code(yy, 1, 1)
+                self.assertEqual(1900 + yy, ITA.FiscalCode.parse(code)['yyyymmdd'].year)
+
+    def test_years_before_the_current_one_are_2000s(self):
+        today = date.today()
+        for yy in range(0, today.year % 100):
+            with self.subTest(yy=yy):
+                code = self._code(yy, 12, 28)
+                self.assertEqual(2000 + yy, ITA.FiscalCode.parse(code)['yyyymmdd'].year)
+
+    def test_current_year_up_to_today_is_20yy(self):
+        today = date.today()
+        if today.month == 2 and today.day == 29:
+            today = date(today.year, 2, 28)
+        code = self._code(today.year % 100, today.month, today.day)
+        self.assertTrue(ITA.FiscalCode.validate(code))
+        self.assertEqual(today, ITA.FiscalCode.parse(code)['yyyymmdd'])
+
+    def test_current_year_after_today_is_19yy(self):
+        today = date.today()
+        # the first day after today in the current year, if there is one
+        tomorrow = today.fromordinal(today.toordinal() + 1)
+        if tomorrow.year != today.year:
+            self.skipTest('today is the last day of the year')
+        code = self._code(today.year % 100, tomorrow.month, tomorrow.day)
+        self.assertTrue(ITA.FiscalCode.validate(code))
+        self.assertEqual(date(1900 + today.year % 100, tomorrow.month, tomorrow.day),
+                         ITA.FiscalCode.parse(code)['yyyymmdd'])
+
+    def test_yy_00_is_2000_even_for_29_february(self):
+        # 2000 was a leap year, 1900 was not
+        code = self._code(0, 2, 29)
+        self.assertEqual(date(2000, 2, 29), ITA.FiscalCode.parse(code)['yyyymmdd'])
+
+    def test_29_february_of_a_non_leap_year_is_invalid_in_both_centuries(self):
+        for yy in (1, 27, 99):
+            code = self._code(yy, 2, 29)
+            self.assertFalse(ITA.FiscalCode.validate(code))
+
+    def test_parsed_birthday_is_never_in_the_future(self):
+        for yy in range(100):
+            code = self._code(yy, 8, 1)
+            self.assertLessEqual(ITA.FiscalCode.parse(code)['yyyymmdd'], date.today())
+
+
 if __name__ == '__main__':
     main()
