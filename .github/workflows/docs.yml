@@ -35,12 +35,12 @@ jobs:
       - name: build dev build
         if: inputs.version == ''
         run: |
-          pydoctor --make-html --html-output=pydocs/dev --project-name="idnumbers" --project-version=dev --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
+          pydoctor --docformat=restructuredtext --make-html --html-output=pydocs/dev --project-name="idnumbers" --project-version=dev --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
           echo "window._CURRENT_VERSION = 'dev';" > pydocs/dev/current_version.js
       - name: build prod build
         if: inputs.version != ''
         run: |
-          pydoctor --make-html --html-output=pydocs/v${{ inputs.version }} --project-name="idnumbers" --project-version=${{ inputs.version }} --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
+          pydoctor --docformat=restructuredtext --make-html --html-output=pydocs/v${{ inputs.version }} --project-name="idnumbers" --project-version=${{ inputs.version }} --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
           echo "window._CURRENT_VERSION = '${{ inputs.version }}';" > pydocs/v${{ inputs.version }}/current_version.js
       - name: prepare for deploy
         run: |
