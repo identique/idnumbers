@@ -61,11 +61,11 @@ def match_regexp(id_number: str, regexp: Pattern[str]) -> Optional[Match[str]]:
     Python's ``re`` module has two traps that let malformed input through a pattern such as
     ``^\\d{3}$`` (see https://docs.python.org/3/library/re.html):
 
-    - ``$`` matches at the end of the string *and just before a trailing newline*, so ``"123\\n"``
-      matches. ``Pattern.fullmatch`` only succeeds when the whole string is consumed.
-    - ``\\d`` (and ``\\w``, ``\\s``) on a ``str`` pattern match any Unicode decimal digit, such as
-      Arabic-Indic or full-width digits, unless ``re.ASCII`` is set. Those later crash ``int()``
-      based checksum code.
+      - ``$`` matches at the end of the string *and just before a trailing newline*, so ``"123\\n"``
+        matches. ``Pattern.fullmatch`` only succeeds when the whole string is consumed.
+      - ``\\d`` (and ``\\w``, ``\\s``) on a ``str`` pattern match any Unicode decimal digit, such as
+        Arabic-Indic or full-width digits, unless ``re.ASCII`` is set. Those later crash ``int()``
+        based checksum code.
 
     The compiled ``METADATA.regexp`` objects are left unchanged (``tools.collect_regexp`` dumps
     them); the ASCII twin is built here and cached.
@@ -76,8 +76,7 @@ def match_regexp(id_number: str, regexp: Pattern[str]) -> Optional[Match[str]]:
 
     :param id_number: the id number; any non-str value gives None
     :param regexp: compiled pattern, expected to describe the whole id number
-    :return: the match object (named groups are preserved), or None when the input is not a str or does
-        not match
+    :return: the match object (named groups are preserved), or None when the input is not a str or does not match
     """
     if not isinstance(id_number, str):
         return None
