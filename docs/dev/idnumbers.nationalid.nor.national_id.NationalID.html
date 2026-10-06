@@ -251,6 +251,16 @@
         
 
         
+            <div class="itemName"><code><a href="#D_NUMBER_DAYS" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.D_NUMBER_DAYS">D<wbr></wbr>_NUMBER<wbr></wbr>_DAYS</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#FIRST_MAGIC_MULTIPLIER" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.FIRST_MAGIC_MULTIPLIER">FIRST<wbr></wbr>_MAGIC<wbr></wbr>_MULTIPLIER</a></code>
             </div>
         
@@ -261,7 +271,27 @@
         
 
         
+            <div class="itemName"><code><a href="#H_NUMBER_MONTHS" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.H_NUMBER_MONTHS">H<wbr></wbr>_NUMBER<wbr></wbr>_MONTHS</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.METADATA">METADATA</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#NUMBER_OFFSET" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.NUMBER_OFFSET">NUMBER<wbr></wbr>_OFFSET</a></code>
             </div>
         
 
@@ -369,6 +399,8 @@
 
         <div class="moduleDocstring">
           <div><p>Norway National ID number https://en.wikipedia.org/wiki/National_identification_number#Norway https://en.wikipedia.org/wiki/National_identity_number_(Norway)</p>
+<p>Besides the fødselsnummer proper, two variants that keep the 11-digit layout are accepted. Both add 4 to one digit of the date, and the control digits are computed over the digits as written (https://no.wikipedia.org/wiki/F%C3%B8dselsnummer). A D-number (temporary number) adds 4 to the first digit of the day, so the day is 41-71. An H-number (hjelpenummer) adds 4 to the third digit, so the month is 41-52.</p>
+<p>A number that has both additions is not a defined type and is invalid. FH-numbers (first digit 8 or 9) carry no birth date and are invalid as well.</p>
 </div>
         </div>
 
@@ -385,7 +417,7 @@
     
     <td>Static Method</td>
     <td><code><a href="#parse" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.parse">parse</a></code></td>
-    <td>parse the result</td>
+    <td>parse the result, None if the input is invalid or has no real calendar birth date</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
@@ -394,12 +426,27 @@
   </tr><tr class="constant">
     
     <td>Constant</td>
+    <td><code><a href="#D_NUMBER_DAYS" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.D_NUMBER_DAYS">D<wbr></wbr>_NUMBER<wbr></wbr>_DAYS</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
     <td><code><a href="#FIRST_MAGIC_MULTIPLIER" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.FIRST_MAGIC_MULTIPLIER">FIRST<wbr></wbr>_MAGIC<wbr></wbr>_MULTIPLIER</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="constant">
     
     <td>Constant</td>
+    <td><code><a href="#H_NUMBER_MONTHS" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.H_NUMBER_MONTHS">H<wbr></wbr>_NUMBER<wbr></wbr>_MONTHS</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
     <td><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.METADATA">METADATA</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="constant">
+    
+    <td>Constant</td>
+    <td><code><a href="#NUMBER_OFFSET" class="internal-link" title="idnumbers.nationalid.nor.national_id.NationalID.NUMBER_OFFSET">NUMBER<wbr></wbr>_OFFSET</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="constant">
     
@@ -459,7 +506,8 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>parse the result</p>
+    <div><p>parse the result, None if the input is invalid or has no real calendar birth date</p>
+<p>For a D-number or an H-number, yyyymmdd is the real birth date, with the 40 taken off again.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.nationalid.nor.national_id.ParseResult.html" class="internal-link" title="idnumbers.nationalid.nor.national_id.ParseResult">ParseResult</a>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -489,6 +537,30 @@
 </div><div class="baseconstant">
   
   
+  <a name="idnumbers.nationalid.nor.national_id.NationalID.D_NUMBER_DAYS">
+    
+  </a>
+  <a name="D_NUMBER_DAYS">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">D_NUMBER_DAYS</span> =
+    
+    <a class="headerLink" href="#D_NUMBER_DAYS" title="idnumbers.nationalid.nor.national_id.NationalID.D_NUMBER_DAYS">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>range(<wbr></wbr>41, <wbr></wbr>72)</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
   <a name="idnumbers.nationalid.nor.national_id.NationalID.FIRST_MAGIC_MULTIPLIER">
     
   </a>
@@ -509,6 +581,30 @@
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr>3, <wbr></wbr>7, <wbr></wbr>6, <wbr></wbr>1, <wbr></wbr>8, <wbr></wbr>9, <wbr></wbr>4, <wbr></wbr>5, <wbr></wbr>2, <wbr></wbr>1]</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="idnumbers.nationalid.nor.national_id.NationalID.H_NUMBER_MONTHS">
+    
+  </a>
+  <a name="H_NUMBER_MONTHS">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">H_NUMBER_MONTHS</span> =
+    
+    <a class="headerLink" href="#H_NUMBER_MONTHS" title="idnumbers.nationalid.nor.national_id.NationalID.H_NUMBER_MONTHS">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>range(<wbr></wbr>41, <wbr></wbr>53)</code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
   
@@ -540,6 +636,30 @@
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">dd</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">mm</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">yy</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2</span><span class="rst-variable-linewrap">↵</span>
 <span class="rst-re-op">}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">individual_number</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{3}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">checksum</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span>$<span class="rst-variable-quote">'</span>),
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
+  <a name="idnumbers.nationalid.nor.national_id.NationalID.NUMBER_OFFSET">
+    
+  </a>
+  <a name="NUMBER_OFFSET">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">NUMBER_OFFSET</span>: <code>int</code> =
+    
+    <a class="headerLink" href="#NUMBER_OFFSET" title="idnumbers.nationalid.nor.national_id.NationalID.NUMBER_OFFSET">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>40</code></pre></td></tr></table>
   </div>
 </div><div class="baseconstant">
   
@@ -577,7 +697,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-06 15:29:52.
+    22.9.1 at 2026-10-06 15:37:47.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
