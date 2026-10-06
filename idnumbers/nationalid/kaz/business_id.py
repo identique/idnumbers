@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import CHECK_DIGIT, validate_regexp
+from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 from .util import EntityType, EntityDivision, checksum
 
 
@@ -67,7 +67,7 @@ class BusinessIDNumber:
     @staticmethod
     def parse(id_number: str) -> Optional[BINParseResult]:
         """parse the result"""
-        match_obj = BusinessIDNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, BusinessIDNumber.METADATA.regexp)
         if not match_obj:
             return None
         bin_checksum = BusinessIDNumber.checksum(id_number)

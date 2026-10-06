@@ -2,7 +2,7 @@ import re
 from datetime import date
 from types import SimpleNamespace
 from typing import Literal, Optional, TypedDict
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 from ..constant import Citizenship, Gender
 
 
@@ -93,7 +93,7 @@ class ResidentRegistration:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = ResidentRegistration.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, ResidentRegistration.METADATA.regexp)
         return ResidentRegistration.build_parse_result(match_obj)
 
     @staticmethod

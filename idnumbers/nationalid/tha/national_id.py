@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from types import SimpleNamespace
 from typing import Literal, Optional, TypedDict
-from ..util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp
+from ..util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
 
 
 class ThaiCitizenship(Enum):
@@ -116,7 +116,7 @@ class NationalID:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
         citizenship = match_obj.group('citizenship')

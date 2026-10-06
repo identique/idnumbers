@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import CHECK_DIGIT, luhn_digit, validate_regexp
+from ..util import CHECK_DIGIT, luhn_digit, validate_regexp, match_regexp
 
 
 def normalize(id_number):
@@ -58,7 +58,7 @@ class EmiratesIDNumber:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = EmiratesIDNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, EmiratesIDNumber.METADATA.regexp)
         if not match_obj:
             return None
         yyyy = match_obj.group('yyyy')

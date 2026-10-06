@@ -3,7 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import Optional, Tuple, TypedDict
 from ..constant import Gender
-from ..util import CHECK_DIGIT, validate_regexp
+from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 from .util import checksum
 
 
@@ -59,7 +59,7 @@ class IndividualIDNumber:
     @staticmethod
     def parse(id_number: str) -> Optional[IINParseResult]:
         """parse the result"""
-        match_obj = IndividualIDNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, IndividualIDNumber.METADATA.regexp)
         if not match_obj:
             return None
         iin_checksum = IndividualIDNumber.checksum(id_number)

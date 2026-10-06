@@ -2,7 +2,7 @@ import re
 from datetime import date
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -48,7 +48,7 @@ class PersonalIdentityNumber:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """ parse the CPR id"""
-        match_obj = PersonalIdentityNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, PersonalIdentityNumber.METADATA.regexp)
         if not match_obj:
             return None
         yy = int(match_obj.group('yy'))

@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 
 
 def normalize(id_number):
@@ -69,7 +69,7 @@ class NationalID:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """pares the result"""
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
 
         if not match_obj:
             return None

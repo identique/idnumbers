@@ -2,7 +2,7 @@ import re
 from datetime import date
 from types import SimpleNamespace
 from typing import Literal, Optional, TypedDict, get_args
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 from ..constant import Gender
 
 
@@ -79,7 +79,7 @@ class PersonalIdentityCode:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """ parse the FIN HETU id"""
-        match_obj = PersonalIdentityCode.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, PersonalIdentityCode.METADATA.regexp)
         if not match_obj:
             return None
         elif not PersonalIdentityCode.checksum(id_number):
@@ -103,7 +103,7 @@ class PersonalIdentityCode:
     @staticmethod
     def checksum(id_number: str) -> bool:
         """check if the ID valid against its checksum"""
-        match_obj = PersonalIdentityCode.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, PersonalIdentityCode.METADATA.regexp)
         if not match_obj:
             return False
         numbers = int(match_obj.group('dd') + match_obj.group('mm') + match_obj.group('yy') + match_obj.group('sn'))

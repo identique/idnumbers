@@ -2,7 +2,7 @@ import re
 from datetime import date
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 from ..constant import Gender
 
 
@@ -60,7 +60,7 @@ class NIK:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the id number to the result"""
-        match_obj = NIK.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NIK.METADATA.regexp)
         if not match_obj:
             return None
 

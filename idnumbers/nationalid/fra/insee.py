@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 from ..constant import Gender
 
 
@@ -70,7 +70,7 @@ class INSEE:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        match_obj = INSEE.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, INSEE.METADATA.regexp)
         if not match_obj:
             return None
         birth_department = INSEE.validate_birth_department(match_obj.group('birth_department'))

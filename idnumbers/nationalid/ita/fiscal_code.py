@@ -3,7 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import Optional, Tuple, TypedDict, cast
 from ..constant import Gender
-from ..util import CHECK_ALPHA, validate_regexp
+from ..util import CHECK_ALPHA, validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -99,7 +99,7 @@ class FiscalCode:
         """
         parse the id number
         """
-        match_obj = FiscalCode.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, FiscalCode.METADATA.regexp)
         if not match_obj:
             return None
 

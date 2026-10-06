@@ -2,7 +2,7 @@ import re
 from datetime import date
 from types import SimpleNamespace
 from typing import Optional, TypedDict
-from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit
+from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, match_regexp
 
 
 def normalize(id_number):
@@ -55,7 +55,7 @@ class IcelandicID:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = IcelandicID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, IcelandicID.METADATA.regexp)
         if not match_obj:
             return None
         checksum = IcelandicID.checksum(id_number)

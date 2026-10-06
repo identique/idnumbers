@@ -2,7 +2,7 @@ import re
 from types import SimpleNamespace
 from typing import Optional
 
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 from .old_national_id import OldNationalID, OldParseResult
 
 
@@ -57,7 +57,7 @@ class NationalID(OldNationalID):
         """
         Parse the result
         """
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
         old_result = OldNationalID.parse(id_number[4:])

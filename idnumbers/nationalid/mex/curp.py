@@ -3,7 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import Literal, Optional, TypedDict
 from ..constant import Gender
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -81,7 +81,7 @@ class CURP:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = CURP.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, CURP.METADATA.regexp)
         if not match_obj:
             return None
         location = match_obj.group('location')

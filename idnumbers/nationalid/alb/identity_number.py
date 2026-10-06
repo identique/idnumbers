@@ -3,6 +3,7 @@ from datetime import date
 from types import SimpleNamespace
 from typing import Literal, Optional, TypedDict
 from ..constant import Gender
+from ..util import match_regexp
 
 
 class ParseResult(TypedDict):
@@ -61,7 +62,7 @@ class IdentityNumber:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = IdentityNumber.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, IdentityNumber.METADATA.regexp)
         if not match_obj:
             return None
         yyyy = IdentityNumber.get_year(match_obj.group('yy'))

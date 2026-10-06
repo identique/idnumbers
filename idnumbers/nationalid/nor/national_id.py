@@ -4,7 +4,7 @@ from typing import Optional, TypedDict
 from datetime import date
 
 from ..constant import Gender
-from ..util import validate_regexp
+from ..util import validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -59,7 +59,7 @@ class NationalID:
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """parse the result"""
-        match_obj = NationalID.METADATA.regexp.match(id_number)
+        match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
 
