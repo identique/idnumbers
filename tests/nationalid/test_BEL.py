@@ -96,3 +96,17 @@ class TestBELValidation(TestCase):
         self.assertEqual(date(2000, 2, 29), BEL.NationalID.parse('00022900145')['yyyymmdd'])
         # Synthetic: the same digits with the 19xx check digits (16) would be 29 February 1900, which does not exist
         self.assertFalse(BEL.NationalID.validate('00022900116'))
+
+    def test_entity_vat_prefix(self):
+        # Issue #282: the first digit of a 10-digit number is 0 or 1 (FOD Economie: the 1-series began
+        # on 2023-09-19). The mod-97 check digits of 2000663602 are correct, but the prefix is not.
+        self.assertFalse(BEL.TIN.entity.validate('2000663602'))
+        self.assertFalse(BEL.TIN.entity.validate('9876543210'))
+        # Synthetic 1-series number: 97 - 10000003 % 97 = 18
+        self.assertTrue(BEL.TIN.entity.validate('1000000318'))
+        self.assertFalse(BEL.TIN.entity.validate('1000000319'))
+        # Synthetic: a 9-digit number has an implied leading 0, so its first digit may be 2 to 9.
+        # 97 - 5123456 % 97 = 84, 97 - 9876543 % 97 = 94
+        self.assertTrue(BEL.TIN.entity.validate('512345684'))
+        self.assertTrue(BEL.TIN.entity.validate('987654394'))
+        self.assertFalse(BEL.TIN.entity.validate('512345685'))
