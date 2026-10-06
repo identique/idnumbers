@@ -26,8 +26,9 @@ class NationalID:
     Besides the fødselsnummer proper, two variants that keep the 11-digit layout are accepted. Both add 4 to one digit
     of the date, and the control digits are computed over the digits as written
     (https://no.wikipedia.org/wiki/F%C3%B8dselsnummer).
-    A D-number (temporary number) adds 4 to the first digit of the day, so the day is 41-71.
-    An H-number (hjelpenummer) adds 4 to the third digit, so the month is 41-52.
+
+    - A D-number (temporary number) adds 4 to the first digit of the day, so the day is 41-71.
+    - An H-number (hjelpenummer) adds 4 to the third digit, so the month is 41-52.
 
     A number that has both additions is not a defined type and is invalid. FH-numbers (first digit 8 or 9) carry no
     birth date and are invalid as well.
@@ -65,10 +66,6 @@ class NationalID:
         if not NationalID.parse(id_number):
             return False
         return NationalID.checksum(id_number)
-
-    NUMBER_OFFSET = 40
-    D_NUMBER_DAYS = range(41, 72)
-    H_NUMBER_MONTHS = range(41, 53)
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
@@ -117,6 +114,9 @@ class NationalID:
             "checksum": match_obj.group('checksum')
         }
 
+    NUMBER_OFFSET = 40
+    D_NUMBER_DAYS = range(41, 72)
+    H_NUMBER_MONTHS = range(41, 53)
     FIRST_MAGIC_MULTIPLIER = [3, 7, 6, 1, 8, 9, 4, 5, 2, 1]
     SECOND_MAGIC_MULTIPLIER = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1]
 
