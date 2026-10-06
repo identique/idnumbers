@@ -74,7 +74,9 @@ class NationalID:
                 'sn': sn,
                 'checksum': int(match_obj.group('checksum'))
             }
-        except ValueError:
+        except (ValueError, OverflowError):
+            # an out of range date raises ValueError, a year near 0001 or 9999 whose day offset
+            # leaves the supported range raises OverflowError
             return None
 
     @staticmethod

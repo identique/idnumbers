@@ -43,6 +43,8 @@ class NationalID:
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """algorithm: https://github.com/mohammadv184/idvalidator/blob/main/validate/nationalid/nationalid.go"""
+        if not validate_regexp(id_number, NationalID.METADATA.regexp):
+            return None
         normalized = normalize(id_number)
         numbers = [int(i) for i in normalized]
         modulus = weighted_modulus_digit(numbers[:-1], NationalID.MULTIPLIER, 11, True)

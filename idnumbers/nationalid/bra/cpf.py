@@ -40,7 +40,9 @@ class CPFNumber:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
-        """Validate CPF number checksum digits"""
+        """Validate CPF number checksum digits, False when the input is not a well-formed CPF number"""
+        if not validate_regexp(id_number, CPFNumber.METADATA.regexp):
+            return False
         normalized = normalize(id_number)
         number_list = [int(char) for char in list(normalized[:9])]
         return normalized[9] == CPFNumber.first_digit_checksum(number_list) and normalized[

@@ -60,6 +60,8 @@ class UniformCivilNumber:
         Parse the result
         """
         match_obj = match_regexp(id_number, UniformCivilNumber.METADATA.regexp)
+        if match_obj is None:
+            return None
         checksum = int(match_obj.group("checksum"))
         yy = int(match_obj.group("yy"))
         mm = int(match_obj.group("mm"))
@@ -86,10 +88,12 @@ class UniformCivilNumber:
     MULTIPLIER = [2, 4, 8, 5, 10, 9, 7, 3, 6]
 
     @staticmethod
-    def checksum(id_number: str) -> CHECK_DIGIT:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """
-        Get the checksum digit
+        Get the checksum digit, or None when the input is not a well-formed BGR id number
         https://en.wikipedia.org/wiki/Unique_citizenship_number
         """
+        if not validate_regexp(id_number, UniformCivilNumber.METADATA.regexp):
+            return None
         digits_numbers = [int(i) for i in id_number[:-1]]
         return weighted_modulus_digit(digits_numbers, UniformCivilNumber.MULTIPLIER, 11, True)

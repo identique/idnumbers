@@ -1,5 +1,6 @@
 import re
 from types import SimpleNamespace
+from typing import Optional
 
 from ..util import validate_regexp, weighted_modulus_digit
 
@@ -43,8 +44,10 @@ class MyNumber:
         return MyNumber.checksum(id_number) == id_number[-1]
 
     @staticmethod
-    def checksum(id_number: str) -> str:
-        """Calculate Japan national id checksum"""
+    def checksum(id_number: str) -> Optional[str]:
+        """Calculate Japan national id checksum, None when the input is not a well-formed id number"""
+        if not validate_regexp(id_number, MyNumber.METADATA.regexp):
+            return None
         arr = [int(i) for i in id_number[:11]]
         rem = weighted_modulus_digit(arr, MyNumber.MULTIPLIER, 11, True)
         return str(0 if rem <= 1 else (11 - rem))

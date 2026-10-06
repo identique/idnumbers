@@ -22,7 +22,7 @@ class NationalHealthIndexNumber:
         # no I and no O in alphabet
         'regexp': re.compile(r'^('
                              r'[A-HJ-NP-Z]{3}\d{4}|'
-                             r'[A-HJ-NP-Z]{3}\d{2}[A-HJ-NP-Z]{2}|'
+                             r'[A-HJ-NP-Z]{3}\d{2}[A-HJ-NP-Z]{2}'
                              r')$'),
         'alias_of': None,
         'names': ['National Health Index Number',

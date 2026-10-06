@@ -40,5 +40,10 @@ class SocialSecurityNumber:
         """use EAN-13 to validate the number"""
         if not validate_regexp(id_number, SocialSecurityNumber.METADATA.regexp):
             return False
-        numbers = [int(char) for char in normalize(id_number)]
+        normalized = normalize(id_number)
+        if not normalized.isdigit():
+            # the regexp separator before the last two digits is an unescaped '.', so it also lets
+            # a non-digit through (e.g. '756.1234.5678-97'): not a valid number, but not an error either
+            return False
+        numbers = [int(char) for char in normalized]
         return numbers[-1] == ean13_digit(numbers[:-1])
