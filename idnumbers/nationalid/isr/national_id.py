@@ -36,7 +36,9 @@ class NationalID:
         """
         Validate
         """
-        return str(NationalID.checksum(id_number)) == id_number[-1]
+        check_digit = NationalID.checksum(id_number)
+        # checksum() is None unless the input is a str that matches the regexp, so [-1] is safe below
+        return check_digit is not None and str(check_digit) == id_number[-1]
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:

@@ -45,6 +45,8 @@ class TaxNumber:
         """
         src: https://gist.github.com/svschannak/e79892f4fbc56df15bdb5496d0e67b85
         """
+        if not isinstance(id_number, str):
+            return False
         normalized = normalize(id_number)
         if not validate_regexp(normalized, TaxNumber.METADATA.regexp):
             return False

@@ -57,6 +57,8 @@ class TaxpayerIDNumber:
     @staticmethod
     def parse(id_number: str) -> Optional[TaxpayerIDParseResult]:
         """parse the result"""
+        if not validate_regexp(id_number, TaxpayerIDNumber.METADATA.regexp):
+            return None
         if TaxpayerIDNumber.checksum(id_number) != int(id_number[9]):
             return None
         # according to the PHP implementation, we need to minus 1, maybe the tail and head values included.

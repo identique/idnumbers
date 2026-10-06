@@ -88,13 +88,11 @@ class TestValidateRegexp(TestCase):
         self.assertEqual('345', match_obj.group('serial'))
         self.assertIsNone(match_regexp('12345\n', pattern))
 
-    def test_non_str_raises_assertion_error(self):
+    def test_non_str_never_matches(self):
         pattern = re.compile(r'^\d{3}$')
-        for value in (123, None, b'123', ['1', '2', '3']):
-            with self.assertRaises(AssertionError):
-                validate_regexp(value, pattern)
-            with self.assertRaises(AssertionError):
-                match_regexp(value, pattern)
+        for value in (123, None, b'123', bytearray(b'123'), ['1', '2', '3'], 12.5, {}, object()):
+            self.assertIs(False, validate_regexp(value, pattern))
+            self.assertIsNone(match_regexp(value, pattern))
 
 
 def _discover_id_types() -> List[Tuple[str, Type]]:

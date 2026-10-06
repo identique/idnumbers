@@ -70,11 +70,17 @@ def match_regexp(id_number: str, regexp: Pattern[str]) -> Optional[Match[str]]:
     The compiled ``METADATA.regexp`` objects are left unchanged (``tools.collect_regexp`` dumps
     them); the ASCII twin is built here and cached.
 
-    :param id_number: the id number, MUST be a str
+    Input that is not a ``str`` (``None``, numbers, ``bytes``, lists, ...) never matches. It is not an
+    error: validators must return False for it instead of raising, and no ``assert`` is used because
+    asserts are stripped under ``python -O``.
+
+    :param id_number: the id number; any non-str value gives None
     :param regexp: compiled pattern, expected to describe the whole id number
-    :return: the match object (named groups are preserved), or None when the input does not match
+    :return: the match object (named groups are preserved), or None when the input is not a str or does
+        not match
     """
-    assert isinstance(id_number, str), 'id_number MUST be str'
+    if not isinstance(id_number, str):
+        return None
     return _ascii_pattern(regexp).fullmatch(id_number)
 
 
@@ -83,6 +89,7 @@ def validate_regexp(id_number: str, regexp: Pattern[str]) -> bool:
     Validate that the whole string matches the regular expression, using ASCII digits only.
 
     A trailing newline and non-ASCII digits are rejected, see :func:`match_regexp` for the reasons.
+    Input that is not a ``str`` is rejected too: the result is False, it never raises.
     """
     return match_regexp(id_number, regexp) is not None
 

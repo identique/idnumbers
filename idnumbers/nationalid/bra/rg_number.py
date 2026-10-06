@@ -39,10 +39,19 @@ class RGNumber:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
-        """Validate RG number checksum"""
+        """Validate RG number checksum, False when the input is not a well-formed RG number"""
+        if not validate_regexp(id_number, RGNumber.METADATA.regexp):
+            return False
         normalized = normalize(id_number)
         number_list = [int(char) for char in list(normalized[:8])]
         # X is equal to 11 in check digit
-        check_digit = 11 if normalized[8] == 'X' else int(normalized[8])
+        if normalized[8] == 'X':
+            check_digit = 11
+        elif normalized[8].isdigit():
+            check_digit = int(normalized[8])
+        else:
+            # the regexp character class [\d|X] also lets '|' through; it is not a digit, so reject it
+            # instead of raising ValueError (the regexp itself is left as is, see #370)
+            return False
         total = sum([value * RGNumber.MULTIPLIER[index] for (index, value) in enumerate(number_list)])
         return True if ((total + check_digit * 100) % 11) == 0 else False

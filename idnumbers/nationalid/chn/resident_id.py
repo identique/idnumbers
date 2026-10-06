@@ -56,11 +56,8 @@ class ResidentID:
         """
         Validate the CHN id number
         """
-        if not id_number:
+        if not isinstance(id_number, str) or not id_number:
             return False
-
-        if not isinstance(id_number, str):
-            id_number = repr(id_number)
         return ResidentID.parse(id_number) is not None
 
     @staticmethod
