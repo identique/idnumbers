@@ -17,7 +17,7 @@ class RGNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^(\d{2}\.\d{3}\.\d{3}-[\d|X])$'),
+        'regexp': re.compile(r'^(\d{2}\.\d{3}\.\d{3}-[\dX])$'),
         'alias_of': None,
         'names': ['RG number',
                   'Registro Geral number'],
@@ -47,11 +47,7 @@ class RGNumber:
         # X is equal to 11 in check digit
         if normalized[8] == 'X':
             check_digit = 11
-        elif normalized[8].isdigit():
-            check_digit = int(normalized[8])
         else:
-            # the regexp character class [\d|X] also lets '|' through; it is not a digit, so reject it
-            # instead of raising ValueError (the regexp itself is left as is, see #370)
-            return False
+            check_digit = int(normalized[8])
         total = sum([value * RGNumber.MULTIPLIER[index] for (index, value) in enumerate(number_list)])
         return True if ((total + check_digit * 100) % 11) == 0 else False

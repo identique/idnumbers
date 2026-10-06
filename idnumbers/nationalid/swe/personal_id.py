@@ -37,7 +37,7 @@ class PersonalIdentityNumber:
         'parsable': True,
         'checksum': True,
         'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})'
-                             r'(?P<sep>[+|-])'
+                             r'(?P<sep>[+-])'
                              r'(?!000)(?P<birth_number>\d{3})'
                              r'(?P<checksum>\d)$'),
         'alias_of': None,
@@ -93,8 +93,4 @@ class PersonalIdentityNumber:
         if not validate_regexp(id_number, PersonalIdentityNumber.METADATA.regexp):
             return None
         normalized = normalize(id_number)
-        if not normalized.isdigit():
-            # the separator class [+|-] also lets '|' through, normalize() does not strip it, and it is
-            # not a digit: treat it as invalid instead of raising ValueError. The regexp is left as is, see #370
-            return None
         return luhn_digit([int(char) for char in normalized[:-1]], True)
