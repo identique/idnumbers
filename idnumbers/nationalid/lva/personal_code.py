@@ -46,9 +46,12 @@ class PersonalCode:
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
+        """
+        Calculate national id checksum: (1101-sum) mod 11 and mod 10.
+        None is returned if the input does not match the format.
+        """
         if not validate_regexp(id_number, PersonalCode.METADATA.regexp):
             return None
-        """Calculate national id checksum: (1101-sum) mod 11 and mod 10"""
         numbers = [int(i) for i in normalize(id_number)[:10]]
         weighted_value = sum([value * PersonalCode.MULTIPLIER[index] for (index, value) in enumerate(numbers)])
         return (1101 - weighted_value) % 11 % 10

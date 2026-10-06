@@ -169,7 +169,7 @@ class TestIssue278Regressions(TestCase):
             self.assertIs(False, BRA.RGNumber.checksum(value))
 
     def test_bra_rg_check_digit_pipe(self):
-        # the RG regexp class [\d|X] also accepts '|' (tracked by #370, not changed here), it used to raise
+        # the RG regexp rejects '|' in the check digit position (since #370); end-to-end check, it used to raise
         self.assertIs(False, BRA.RGNumber.validate('12.345.678-|'))
 
     def test_irn_jpn_checksum_on_non_digit_input(self):
@@ -193,7 +193,7 @@ class TestIssue278Regressions(TestCase):
             self.assertIs(False, CHE.SocialSecurityNumber.validate(value), value)
 
     def test_swe_pipe_separator_is_invalid(self):
-        # the separator class [+|-] lets '|' through (regexp left as is, see #370); it used to raise ValueError
+        # the separator class [+-] rejects '|' (since #370); end-to-end check, it used to raise ValueError
         self.assertIs(False, SWE.PersonalIdentityNumber.validate('191231|2392'))
         self.assertIsNone(SWE.PersonalIdentityNumber.parse('850709|9805'))
         self.assertIsNone(SWE.PersonalIdentityNumber.checksum('850709|9805'))
