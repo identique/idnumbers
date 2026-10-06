@@ -11,7 +11,7 @@ import os
 from typing import Any, Callable, Iterator, List, Set, Tuple
 from unittest import TestCase, main
 
-from idnumbers.nationalid import BGR, BRA, CHE, CHL, CZE, EST, GRC, IRN, ISR, JPN, LKA, LVA, NZL, SWE, UKR, ZAF
+from idnumbers.nationalid import BGR, BRA, CHE, CHL, CZE, EST, GRC, IRN, ISR, JPN, LKA, LVA, NZL, SWE, UKR, ZAF, ZWE
 from tests.test_validate_regexp import _discover_id_types
 
 ARABIC_INDIC_ONE = '١'
@@ -180,6 +180,10 @@ class TestIssue278Regressions(TestCase):
     def test_chl_checksum_on_malformed_input(self):
         for value in ('abc', '12345', '', None, 123, '10.000.013-K\n'):
             self.assertIsNone(CHL.NationalID.checksum(value))  # was ValueError / TypeError, or a meaningless character
+
+    def test_zwe_checksum_on_malformed_input(self):
+        for value in ('abc', '12345', '', None, 123, '75191961R00\n', '75191961r00'):
+            self.assertIs(False, ZWE.NationalID.checksum(value))  # was AttributeError
 
     def test_ukr_parse_on_malformed_input(self):
         for value in ('abc', '12345', '', None):
