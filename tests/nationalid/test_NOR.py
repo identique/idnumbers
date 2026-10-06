@@ -99,6 +99,32 @@ class TestNORDAndHNumbers(TestCase):
         self.assertFalse(NOR.NationalID.validate(number))
         self.assertIsNone(NOR.NationalID.parse(number))
 
+    def test_day_40_is_not_a_d_number(self):
+        # day 40 is just below the D-number range 41-71; the control digits are computed with the no.wikipedia
+        # mod-11 weights and python-stdnum 2.2 (stdnum.no.fodselsnummer) also rejects it
+        number = '40019912312'
+        self.assertTrue(NOR.NationalID.checksum(number))
+        self.assertFalse(NOR.NationalID.validate(number))
+        self.assertIsNone(NOR.NationalID.parse(number))
+
+    def test_month_40_is_not_an_h_number(self):
+        # month 40 is just below the H-number range 41-52; same source as the day 40 vector
+        number = '01409912350'
+        self.assertTrue(NOR.NationalID.checksum(number))
+        self.assertFalse(NOR.NationalID.validate(number))
+        self.assertIsNone(NOR.NationalID.parse(number))
+
+    def test_d_and_h_numbers_use_the_century_table(self):
+        # individual number 500-749 with yy >= 54 is 18xx; the control digits are computed with the no.wikipedia
+        # mod-11 weights and python-stdnum 2.2 reads both as 1855-01-01
+        for kind, number, checksum in [('D-number', '41015550072', '72'), ('H-number', '01415550061', '61')]:
+            with self.subTest(kind=kind, number=number):
+                self.assertTrue(NOR.NationalID.validate(number))
+                result = NOR.NationalID.parse(number)
+                self.assertEqual(date(1855, 1, 1), result['yyyymmdd'])
+                self.assertEqual(Gender.FEMALE, result['gender'])
+                self.assertEqual(checksum, result['checksum'])
+
     def test_wrong_checksum_is_still_invalid(self):
         self.assertFalse(NOR.NationalID.validate('41019912350'))
         self.assertFalse(NOR.NationalID.validate('01419912341'))
