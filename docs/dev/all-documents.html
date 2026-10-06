@@ -2132,7 +2132,7 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">No module docstring; 1/2 class documented</span></div>
+            <div class="summary"><span class="undocumented">No module docstring; 1/1 function, 1/2 class documented</span></div>
           </li><li id="idnumbers.nationalid.svk.citizen_id">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.svk<wbr></wbr>.citizen<wbr></wbr>_id</div>
@@ -4364,7 +4364,7 @@
             <div class="type">Attribute</div>
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">birthday of this ID, there is no way to know the century of the birthday. So, yy &lt; 50 is 20yy else 19yy.</div>
+            <div class="summary">birthday of this ID. The number has 10 digits only from 1954, so the century follows from that: yy &lt; 54 is 20yy else 19yy. A birthday after today is not valid.</div>
           </li><li id="idnumbers.nationalid.svk.birth_number.BirthNumberParseResult.gender">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.svk<wbr></wbr>.birth<wbr></wbr>_number<wbr></wbr>.<wbr></wbr>Birth<wbr></wbr>Number<wbr></wbr>Parse<wbr></wbr>Result<wbr></wbr>.gender</div>
@@ -4389,6 +4389,14 @@
             <div class="kind">Class Variable</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">checksum</div>
+          </li><li id="idnumbers.nationalid.svk.birth_number._birth_date">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.svk<wbr></wbr>.birth<wbr></wbr>_number<wbr></wbr>._birth<wbr></wbr>_date</div>
+            <div class="url">idnumbers.nationalid.svk.birth_number.html#_birth_date</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Birth date of a matched birth number, or None when the date is not possible.</div>
           </li><li id="idnumbers.nationalid.svk.birth_number.BirthNumber">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.svk<wbr></wbr>.birth<wbr></wbr>_number<wbr></wbr>.<wbr></wbr>Birth<wbr></wbr>Number</div>
@@ -4412,7 +4420,7 @@
             <div class="type">Function</div>
             <div class="kind">Static Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Validate birth number</div>
+            <div class="summary">Validate birth number: the check digit (10 digits only) and the birth date must be right.</div>
           </li><li id="idnumbers.nationalid.svk.birth_number.BirthNumber.parse">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.svk<wbr></wbr>.birth<wbr></wbr>_number<wbr></wbr>.<wbr></wbr>Birth<wbr></wbr>Number<wbr></wbr>.parse</div>
@@ -4420,7 +4428,7 @@
             <div class="type">Function</div>
             <div class="kind">Static Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">parse the id number</div>
+            <div class="summary">parse the id number. A valid 9-digit number (before 1954) has no check digit to return, so None is returned for it, although ``validate()`` is True.</div>
           </li><li id="idnumbers.nationalid.svk.birth_number.BirthNumber.checksum">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.svk<wbr></wbr>.birth<wbr></wbr>_number<wbr></wbr>.<wbr></wbr>Birth<wbr></wbr>Number<wbr></wbr>.checksum</div>
@@ -4428,7 +4436,7 @@
             <div class="type">Function</div>
             <div class="kind">Static Method</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">Calculate SVK BirthNumber checksum digit</div>
+            <div class="summary">Check the check digit: it is ``int(first nine digits) % 11 % 10``.</div>
           </li><li id="idnumbers.nationalid.svk.birth_number.BirthNumber.normalize">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.svk<wbr></wbr>.birth<wbr></wbr>_number<wbr></wbr>.<wbr></wbr>Birth<wbr></wbr>Number<wbr></wbr>.normalize</div>

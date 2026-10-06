@@ -311,8 +311,21 @@
     </li>
 </ul>
 
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="private">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.svk.birth_number.html#_birth_date" class="internal-link" title="idnumbers.nationalid.svk.birth_number._birth_date">_birth<wbr></wbr>_date</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -359,6 +372,11 @@
 
         <div class="moduleDocstring">
           <div><p>Slovakia Birth Number format, rodné číslo (RČ) https://en.wikipedia.org/wiki/National_identification_number#Slovakia</p>
+<p>The Czech Republic uses the same system, so ``CZE.BirthNumber`` is a subclass of this class.</p>
+<p>Check digit: the 10th digit is the remainder of the first nine digits divided by 11. When that remainder is 10 the check digit is 0, so such a number is *not* divisible by 11 as a whole (this was used for about a thousand numbers in total, until 1985). Every other number is divisible by 11.</p>
+<p>Century: a 10-digit number only exists from 1954, so ``yy`` 54-99 is 1954-1999 and ``yy`` 00-53 is 2000-2053. A birth date after today is impossible, so such a number is not valid (this also rejects 10-digit numbers with ``yy`` 50-53 that used to be read as 1950-1953). The month offsets are +50 for women and, since 2004, +20 when the serial numbers of a day run out; the +20 is accepted for any year.</p>
+<p>9-digit form: numbers given out up to and including 1953 have 9 digits (the date, a 3-digit serial number and no check digit); people who hold them are still alive. The 9-digit form is only valid for a birth year 1900-1953 (``yy &lt;= 53``) with a real calendar date, and has nothing to check, so ``checksum()`` is True for any well-formed 9-digit number and the year and date rules are applied by ``validate()`` and ``parse()``. The ``checksum`` group of the regexp is absent for a 9-digit number. ``parse()`` returns None for a 9-digit number, because the result has a ``checksum`` digit that does not exist: ``validate()`` is True while ``parse()`` is None, as for the Belgian number with an incomplete birth date.</p>
+<p>Sources: Czech Wikipedia "Rodné číslo" (citing law no. 133/2000 Sb.) and python-stdnum ``stdnum/cz/rc.py``, which checks ``int(number[:9]) % 11 % 10`` for 10 digits and accepts 9 digits only up to 1953.</p>
 </div>
         </div>
 
@@ -370,7 +388,7 @@
     
     <td>Static Method</td>
     <td><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.svk.birth_number.BirthNumber.checksum">checksum</a></code></td>
-    <td>Calculate SVK BirthNumber checksum digit</td>
+    <td>Check the check digit: it is ``int(first nine digits) % 11 % 10``.</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
@@ -380,12 +398,12 @@
     
     <td>Static Method</td>
     <td><code><a href="#parse" class="internal-link" title="idnumbers.nationalid.svk.birth_number.BirthNumber.parse">parse</a></code></td>
-    <td>parse the id number</td>
+    <td>parse the id number. A valid 9-digit number (before 1954) has no check digit to return, so None is returned for it, although ``validate()`` is True.</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
     <td><code><a href="#validate" class="internal-link" title="idnumbers.nationalid.svk.birth_number.BirthNumber.validate">validate</a></code></td>
-    <td>Validate birth number</td>
+    <td>Validate birth number: the check digit (10 digits only) and the birth date must be right.</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
@@ -420,7 +438,9 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Calculate SVK BirthNumber checksum digit</p>
+    <div><p>Check the check digit: it is ``int(first nine digits) % 11 % 10``.</p>
+<p>This is the same as "the whole number is divisible by 11", except when the first nine digits leave remainder 10: the check digit is then 0, and the whole number is not divisible by 11.</p>
+<p>A 9-digit number (before 1954) has no check digit, so there is nothing that can fail and the result is True for any well-formed 9-digit number.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -468,7 +488,7 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>parse the id number</p>
+    <div><p>parse the id number. A valid 9-digit number (before 1954) has no check digit to return, so None is returned for it, although ``validate()`` is True.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.nationalid.svk.birth_number.BirthNumberParseResult.html" class="internal-link" title="idnumbers.nationalid.svk.birth_number.BirthNumberParseResult">BirthNumberParseResult</a>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -492,7 +512,7 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Validate birth number</p>
+    <div><p>Validate birth number: the check digit (10 digits only) and the birth date must be right.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="baseconstant">
@@ -518,12 +538,12 @@
     
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>SimpleNamespace(<wbr></wbr>**{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">iso3166_alpha2</span><span class="rst-variable-quote">'</span>: <span class="rst-variable-quote">'</span><span class="rst-variable-string">SK</span><span class="rst-variable-quote">'</span>,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">min_length</span><span class="rst-variable-quote">'</span>: 10,
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">min_length</span><span class="rst-variable-quote">'</span>: 9,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">max_length</span><span class="rst-variable-quote">'</span>: 10,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">parsable</span><span class="rst-variable-quote">'</span>: True,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">checksum</span><span class="rst-variable-quote">'</span>: True,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">yy</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">mm</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">dd</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2</span><span class="rst-variable-linewrap">↵</span>
-<span class="rst-re-op">}</span><span class="rst-re-group">)</span>/<span class="rst-re-op">?</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">sn</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{3}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">checksum</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-group">)</span>$<span class="rst-variable-quote">'</span>),
+<span class="rst-re-op">}</span><span class="rst-re-group">)</span>/<span class="rst-re-op">?</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">sn</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{3}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">checksum</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-group">)</span><span class="rst-re-op">?</span>$<span class="rst-variable-quote">'</span>),
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
 </div>
@@ -538,7 +558,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-06 15:02:25.
+    22.9.1 at 2026-10-06 15:17:05.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
