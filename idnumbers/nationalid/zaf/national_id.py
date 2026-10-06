@@ -54,11 +54,13 @@ class NationalID:
         Validate the ZAF id number
         """
         if not isinstance(id_number, str):
-            id_number = repr(id_number)
+            return False
         return NationalID.parse(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        if not isinstance(id_number, str):
+            return None
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         check_digit = NationalID.checksum(id_number)
         if not match_obj:
