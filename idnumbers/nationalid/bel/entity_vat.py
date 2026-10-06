@@ -6,10 +6,14 @@ from .util import calc_check_digits
 
 class EntityVAT:
     """
-    Belgium National register number format
+    Belgium enterprise (VAT) number format
     https://en.wikipedia.org/wiki/VAT_identification_number
     https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698
 
+    The number has 10 digits: 8 digits and 2 check digits (``97 - (the 8 digits mod 97)``).
+    The first digit is 0 or 1: the 0-series is used up, and the 1-series began on 19 September 2023
+    (FOD Economie). The old 9-digit form is the same number with the leading 0 left out, so a
+    9-digit input has an implied leading 0 and its first digit may be any digit.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'BE',
@@ -17,7 +21,7 @@ class EntityVAT:
         'max_length': 10,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{9,10}$'),
+        'regexp': re.compile(r'^(?:[01]\d{9}|\d{9})$'),
         'alias_of': None,
         'names': ['tax registration numbers',
                   'Belgium BE VAT',
@@ -28,7 +32,8 @@ class EntityVAT:
                   'Mwst-nr'],
         'links': ['https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698',
                   'https://en.wikipedia.org/wiki/VAT_identification_number',
-                  'https://www.vatcalc.com/belgium/belgian-vat-number-format-changes/'],
+                  'https://www.vatcalc.com/belgium/belgian-vat-number-format-changes/',
+                  'https://news.economie.fgov.be/228778-ondernemingsnummers-beginnen-nu-ook-met-het-cijfer-1/'],
         'deprecated': False
     })
 
