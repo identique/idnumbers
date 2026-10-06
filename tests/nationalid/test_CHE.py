@@ -27,6 +27,14 @@ class TestCHEAVHValidation(TestCase):
         self.assertTrue(CHE.SocialSecurityNumber.checksum('756.9217.0769.85'))
         self.assertFalse(CHE.SocialSecurityNumber.checksum('756.9217.0769.86'))
 
+    def test_separator_before_the_check_digits_must_be_a_dot(self):
+        # the regexp had an unescaped '.', so any character got through and normalize() left it in: issue #285
+        for value in ('756.1234.5678-97', '756.1234.5678 97', '756.1234.5678x97', '756.1234.567897',
+                      '756.1234.5678\n97', '756.1234.5678.97\n'):
+            self.assertIs(False, CHE.SocialSecurityNumber.validate(value), repr(value))
+            self.assertIs(False, CHE.SocialSecurityNumber.checksum(value), repr(value))
+        self.assertTrue(CHE.SocialSecurityNumber.validate('756.1234.5678.97'))
+
     def test_error_case(self):
         self.assertFalse(CHE.SocialSecurityNumber.validate('756.1234.5678.90'))
         self.assertFalse(CHE.SocialSecurityNumber.validate('755.1234.5678.90'))

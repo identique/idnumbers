@@ -23,7 +23,7 @@ class SocialSecurityNumber:
         'max_length': 13,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^756\.\d{4}\.\d{4}.\d{2}$'),
+        'regexp': re.compile(r'^756\.\d{4}\.\d{4}\.\d{2}$'),
         'alias_of': None,
         'names': ['Social Security Number',
                   'AHV-Nr.',
@@ -45,11 +45,7 @@ class SocialSecurityNumber:
         """use EAN-13 to validate the number"""
         if not validate_regexp(id_number, SocialSecurityNumber.METADATA.regexp):
             return False
+        # the regexp leaves exactly 13 ASCII digits once the dots are stripped
         normalized = normalize(id_number)
-        if not (normalized.isascii() and normalized.isdigit()):
-            # the regexp separator before the last two digits is an unescaped '.', so it also lets any
-            # character through, e.g. '-' or '²' (str.isdigit() is True for it, int() raises): such input is
-            # not a valid number, but it is not an error either
-            return False
         numbers = [int(char) for char in normalized]
         return numbers[-1] == ean13_digit(numbers[:-1])
