@@ -140,6 +140,22 @@ You can also use the library to validate different types of ID numbers for diffe
 It is important to keep in mind that the library is only able to validate the format and the checksum of the ID number,
 not if it is an actual issued ID number.
 
+### Input handling
+
+- `validate()` returns a `bool` for any input and is not meant to raise. Anything that is not a `str` (`None`, numbers,
+  `bytes`, lists, ...) gives `False`, an integer is never converted to a string, so `validate(37605030299)` is `False`.
+- The whole string must match the ID format. Nothing is stripped, so surrounding whitespace or a trailing newline gives
+  `False` (the Irish PPS number is the one exception: its own format allows one trailing space).
+- Only ASCII digits `0-9` are accepted, other Unicode digits such as `١٢٣` or `１２３` give `False`.
+- Separators and letter case are type specific. Several ID types accept their usual written form (for example spaces,
+  dashes or dots inside the number, as in `8924 7352 8038`), and a few accept lower case letters. Most types are case
+  sensitive. The `METADATA.regexp` of each type shows what it accepts.
+- `parse()` returns `None` for invalid input.
+
+Known issues: five types can still raise `ValueError` or `IndexError` for some input. These are ITA (omocodia letters,
+#296), KWT (impossible birth dates, #298), NOR (impossible birth dates, #304), ROU (#308) and ZAF (non-numeric
+strings, #314). Each has an open issue.
+
 ## Parse National IDs
 
 The idnumbers library supports the parse function for certain national ID numbers, which allows you to easily extract
