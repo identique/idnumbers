@@ -256,12 +256,12 @@ class TestIssue278Regressions(TestCase):
             self.assertIsNone(UKR.TaxpayerIDNumber.checksum(value))
 
     def test_che_separator_is_not_a_digit(self):
-        # found by the fuzz: the regexp has an unescaped '.' before the last two digits
+        # found by the fuzz: the regexp had an unescaped '.' before the last two digits, any character got through
         self.assertIs(False, CHE.SocialSecurityNumber.validate('756.1234.5678-97'))  # was ValueError
         self.assertIs(False, CHE.SocialSecurityNumber.validate('756.1234.5678 97'))
 
     def test_che_non_ascii_digit_like_separator(self):
-        # str.isdigit() is True for these, int() raises ValueError for them: a review of the first fix
+        # str.isdigit() is True for these, int() raised ValueError for them: the regexp now rejects them
         for value in ('756.1234.5678²97', '756.1234.5678³97', '756.1234.5678①97'):
             self.assertIs(False, CHE.SocialSecurityNumber.validate(value), value)
 

@@ -188,7 +188,9 @@ def letter_to_number(letter: str, capital: bool = True):
 def ean13_digit(numbers: List[int]) -> CHECK_DIGIT:
     """
     The EAN-13 validation. The EAN-13 is a [barcode format](https://boxshot.com/barcode/tutorials/ean-13-barcodes/).
-    This is the check digit of EAN-13.
+    This is the check digit of EAN-13: the 12 data digits are weighted 1, 3, 1, 3, ... from the left (the odd
+    positions by 1, the even positions by 3), and the check digit completes the weighted sum to a multiple of 10.
+    https://www.gs1.org/services/how-calculate-check-digit-manually
     https://boxshot.com/barcode/tutorials/ean-13-calculator/
     """
     odd = 0
@@ -198,7 +200,7 @@ def ean13_digit(numbers: List[int]) -> CHECK_DIGIT:
             even += value
         else:
             odd += value
-    total = even * 2 + odd
+    total = even * 3 + odd
     modulus = total % 10
     return cast(CHECK_DIGIT,
                 0 if modulus == 0 else (10 - modulus))
