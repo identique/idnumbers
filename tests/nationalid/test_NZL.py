@@ -12,6 +12,12 @@ class TestNZLDriverLicenseNumberValidation(TestCase):
         self.assertFalse(NZL.DriverLicenseNumber.validate('AA000000'))
         self.assertFalse(NZL.DriverLicenseNumber.validate('B11111'))
 
+    def test_prefix_is_ascii_letters_only(self):
+        self.assertTrue(NZL.DriverLicenseNumber.validate('AB123456'))
+        # Latin letter with a diaeresis and Greek capitals look like letters but are not ASCII
+        self.assertFalse(NZL.DriverLicenseNumber.validate('\u00c4B123456'))
+        self.assertFalse(NZL.DriverLicenseNumber.validate('\u0391\u0392123456'))
+
     def test_with_metadata(self):
         self.assertIsNotNone(NZL.DriverLicenseNumber.METADATA)
 
