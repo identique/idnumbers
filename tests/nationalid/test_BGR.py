@@ -47,6 +47,28 @@ class TestBGRValidation(TestCase):
             self.assertFalse(BGR.UniformCivilNumber.validate('990615006%d' % check_digit), check_digit)
             self.assertFalse(BGR.UniformCivilNumber.validate('850730005%d' % check_digit), check_digit)
 
+    def test_remainder_10_with_month_offsets(self):
+        # synthetic vectors, generated so the weighted sum of the first nine digits is 10 mod 11 (check digit 0),
+        # cross-checked with python-stdnum 2.2 stdnum.bg.egn (is_valid and get_birth_date).
+        # Month +20 means born 1800-1899, month +40 means born 2000-2099.
+        cases = (
+            ('8523150070', date(1885, 3, 15), Gender.FEMALE),  # +20
+            ('9932310080', date(1899, 12, 31), Gender.MALE),  # +20
+            ('0541010090', date(2005, 1, 1), Gender.FEMALE),  # +40
+            ('1242290000', date(2012, 2, 29), Gender.MALE),  # +40
+            ('2351300030', date(2023, 11, 30), Gender.FEMALE),  # +40
+        )
+        for number, birth_date, gender in cases:
+            self.assertTrue(BGR.UniformCivilNumber.validate(number), number)
+            self.assertEqual(0, BGR.UniformCivilNumber.checksum(number), number)
+            result = BGR.UniformCivilNumber.parse(number)
+            self.assertEqual(birth_date, result['yyyymmdd'], number)
+            self.assertEqual(gender, result['gender'], number)
+            self.assertEqual(0, result['checksum'], number)
+            for check_digit in range(1, 10):
+                wrong = '%s%d' % (number[:9], check_digit)
+                self.assertFalse(BGR.UniformCivilNumber.validate(wrong), wrong)
+
     def test_checksum_range(self):
         # the check digit is always a single digit; remainder 10 is mapped to 0
         self.assertEqual(8, BGR.UniformCivilNumber.checksum('7501020018'))
