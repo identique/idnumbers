@@ -2,6 +2,7 @@ import math
 import re
 from types import SimpleNamespace
 from ..util import validate_regexp, weighted_modulus_digit, modulus_overflow_mod10
+from .birth_number import BirthNumber
 
 
 def normalize(id_number: str) -> str:
@@ -13,6 +14,15 @@ class TaxNumber:
     Czech Republic tax number format
     https://gist.github.com/svschannak/e79892f4fbc56df15bdb5496d0e67b85
 
+    The number has 8, 9 or 10 digits:
+
+      - 8 digits: a legal entity, with a modulus 11 check digit. It cannot start with 9.
+      - 9 digits starting with 6: an individual without a birth number, with a special check digit.
+      - any other 9 or 10 digits: an individual, whose DIČ is the birth number. It is validated with the
+        birth number rules of ``CZE.BirthNumber``: a real birth date (9 digits only up to 1953) and the
+        check digit (10 digits).
+
+    Source: python-stdnum ``stdnum/cz/dic.py``.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'CZ',
@@ -29,7 +39,8 @@ class TaxNumber:
         'links': ['https://tincheck.io/czech-republic/',
                   'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/CZ-TIN.pdf',
-                  'https://gist.github.com/svschannak/e79892f4fbc56df15bdb5496d0e67b85'],
+                  'https://gist.github.com/svschannak/e79892f4fbc56df15bdb5496d0e67b85',
+                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cz/dic.py'],
         'deprecated': False
     })
 
@@ -51,16 +62,13 @@ class TaxNumber:
         if not validate_regexp(normalized, TaxNumber.METADATA.regexp):
             return False
         elif not TaxNumber.is_individual(normalized):
-            return TaxNumber.checksum_entity(normalized)
-        elif len(normalized) == 9:
-            if int(normalized[0]) < 6:
-                # no checksum
-                return True
-            else:
-                return TaxNumber.checksum_old_individual(normalized)
+            # a legal entity DIČ never starts with 9
+            return not normalized.startswith('9') and TaxNumber.checksum_entity(normalized)
+        elif len(normalized) == 9 and normalized.startswith('6'):
+            return TaxNumber.checksum_old_individual(normalized)
         else:
-            # no checksum
-            return True
+            # the DIČ of an individual is the birth number
+            return BirthNumber.validate(normalized)
 
     @staticmethod
     def checksum_entity(id_number: str) -> bool:
