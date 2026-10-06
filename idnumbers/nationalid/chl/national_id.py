@@ -29,11 +29,14 @@ class NationalID:
                   'RUN',
                   'Rol Único Tributario',
                   'RUT'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Chile'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Chile',
+                  'https://es.wikipedia.org/wiki/Rol_%C3%9Anico_Tributario#Algoritmo',
+                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cl/rut.py'],
         'deprecated': False
     })
 
-    MULTIPLIER = [3, 2, 7, 6, 5, 4, 3, 2]
+    # The weights are applied to the digits of the body counted from the RIGHT and cycle: 2, 3, 4, 5, 6, 7, 2, 3, ...
+    MULTIPLIER = [2, 3, 4, 5, 6, 7]
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -48,9 +51,15 @@ class NationalID:
     @staticmethod
     def checksum(id_number: str) -> str:
         """
-        Validate CHL national id number checksum
-        https://gist.github.com/ryangreenberg/4531891
+        Calculate the CHL national id number check character (modulo 11).
+
+        The digits of the body (the id without its check character) are weighted from the right with the
+        repeating cycle 2, 3, 4, 5, 6, 7, 2, 3, ... so it works for both 7 and 8 digit bodies. The check
+        character is 11 - (sum mod 11), where 11 is written as 0 and 10 as K.
+        https://es.wikipedia.org/wiki/Rol_%C3%9Anico_Tributario#Algoritmo
+        https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cl/rut.py
         """
-        number_list = [int(char) for char in list(normalize(id_number)[:-1])]
-        modulus = weighted_modulus_digit(number_list, NationalID.MULTIPLIER, 11)
+        number_list = [int(char) for char in reversed(normalize(id_number)[:-1])]
+        weights = [NationalID.MULTIPLIER[index % len(NationalID.MULTIPLIER)] for index in range(len(number_list))]
+        modulus = weighted_modulus_digit(number_list, weights, 11)
         return str(0 if modulus == 11 else 'K' if modulus == 10 else modulus)
