@@ -259,6 +259,22 @@ class TestIssue278Regressions(TestCase):
         for value in ('756.1234.5678²97', '756.1234.5678³97', '756.1234.5678①97'):
             self.assertIs(False, CHE.SocialSecurityNumber.validate(value), value)
 
+    def test_swe_pipe_separator_is_invalid(self):
+        # the separator class [+|-] lets '|' through (regexp left as is, see #370); it used to raise ValueError
+        self.assertIs(False, SWE.PersonalIdentityNumber.validate('191231|2392'))
+        self.assertIsNone(SWE.PersonalIdentityNumber.parse('850709|9805'))
+        self.assertIsNone(SWE.PersonalIdentityNumber.checksum('850709|9805'))
+
+    def test_swe_plus_and_minus_vectors_are_unchanged(self):
+        # vectors from tests/nationalid/test_SWE.py
+        self.assertTrue(SWE.PersonalIdentityNumber.validate('850709-9805'))
+        self.assertTrue(SWE.PersonalIdentityNumber.validate('191231+2392'))
+        self.assertFalse(SWE.PersonalIdentityNumber.validate('850709-9802'))
+        self.assertFalse(SWE.PersonalIdentityNumber.validate('191231+2391'))
+        self.assertEqual(5, SWE.PersonalIdentityNumber.checksum('850709-9805'))
+        self.assertEqual((1985, 7, 9), SWE.PersonalIdentityNumber.parse('850709-9805')['yyyymmdd'].timetuple()[:3])
+        self.assertEqual('5', SWE.PersonalIdentityNumber.parse('850709-9805')['checksum'])
+
     def test_valid_ids_are_still_valid(self):
         self.assertTrue(GRC.TaxIdentityNumber.validate('094014250'))
         self.assertTrue(LVA.PersonalCode.validate('290156-11605'))

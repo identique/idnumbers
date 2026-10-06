@@ -93,4 +93,8 @@ class PersonalIdentityNumber:
         if not validate_regexp(id_number, PersonalIdentityNumber.METADATA.regexp):
             return None
         normalized = normalize(id_number)
+        if not normalized.isdigit():
+            # the separator class [+|-] also lets '|' through, normalize() does not strip it, and it is
+            # not a digit: treat it as invalid instead of raising ValueError. The regexp is left as is, see #370
+            return None
         return luhn_digit([int(char) for char in normalized[:-1]], True)
