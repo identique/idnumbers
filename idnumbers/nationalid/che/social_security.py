@@ -12,6 +12,9 @@ class SocialSecurityNumber:
     """
     Switzerland Social Security Number (AHV-Nr. [de] / No AVS [fr])
     https://en.wikipedia.org/wiki/National_identification_number#Switzerland
+
+    The last digit is the EAN-13 check digit of the first 12 digits (eCH-0044), the weights are 1 and 3:
+    https://www.gs1.org/services/how-calculate-check-digit-manually
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'CH',
@@ -25,7 +28,9 @@ class SocialSecurityNumber:
         'names': ['Social Security Number',
                   'AHV-Nr.',
                   'No AVS'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Switzerland'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Switzerland',
+                  'https://www.gs1.org/services/how-calculate-check-digit-manually',
+                  'https://www.ech.ch/de/ech/ech-0044/4.1'],
         'deprecated': False
 
     })
