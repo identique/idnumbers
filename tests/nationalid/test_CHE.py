@@ -64,6 +64,43 @@ class TestCHEUIDValidation(TestCase):
         self.assertFalse(CHE.UID.validate('CHE.116.281.710'))
         self.assertFalse(CHE.UID.validate('116.281.710'))
 
+    def test_check_digit_vectors(self):
+        # the issue #285 vectors, validated by python-stdnum 2.2 (ch.uid.is_valid)
+        self.assertTrue(CHE.UID.validate('CHE-116.281.710'))
+        self.assertFalse(CHE.UID.validate('CHE-116.281.715'))  # wrong check digit
+        self.assertFalse(CHE.UID.validate('CHE-126.281.710'))  # wrong check digit
+        # CHE-100.155.212 and its invalid neighbour CHE-100.155.213: the doctest of python-stdnum's ch/uid.py
+        self.assertTrue(CHE.UID.validate('CHE-100.155.212'))
+        self.assertFalse(CHE.UID.validate('CHE-100.155.213'))
+        # synthetic: 11628172 gives the check digit 7
+        self.assertTrue(CHE.UID.validate('CHE-116.281.727'))
+        self.assertFalse(CHE.UID.validate('CHE-116.281.720'))
+
+    def test_check_digit_with_optional_separators(self):
+        for value in ('CHE-116.281.710', 'CHE116281710', 'CHE-116281710', 'CHE116.281.710', 'CHE-116.281710'):
+            self.assertTrue(CHE.UID.validate(value), value)
+            self.assertTrue(CHE.BusinessID.checksum(value), value)
+        self.assertFalse(CHE.UID.validate('CHE116281715'))
+        self.assertFalse(CHE.BusinessID.checksum('CHE116281715'))
+
+    def test_check_digit_10_is_never_valid(self):
+        # synthetic: the weighted sum of the digits 00000003 is 12, 12 % 11 = 1 and 11 - 1 = 10 is not a digit
+        for check_digit in range(10):
+            value = f'CHE-000.000.03{check_digit}'
+            self.assertFalse(CHE.UID.validate(value), value)
+            self.assertFalse(CHE.BusinessID.checksum(value), value)
+
+    def test_check_digit_0_is_valid(self):
+        # the weighted sum of 11628171 is 132, 132 % 11 = 0 gives the check digit 0 (python-stdnum: (11 - sum) % 11)
+        self.assertTrue(CHE.UID.validate('CHE-116.281.710'))
+
+    def test_metadata(self):
+        self.assertTrue(CHE.BusinessID.METADATA.checksum)
+        # the length is counted without the optional '-' and '.', like the other id types
+        stripped = len('CHE116281710')
+        self.assertEqual(stripped, CHE.BusinessID.METADATA.min_length)
+        self.assertEqual(stripped, CHE.BusinessID.METADATA.max_length)
+
 
 if __name__ == '__main__':
     main()
