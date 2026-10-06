@@ -23,7 +23,7 @@ class NationalID:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{1,2}\.\d{3}\.\d{3}-[\d|K])$'),
+        'regexp': re.compile(r'^(\d{1,2}\.\d{3}\.\d{3}-[\dKk])$'),
         'alias_of': None,
         'names': ['Rol Único Nacional',
                   'RUN',
@@ -41,12 +41,12 @@ class NationalID:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the CHL id number
+        Validate the CHL id number. A lowercase k check character is accepted as equivalent to K.
         https://codepen.io/alisteroz/pen/KEoqgQ
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
-        return NationalID.checksum(id_number) == id_number[-1]
+        return NationalID.checksum(id_number) == id_number[-1].upper()
 
     @staticmethod
     def checksum(id_number: str) -> str:

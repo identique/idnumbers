@@ -23,6 +23,13 @@ class TestCHLNationalIDValidation(TestCase):
         self.assertEqual(CHL.NationalID.checksum('31.174.738-K'), 'K')
         self.assertEqual(CHL.NationalID.checksum('10.000.013-K'), 'K')
 
+    def test_lowercase_k_check_character(self):
+        # Issue #286: RUTs are routinely typed with a lowercase k; python-stdnum upper-cases in compact().
+        self.assertTrue(CHL.NationalID.validate('10.000.013-K'))
+        self.assertTrue(CHL.NationalID.validate('10.000.013-k'))
+        self.assertTrue(CHL.NationalID.validate('6.123.456-k'))
+        self.assertEqual(CHL.NationalID.checksum('10.000.013-k'), 'K')
+
     def test_error_case(self):
         self.assertFalse(CHL.NationalID.validate('130.692.545-9'))
         self.assertFalse(CHL.NationalID.validate('28.373.183-3'))
@@ -32,6 +39,13 @@ class TestCHLNationalIDValidation(TestCase):
         # Issue #286: these were accepted by the left-aligned weights.
         self.assertFalse(CHL.NationalID.validate('1.111.111-3'))
         self.assertFalse(CHL.NationalID.validate('6.123.456-0'))
+
+    def test_invalid_check_character(self):
+        # '|' was admitted by the old regexp class [\d|K]; other lowercase letters are not valid either.
+        self.assertFalse(CHL.NationalID.validate('10.000.013-|'))
+        self.assertFalse(CHL.NationalID.validate('10.000.013-x'))
+        self.assertFalse(CHL.NationalID.validate('10.000.013-9'))
+        self.assertFalse(CHL.NationalID.validate('6.123.456-k '))
 
     def test_with_metadata(self):
         self.assertIsNotNone(CHL.NationalID.METADATA)
