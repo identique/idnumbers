@@ -60,7 +60,7 @@ class BirthNumber:
 
     Check digit: the 10th digit is the remainder of the first nine digits divided by 11. When that
     remainder is 10 the check digit is 0, so such a number is *not* divisible by 11 as a whole
-    (this was used for about 1,000 numbers per year until 1985). Every other number is divisible by 11.
+    (this was used for about a thousand numbers in total, until 1985). Every other number is divisible by 11.
 
     Century: a 10-digit number only exists from 1954, so ``yy`` 54-99 is 1954-1999 and ``yy`` 00-53 is
     2000-2053. A birth date after today is impossible, so such a number is not valid (this also rejects
