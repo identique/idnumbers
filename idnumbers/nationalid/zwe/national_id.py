@@ -74,9 +74,16 @@ class NationalID:
             }
 
     @staticmethod
-    def checksum(id_number) -> bool:
-        """Validate checksum"""
+    def checksum(id_number: str) -> bool:
+        """
+        Check the check letter of the ZWE id number.
+
+        Returns True when the check letter matches the one computed by ``get_checksum``,
+        and False when it does not or the input is not a well-formed id number.
+        """
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
+        if not match_obj:
+            return False
         register_office_code = match_obj.group('register_office_code')
         national_num = match_obj.group('national_num')
         checksum_code = match_obj.group('checksum')
