@@ -19,3 +19,15 @@ class TestKWTValidation(TestCase):
         self.assertEqual(1, result['yyyymmdd'].day)
         self.assertEqual('0419', result['sn'])
         self.assertEqual(6, result['checksum'])
+
+    def test_impossible_birth_date(self):
+        # Source: issue #298. All three have a correct check digit, only the birth date is impossible.
+        for value in (
+            '200022900006',  # 29 Feb 1900, 1900 is not a leap year
+            '200013200008',  # month 13
+            '200001000009',  # month 00 and day 00
+        ):
+            with self.subTest(value=value):
+                self.assertEqual(int(value[-1]), KWT.CivilNumber.checksum(value))
+                self.assertFalse(KWT.CivilNumber.validate(value))
+                self.assertIsNone(KWT.CivilNumber.parse(value))
