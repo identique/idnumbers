@@ -25,7 +25,12 @@ STR_INPUTS: List[str] = [
     ARABIC_INDIC_ONE * 13, FULL_WIDTH_ONE * 13, ARABIC_INDIC_ONE * 10 + 'A' * 3,
 ]
 
-FUZZ_SUBSTITUTES = '09AZ- '
+FUZZ_SUBSTITUTES = '09AZ- |.²①\n١/'
+"""
+Substituted at, and inserted before, every position. Besides the plain digit, letter and separator cases it
+holds the characters that regexps and checksum code mishandle: '|' and '.' (sloppy character classes),
+'²' and '①' (str.isdigit() is True, int() raises), a newline, an Arabic-Indic digit and '/'.
+"""
 FUZZ_EXTENSIONS = '0A'
 
 
@@ -88,10 +93,11 @@ def _string_literals() -> Set[str]:
 
 
 def _mutations(vector: str) -> Iterator[str]:
-    """Substitute each position, truncate by 1..n characters, extend with a trailing character."""
+    """Substitute or insert at each position, truncate by 1..n characters, extend with a trailing character."""
     for index in range(len(vector)):
         for char in FUZZ_SUBSTITUTES:
             yield vector[:index] + char + vector[index + 1:]
+            yield vector[:index] + char + vector[index:]
     for cut in range(1, len(vector) + 1):
         yield vector[:-cut]
     for char in FUZZ_EXTENSIONS:
