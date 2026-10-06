@@ -58,7 +58,7 @@ class NationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        """parse the result"""
+        """parse the result, None if the input is invalid or has no real calendar birth date"""
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
@@ -77,9 +77,14 @@ class NationalID:
         elif 900 <= individual_num < 1000 and int(yy) >= 40:
             birth_century = 19
 
+        try:
+            birth_date = date(int(f'{birth_century}{yy}'), int(mm), int(dd))
+        except ValueError:
+            return None
+
         return {
             "gender": Gender.FEMALE if int(individual_code[2]) % 2 == 0 else Gender.MALE,
-            'yyyymmdd': date(int(f'{birth_century}{yy}'), int(mm), int(dd)),
+            'yyyymmdd': birth_date,
             "checksum": match_obj.group('checksum')
         }
 
