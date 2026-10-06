@@ -9,6 +9,9 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#Singapore
     https://www.ngiam.net/NRIC/NRIC_numbers.pdf
     python version of https://github.com/IonBazan/NRIC
+    M series FIN (issued from 1 January 2022):
+    https://www.ica.gov.sg/news-and-publications/media-releases/media-release/new-m-fin-series-to-be-introduced-from-1-january-2022
+    https://github.com/opengovsg/FormSG/blob/develop/packages/shared/utils/nric-validation.ts
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'SG',
@@ -25,7 +28,10 @@ class NationalID:
                   'UIN',
                   'FIN'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Singapore',
-                  'https://www.ngiam.net/NRIC/NRIC_numbers.pdf'],
+                  'https://www.ngiam.net/NRIC/NRIC_numbers.pdf',
+                  'https://www.ica.gov.sg/news-and-publications/media-releases/media-release/'
+                  'new-m-fin-series-to-be-introduced-from-1-january-2022',
+                  'https://github.com/opengovsg/FormSG/blob/develop/packages/shared/utils/nric-validation.ts'],
         'deprecated': False
     })
 
@@ -37,6 +43,12 @@ class NationalID:
         'G': 'RQPNMLKXWUT',
         'M': 'XWUTRQPNJLK'
     }
+    SERIES_OFFSET = {'M': 3}
+    """
+    The start constant added to the weighted sum before the modulus 11, by series. The M series adds 3
+    (GovTech FormSG isMFinSeriesValid). The +4 of the T and G series is already folded into their rotated
+    CHECKSUM_MAP tables, and the S and F series add 0, so they are not listed here.
+    """
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -53,6 +65,7 @@ class NationalID:
         algorithm from:
         https://www.ngiam.net/NRIC/NRIC_numbers.pdf
         https://github.com/IonBazan/NRIC
+        https://github.com/opengovsg/FormSG/blob/develop/packages/shared/utils/nric-validation.ts
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
@@ -60,5 +73,6 @@ class NationalID:
         checksum = id_number[-1]
         # it uses modulus 11 algorithm with magic numbers
         numbers = [int(char) for char in id_number[1:-1]]
-        modulus = weighted_modulus_digit(numbers, NationalID.MAGIC_MULTIPLIER, 11, True)
+        modulus = (weighted_modulus_digit(numbers, NationalID.MAGIC_MULTIPLIER, 11, True)
+                   + NationalID.SERIES_OFFSET.get(series, 0)) % 11
         return checksum == NationalID.CHECKSUM_MAP[series][modulus]
