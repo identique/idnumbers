@@ -39,6 +39,42 @@ class TestCZEBirthNumberCheckDigit(TestCase):
         self.assertEqual(0, result['checksum'])
 
 
+class TestCZEBirthNumberNineDigits(TestCase):
+    """Numbers given out up to 1953 have 9 digits and no check digit."""
+
+    def test_nine_digits_before_1954_are_valid(self):
+        # 530101123 comes from issue #288 (python-stdnum 2.2 cz.rc accepts it): 1 Jan 1953
+        for number in ('530101123', '530101/123', '531231123', '535101123', '000101123'):
+            with self.subTest(number=number):
+                self.assertTrue(BirthNumber.validate(number))
+                self.assertTrue(BirthNumber.checksum(number))
+
+    def test_nine_digits_from_1954_are_invalid(self):
+        # python-stdnum 2.2 cz.rc doctest: '590312/123' is a 9 digit number in 1959 and is rejected
+        for number in ('540101123', '590312123', '590312/123', '700101123'):
+            with self.subTest(number=number):
+                self.assertFalse(BirthNumber.validate(number))
+
+    def test_nine_digits_with_an_impossible_date_are_invalid(self):
+        for number in ('530230123', '531301123', '530100123', '530132123', '530001123'):
+            with self.subTest(number=number):
+                self.assertFalse(BirthNumber.validate(number))
+
+    def test_wrong_length_is_invalid(self):
+        for number in ('53010112', '53010112300', '', '5301011234x'):
+            with self.subTest(number=number):
+                self.assertFalse(BirthNumber.validate(number))
+
+    def test_parse_nine_digits_is_none(self):
+        # there is no check digit to put in the result, as for a BEL number with an incomplete date
+        self.assertIsNone(BirthNumber.parse('530101123'))
+        self.assertIsNone(BirthNumber.parse('540101123'))
+
+    def test_ten_digits_are_unchanged(self):
+        self.assertIsNotNone(BirthNumber.parse('7103192745'))
+        self.assertIsNone(BirthNumber.parse('7103192746'))
+
+
 # the DIC of an individual is the birth number, except for 8 and 9 digit special cases
 class TestCZETaxNumberValidation(TestCase):
     def test_normal_case(self):

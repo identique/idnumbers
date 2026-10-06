@@ -24,6 +24,14 @@ class TestSVKValidation(TestCase):
         self.assertFalse(SVK.BirthNumber.validate('5401031231'))
         self.assertFalse(SVK.BirthNumber.validate('5601011239'))
 
+    def test_nine_digits_before_1954(self):
+        # Issue #288, python-stdnum 2.2 (sk.rc is cz.rc): 9-digit numbers have no check digit, up to 1953
+        self.assertTrue(SVK.BirthNumber.validate('530101123'))
+        self.assertTrue(SVK.BirthNumber.validate('530101/123'))
+        self.assertFalse(SVK.BirthNumber.validate('540101123'))
+        self.assertFalse(SVK.BirthNumber.validate('530230123'))
+        self.assertIsNone(SVK.BirthNumber.parse('530101123'))
+
     def test_parse(self):
         result = SVK.BirthNumber.parse('6052299011')
         self.assertEqual(1960, result['yyyymmdd'].year)
