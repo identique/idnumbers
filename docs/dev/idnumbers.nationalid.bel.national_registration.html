@@ -379,7 +379,7 @@
     
     <td>Class</td>
     <td><code><a href="idnumbers.nationalid.bel.national_registration.NationalRegistrationNumber.html" class="internal-link" title="idnumbers.nationalid.bel.national_registration.NationalRegistrationNumber"><wbr></wbr>National<wbr></wbr>Registration<wbr></wbr>Number</a></code></td>
-    <td>Belgium National register number format https://en.wikipedia.org/wiki/Belgian_identity_card</td>
+    <td>Belgium National register number format <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Belgian_identity_card" target="_top">https://en.wikipedia.org/wiki/Belgian_identity_card</a></td>
   </tr><tr class="class">
     
     <td>Class</td>
@@ -430,9 +430,12 @@
   <div class="docstring functionBody">
     
     <div><p>Infer the century of birth (1900 or 2000) from the check digits.</p>
-<p>The two-digit year is ambiguous, so the century can only be found by computing the check digits: for a person born from 2000 the digit 2 is put in front of the first nine digits (IT000). At most one of the two forms can match, because 2000000000 % 97 != 0. A 20xx birth year in the future is impossible, so the 2000 form is not accepted for it (python-stdnum does the same).</p>
-<p>:param normalized: the 11 digits, without separators :return: 1900, 2000, or None if neither form matches the check digits</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">normalized:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+<p>The two-digit year is ambiguous, so the century can only be found by computing the check digits:
+for a person born from 2000 the digit 2 is put in front of the first nine digits (IT000).
+At most one of the two forms can match, because 2000000000 % 97 != 0.
+A 20xx birth year in the future is impossible, so the 2000 form is not accepted for it
+(python-stdnum does the same).</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">normalized:</span><code>str</code></td><td class="fieldArgDesc">the 11 digits, without separators</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>int]</code></td><td class="fieldArgDesc">1900, 2000, or None if neither form matches the check digits</td></tr></table></div>
   </div>
 </div><div class="basefunction private">
   
@@ -456,7 +459,9 @@
   <div class="docstring functionBody">
     
     <div><p>Check the birth date part, which may be incomplete.</p>
-<p>A month of 00 (only the year is known, or the day counter of an unknown month ran out) is valid with any day. A valid month with the day 00 is valid too. Otherwise the day must exist in that month of the inferred century (IT000; python-stdnum stdnum/be/nn.py).</p>
+<p>A month of 00 (only the year is known, or the day counter of an unknown month ran out) is valid
+with any day. A valid month with the day 00 is valid too. Otherwise the day must exist in that month
+of the inferred century (IT000; python-stdnum stdnum/be/nn.py).</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">century:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">match<wbr></wbr>_obj:</span><code>re.Match[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basefunction private">
@@ -481,8 +486,7 @@
   <div class="docstring functionBody">
     
     <div><p>Match the number against the regexp and check the century and the birth date part.</p>
-<p>:param id_number: the national registration number, with or without separators :return: the century and the regexp match, or None if the format, the check digits or the birth date is invalid</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>Tuple[<wbr></wbr>int, <wbr></wbr>re.Match[<wbr></wbr>str]]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc">the national registration number, with or without separators</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>Tuple[<wbr></wbr>int, <wbr></wbr>re.Match[<wbr></wbr>str]]]</code></td><td class="fieldArgDesc">the century and the regexp match, or None if the format, the check digits or the birth date is invalid</td></tr></table></div>
   </div>
 </div>
         </div>
@@ -496,7 +500,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-06 19:31:23.
+    22.9.1 at 2026-10-06 19:40:47.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

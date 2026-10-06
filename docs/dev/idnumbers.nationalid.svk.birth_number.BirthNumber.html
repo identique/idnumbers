@@ -371,12 +371,27 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>Slovakia Birth Number format, rodné číslo (RČ) https://en.wikipedia.org/wiki/National_identification_number#Slovakia</p>
-<p>The Czech Republic uses the same system, so ``CZE.BirthNumber`` is a subclass of this class.</p>
-<p>Check digit: the 10th digit is the remainder of the first nine digits divided by 11. When that remainder is 10 the check digit is 0, so such a number is *not* divisible by 11 as a whole (this was used for about a thousand numbers in total, until 1985). Every other number is divisible by 11.</p>
-<p>Century: a 10-digit number only exists from 1954, so ``yy`` 54-99 is 1954-1999 and ``yy`` 00-53 is 2000-2053. A birth date after today is impossible, so such a number is not valid (this also rejects 10-digit numbers with ``yy`` 50-53 that used to be read as 1950-1953). The month offsets are +50 for women and, since 2004, +20 when the serial numbers of a day run out; the +20 is accepted for any year.</p>
-<p>9-digit form: numbers given out up to and including 1953 have 9 digits (the date, a 3-digit serial number and no check digit); people who hold them are still alive. The 9-digit form is only valid for a birth year 1900-1953 (``yy &lt;= 53``) with a real calendar date, and has nothing to check, so ``checksum()`` is True for any well-formed 9-digit number and the year and date rules are applied by ``validate()`` and ``parse()``. The ``checksum`` group of the regexp is absent for a 9-digit number. ``parse()`` returns None for a 9-digit number, because the result has a ``checksum`` digit that does not exist: ``validate()`` is True while ``parse()`` is None, as for the Belgian number with an incomplete birth date.</p>
-<p>Sources: Czech Wikipedia "Rodné číslo" (citing law no. 133/2000 Sb.) and python-stdnum ``stdnum/cz/rc.py``, which checks ``int(number[:9]) % 11 % 10`` for 10 digits and accepts 9 digits only up to 1953.</p>
+          <div><p>Slovakia Birth Number format, rodné číslo (RČ)
+<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/National_identification_number#Slovakia" target="_top">https://en.wikipedia.org/wiki/National_identification_number#Slovakia</a></p>
+<p>The Czech Republic uses the same system, so <tt class="rst-docutils literal">CZE.BirthNumber</tt> is a subclass of this class.</p>
+<p>Check digit: the 10th digit is the remainder of the first nine digits divided by 11. When that
+remainder is 10 the check digit is 0, so such a number is <em>not</em> divisible by 11 as a whole
+(this was used for about a thousand numbers in total, until 1985). Every other number is divisible by 11.</p>
+<p>Century: a 10-digit number only exists from 1954, so <tt class="rst-docutils literal">yy</tt> 54-99 is 1954-1999 and <tt class="rst-docutils literal">yy</tt> 00-53 is
+2000-2053. A birth date after today is impossible, so such a number is not valid (this also rejects
+10-digit numbers with <tt class="rst-docutils literal">yy</tt> 50-53 that used to be read as 1950-1953). The month offsets are +50 for
+women and, since 2004, +20 when the serial numbers of a day run out; the +20 is accepted for any year.</p>
+<p>9-digit form: numbers given out up to and including 1953 have 9 digits (the date, a 3-digit serial
+number and no check digit); people who hold them are still alive. The 9-digit form is only valid for
+a birth year 1900-1953 (<tt class="rst-docutils literal">yy &lt;= 53</tt>) with a real calendar date, and has nothing to check, so
+<tt class="rst-docutils literal">checksum()</tt> is True for any well-formed 9-digit number and the year and date rules are applied by
+<tt class="rst-docutils literal">validate()</tt> and <tt class="rst-docutils literal">parse()</tt>. The <tt class="rst-docutils literal">checksum</tt> group of the regexp is absent for a 9-digit number.
+<tt class="rst-docutils literal">parse()</tt> returns None for a 9-digit number, because the result has a <tt class="rst-docutils literal">checksum</tt> digit that
+does not exist: <tt class="rst-docutils literal">validate()</tt> is True while <tt class="rst-docutils literal">parse()</tt> is None, as for the Belgian number with an
+incomplete birth date.</p>
+<p>Sources: Czech Wikipedia "Rodné číslo" (citing law no. 133/2000 Sb.) and python-stdnum
+<tt class="rst-docutils literal">stdnum/cz/rc.py</tt>, which checks <tt class="rst-docutils literal"><span class="pre">int(number[:9])</span> % 11 % 10</tt> for 10 digits and accepts 9 digits
+only up to 1953.</p>
 </div>
         </div>
 
@@ -388,7 +403,7 @@
     
     <td>Static Method</td>
     <td><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.svk.birth_number.BirthNumber.checksum">checksum</a></code></td>
-    <td>Check the check digit: it is ``int(first nine digits) % 11 % 10``.</td>
+    <td>Check the check digit: it is <tt class="rst-docutils literal">int(first nine digits) % 11 % 10</tt>.</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
@@ -398,7 +413,7 @@
     
     <td>Static Method</td>
     <td><code><a href="#parse" class="internal-link" title="idnumbers.nationalid.svk.birth_number.BirthNumber.parse">parse</a></code></td>
-    <td>parse the id number. A valid 9-digit number (before 1954) has no check digit to return, so None is returned for it, although ``validate()`` is True.</td>
+    <td>parse the id number. A valid 9-digit number (before 1954) has no check digit to return, so None is returned for it, although <tt class="rst-docutils literal">validate()</tt> is True.</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
@@ -438,9 +453,11 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Check the check digit: it is ``int(first nine digits) % 11 % 10``.</p>
-<p>This is the same as "the whole number is divisible by 11", except when the first nine digits leave remainder 10: the check digit is then 0, and the whole number is not divisible by 11.</p>
-<p>A 9-digit number (before 1954) has no check digit, so there is nothing that can fail and the result is True for any well-formed 9-digit number.</p>
+    <div><p>Check the check digit: it is <tt class="rst-docutils literal">int(first nine digits) % 11 % 10</tt>.</p>
+<p>This is the same as "the whole number is divisible by 11", except when the first nine digits
+leave remainder 10: the check digit is then 0, and the whole number is not divisible by 11.</p>
+<p>A 9-digit number (before 1954) has no check digit, so there is nothing that can fail and the
+result is True for any well-formed 9-digit number.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -488,7 +505,8 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>parse the id number. A valid 9-digit number (before 1954) has no check digit to return, so None is returned for it, although ``validate()`` is True.</p>
+    <div><p>parse the id number. A valid 9-digit number (before 1954) has no check digit to return, so None
+is returned for it, although <tt class="rst-docutils literal">validate()</tt> is True.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.nationalid.svk.birth_number.BirthNumberParseResult.html" class="internal-link" title="idnumbers.nationalid.svk.birth_number.BirthNumberParseResult">BirthNumberParseResult</a>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -558,7 +576,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-06 19:31:23.
+    22.9.1 at 2026-10-06 19:40:47.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

@@ -2034,7 +2034,7 @@
     
     <td>Function</td>
     <td><code><a href="#ean13_digit" class="internal-link" title="idnumbers.nationalid.util.ean13_digit">ean13<wbr></wbr>_digit</a></code></td>
-    <td>The EAN-13 validation. The EAN-13 is a [barcode format](https://boxshot.com/barcode/tutorials/ean-13-barcodes/). This is the check digit of EAN-13: the 12 data digits are weighted 1, 3, 1, 3, ... from the left (the odd positions by 1, the even positions by 3), and the check digit completes the weighted sum to a multiple of 10...</td>
+    <td>The EAN-13 validation. The EAN-13 is a [barcode format](<a class="rst-reference rst-external" href="https://boxshot.com/barcode/tutorials/ean-13-barcodes/" target="_top">https://boxshot.com/barcode/tutorials/ean-13-barcodes/</a>). This is the check digit of EAN-13: the 12 data digits are weighted 1, 3, 1, 3, ... from the left (the odd positions by 1, the even positions by 3), and the check digit completes the weighted sum to a multiple of 10...</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2044,7 +2044,7 @@
     
     <td>Function</td>
     <td><code><a href="#luhn_digit" class="internal-link" title="idnumbers.nationalid.util.luhn_digit">luhn<wbr></wbr>_digit</a></code></td>
-    <td>implement the algorithm of Luhn. https://en.wikipedia.org/wiki/Luhn_algorithm :param multipliers_start_by_two: Multipliers start by two :param digits: digits for calculating the check digit :return: checksum...</td>
+    <td>implement the algorithm of Luhn. <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Luhn_algorithm" target="_top">https://en.wikipedia.org/wiki/Luhn_algorithm</a></td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -2069,17 +2069,17 @@
     
     <td>Function</td>
     <td><code><a href="#verhoeff_check" class="internal-link" title="idnumbers.nationalid.util.verhoeff_check">verhoeff<wbr></wbr>_check</a></code></td>
-    <td>implement the verhoeff algorithm in table format: https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</td>
+    <td>implement the verhoeff algorithm in table format: <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm" target="_top">https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</a></td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#weighted_modulus_digit" class="internal-link" title="idnumbers.nationalid.util.weighted_modulus_digit">weighted<wbr></wbr>_modulus<wbr></wbr>_digit</a></code></td>
-    <td>It metrix-multiples numbers and weights and calculate the modulus by the divider. :param numbers: the numbers list. :param weights: the weights list which will used in matrix multiplications. If weights is none, we use the [1] * len(numbers) as the weights...</td>
+    <td>It metrix-multiples numbers and weights and calculate the modulus by the divider.</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
     <td><code><a href="#VERHOEFF" class="internal-link" title="idnumbers.nationalid.util.VERHOEFF">VERHOEFF</a></code></td>
-    <td>[Table](https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm) for the Verhoeff algorithm</td>
+    <td>[Table](<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm" target="_top">https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</a>) for the Verhoeff algorithm</td>
   </tr><tr class="typealias">
     
     <td>Type Alias</td>
@@ -2147,7 +2147,11 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>The EAN-13 validation. The EAN-13 is a [barcode format](https://boxshot.com/barcode/tutorials/ean-13-barcodes/). This is the check digit of EAN-13: the 12 data digits are weighted 1, 3, 1, 3, ... from the left (the odd positions by 1, the even positions by 3), and the check digit completes the weighted sum to a multiple of 10. https://www.gs1.org/services/how-calculate-check-digit-manually https://boxshot.com/barcode/tutorials/ean-13-calculator/</p>
+    <div><p>The EAN-13 validation. The EAN-13 is a [barcode format](<a class="rst-reference rst-external" href="https://boxshot.com/barcode/tutorials/ean-13-barcodes/" target="_top">https://boxshot.com/barcode/tutorials/ean-13-barcodes/</a>).
+This is the check digit of EAN-13: the 12 data digits are weighted 1, 3, 1, 3, ... from the left (the odd
+positions by 1, the even positions by 3), and the check digit completes the weighted sum to a multiple of 10.
+<a class="rst-reference rst-external" href="https://www.gs1.org/services/how-calculate-check-digit-manually" target="_top">https://www.gs1.org/services/how-calculate-check-digit-manually</a>
+<a class="rst-reference rst-external" href="https://boxshot.com/barcode/tutorials/ean-13-calculator/" target="_top">https://boxshot.com/barcode/tutorials/ean-13-calculator/</a></p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">numbers:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basefunction">
@@ -2195,8 +2199,9 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>implement the algorithm of Luhn. https://en.wikipedia.org/wiki/Luhn_algorithm :param multipliers_start_by_two: Multipliers start by two :param digits: digits for calculating the check digit :return: checksum</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">digits:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">multipliers<wbr></wbr>_start<wbr></wbr>_by<wbr></wbr>_two:</span><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>implement the algorithm of Luhn.
+<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Luhn_algorithm" target="_top">https://en.wikipedia.org/wiki/Luhn_algorithm</a></p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">digits:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc">digits for calculating the check digit</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">multipliers<wbr></wbr>_start<wbr></wbr>_by<wbr></wbr>_two:</span><code>bool</code></td><td class="fieldArgDesc">Multipliers start by two</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a></code></td><td class="fieldArgDesc">checksum</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -2220,15 +2225,23 @@
   <div class="docstring functionBody">
     
     <div><p>Match the whole id number against the regular expression, in ASCII mode.</p>
-<p>Python's ``re`` module has two traps that let malformed input through a pattern such as ``^\d{3}$`` (see https://docs.python.org/3/library/re.html):</p>
+<p>Python's <tt class="rst-docutils literal">re</tt> module has two traps that let malformed input through a pattern such as
+<tt class="rst-docutils literal">^\d{3}$</tt> (see <a class="rst-reference rst-external" href="https://docs.python.org/3/library/re.html" target="_top">https://docs.python.org/3/library/re.html</a>):</p>
+<blockquote>
 <ul class="rst-simple">
-<li>``$`` matches at the end of the string *and just before a trailing newline*, so ``"123\n"`` matches. ``Pattern.fullmatch`` only succeeds when the whole string is consumed.</li>
-<li>``\d`` (and ``\w``, ``\s``) on a ``str`` pattern match any Unicode decimal digit, such as Arabic-Indic or full-width digits, unless ``re.ASCII`` is set. Those later crash ``int()`` based checksum code.</li>
+<li><tt class="rst-docutils literal">$</tt> matches at the end of the string <em>and just before a trailing newline</em>, so <tt class="rst-docutils literal">"123\n"</tt>
+matches. <tt class="rst-docutils literal">Pattern.fullmatch</tt> only succeeds when the whole string is consumed.</li>
+<li><tt class="rst-docutils literal">\d</tt> (and <tt class="rst-docutils literal">\w</tt>, <tt class="rst-docutils literal">\s</tt>) on a <tt class="rst-docutils literal">str</tt> pattern match any Unicode decimal digit, such as
+Arabic-Indic or full-width digits, unless <tt class="rst-docutils literal">re.ASCII</tt> is set. Those later crash <tt class="rst-docutils literal">int()</tt>
+based checksum code.</li>
 </ul>
-<p>The compiled ``METADATA.regexp`` objects are left unchanged (``tools.collect_regexp`` dumps them); the ASCII twin is built here and cached.</p>
-<p>Input that is not a ``str`` (``None``, numbers, ``bytes``, lists, ...) never matches. It is not an error: validators must return False for it instead of raising, and no ``assert`` is used because asserts are stripped under ``python -O``.</p>
-<p>:param id_number: the id number; any non-str value gives None :param regexp: compiled pattern, expected to describe the whole id number :return: the match object (named groups are preserved), or None when the input is not a str or does not match</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">regexp:</span><code>Pattern[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>Match[<wbr></wbr>str]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+</blockquote>
+<p>The compiled <tt class="rst-docutils literal">METADATA.regexp</tt> objects are left unchanged (<tt class="rst-docutils literal">tools.collect_regexp</tt> dumps
+them); the ASCII twin is built here and cached.</p>
+<p>Input that is not a <tt class="rst-docutils literal">str</tt> (<tt class="rst-docutils literal">None</tt>, numbers, <tt class="rst-docutils literal">bytes</tt>, lists, ...) never matches. It is not an
+error: validators must return False for it instead of raising, and no <tt class="rst-docutils literal">assert</tt> is used because
+asserts are stripped under <tt class="rst-docutils literal">python <span class="pre">-O</span></tt>.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc">the id number; any non-str value gives None</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">regexp:</span><code>Pattern[<wbr></wbr>str]</code></td><td class="fieldArgDesc">compiled pattern, expected to describe the whole id number</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>Match[<wbr></wbr>str]]</code></td><td class="fieldArgDesc">the match object (named groups are preserved), or None when the input is not a str or does not match</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -2252,12 +2265,14 @@
   <div class="docstring functionBody">
     
     <div><p>MN modulus check, (official name TBD) ISO 7064 mod 11 (n), 10 (m)?</p>
-<ol class="rst-simple">
+<blockquote>
+<ol class="rst-arabic simple">
 <li>(adds numbers and product) mod by m</li>
 <li>next product = (2 * total) mod by n</li>
-<li>return n - product :param numbers: numbers :param m: M value used by calculate the first step :param n: N value used by the 2nd and 3rd step :return: the digit</li>
+<li>return n - product</li>
 </ol>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">numbers:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">m:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">n:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+</blockquote>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">numbers:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc">numbers</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">m:</span><code>int</code></td><td class="fieldArgDesc">M value used by calculate the first step</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">n:</span><code>int</code></td><td class="fieldArgDesc">N value used by the 2nd and 3rd step</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>int</code></td><td class="fieldArgDesc">the digit</td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -2280,7 +2295,8 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>get the units digit of a modulus. Some modulus may not be calculated with 10. In some cases, we need the units digit to be the ID.</p>
+    <div><p>get the units digit of a modulus. Some modulus may not be calculated with 10. In some cases, we need the units digit
+to be the ID.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">modulus:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basefunction">
@@ -2305,7 +2321,8 @@
   <div class="docstring functionBody">
     
     <div><p>Validate that the whole string matches the regular expression, using ASCII digits only.</p>
-<p>A trailing newline and non-ASCII digits are rejected, see :func:`match_regexp` for the reasons. Input that is not a ``str`` is rejected too: the result is False, it never raises.</p>
+<p>A trailing newline and non-ASCII digits are rejected, see <code><a href="#match_regexp" class="internal-link" title="idnumbers.nationalid.util.match_regexp">match_regexp</a></code> for the reasons.
+Input that is not a <tt class="rst-docutils literal">str</tt> is rejected too: the result is False, it never raises.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">regexp:</span><code>Pattern[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basefunction">
@@ -2329,7 +2346,8 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>implement the verhoeff algorithm in table format: https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</p>
+    <div><p>implement the verhoeff algorithm in table format:
+<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm" target="_top">https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</a></p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">digits:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basefunction">
@@ -2353,8 +2371,10 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>It metrix-multiples numbers and weights and calculate the modulus by the divider. :param numbers: the numbers list. :param weights: the weights list which will used in matrix multiplications. If weights is none, we use the [1] * len(numbers) as the weights. :param divider: the divider used for calculating modulus. :param modulus_only: If True, it returns the modulus calculated by divider, otherwise it returns divider - modulus. The default is False. :return: the value</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">numbers:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">weights:</span><code>Optional[<wbr></wbr>List[<wbr></wbr>int]]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">divider:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">modulus<wbr></wbr>_only:</span><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+    <div><p>It metrix-multiples numbers and weights and calculate the modulus by the divider.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">numbers:</span><code>List[<wbr></wbr>int]</code></td><td class="fieldArgDesc">the numbers list.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">weights:</span><code>Optional[<wbr></wbr>List[<wbr></wbr>int]]</code></td><td class="fieldArgDesc">the weights list which will used in matrix multiplications. If weights is none, we use the
+[1] * len(numbers) as the weights.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">divider:</span><code>int</code></td><td class="fieldArgDesc">the divider used for calculating modulus.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">modulus<wbr></wbr>_only:</span><code>bool</code></td><td class="fieldArgDesc">If True, it returns the modulus calculated by divider, otherwise it returns divider - modulus.
+The default is False.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>int</code></td><td class="fieldArgDesc">the value</td></tr></table></div>
   </div>
 </div><div class="baseconstant">
   
@@ -2377,7 +2397,7 @@
   </div>
   <div class="functionBody">
     
-    <div><p>[Table](https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm) for the Verhoeff algorithm</p>
+    <div><p>[Table](<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm" target="_top">https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</a>) for the Verhoeff algorithm</p>
 </div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">D_TABLE</span><span class="rst-variable-quote">'</span>: [<wbr></wbr>[<wbr></wbr>0, <wbr></wbr>1, <wbr></wbr>2, <wbr></wbr>3, <wbr></wbr>4, <wbr></wbr>5, <wbr></wbr>6, <wbr></wbr>7, <wbr></wbr>8, <wbr></wbr>9],
              <wbr></wbr>[<wbr></wbr>1, <wbr></wbr>2, <wbr></wbr>3, <wbr></wbr>4, <wbr></wbr>0, <wbr></wbr>6, <wbr></wbr>7, <wbr></wbr>8, <wbr></wbr>9, <wbr></wbr>5],
@@ -2467,7 +2487,9 @@
   <div class="docstring functionBody">
     
     <div><p>Build the ASCII-only twin of a compiled pattern.</p>
-<p>A ``str`` pattern is compiled with ``re.UNICODE`` implicitly, and that flag cannot be combined with ``re.ASCII``, so it is removed first. Every other flag, such as ``re.IGNORECASE``, is kept. A ``bytes`` pattern is ASCII-only already and is returned untouched.</p>
+<p>A <tt class="rst-docutils literal">str</tt> pattern is compiled with <tt class="rst-docutils literal">re.UNICODE</tt> implicitly, and that flag cannot be combined
+with <tt class="rst-docutils literal">re.ASCII</tt>, so it is removed first. Every other flag, such as <tt class="rst-docutils literal">re.IGNORECASE</tt>, is kept.
+A <tt class="rst-docutils literal">bytes</tt> pattern is ASCII-only already and is returned untouched.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">regexp:</span><code>Pattern</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Pattern</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div>
@@ -2482,7 +2504,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-06 19:31:23.
+    22.9.1 at 2026-10-06 19:40:47.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
