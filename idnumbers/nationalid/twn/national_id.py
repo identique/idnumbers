@@ -83,9 +83,14 @@ class NationalID:
         }
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """
-        algorithm:
+        Calculate the TWN national id number check digit.
+        Returns None when the input is not a well-formed id number.
+
+        The check digit (0-9) is (10 - S % 10) % 10, where S is the sum of the two digits of the location code
+        followed by the next eight digits (gender and serial number), weighted 1, 9, 8, 7, 6, 5, 4, 3, 2, 1.
+        A weighted sum that is a multiple of 10 therefore gives 0, not 10.
         https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%B0%91%E8%BA%AB%E5%88%86%E8%AD%89#%E6%9C%89%E6%95%88%E7%A2%BC
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
