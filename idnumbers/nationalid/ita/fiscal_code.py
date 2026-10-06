@@ -176,7 +176,7 @@ class FiscalCode:
             if ord(char) > 64:
                 if char not in FiscalCode.NUMERIC_REPLACEMENT:
                     return None
-                result += char
+                result += FiscalCode.NUMERIC_REPLACEMENT[char]
             else:
                 result += char
 

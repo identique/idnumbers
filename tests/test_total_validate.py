@@ -9,7 +9,6 @@ The few crashes that other issues still own are listed in KNOWN_RAISES, see the 
 import ast
 import glob
 import os
-import re
 from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Set, Tuple
 from unittest import TestCase, main
 
@@ -51,11 +50,7 @@ def _is_ascii_digits(length: int) -> Callable[[str], bool]:
 KNOWN_RAISES: Dict[str, KnownRaise] = {
     # Every entry is a crash that a LATER issue owns and fixes. When that fix lands, test_known_raises_still_
     # reproduce fails on purpose: the PR that fixes the crash MUST delete its entry here, so the exemption
-    # never outlives the bug. Only issues #296, #298, #304, #308 and #314 may be listed.
-    'idnumbers.nationalid.ita.fiscal_code.FiscalCode': KnownRaise(
-        296, 'omocodia letters in the date part make int() raise ValueError',
-        lambda value: re.fullmatch(r'[A-Z0-9]{16}', value) is not None,
-        ('CVORUVS1AMSSRU3D',)),
+    # never outlives the bug. Only issues #298, #304, #308 and #314 may be listed.
     'idnumbers.nationalid.kwt.civil_number.CivilNumber': KnownRaise(
         298, 'an impossible birth date makes date() raise ValueError',
         _is_ascii_digits(12),
@@ -182,7 +177,7 @@ class TestKnownRaises(TestCase):
         self.assertTrue(set(KNOWN_RAISES).issubset(names))
         for name, entry in KNOWN_RAISES.items():
             with self.subTest(id_type=name):
-                self.assertIn(entry.issue, {296, 298, 304, 308, 314})
+                self.assertIn(entry.issue, {298, 304, 308, 314})
                 self.assertTrue(entry.reason)
                 self.assertTrue(entry.examples)
 
