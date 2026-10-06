@@ -41,9 +41,10 @@ class SocialSecurityNumber:
         if not validate_regexp(id_number, SocialSecurityNumber.METADATA.regexp):
             return False
         normalized = normalize(id_number)
-        if not normalized.isdigit():
-            # the regexp separator before the last two digits is an unescaped '.', so it also lets
-            # a non-digit through (e.g. '756.1234.5678-97'): not a valid number, but not an error either
+        if not (normalized.isascii() and normalized.isdigit()):
+            # the regexp separator before the last two digits is an unescaped '.', so it also lets any
+            # character through, e.g. '-' or '²' (str.isdigit() is True for it, int() raises): such input is
+            # not a valid number, but it is not an error either
             return False
         numbers = [int(char) for char in normalized]
         return numbers[-1] == ean13_digit(numbers[:-1])

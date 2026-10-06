@@ -13,7 +13,7 @@ import re
 from typing import Any, Callable, Dict, Iterator, List, NamedTuple, Set, Tuple
 from unittest import TestCase, main
 
-from idnumbers.nationalid import BGR, BRA, CHE, CZE, EST, GRC, IRN, ISR, JPN, LKA, LVA, NZL, UKR, ZAF
+from idnumbers.nationalid import BGR, BRA, CHE, CZE, EST, GRC, IRN, ISR, JPN, LKA, LVA, NZL, SWE, UKR, ZAF
 from tests.test_validate_regexp import _discover_id_types
 
 ARABIC_INDIC_ONE = '١'
@@ -253,6 +253,11 @@ class TestIssue278Regressions(TestCase):
         # found by the fuzz: the regexp has an unescaped '.' before the last two digits
         self.assertIs(False, CHE.SocialSecurityNumber.validate('756.1234.5678-97'))  # was ValueError
         self.assertIs(False, CHE.SocialSecurityNumber.validate('756.1234.5678 97'))
+
+    def test_che_non_ascii_digit_like_separator(self):
+        # str.isdigit() is True for these, int() raises ValueError for them: a review of the first fix
+        for value in ('756.1234.5678²97', '756.1234.5678³97', '756.1234.5678①97'):
+            self.assertIs(False, CHE.SocialSecurityNumber.validate(value), value)
 
     def test_valid_ids_are_still_valid(self):
         self.assertTrue(GRC.TaxIdentityNumber.validate('094014250'))
