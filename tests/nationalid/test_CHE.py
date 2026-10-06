@@ -66,6 +66,8 @@ class TestCHEUIDValidation(TestCase):
 
     def test_check_digit_vectors(self):
         # the issue #285 vectors, validated by python-stdnum 2.2 (ch.uid.is_valid)
+        # the weighted sum of 11628171 is 132, 132 % 11 = 0, so the check digit is 0
+        # (python-stdnum: (11 - sum) % 11)
         self.assertTrue(CHE.UID.validate('CHE-116.281.710'))
         self.assertFalse(CHE.UID.validate('CHE-116.281.715'))  # wrong check digit
         self.assertFalse(CHE.UID.validate('CHE-126.281.710'))  # wrong check digit
@@ -89,10 +91,6 @@ class TestCHEUIDValidation(TestCase):
             value = f'CHE-000.000.03{check_digit}'
             self.assertFalse(CHE.UID.validate(value), value)
             self.assertFalse(CHE.BusinessID.checksum(value), value)
-
-    def test_check_digit_0_is_valid(self):
-        # the weighted sum of 11628171 is 132, 132 % 11 = 0 gives the check digit 0 (python-stdnum: (11 - sum) % 11)
-        self.assertTrue(CHE.UID.validate('CHE-116.281.710'))
 
     def test_metadata(self):
         self.assertTrue(CHE.BusinessID.METADATA.checksum)
