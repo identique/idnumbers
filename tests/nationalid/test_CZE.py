@@ -135,3 +135,28 @@ class TestCZETaxNumberValidation(TestCase):
         self.assertFalse(TIN.individual.validate('71031'))
         self.assertFalse(TIN.individual.validate('682127229'))
         self.assertFalse(TIN.individual.validate('48207927'))
+
+    def test_individual_is_validated_as_a_birth_number(self):
+        # issue #288, all four are rejected by python-stdnum 2.2 cz.dic
+        self.assertFalse(TIN.individual.validate('7103192475'))  # transposed digits of 7103192745, fails mod 11
+        self.assertFalse(TIN.individual.validate('512345679'))  # 9 digits, impossible birth date
+        self.assertFalse(TIN.individual.validate('0123456789'))  # month 23 and fails mod 11
+        self.assertFalse(TIN.individual.validate('710319/2475'))
+
+    def test_individual_birth_number_edge_cases(self):
+        self.assertTrue(TIN.individual.validate('5401031230'))  # check digit 0 for remainder 10
+        self.assertTrue(TIN.individual.validate('530101123'))  # 9 digits before 1954
+        self.assertTrue(TIN.individual.validate('710319/2745'))
+        self.assertFalse(TIN.individual.validate('540101123'))  # 9 digits are not issued from 1954
+        self.assertFalse(TIN.individual.validate('5001010003'))  # a future birth date
+
+    def test_entity_cannot_start_with_9(self):
+        # issue #288: '90208951' has a correct entity check digit, but the DIČ of an entity never starts with 9
+        self.assertFalse(TIN.entity.validate('90208951'))
+        self.assertFalse(TIN.individual.validate('90208951'))
+        self.assertTrue(TIN.entity.validate('25938002'))
+
+    def test_individual_without_birth_number_starts_with_6(self):
+        # 640903926 is the "special case" example of python-stdnum cz.dic
+        self.assertTrue(TIN.individual.validate('640903926'))
+        self.assertFalse(TIN.individual.validate('640903927'))
