@@ -11,7 +11,7 @@ import pkgutil
 import re
 from copy import copy
 from types import SimpleNamespace
-from typing import Any, Iterator, List, Tuple, Type
+from typing import Any, Dict, Iterator, List, Tuple, Type
 from unittest import TestCase, main
 
 import idnumbers.nationalid as nationalid_package
@@ -26,6 +26,34 @@ NEW_KEYS = ('country_name', 'id_type', 'official_name', 'display_format', 'examp
 SLOT_CHARS = '#LX*'
 SEPARATORS = ' -./()'
 STRIPPED = '.-/()'
+
+# The masks that the example of a class does not fit (a mask of another length, or a layout with other slot types) get
+# a synthetic sample written in their layout, so that every mask of every class is checked against the validator. The
+# samples are not real numbers: they are random strings in the layout that the validator of the class accepts, found
+# with the checksum logic of the class. The key is the module and the name of the class, as in ``class_key``.
+MASK_SAMPLES: Dict[str, Tuple[str, ...]] = {
+    'idnumbers.nationalid.arg.national_id.NationalID': ('7.817.851',),
+    'idnumbers.nationalid.aus.driver_license.DriverLicenseNumber': (
+        '64 185 993', '87277373', 'A72348', '570-226-1977', '6873952606',
+    ),
+    'idnumbers.nationalid.aus.medicare.MedicareNumber': ('2918 79473 4/3', '40192664015'),
+    'idnumbers.nationalid.aus.tax_file.TaxFileNumber': ('20451246',),
+    'idnumbers.nationalid.bel.entity_vat.EntityVAT': ('838053670',),
+    'idnumbers.nationalid.bgr.unifed_id_code.UnifiedIdCode': ('8239907086629',),
+    'idnumbers.nationalid.chl.national_id.NationalID': ('0.286.250-6',),
+    'idnumbers.nationalid.col.unique_persional_id.UniquePersonalID': ('784.303.900-1',),
+    'idnumbers.nationalid.cze.birth_number.BirthNumber': ('446218/122',),
+    'idnumbers.nationalid.cze.dic.TaxNumber': ('181231711', '2673099660'),
+    'idnumbers.nationalid.hkg.national_id.NationalID': ('XA0867842',),
+    'idnumbers.nationalid.irl.pps.PersonalPublicServiceNumber': ('6663583BB',),
+    'idnumbers.nationalid.nzl.inland_revenue_department.InlandRevenueDepartmentNumber': ('139-082-329', '084099503'),
+    'idnumbers.nationalid.nzl.passport.PassportNumber': ('N980072',),
+    'idnumbers.nationalid.nzl.health_index.NationalHealthIndexNumber': ('UJY38PB',),
+    'idnumbers.nationalid.svk.birth_number.BirthNumber': ('080710/464',),
+    'idnumbers.nationalid.swe.personal_id.PersonalIdentityNumber': ('19820908-8882',),
+    'idnumbers.nationalid.swe.coordination_number.CoordinationNumber': ('10001090-2047',),
+    'idnumbers.nationalid.zwe.national_id.NationalID': ('456022115L34',),
+}
 
 
 def slots(mask: str) -> int:
@@ -62,6 +90,18 @@ def fits(compact_id: str, mask: str) -> bool:
     """Whether a compact ID has as many characters as the mask has slots, and each character suits its slot."""
     slot_chars = [char for char in mask if char in SLOT_CHARS]
     return len(slot_chars) == len(compact_id) and all(slot_accepts(s, c) for s, c in zip(slot_chars, compact_id))
+
+
+def written_in(text: str, mask: str) -> bool:
+    """Whether a text is written in a mask: each slot has a suitable character and each separator is the same."""
+    return len(text) == len(mask) and all(
+        slot_accepts(mask_char, char) if mask_char in SLOT_CHARS else char == mask_char
+        for char, mask_char in zip(text, mask)
+    )
+
+
+def class_key(cls: Type[Any]) -> str:
+    return f'{cls.__module__}.{cls.__qualname__}'
 
 
 def layout(compact_id: str, mask: str) -> str:
@@ -180,12 +220,7 @@ class TestNewKeys(TestCase):
             self.assertIsNotNone(cls.parse(example), example)
         # The example is written in the first (preferred) layout of the masks, as docs/nationalid/METADATA.md states.
         first = metadata.masks[0]
-        self.assertEqual(len(example), len(first), f'{example} is not written in {first}')
-        for char, mask_char in zip(example, first):
-            if mask_char in SLOT_CHARS:
-                self.assertTrue(slot_accepts(mask_char, char), f'{example} is not written in {first}')
-            else:
-                self.assertEqual(char, mask_char, f'{example} is not written in {first}')
+        self.assertTrue(written_in(example, first), f'{example} is not written in {first}')
         compact_id = compact(example, metadata.masks)
         self.assertLessEqual(metadata.min_length, len(compact_id), example)
         self.assertLessEqual(len(compact_id), metadata.max_length, example)
@@ -197,6 +232,27 @@ class TestNewKeys(TestCase):
             laid = layout(compact_id, mask)
             with self.subTest(mask=mask):
                 self.assertIs(cls.validate(laid), True, f'{mask} -> {laid}')
+        # Every other mask has a sample written in its layout, which the class accepts.
+        for mask in metadata.masks:
+            if mask not in fitting:
+                with self.subTest(mask=mask):
+                    samples = [sample for sample in MASK_SAMPLES.get(class_key(cls), ()) if written_in(sample, mask)]
+                    self.assertTrue(samples, f'{mask} is not fitted by {example} and has no sample in MASK_SAMPLES')
+                    for sample in samples:
+                        self.assertIs(cls.validate(sample), True, f'{mask} -> {sample}')
+
+    def test_every_mask_sample_is_in_use(self) -> None:
+        classes = {class_key(cls): cls for _, cls in id_classes()}
+        for key, samples in MASK_SAMPLES.items():
+            with self.subTest(cls=key):
+                self.assertIn(key, classes)
+                metadata = classes[key].METADATA
+                compact_id = compact(metadata.example, metadata.masks)
+                unfitted = [mask for mask in metadata.masks if not fits(compact_id, mask)]
+                self.assertEqual(len(samples), len(set(samples)))
+                for sample in samples:
+                    self.assertIs(classes[key].validate(sample), True, sample)
+                    self.assertTrue(any(written_in(sample, mask) for mask in unfitted), f'{sample} fits no mask')
 
 
 class TestAliases(TestCase):
