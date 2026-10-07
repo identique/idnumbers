@@ -30,19 +30,25 @@ class NationalID:
     """
     Macau National ID number format, Permanent Resident Identity Card (BIRP),
     and Non-Permanent Resident Identity Card (BIRNP).
+    Accepts the compact eight-character form and the printed ten-character form
+    with paired parentheses around the final digit. This checks format only,
+    not issuance or the check digit.
+    https://photo.gcs.gov.mo/en/register
     https://en.wikipedia.org/wiki/National_identification_number#Macau
     https://en.wikipedia.org/wiki/Macau_Resident_Identity_Card
     https://validatetin.com/macao/
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'MO',
+        # Significant digits, excluding the paired parentheses in printed input.
         'min_length': 8,
         'max_length': 8,
         'parsable': True,
         'checksum': False,
+        # The lookahead pairs parentheses without changing the capture groups.
         'regexp': re.compile(r'^(?P<doc_type>[01578])'
                              r'(?P<sn>\d{6})'
-                             r'\(?(?P<extra>\d)\)?$'),
+                             r'(?=\d$|\(\d\)$)\(?(?P<extra>\d)\)?$'),
         'alias_of': None,
         'names': ['National ID Number',
                   'Permanent Resident Identity Card',

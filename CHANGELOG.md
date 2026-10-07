@@ -69,6 +69,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   unchanged; the modern checksum requirement remains out of scope in
   [#440](https://github.com/identique/idnumbers/issues/440).
 
+- **MAC** identity number ([#351](https://github.com/identique/idnumbers/issues/351)): parentheses around the final
+  digit must be paired; unbalanced forms are rejected. Compact eight-digit and printed parenthesized forms remain
+  accepted, with unchanged parse payloads and eight-significant-digit length metadata.
+
 - **NLD** BSN ([#303](https://github.com/identique/idnumbers/issues/303)): compact nine-digit numbers such as
   `123456782` are now accepted, while the existing fully dotted layout `1234.56.782` remains accepted. All-zero
   numbers remain rejected in both formats; the 11-proof and `checksum()` are unchanged.
