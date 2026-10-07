@@ -48,6 +48,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **IRN** national ID ([#295](https://github.com/identique/idnumbers/issues/295)): codes made of one repeated digit,
   `0000000000` to `9999999999`, are now rejected, including supported hyphenated formats. `checksum()` is unchanged.
 
+- **ISR** identity number ([#350](https://github.com/identique/idnumbers/issues/350)): reject `000000000` even though
+  it passes Luhn. `checksum()` is unchanged; the exact nine-digit format remains required. Shorter-number padding
+  policy is deferred to [#455](https://github.com/identique/idnumbers/issues/455).
+
 - **KAZ** BIN ([#297](https://github.com/identique/idnumbers/issues/297)): registration months outside `01`-`12` are
   now rejected, including checksum-correct `750061381659` (month `00`). `checksum()` is unchanged.
 - **LKA** NIC ([#299](https://github.com/identique/idnumbers/issues/299)): both old and new formats now reject encoded

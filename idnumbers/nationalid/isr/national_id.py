@@ -10,6 +10,10 @@ class NationalID:
     Israel Identity Number, מספר זהות, Mispar Zehut
     https://en.wikipedia.org/wiki/National_identification_number#Israel
     https://taxid.pro/docs/countries/israel
+
+    The python-stdnum 2.2 algorithm requires a positive numeric value independently of the Luhn check:
+    https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/il/idnr.py
+    This excludes the all-zero number; passing these checks does not establish that an ID was issued.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'IL',
@@ -38,7 +42,8 @@ class NationalID:
         """
         check_digit = NationalID.checksum(id_number)
         # checksum() is None unless the input is a str that matches the regexp, so [-1] is safe below
-        return check_digit is not None and str(check_digit) == id_number[-1]
+        return (check_digit is not None and id_number != '000000000'
+                and str(check_digit) == id_number[-1])
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
