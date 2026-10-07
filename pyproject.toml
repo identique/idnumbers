@@ -50,3 +50,10 @@ idnumbers = ["py.typed"]
 python_version = "3.9"
 strict = true
 files = ["idnumbers"]
+
+[tool.ruff]
+target-version = "py39"
+
+[tool.ruff.lint]
+# Ruff's default rule set, pinned so a ruff upgrade cannot change it: pycodestyle E4/E7/E9 and pyflakes.
+select = ["E4", "E7", "E9", "F"]
