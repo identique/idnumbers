@@ -55,7 +55,7 @@ files = ["idnumbers"]
 target-version = "py39"
 
 [tool.ruff.lint]
-# Ruff's default rule set, pinned so a ruff upgrade cannot change it: pycodestyle E4/E7/E9 and pyflakes.
+# Pycodestyle E4/E7/E9 and pyflakes, ruff's long-standing defaults; pinned since newer releases select more.
 select = ["E4", "E7", "E9", "F"]
 
 [tool.coverage.run]
