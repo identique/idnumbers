@@ -39,6 +39,8 @@ CI type-check job checks both discriminator and class-based consumer narrowing a
 re-exported by `idnumbers`. The helpers select only the registry primary, never validate, and leave the country
 classes unchanged. Formatting is length-only; patterns are case-sensitive whole-input layouts with ASCII letters
 and digits (not full validator regexps). In particular, Greek identity-card letters format unchanged but do not
-match the ASCII letter pattern. See the [README examples](../README.md#primary-id-formatting-and-input-masks)
-and [mask metadata](nationalid/METADATA.md). The strict external-consumer fixture
+match the ASCII letter pattern. Swedish formatting preserves its significant `+` before the last four digits,
+while the metadata masks and pattern retain literal preferred `-` layouts.
+See the [README examples](../README.md#primary-id-formatting-and-input-masks) and
+[mask metadata](nationalid/METADATA.md). The strict external-consumer fixture
 `tests/typing/format_api_consumer.py` is included in the default mypy configuration.

@@ -70,7 +70,9 @@ The primary-only [formatting helpers](../../README.md#primary-id-formatting-and-
 `format_id()` chooses the first layout with a matching slot count, without validating characters or checksums.
 `get_input_mask()` returns a frozen `InputMask` with tuple masks and a case-sensitive whole-input pattern.
 Its `#`, `L` and `X` tokens deliberately restrict digits/letters to ASCII; `*` matches Unicode non-whitespace.
-The pattern describes a UI layout, not all inputs the country validator accepts. Greece's primary example uses
+The pattern describes literal preferred UI layouts, not all inputs the country validator accepts. Swedish
+formatting preserves a significant `+` before the last four digits in both 10-digit and 12-digit forms; its
+metadata masks and input pattern still describe the preferred `-` layouts. Greece's primary example uses
 accepted Latin `AB-123456`; Greek letters remain valid and format unchanged but intentionally fail the ASCII
 `L` pattern. No transliteration is performed. Normalization does not change the country validators' handling of
 compact inputs: measured on primary examples, CHE, CHL, KOR and USA reject compact text; all formatted examples

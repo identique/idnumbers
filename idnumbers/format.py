@@ -84,6 +84,8 @@ def format_id(country: str, id_number: str) -> Optional[str]:
 
     This checks length only, not slot characters or ID validity. For a custom
     country without masks, metadata length bounds select the normalized text.
+    Sweden's single ``+`` before the last four slots replaces the preferred
+    ``-`` literal in its 10/12-slot layouts, preserving the significant sign.
     It does not change country validators' input handling.
 
     :return: display text, or ``None`` for unsupported/non-string input or an unmatched length.
@@ -97,10 +99,19 @@ def format_id(country: str, id_number: str) -> Optional[str]:
     masks = _masks(metadata)
     if not masks:
         return value if _fits_length(value, metadata) else None
+    swedish = resolve_country(country) == 'SWE'
     for mask in masks:
-        if _slots(mask) == len(value):
-            chars = iter(value)
-            return ''.join(next(chars) if char in _TOKENS else char for char in mask)
+        slot_value = value
+        display_mask = mask
+        if (swedish and mask in ('######-####', '########-####')
+                and len(value) == _slots(mask) + 1 and value.count('+') == 1):
+            separator = mask.index('-')
+            if value[separator] == '+':
+                slot_value = value[:separator] + value[separator + 1:]
+                display_mask = mask.replace('-', '+')
+        if _slots(mask) == len(slot_value):
+            chars = iter(slot_value)
+            return ''.join(next(chars) if char in _TOKENS else char for char in display_mask)
     return None
 
 
@@ -112,6 +123,8 @@ def get_input_mask(country: str) -> Optional[InputMask]:
     length-only formatting can produce text that the pattern rejects. Greek
     identity-card letters remain accepted by the validator and unchanged by
     formatting, but intentionally do not match the ASCII ``L`` pattern.
+    Sweden's significant ``+`` is preserved by formatting, but these literal
+    preferred layouts still use ``-`` and do not match the plus form.
 
     :return: frozen mask information, or ``None`` for unsupported countries or missing masks.
     """

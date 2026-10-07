@@ -441,13 +441,17 @@ assert mask is not None
 assert mask.country_code == 'TWN' and mask.masks == ('L#########',)
 assert mask.pattern.fullmatch('A123456789') is not None
 assert validate('BR', format_id('BRA', compact)).is_valid
+assert normalize_id('se', '811218+9876') == '811218+9876'
+assert format_id('SWE', '811218+9876') == '811218+9876'
+assert format_id('se', '19811218+9876') == '19811218+9876'
 print(compact, mask.masks)
 ```
 
 Normalization uppercases and removes whitespace (including U+200B–U+200D, U+2060 and U+FEFF) and `. - / ( )`.
 If no mask contains literal separators and the whitespace-free text already has an allowed slot count, those
 separators stay: Finland's century sign is significant. `+` is never removed. Sweden's minus is removed and
-reinserted by formatting; a plus remains normalized but has no matching built-in mask, so formatting returns `None`.
+reinserted by formatting. A single Swedish plus before the last four digits remains normalized and replaces the
+preferred minus literal when formatting either the 10-digit or 12-digit form.
 Normalization does **not** validate or reject unknown lengths. Formatting chooses the first mask with the right
 slot count, without checking characters or validity. Unsupported countries and non-string IDs return `None`;
 formatting also returns `None` if no layout fits. Custom countries without masks use metadata length bounds for
@@ -456,6 +460,8 @@ formatting, and `get_input_mask()` returns `None`.
 `InputMask` is frozen, with `country_code`, tuple `masks`, and compiled `pattern`. Patterns match the whole input,
 case-sensitively: `#` means `[0-9]`, `L` means `[A-Z]`, `X` means `[A-Z0-9]`, and `*` means Unicode non-whitespace.
 Other mask characters are escaped literals. This is a **UI layout pattern, not the validator's regexp**.
+It describes literal preferred layouts, not every accepted input: Sweden's masks and pattern retain `-`, even
+though formatting preserves the significant `+` in plus forms.
 Its intentional ASCII letter restriction excludes Greek identity-card letters even though the country validator
 accepts them and formatting preserves them unchanged. The metadata example uses accepted Latin `AB-123456`.
 Length-only formatting can produce characters that do not match the pattern; call `validate()` separately.

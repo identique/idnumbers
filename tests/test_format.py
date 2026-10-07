@@ -7,10 +7,11 @@ import sys
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import TestCase
+from unittest.mock import patch
 
 from idnumbers import InputMask, format_id, get_input_mask, normalize_id, register
 from idnumbers import list_supported_countries
-from idnumbers.nationalid import GRC
+from idnumbers.nationalid import GRC, SWE
 from tests.test_api import isolated_registry
 from tests.test_metadata import MASK_SAMPLES, class_key, compact, fits, layout
 
@@ -81,8 +82,41 @@ class TestNormalization(TestCase):
             self.assertEqual(normalize_id('SE', sample), sample.replace('-', ''))
             self.assertEqual(format_id('SE', sample), sample)
         self.assertEqual(normalize_id('SE', '820908+8882'), '820908+8882')
-        self.assertIsNone(format_id('SE', '820908+8882'))
+        self.assertEqual(format_id('SE', '820908+8882'), '820908+8882')
         self.assertEqual(normalize_id('BR', '111+44477735'), '111+44477735')
+
+    def test_sweden_valid_century_sign_roundtrip(self):
+        for sample in ['811218+9876', '19811218+9876']:
+            self.assertTrue(SWE.NationalID.validate(sample))
+            for country in ['se', 'SE', 'swe', 'SWE']:
+                for text in [sample, ' \t' + sample[:3] + '\u200b' + sample[3:] + '\n']:
+                    with self.subTest(country=country, text=text):
+                        self.assertEqual(normalize_id(country, text), sample)
+                        formatted = format_id(country, text)
+                        self.assertEqual(formatted, sample)
+                        self.assertTrue(SWE.NationalID.validate(formatted))
+                        self.assertEqual(normalize_id(country, formatted), normalize_id(country, text))
+                        self.assertEqual(format_id(country, formatted), formatted)
+            mask = get_input_mask('se')
+            self.assertEqual(mask.masks, ('######-####', '########-####'))
+            self.assertIsNone(mask.pattern.fullmatch(sample))
+            self.assertIsNotNone(mask.pattern.fullmatch(sample.replace('+', '-')))
+        with patch.object(SWE.NationalID, 'validate', side_effect=AssertionError('must not validate')):
+            self.assertEqual(format_id('se', '811218+9876'), '811218+9876')
+            self.assertEqual(format_id('SWE', '19811218+9876'), '19811218+9876')
+            self.assertEqual(format_id('SE', 'AAAAAA+BBBB'), 'AAAAAA+BBBB')
+
+    def test_sweden_malformed_century_signs_are_not_relocated(self):
+        for sample in ['+8112189876', '81121+89876', '8112189876+',
+                       '+198112189876', '1981121+89876', '198112189876+',
+                       '811218++9876', '19811218++9876', '811+218+9876']:
+            with self.subTest(sample=sample):
+                self.assertFalse(SWE.NationalID.validate(sample))
+                self.assertEqual(normalize_id('SE', sample), sample)
+                formatted = format_id('SE', sample)
+                self.assertFalse(SWE.NationalID.validate(formatted))
+        # Length-only formatting still leaves a misplaced sign in its slot.
+        self.assertEqual(format_id('SE', '81121+9876'), '81121+-9876')
 
     def test_no_length_or_validity_check(self):
         self.assertEqual(normalize_id('TW', ''), '')
@@ -147,6 +181,13 @@ class TestCustomMasks(TestCase):
                 self.assertIsNotNone(mask.pattern.fullmatch(text))
             for text in ['１２-A3!', '12-a3!', '12-A３!', '12-A3 ', '12-A3!\n', 'x123']:
                 self.assertIsNone(mask.pattern.match(text))
+
+    def test_sweden_sign_handling_does_not_apply_to_other_countries(self):
+        with isolated_registry():
+            self.custom(masks=('######-####', '########-####'))
+            self.assertIsNone(format_id('custom-format', '811218+9876'))
+            self.assertIsNone(format_id('QQ', '19811218+9876'))
+            self.assertEqual(format_id('QQQ', '8112189876'), '811218-9876')
 
     def test_escaped_literal(self):
         with isolated_registry():
