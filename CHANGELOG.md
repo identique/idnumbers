@@ -42,7 +42,7 @@ which IDs are accepted, so read the first two sections before you upgrade.
 - `parse()` returns `None` for IDs that are valid but have no complete birth date or no check digit to report: BEL
   numbers with an unknown month or day ([#373](https://github.com/identique/idnumbers/pull/373)), and CZE and SVK
   9-digit birth numbers ([#384](https://github.com/identique/idnumbers/pull/384)). `ParseResult` is unchanged. BEL
-  numbers with `yy` 50 to 99 now parse to 19xx, not 20xx ([#373](https://github.com/identique/idnumbers/pull/373)).
+  numbers with `yy` 50 now parse to 1950, not 2050 ([#373](https://github.com/identique/idnumbers/pull/373)).
 - Some types now accept or reject whole groups of IDs. The largest shifts are GEO (11 digits instead of 9,
   [#400](https://github.com/identique/idnumbers/pull/400)), ZWE (a new check letter,
   [#398](https://github.com/identique/idnumbers/pull/398)), CHL 7-digit RUTs
@@ -61,7 +61,7 @@ them are also tests.
     rejected).
   - The century is inferred from the check digit, as the Rijksregister instruction IT000 requires. 1900-1949 numbers
     such as `47010100190` are now valid. A future 20xx birth year is rejected.
-  - For `yy` 50 to 99, validity is unchanged, but `parse()` now returns the 19xx birth date (`50010100156` was read as
+  - For `yy` 50, validity is unchanged, but `parse()` now returns 1950 instead of 2050 (`50010100156` was read as
     2050-01-01 and is now 1950-01-01).
   - A month `00` or a day `00` (an incomplete birth date, for example `85003003376`) is now valid and `parse()` returns
     `None`. A day that does not exist in its month, and a month above 12, stay invalid.
