@@ -11,6 +11,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **BRA** CPF ([#284](https://github.com/identique/idnumbers/issues/284)): numbers made of one repeated digit,
   `000.000.000-00` to `999.999.999-99`, are now rejected. They pass the check digits, but the federal civil-registry
   system SIRC lists repeated digits as a reason for an invalid CPF. `checksum()` is unchanged.
+- **DEU** tax ID (IdNr) ([#289](https://github.com/identique/idnumbers/issues/289)): the digit rules now follow the
+  ELSTER specification. A leading `0` is rejected, which includes ELSTER test numbers such as `02476291358`. Among the
+  first ten digits, exactly one digit must appear twice or three times, so `39825979193` (four 9s) and `36794081522`
+  (no repeated digit) are rejected. A check digit equal to the two digits before it is no longer rejected, so
+  `38056471999` is now valid.
 
 ## 1.12.0 (2026-10-07)
 
