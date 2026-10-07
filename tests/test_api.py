@@ -251,7 +251,10 @@ class TestPackageExports(TestCase):
         self.assertIs(idnumbers.FailureReason, api.FailureReason)
 
     def test_all(self) -> None:
-        self.assertEqual(api.__all__, ['FailureReason', 'ValidationResult', 'validate', 'validate_many'])
+        self.assertEqual(api.__all__, [
+            'FailureReason', 'ValidationResult', 'ParseSuccess', 'ParseFailure', 'ParseIdInfoResult',
+            'validate', 'validate_many', 'parse_id_info',
+        ])
         for name in api.__all__:
             self.assertTrue(hasattr(api, name))
 

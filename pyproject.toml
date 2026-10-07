@@ -49,7 +49,7 @@ idnumbers = ["py.typed"]
 [tool.mypy]
 python_version = "3.9"
 strict = true
-files = ["idnumbers"]
+files = ["idnumbers", "tests/typing/parse_api_consumer.py"]
 
 [tool.ruff]
 target-version = "py39"
