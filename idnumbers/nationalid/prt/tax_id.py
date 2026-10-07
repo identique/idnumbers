@@ -16,12 +16,15 @@ class TaxIDNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^([12356][0-9]|45|7[012]|9[0189])\d{7}$'),
+        'regexp': re.compile(r'^([12356][0-9]|45|7[01245789]|9[0189])\d{7}$'),
         'alias_of': None,
         'names': ['Tax ID Number',
-                  'Número de identificação fiscal'
+                  'Número de identificação fiscal',
                   'NIF'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Portugal'],
+        'links': [
+            'https://en.wikipedia.org/wiki/National_identification_number#Portugal',
+            'https://www.esma.europa.eu/sites/default/files/library/esma70-1861941480-56_qas_mifir_data_reporting.pdf'
+        ],
         'deprecated': False
     })
 
