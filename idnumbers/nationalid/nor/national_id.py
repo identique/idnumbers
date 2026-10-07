@@ -21,7 +21,7 @@ class NationalID:
     """
     Norway National ID number
     https://en.wikipedia.org/wiki/National_identification_number#Norway
-    https://en.wikipedia.org/wiki/National_identity_number_(Norway)
+    https://en.wikipedia.org/wiki/National_identity_number_(Norway%29
 
     Besides the fødselsnummer proper, two variants that keep the 11-digit layout are accepted. Both add 4 to one digit
     of the date, and the control digits are computed over the digits as written
@@ -122,7 +122,7 @@ class NationalID:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
-        """algorithm: https://en.wikipedia.org/wiki/National_identity_number_(Norway)#Check_digits"""
+        """algorithm: https://en.wikipedia.org/wiki/National_identity_number_(Norway%29#Check_digits"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
         number_list = [int(char) for char in id_number]

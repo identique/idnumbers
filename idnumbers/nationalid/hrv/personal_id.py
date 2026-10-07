@@ -7,7 +7,7 @@ from ..util import validate_regexp, mn_modulus_digit, modulus_overflow_mod10
 class PersonalID:
     """
     Croatia Personal ID number format, OIB
-    https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)
+    https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia%29
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'HR',

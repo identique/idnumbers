@@ -26,7 +26,10 @@ class ParseResult(TypedDict):
 class NRIC:
     """
     Malaysia National ID number format, NRIC
-    https://en.wikipedia.org/wiki/Malaysian_identity_card#Structure_of_the_National_Registration_Identity_Card_Number_(NRIC)
+    See the `NRIC structure`_.
+
+    .. _NRIC structure: https://en.wikipedia.org/wiki/Malaysian_identity_card
+       #Structure_of_the_National_Registration_Identity_Card_Number_(NRIC%29
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'MY',

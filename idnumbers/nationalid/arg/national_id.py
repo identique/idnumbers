@@ -7,7 +7,7 @@ class NationalID:
     """
     Argentina National ID number
     https://www.protecto.ai/argentina-national-identity-number-download-sample-data-for-testing/
-    https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Argentina)
+    https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Argentina%29
 
     A DNI has 7 or 8 digits (numbers below 10 million have 7), optionally grouped with dots as ``#.###.###`` or
     ``##.###.###``, see python-stdnum ``stdnum/ar/dni.py``
