@@ -2,6 +2,13 @@
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Documentation
+
+- Document project, virtual-environment, one-off and standalone-script usage with uv in the README
+  ([#470](https://github.com/identique/idnumbers/issues/470)).
+
 ## 1.13.0 (2026-10-07)
 
 ### Validity changes
