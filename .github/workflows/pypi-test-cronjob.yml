@@ -45,7 +45,8 @@ jobs:
           cp tests/pypi_spec.py tests/uv_install_spec.py docs/examples/uv_script.py README.md "$scratch/"
           version="$VERSION"
           if [ -z "$version" ]; then
-            version=$("$environment/bin/python" -I -c 'from importlib.metadata import version; print(version("idnumbers"))')
+            version=$("$environment/bin/python" -I \
+              -c 'from importlib.metadata import version; print(version("idnumbers"))')
           fi
           cd "$scratch"
           "$environment/bin/python" -I uv_install_spec.py --version "$version" \
