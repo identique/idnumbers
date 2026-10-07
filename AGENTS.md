@@ -87,16 +87,20 @@ Never publish to PyPI without the maintainer's approval.
 Releases run through GitHub Actions and need the maintainer's approval. Don't edit `VERSION` by hand.
 
 1. **Changelog:** merge a PR that moves the release's entries in `CHANGELOG.md` under the new version.
-2. **Bump the version:** run the **Bump Release Version with PR** workflow
-   (`gh workflow run bump_version.yml -f version=<X.Y.Z>`).
+2. **Bump the version:** on GitHub, open **Actions → Bump Release Version with PR → Run workflow** and enter the new
+   version (`<X.Y.Z>`).
    - It opens a bot PR that updates `VERSION` and `docs/template/versions.js`.
    - The bot PR is created with `GITHUB_TOKEN`, so CI doesn't run on it. Check that the diff is exactly those two
      files, then merge it.
-3. **Publish:** run the **Official Release** workflow (`gh workflow run release_to_pypi.yml -f to-prod=yes`).
-   - With `to-prod=yes` it publishes to pypi.org and then deploys the API docs for the new version.
+3. **Publish:** on GitHub, open **Actions → Official Release → Run workflow** and type `yes` in the `to-prod` field.
+   - With `yes` it builds the package on GitHub, publishes it to pypi.org, and then deploys the API docs for the new
+     version.
    - Any other value publishes to test.pypi.org.
 4. **Verify:** check that `https://pypi.org/pypi/idnumbers/json` reports the new version.
 5. **GitHub release:** create release `v<X.Y.Z>` titled `Release <X.Y.Z>` on the released commit, with notes from
    the changelog, and tick **Create a discussion for this release** (see `RELEASE.md`).
 
-See `RELEASE.md` for the manual fallback.
+Both workflows can also be started from the GitHub CLI, which runs the same GitHub Action:
+`gh workflow run bump_version.yml -f version=<X.Y.Z>` and `gh workflow run release_to_pypi.yml -f to-prod=yes`.
+`RELEASE.md` also describes a manual release from a local machine (`scripts/publish.ps1`), for use only when the
+Actions release can't run.
