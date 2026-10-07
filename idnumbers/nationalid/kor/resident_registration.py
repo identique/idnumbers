@@ -53,7 +53,14 @@ class ResidentRegistration:
                   'Jumin Deungnok Beonho'],
         'links': ['https://en.wikipedia.org/wiki/Resident_registration_number',
                   'https://centers.ibs.re.kr/html/living_en/overview/arc.html'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'South Korea',
+        'id_type': 'Resident Registration Number',
+        'official_name': '주민등록번호',
+        'display_format': 'YYMMDD-GSSSSSS',
+        'example': '800101-1234567',
+        'checksum_algorithm': None,
+        'masks': ('######-#######',)
     })
 
     CITIZENSHIP_MAP = {

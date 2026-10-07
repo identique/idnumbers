@@ -20,8 +20,16 @@ class OldIdentityCard:
         'regexp': re.compile(r'^[ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]-?\d{6}$'),
         'alias_of': None,
         'names': ['Identity Card Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece'],
-        'deprecated': True
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece',
+                  'https://en.wikipedia.org/wiki/Greek_identity_card'],
+        'deprecated': True,
+        'country_name': 'Greece',
+        'id_type': 'Identity Card Number (Old)',
+        'official_name': 'Δελτίο Ταυτότητας',
+        'display_format': 'L-######',
+        'example': 'Χ-123456',
+        'checksum_algorithm': None,
+        'masks': ('L-######', 'L######')
     })
 
     @staticmethod

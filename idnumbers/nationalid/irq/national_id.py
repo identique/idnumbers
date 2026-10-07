@@ -20,7 +20,14 @@ class NationalID:
                   'البطاقة الوطنية',
                   'كارتى نيشتمانى'],
         'links': ['https://en.wikipedia.org/wiki/Iraq_National_Card'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Iraq',
+        'id_type': 'National Card Number',
+        'official_name': 'البطاقة الوطنية',
+        'display_format': '############',
+        'example': '123456789012',
+        'checksum_algorithm': None,
+        'masks': ('############',)
     })
 
     @staticmethod

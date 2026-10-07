@@ -60,7 +60,14 @@ class INSEE:
                   'Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR',
                   'https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente'],
         'deprecated': False
-
+,
+        'country_name': 'France',
+        'id_type': 'Social Security Number',
+        'official_name': "Numéro d'inscription au répertoire",
+        'display_format': 'GYYMMDDCCCOOOKK',
+        'example': '255081416802538',
+        'checksum_algorithm': 'Mod 97 (key = 97 - (the first 13 digits mod 97); 2A and 2B count as 19 and 18)',
+        'masks': ('###############', '######X########')
     })
 
     @staticmethod

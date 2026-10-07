@@ -46,7 +46,15 @@ class OldResidentRegistration(ResidentRegistration):
                   'Jumin Deungnok Beonho'],
         'links': ['https://en.wikipedia.org/wiki/Resident_registration_number',
                   'https://centers.ibs.re.kr/html/living_en/overview/arc.html'],
-        'deprecated': True
+        'deprecated': True,
+        'country_name': 'South Korea',
+        'id_type': 'Resident Registration Number (Old)',
+        'official_name': '주민등록번호',
+        'display_format': 'YYMMDD-GLLLLSC',
+        'example': '800101-1234560',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2-9, then 2-5 over the first twelve digits; '
+                              'check = 11 - remainder, reduced to its last digit)',
+        'masks': ('######-#######',)
     })
 
     MAGIC_MULTIPLIER = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5]

@@ -29,7 +29,15 @@ class NationalID:
                   'kart-e-meli',
                   'کارت ملی'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Iran',
+        'id_type': 'National ID Number',
+        'official_name': 'کارت ملی',
+        'display_format': '###-######-#',
+        'example': '001-234567-9',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 10-2; a remainder below 2 is the check digit, otherwise 11 '
+                              '- remainder)',
+        'masks': ('###-######-#', '##########')
     })
 
     MULTIPLIER = [10, 9, 8, 7, 6, 5, 4, 3, 2]

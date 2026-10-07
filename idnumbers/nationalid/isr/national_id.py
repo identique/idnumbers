@@ -32,7 +32,14 @@ class NationalID:
                   'Mispar Zehut'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Israel',
                   'https://taxid.pro/docs/countries/israel'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Israel',
+        'id_type': 'Identity Number',
+        'official_name': 'מספר זהות',
+        'display_format': '#########',
+        'example': '000000018',
+        'checksum_algorithm': 'Luhn (mod 10)',
+        'masks': ('#########',)
     })
 
     @staticmethod

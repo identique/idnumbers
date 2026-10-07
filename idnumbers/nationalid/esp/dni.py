@@ -32,7 +32,14 @@ class DNI:
                   'https://es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal',
                   'https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/tramites-y-gestiones/dni/'
                   'calculo-del-digito-de-control-del-nif-nie/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Spain',
+        'id_type': 'National Identity Document',
+        'official_name': 'Documento Nacional de Identidad',
+        'display_format': '########L',
+        'example': '12345678Z',
+        'checksum_algorithm': 'Mod 23 check letter (table TRWAGMYFPDXBNJZSQVHLCKE)',
+        'masks': ('########L',)
     })
 
     @staticmethod

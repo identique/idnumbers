@@ -49,7 +49,15 @@ class FiscalCode:
                   'Codice fiscale'],
         'links': ['https://en.wikipedia.org/wiki/Italian_fiscal_code',
                   'https://en.wikipedia.org/wiki/National_identification_number#Italy'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Italy',
+        'id_type': 'Fiscal Code',
+        'official_name': 'Codice fiscale',
+        'display_format': 'LLLLLLYYMDDXXXXC',
+        'example': 'RSSMRA85M01H501Q',
+        'checksum_algorithm': 'Mod 26 check letter (the characters at odd and at even positions are mapped through two '
+                              'tables and added)',
+        'masks': ('LLLLLLXXLXXLXXXL',)
     })
 
     MONTH_MAP = {'A': 1, 'B': 2, 'C': 3, 'D': 4,

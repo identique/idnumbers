@@ -44,7 +44,15 @@ class PersonalIdentityCode:
         'names': ['personal identity code',
                   'HETU'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Finland'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Finland',
+        'id_type': 'Personal Identity Code',
+        'official_name': 'henkilötunnus',
+        'display_format': 'DDMMYY[+-A]SSSC',
+        'example': '131052-308T',
+        'checksum_algorithm': 'Mod 31 check character (the nine digits DDMMYYSSS as a number mod 31, mapped to 0-9 and '
+                              'A-Y without G, I, O, Q)',
+        'masks': ('######*###X',)
     })
 
     DOB_BASE_MAP = {

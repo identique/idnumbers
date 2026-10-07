@@ -19,7 +19,15 @@ class TaxIdentityNumber:
         'alias_of': None,
         'names': ['Tax Identity Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Greece',
+        'id_type': 'Tax Identity Number',
+        'official_name': 'Αριθμός Φορολογικού Μητρώου',
+        'display_format': '#########',
+        'example': '123456783',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 256, 128, 64, 32, 16, 8, 4, 2; a remainder of 10 becomes '
+                              '0)',
+        'masks': ('#########',)
     })
 
     MULTIPLIER = [256, 128, 64, 32, 16, 8, 4, 2]

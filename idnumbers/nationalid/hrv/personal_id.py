@@ -24,7 +24,14 @@ class PersonalID:
         'links': ['https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)',
                   'https://www.porezna-uprava.hr/en/Pages/PIN.aspx'],
         'deprecated': False
-
+,
+        'country_name': 'Croatia',
+        'id_type': 'Personal Identification Number',
+        'official_name': 'Osobni identifikacijski broj',
+        'display_format': '###########',
+        'example': '12345678903',
+        'checksum_algorithm': 'ISO 7064 MOD 11,10',
+        'masks': ('###########',)
     })
 
     @staticmethod

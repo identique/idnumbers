@@ -31,7 +31,14 @@ class PersonalNumber:
             'https://en.wikipedia.org/wiki/National_identification_number#Georgia',
             'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Georgia-TIN.pdf',
         ],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Georgia',
+        'id_type': 'Personal Number',
+        'official_name': None,
+        'display_format': '###########',
+        'example': '12345678901',
+        'checksum_algorithm': None,
+        'masks': ('###########',)
     })
 
     @staticmethod

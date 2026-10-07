@@ -28,7 +28,15 @@ class MyNumber:
                   'My Number',
                   'マイナンバー'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Japan'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Japan',
+        'id_type': 'My Number',
+        'official_name': 'マイナンバー',
+        'display_format': '############',
+        'example': '765895492872',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2; a remainder of 0 or 1 '
+                              'gives 0, otherwise 11 - remainder)',
+        'masks': ('############',)
     })
 
     MULTIPLIER = [6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]

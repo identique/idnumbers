@@ -37,7 +37,15 @@ class PersonalPublicServiceNumber:
                   'RSI No'],
         'links': ['https://en.wikipedia.org/wiki/Personal_Public_Service_Number',
                   'https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/ie/pps.py'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Ireland',
+        'id_type': 'Personal Public Service Number',
+        'official_name': 'Uimhir Phearsanta Seirbhíse Poiblí',
+        'display_format': '#######L(L)',
+        'example': '1234567T',
+        'checksum_algorithm': 'Weighted sum mod 23 (weights 8-2, an A, B or H suffix added with weight 9) mapped to '
+                              'the check letter A-W',
+        'masks': ('#######L', '#######LL')
     })
 
     MAGIC_MULTIPLIER = [8, 7, 6, 5, 4, 3, 2, 9]

@@ -22,7 +22,14 @@ class NationalInsuranceNumber:
                   'NINO'],
         'links': ['https://en.wikipedia.org/wiki/National_Insurance_number',
                   'https://www.gov.uk/hmrc-internal-manuals/national-insurance-manual/nim39110'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'United Kingdom',
+        'id_type': 'National Insurance Number',
+        'official_name': None,
+        'display_format': 'LL######L',
+        'example': 'AB123456C',
+        'checksum_algorithm': None,
+        'masks': ('LL######L',)
     })
 
     @staticmethod

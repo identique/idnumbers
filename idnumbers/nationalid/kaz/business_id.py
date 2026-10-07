@@ -46,7 +46,15 @@ class BusinessIDNumber:
         'names': ['Business Identification Number',
                   'Бизнес-идентификационный номер'],
         'links': ['https://korgan-zan.kz/en/obtaining-iin-and-bin-in-kazakhstan/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Kazakhstan',
+        'id_type': 'Business Identification Number',
+        'official_name': 'Бизнес-идентификационный номер',
+        'display_format': 'YYMMTDSSSSSC',
+        'example': '100140000003',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 1-11; with a remainder of 10 the weights 3-11, 1, 2 are '
+                              'used and a second 10 is invalid)',
+        'masks': ('############',)
     })
 
     ENTITY_TYPE_MAP = {

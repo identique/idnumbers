@@ -40,7 +40,15 @@ class IcelandicID:
                   'kennitala',
                   'kt.'],
         'links': ['https://en.wikipedia.org/wiki/Icelandic_identification_number'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Iceland',
+        'id_type': 'Icelandic Identification Number',
+        'official_name': 'kennitala',
+        'display_format': 'DDMMYY-SSKC',
+        'example': '120174-3399',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 3, 2, 7, 6, 5, 4, 3, 2 over the first eight digits; check '
+                              '= 11 - remainder)',
+        'masks': ('######-####',)
     })
 
     WEIGHTS = [3, 2, 7, 6, 5, 4, 3, 2]
