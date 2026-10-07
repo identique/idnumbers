@@ -592,7 +592,7 @@
     "birthdate_note": "No full calendar date encoded or validated."
   },
   "idnumbers.nationalid.grc.identity_card.IdentityCard": {
-    "valid": "\u0391\u0392-123456",
+    "valid": "AB-123456",
     "length": [
       "\u0391\u039212345",
       "\u0391\u03921234561",

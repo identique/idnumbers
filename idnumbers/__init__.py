@@ -23,3 +23,8 @@ from .registry import list_supported_countries as list_supported_countries
 from .registry import register as register
 from .registry import resolve_country as resolve_country
 from .api import failure_reason as failure_reason
+
+from .format import InputMask as InputMask
+from .format import normalize_id as normalize_id
+from .format import format_id as format_id
+from .format import get_input_mask as get_input_mask

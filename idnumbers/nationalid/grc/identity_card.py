@@ -28,7 +28,7 @@ class IdentityCard:
         'id_type': 'Identity Card Number',
         'official_name': 'Δελτίο Ταυτότητας',
         'display_format': 'LL-######',
-        'example': 'ΑΒ-123456',
+        'example': 'AB-123456',
         'checksum_algorithm': None,
         'masks': ('LL-######', 'LL######')
     })
