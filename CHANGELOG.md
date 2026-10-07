@@ -32,6 +32,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   seventh digit and the two-digit year, as the CPR office's table defines it, instead of `yy > 50`. `parse()` reads
   `0101451234` as 1945-01-01 instead of 2045-01-01, and 1858-1899 births are recognised. `2902000000` (29 February 1900)
   is now rejected and `2902004000` (29 February 2000) is valid. A birth date in the future is rejected.
+- **ESP** DNI ([#349](https://github.com/identique/idnumbers/issues/349)): `validate()` and `checksum()` now accept
+  ASCII lowercase check letters and strip surrounding whitespace. Checksum arithmetic and the eight-ASCII-digit
+  plus ASCII-letter payload format are unchanged; internal whitespace and separators remain invalid.
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): birth department `96` is now accepted. It
   was used for Tunisia before 1964, like 91-95 for Algeria and Morocco, so `145089612304582` is now valid.
 - **IDN** NIK ([#293](https://github.com/identique/idnumbers/issues/293)): encoded birth days are now validated as
