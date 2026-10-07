@@ -1,26 +1,53 @@
-name: pypi test cronjob (download idnumbers from pypi)
+name: PyPI install test with uv
 
 on:
-  schedule:
-    - cron: '5 1 * * *'
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'PyPI release version (blank checks latest)'
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  pypi-install:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.14']
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
-          python-version: "3.9"
-      - name: Install dependencies
+          python-version: ${{ matrix.python-version }}
+      # https://docs.astral.sh/uv/guides/integration/github/
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: '0.12.1'
+          enable-cache: false
+      - name: Install and check the PyPI package outside the checkout
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version }}
         run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install idnumbers
-      - name: Test with python pypi_spec
-        run: |
-          python -m tests.pypi_spec
+          set -euo pipefail
+          environment="$RUNNER_TEMP/idnumbers-pypi-env"
+          scratch=$(mktemp -d "$RUNNER_TEMP/idnumbers-pypi-smoke.XXXXXX")
+          uv venv --python "${{ matrix.python-version }}" "$environment"
+          requirement='idnumbers'
+          if [ -n "$VERSION" ]; then
+            requirement="idnumbers==$VERSION"
+          fi
+          uv pip install --python "$environment/bin/python" --index-url https://pypi.org/simple "$requirement"
+          cp tests/pypi_spec.py tests/uv_install_spec.py docs/examples/uv_script.py README.md "$scratch/"
+          version="$VERSION"
+          if [ -z "$version" ]; then
+            version=$("$environment/bin/python" -I -c 'from importlib.metadata import version; print(version("idnumbers"))')
+          fi
+          cd "$scratch"
+          "$environment/bin/python" -I uv_install_spec.py --version "$version" \
+            --readme README.md --example uv_script.py
+          "$environment/bin/python" -I pypi_spec.py
