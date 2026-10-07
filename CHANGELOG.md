@@ -59,6 +59,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   prefixes now require two ASCII letters, preserving lowercase acceptance and the trailing-digit blacklist. IRD
   numbers must be within the current inclusive 10,000,000-200,000,000 range and pass the existing checksum.
 
+- **SWE** ([#311](https://github.com/identique/idnumbers/issues/311)): personnummer now accepts 10- and 12-digit
+  compact forms and optional `-`/`+` separators; explicit four-digit years determine the century. Only the two
+  century digits are excluded from the checksum. Add separate `CoordinationNumber` support for samordningsnummer,
+  with encoded birth day +60 and decoded dates in `parse()`. `NationalID` remains personnummer-only; existing
+  10-digit `-`/`+` decoding and checksum-calculator behavior are unchanged.
+
 ### Other fixes
 
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the

@@ -123,7 +123,7 @@ class TestEveryIDTypeRejectsMalformedInput(TestCase):
     def test_id_types_are_discovered(self):
         names = [name for name, _ in _discover_id_types()]
         # adding or removing an ID type must update this number
-        self.assertEqual(103, len(names))
+        self.assertEqual(104, len(names))
         self.assertIn('idnumbers.nationalid.chn.resident_id.ResidentID', names)
         self.assertIn('idnumbers.nationalid.yugoslavia.UniqueMasterCitizenNumber', names)
 
