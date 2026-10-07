@@ -6,7 +6,7 @@
 
   <head>
     
-    <title>idnumbers.nationalid.irq.national_id.NationalID</title>
+    <title>idnumbers.nationalid.swe.coordination_number.CoordinationNumber</title>
     <meta name="generator" content="pydoctor 22.9.1"> 
         
     </meta>
@@ -191,7 +191,7 @@
 
       <div class="thingTitle">
         <span>Class</span>
-        <code class="thisobject"><a href="idnumbers.nationalid.irq.national_id.NationalID.html" class="internal-link" title="This class"><wbr></wbr>National<wbr></wbr>ID</a></code> 
+        <code class="thisobject"><a href="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.html" class="internal-link" title="This class"><wbr></wbr>Coordination<wbr></wbr>Number</a></code> 
       </div>
       
       <div>
@@ -212,7 +212,27 @@
         
 
         
-            <div class="itemName"><code><a href="#validate" class="internal-link" title="idnumbers.nationalid.irq.national_id.NationalID.validate">validate</a></code>
+            <div class="itemName"><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.checksum">checksum</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#parse" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.parse">parse</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#validate" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.validate">validate</a></code>
             </div>
         
 
@@ -231,7 +251,7 @@
         
 
         
-            <div class="itemName"><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.irq.national_id.NationalID.METADATA">METADATA</a></code>
+            <div class="itemName"><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.METADATA">METADATA</a></code>
             </div>
         
 
@@ -246,7 +266,7 @@
 
       <div class="thingTitle">
         <span>Module</span>
-        <code><a href="idnumbers.nationalid.irq.national_id.html" class="internal-link" title="The parent of this class">national<wbr></wbr>_id</a></code> 
+        <code><a href="idnumbers.nationalid.swe.coordination_number.html" class="internal-link" title="The parent of this class">coordination<wbr></wbr>_number</a></code> 
       </div>
       
       <div>
@@ -264,7 +284,7 @@
         
 
         
-            <div class="itemName"><code><a href="idnumbers.nationalid.irq.national_id.NationalID.html" class="internal-link" title="idnumbers.nationalid.irq.national_id.NationalID"><wbr></wbr>National<wbr></wbr>ID</a></code>
+            <div class="itemName"><code><a href="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.html" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber"><wbr></wbr>Coordination<wbr></wbr>Number</a></code>
             </div>
         
 
@@ -302,7 +322,7 @@
         
 
         <div class="page-header">
-          <h1 class="class"><code><code><a href="index.html" class="internal-link">idnumbers</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.html" class="internal-link" title="idnumbers.nationalid">nationalid</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.irq.html" class="internal-link" title="idnumbers.nationalid.irq">irq</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.irq.national_id.html" class="internal-link" title="idnumbers.nationalid.irq.national_id">national_id</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.irq.national_id.NationalID.html" class="internal-link" title="idnumbers.nationalid.irq.national_id.NationalID">NationalID</a></code></code></h1>
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">idnumbers</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.html" class="internal-link" title="idnumbers.nationalid">nationalid</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.swe.html" class="internal-link" title="idnumbers.nationalid.swe">swe</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.swe.coordination_number.html" class="internal-link" title="idnumbers.nationalid.swe.coordination_number">coordination_number</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.html" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber">CoordinationNumber</a></code></code></h1>
           <div id="showPrivate">
             <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
           </div>
@@ -313,29 +333,45 @@
         </div>
 
         <div class="extrasDocstring">
-          <p><code><span class="py-keyword">class</span> <span class="py-defname">NationalID</span>:</code></p>
-          <p><a href="classIndex.html#idnumbers.nationalid.irq.national_id.NationalID">View In Hierarchy</a></p>
+          <p><code><span class="py-keyword">class</span> <span class="py-defname">CoordinationNumber</span>:</code></p>
+          <p><a href="classIndex.html#idnumbers.nationalid.swe.coordination_number.CoordinationNumber">View In Hierarchy</a></p>
         </div>
 
         <div class="moduleDocstring">
-          <div><p>Iraq National Card number. not enough docs to research.
-<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Iraq_National_Card" target="_top">https://en.wikipedia.org/wiki/Iraq_National_Card</a></p>
+          <div><p>Sweden coordination number (samordningsnummer).</p>
+<p>Uses the same serial, gender and checksum rules as personnummer, with 60 added to the
+birth day. The checksum uses the encoded day; parsing returns the decoded calendar date.
+Accepts 10 or 12 digits and an optional <tt class="rst-docutils literal">-</tt> or <tt class="rst-docutils literal">+</tt> before the last four digits.
+Explicit years determine the century; two-digit years follow personnummer decoding.
+Validation checks syntax, calendar date and checksum, not issuance or active identity status.</p>
+<p><a class="rst-reference rst-external" href="https://www.skatteverket.se/offentligaaktorer/folkbokforing/samordningsnummerforoffentligaaktorer.4.46ae6b26141980f1e2d3643.html" target="_top">Skatteverket guidance</a> describes the encoded day and serial/checksum rules.
+The twelve-digit system format is also documented in the API specification linked in metadata.</p>
 </div>
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id215">
+          <table class="children sortable" id="id374">
   
   
   <tr class="staticmethod">
     
     <td>Static Method</td>
-    <td><code><a href="#validate" class="internal-link" title="idnumbers.nationalid.irq.national_id.NationalID.validate">validate</a></code></td>
-    <td>Validate</td>
+    <td><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.checksum">checksum</a></code></td>
+    <td>Calculate Luhn from the encoded last ten digits, without checking the calendar date.</td>
+  </tr><tr class="staticmethod">
+    
+    <td>Static Method</td>
+    <td><code><a href="#parse" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.parse">parse</a></code></td>
+    <td>Parse the decoded birth date, gender and supplied checksum digit.</td>
+  </tr><tr class="staticmethod">
+    
+    <td>Static Method</td>
+    <td><code><a href="#validate" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.validate">validate</a></code></td>
+    <td>Validate the coordination number's syntax, calendar date and checksum.</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
-    <td><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.irq.national_id.NationalID.METADATA">METADATA</a></code></td>
+    <td><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.METADATA">METADATA</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
@@ -348,7 +384,55 @@
           <div class="basestaticmethod">
   
   
-  <a name="idnumbers.nationalid.irq.national_id.NationalID.validate">
+  <a name="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.checksum">
+    
+  </a>
+  <a name="checksum">
+    
+  </a>
+  <div class="functionHeader">
+    @staticmethod<br />
+    <span class="py-keyword">def</span> <span class="py-defname">checksum</span>(id_number):
+    
+    <a class="headerLink" href="#checksum" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.checksum">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Calculate Luhn from the encoded last ten digits, without checking the calendar date.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basestaticmethod">
+  
+  
+  <a name="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.parse">
+    
+  </a>
+  <a name="parse">
+    
+  </a>
+  <div class="functionHeader">
+    @staticmethod<br />
+    <span class="py-keyword">def</span> <span class="py-defname">parse</span>(id_number):
+    
+    <a class="headerLink" href="#parse" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.parse">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Parse the decoded birth date, gender and supplied checksum digit.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.nationalid.swe.personal_id.ParseResult.html" class="internal-link" title="idnumbers.nationalid.swe.personal_id.ParseResult">ParseResult</a>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basestaticmethod">
+  
+  
+  <a name="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.validate">
     
   </a>
   <a name="validate">
@@ -358,7 +442,7 @@
     @staticmethod<br />
     <span class="py-keyword">def</span> <span class="py-defname">validate</span>(id_number):
     
-    <a class="headerLink" href="#validate" title="idnumbers.nationalid.irq.national_id.NationalID.validate">
+    <a class="headerLink" href="#validate" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.validate">
       
       
       ¶
@@ -366,13 +450,13 @@
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Validate</p>
+    <div><p>Validate the coordination number's syntax, calendar date and checksum.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="baseconstant">
   
   
-  <a name="idnumbers.nationalid.irq.national_id.NationalID.METADATA">
+  <a name="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.METADATA">
     
   </a>
   <a name="METADATA">
@@ -382,7 +466,7 @@
     
     <span class="py-defname">METADATA</span> =
     
-    <a class="headerLink" href="#METADATA" title="idnumbers.nationalid.irq.national_id.NationalID.METADATA">
+    <a class="headerLink" href="#METADATA" title="idnumbers.nationalid.swe.coordination_number.CoordinationNumber.METADATA">
       
       
       ¶
@@ -391,13 +475,13 @@
   <div class="functionBody">
     
     <div><p class="undocumented">Undocumented</p></div>
-    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>SimpleNamespace(<wbr></wbr>**{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">iso3166_alpha2</span><span class="rst-variable-quote">'</span>: <span class="rst-variable-quote">'</span><span class="rst-variable-string">IQ</span><span class="rst-variable-quote">'</span>,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">min_length</span><span class="rst-variable-quote">'</span>: 12,
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>SimpleNamespace(<wbr></wbr>**{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">iso3166_alpha2</span><span class="rst-variable-quote">'</span>: <span class="rst-variable-quote">'</span><span class="rst-variable-string">SE</span><span class="rst-variable-quote">'</span>,
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">min_length</span><span class="rst-variable-quote">'</span>: 10,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">max_length</span><span class="rst-variable-quote">'</span>: 12,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">parsable</span><span class="rst-variable-quote">'</span>: False,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">checksum</span><span class="rst-variable-quote">'</span>: False,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^\d<span class="rst-re-op">{12}</span>$<span class="rst-variable-quote">'</span>),
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">alias_of</span><span class="rst-variable-quote">'</span>: None,
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">parsable</span><span class="rst-variable-quote">'</span>: True,
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">checksum</span><span class="rst-variable-quote">'</span>: True,
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">century</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-op">?</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">yy</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">{2}</span><span class="rst-re-group"></span><span class="rst-variable-linewrap">↵</span>
+<span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">mm</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">dd</span><span class="rst-re-group">&gt;</span>6<span class="rst-re-group">[</span>1<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">|</span><span class="rst-re-group">[</span>78<span class="rst-re-group">]</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">|</span>9<span class="rst-re-group">[</span>01<span class="rst-re-group">]</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">sep</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>\+-<span class="rst-re-group">]</span><span class="rst-re-group">)</span><span class="rst-re-op">?</span><span class="rst-re-group">(?!</span>000<span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">birth_n</span><span class="rst-variable-linewrap">↵</span>
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
 </div>

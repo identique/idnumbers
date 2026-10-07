@@ -239,6 +239,26 @@
             </div>
         
 
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_checksum" class="internal-link" title="idnumbers.nationalid.swe.personal_id._checksum">_checksum</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_parse" class="internal-link" title="idnumbers.nationalid.swe.personal_id._parse">_parse</a></code>
+            </div>
+        
+
     </li>
 </ul> 
 
@@ -265,7 +285,17 @@
         <div class="childrenKindTitle">Modules</div>
         <ul>
     
-    <li class=" thisobject">
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.swe.coordination_number.html" class="internal-link" title="idnumbers.nationalid.swe.coordination_number">coordination<wbr></wbr>_number</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
         
         
         
@@ -332,7 +362,7 @@
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id373">
+          <table class="children sortable" id="id375">
   
   
   <tr class="class">
@@ -344,12 +374,22 @@
     
     <td>Class</td>
     <td><code><a href="idnumbers.nationalid.swe.personal_id.PersonalIdentityNumber.html" class="internal-link" title="idnumbers.nationalid.swe.personal_id.PersonalIdentityNumber"><wbr></wbr>Personal<wbr></wbr>Identity<wbr></wbr>Number</a></code></td>
-    <td>Sweden Personal Identity number <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/National_identification_number#Sweden" target="_top">https://en.wikipedia.org/wiki/National_identification_number#Sweden</a> <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden" target="_top">https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden</a>) <a class="rst-reference rst-external" href="https://swedish.identityinfo.net/" target="_top">https://swedish.identityinfo.net/</a> <a class="rst-reference rst-external" href="https://personnummer.dev/" target="_top">https://personnummer.dev/</a>...</td>
+    <td>Sweden Personal Identity number.</td>
   </tr><tr class="function">
     
     <td>Function</td>
     <td><code><a href="#normalize" class="internal-link" title="idnumbers.nationalid.swe.personal_id.normalize">normalize</a></code></td>
     <td>strip out useless characters/whitespaces</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_checksum" class="internal-link" title="idnumbers.nationalid.swe.personal_id._checksum">_checksum</a></code></td>
+    <td>Calculate from the encoded YYMMDD and serial, excluding any century digits.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_parse" class="internal-link" title="idnumbers.nationalid.swe.personal_id._parse">_parse</a></code></td>
+    <td>Share format, century and gender decoding between Sweden's two number types.</td>
   </tr>
 </table>
           
@@ -382,6 +422,54 @@
     <div><p>strip out useless characters/whitespaces</p>
 </div>
   </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.nationalid.swe.personal_id._checksum">
+    
+  </a>
+  <a name="_checksum">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_checksum</span>(id_number, regexp):
+    
+    <a class="headerLink" href="#_checksum" title="idnumbers.nationalid.swe.personal_id._checksum">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Calculate from the encoded YYMMDD and serial, excluding any century digits.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">regexp:</span><code>Pattern[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>int]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.nationalid.swe.personal_id._parse">
+    
+  </a>
+  <a name="_parse">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_parse</span>(id_number, regexp, day_offset=0):
+    
+    <a class="headerLink" href="#_parse" title="idnumbers.nationalid.swe.personal_id._parse">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Share format, century and gender decoding between Sweden's two number types.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">regexp:</span><code>Pattern[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">day<wbr></wbr>_offset:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.nationalid.swe.personal_id.ParseResult.html" class="internal-link" title="idnumbers.nationalid.swe.personal_id.ParseResult">ParseResult</a>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
 </div>
         </div>
       
@@ -394,7 +482,7 @@
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-07 05:41:05.
+    22.9.1 at 2026-10-07 06:02:16.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

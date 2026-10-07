@@ -314,6 +314,26 @@
             </div>
         
 
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.swe.personal_id.html#_checksum" class="internal-link" title="idnumbers.nationalid.swe.personal_id._checksum">_checksum</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.swe.personal_id.html#_parse" class="internal-link" title="idnumbers.nationalid.swe.personal_id._parse">_parse</a></code>
+            </div>
+        
+
     </li>
 </ul> 
 
@@ -361,7 +381,14 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>Sweden Personal Identity number
+          <div><p>Sweden Personal Identity number.</p>
+<p>Accepts 10 or 12 digits, with an optional <tt class="rst-docutils literal">-</tt> or <tt class="rst-docutils literal">+</tt> before the last four digits.
+An explicit four-digit year determines the century regardless of the separator.
+For a two-digit year, <tt class="rst-docutils literal">+</tt> denotes the older century; compact input is treated as <tt class="rst-docutils literal">-</tt>.
+Validation checks syntax, calendar date and checksum, not issuance or identity status.</p>
+<p>Skatteverket describes personnummer and the twelve-digit database format:
+<a class="rst-reference rst-external" href="https://www.skatteverket.se/privat/folkbokforing/personnummer.4.3810a01c150939e893f18c29.html" target="_top">https://www.skatteverket.se/privat/folkbokforing/personnummer.4.3810a01c150939e893f18c29.html</a>
+<a class="rst-reference rst-external" href="https://www4.skatteverket.se/rattsligvagledning/edition/2026.12/330242.html" target="_top">https://www4.skatteverket.se/rattsligvagledning/edition/2026.12/330242.html</a>
 <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/National_identification_number#Sweden" target="_top">https://en.wikipedia.org/wiki/National_identification_number#Sweden</a>
 <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden" target="_top">https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden</a>)
 <a class="rst-reference rst-external" href="https://swedish.identityinfo.net/" target="_top">https://swedish.identityinfo.net/</a>
@@ -370,7 +397,7 @@
         </div>
 
         <div id="splitTables">
-          <table class="children sortable" id="id375">
+          <table class="children sortable" id="id377">
   
   
   <tr class="staticmethod">
@@ -497,11 +524,11 @@ Multiplier start by 2</p>
     <div><p class="undocumented">Undocumented</p></div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>SimpleNamespace(<wbr></wbr>**{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">iso3166_alpha2</span><span class="rst-variable-quote">'</span>: <span class="rst-variable-quote">'</span><span class="rst-variable-string">SE</span><span class="rst-variable-quote">'</span>,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">min_length</span><span class="rst-variable-quote">'</span>: 10,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">max_length</span><span class="rst-variable-quote">'</span>: 10,
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">max_length</span><span class="rst-variable-quote">'</span>: 12,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">parsable</span><span class="rst-variable-quote">'</span>: True,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">checksum</span><span class="rst-variable-quote">'</span>: True,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">yy</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">mm</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">dd</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2</span><span class="rst-variable-linewrap">↵</span>
-<span class="rst-re-op">}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">sep</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>\+-<span class="rst-re-group">]</span><span class="rst-re-group">)</span><span class="rst-re-group">(?!</span>000<span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">birth_number</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{3}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">checksum</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-group">)</span>$<span class="rst-variable-quote">'</span>),
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">century</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-op">?</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">yy</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">{2}</span><span class="rst-re-group"></span><span class="rst-variable-linewrap">↵</span>
+<span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">mm</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">dd</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">sep</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>\+-<span class="rst-re-group">]</span><span class="rst-re-group">)</span><span class="rst-re-op">?</span><span class="rst-re-group">(?!</span>000<span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">birth_number</span><span class="rst-re-group">&gt;</span><span class="rst-re-group">[</span>0<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span><span class="rst-re-op">{3}</span><span class="rst-re-group"></span><span class="rst-variable-linewrap">↵</span>
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
 </div>
@@ -516,7 +543,7 @@ Multiplier start by 2</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-07 05:41:05.
+    22.9.1 at 2026-10-07 06:02:16.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
