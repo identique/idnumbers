@@ -17,6 +17,17 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   ([#325](https://github.com/identique/idnumbers/issues/325)).
 - CI type-checks the package with strict mypy for Python 3.9 and checks the built distributions with
   `twine check --strict` ([#325](https://github.com/identique/idnumbers/issues/325)).
+- Re-export the ID classes explicitly (`import X as X`) from the country modules such as `AUS`, so strict type
+  checkers (mypy `--strict`, which disallows implicit re-exports) accept
+  `from idnumbers.nationalid.AUS import MedicareNumber` and `AUS.MedicareNumber`; nothing changes at runtime
+  ([#326](https://github.com/identique/idnumbers/issues/326)).
+
+### Internal, docs and CI
+
+- CI lints with ruff, enforces a 97% line-and-branch coverage floor, runs the README Python examples and
+  informational benchmarks, keeps GitHub Actions updated with Dependabot, and reports a single `ci-summary` result
+  ([#326](https://github.com/identique/idnumbers/issues/326)). Formatting with `ruff format` and a coverage badge
+  await a decision in [#485](https://github.com/identique/idnumbers/issues/485).
 
 ## 1.14.0 (2026-10-07)
 
