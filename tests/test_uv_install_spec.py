@@ -75,6 +75,10 @@ class TestUVInstallSpec(TestCase):
                     patch.object(spec.sysconfig, 'get_path', return_value=str(site)), \
                     patch.object(spec.importlib.metadata, 'distribution', return_value=distribution), \
                     patch.object(idnumbers, '__file__', str(installed)):
+                with self.assertRaisesRegex(RuntimeError, 'py.typed'):
+                    spec.check_install('1.13.0')
+                (site / 'idnumbers').mkdir(parents=True)
+                (site / 'idnumbers/py.typed').touch()
                 self.assertEqual(spec.check_install('1.13.0'), installed.resolve())
                 with self.assertRaises(RuntimeError):
                     spec.check_install('0.0.0')
