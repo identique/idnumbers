@@ -11,7 +11,7 @@ which IDs are accepted, so read the first two sections before you upgrade.
 ### Behaviour changes
 
 - `validate()` never raises any more. It returns `False` for non-`str` input, for empty input and for malformed input,
-  and `parse()` returns `None` for the same inputs. Before, several types raised `AssertionError`, `ValueError`,
+  and `parse()` returns `None` for the same inputs. Before, most types raised `AssertionError`, `ValueError`,
   `IndexError` or `TypeError` ([#371](https://github.com/identique/idnumbers/pull/371)).
 - An integer is no longer converted to a string. ALB, ARE, BHR, CHN, EST, ITA, KWT, LKA (old), LTU, POL and VNM used to
   turn non-`str` input into text with `repr()`, so `LTU.NationalID.validate(37605030299)` was `True`. It is now `False`,
@@ -41,7 +41,8 @@ which IDs are accepted, so read the first two sections before you upgrade.
   ([#377](https://github.com/identique/idnumbers/pull/377)).
 - `parse()` returns `None` for IDs that are valid but have no complete birth date or no check digit to report: BEL
   numbers with an unknown month or day ([#373](https://github.com/identique/idnumbers/pull/373)), and CZE and SVK
-  9-digit birth numbers ([#384](https://github.com/identique/idnumbers/pull/384)). `ParseResult` is unchanged.
+  9-digit birth numbers ([#384](https://github.com/identique/idnumbers/pull/384)). `ParseResult` is unchanged. BEL
+  numbers with `yy` 50 to 99 now parse to 19xx, not 20xx ([#373](https://github.com/identique/idnumbers/pull/373)).
 - Some types now accept or reject whole groups of IDs. The largest shifts are GEO (11 digits instead of 9,
   [#400](https://github.com/identique/idnumbers/pull/400)), ZWE (a new check letter,
   [#398](https://github.com/identique/idnumbers/pull/398)), CHL 7-digit RUTs
@@ -51,15 +52,17 @@ which IDs are accepted, so read the first two sections before you upgrade.
 
 ### Validity changes
 
-Each bullet says what is accepted now and what is rejected now. Vectors are taken from the pull requests, and each one
-is also a test.
+Each bullet says what is accepted now and what is rejected now. Vectors are taken from the pull requests, and most of
+them are also tests.
 
 - **BEL** national registration number ([#373](https://github.com/identique/idnumbers/pull/373)):
   - The post-2000 check digit was computed with an operator-precedence bug. Real numbers born from 2000, such as
     `01010100126`, were rejected, and any `yy` below 50 with check number `29` was accepted (`00010100129`, now
     rejected).
   - The century is inferred from the check digit, as the Rijksregister instruction IT000 requires. 1900-1949 numbers
-    such as `47010100190` and `yy` 50 are now valid. A future 20xx birth year is rejected.
+    such as `47010100190` are now valid. A future 20xx birth year is rejected.
+  - For `yy` 50 to 99, validity is unchanged, but `parse()` now returns the 19xx birth date (`50010100156` was read as
+    2050-01-01 and is now 1950-01-01).
   - A month `00` or a day `00` (an incomplete birth date, for example `85003003376`) is now valid and `parse()` returns
     `None`. A day that does not exist in its month, and a month above 12, stay invalid.
 - **BEL** entity VAT ([#373](https://github.com/identique/idnumbers/pull/373)): a 10-digit number must start with `0` or
@@ -126,7 +129,8 @@ is also a test.
 ### New ID types
 
 - **Cyprus** tax identification number, `CYP.TaxNumber` (also `CYP.NationalID` and `CYP.TIN`)
-  ([#261](https://github.com/identique/idnumbers/pull/261)).
+  ([#261](https://github.com/identique/idnumbers/pull/261),
+  [#265](https://github.com/identique/idnumbers/pull/265)).
 - **Czech Republic** tax number, DIČ, `CZE.TaxNumber` (also `CZE.TIN`)
   ([#266](https://github.com/identique/idnumbers/pull/266)). It follows python-stdnum: 8-digit entity numbers must not
   start with 9, 9-digit numbers starting with 6 have a special check digit, and every other 9 or 10-digit number is
@@ -141,8 +145,6 @@ is also a test.
   ([#371](https://github.com/identique/idnumbers/pull/371)).
 - GRC, ISR and LVA no longer index `id_number[-1]` for an empty string, and NZL NHI no longer has an empty alternative
   in its pattern ([#371](https://github.com/identique/idnumbers/pull/371)).
-- The weight table of the new Cyprus TIN was missing the digit 8
-  ([#265](https://github.com/identique/idnumbers/pull/265)).
 - `idnumbers.nationalid.util.match_regexp()` is new. `validate_regexp()` and every `parse()` that reads the pattern now
   use it, so they match the whole input ([#369](https://github.com/identique/idnumbers/pull/369)).
 
@@ -153,7 +155,7 @@ is also a test.
 - A tool, `python3 -m tools.collect_regexp`, dumps the regular expressions of all ID types, and the aliases of MKD, MNE
   and SRB `JMBG`, PAK `CNIC`, SMR `SSI` and VEN `RIF` now use `alias_of`
   ([#269](https://github.com/identique/idnumbers/pull/269)).
-- The API docs are built with pydoctor and the reStructuredText docformat, and the `match_regexp` docstring is valid
+- The API docs are now built with the reStructuredText docformat, and the `match_regexp` docstring renders correctly
   ([#380](https://github.com/identique/idnumbers/pull/380), [#408](https://github.com/identique/idnumbers/pull/408)).
 - The README gains an "Input handling" section ([#371](https://github.com/identique/idnumbers/pull/371),
   [#403](https://github.com/identique/idnumbers/pull/403)). New tests sweep every ID type to check that `validate()`
