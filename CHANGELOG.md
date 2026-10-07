@@ -25,6 +25,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **IDN** NIK ([#293](https://github.com/identique/idnumbers/issues/293)): encoded birth days are now validated as
   `01`-`31` for men and `41`-`71` for women. Impossible dates are rejected, while 29 February with year `00` is
   accepted because it exists in 2000 even though it does not exist in 1900; NIK does not identify the century.
+- **IRL** PPS number ([#294](https://github.com/identique/idnumbers/issues/294)): the optional second suffix character
+  is now limited to `A`, `B`, `H`, `W` or a space; other letters are rejected even when the check character is correct.
+  The whitespace restriction was already fixed in [#369](https://github.com/identique/idnumbers/issues/369).
+  Historical `T`/`X` suffix handling remains out of scope and is tracked in
+  [#433](https://github.com/identique/idnumbers/issues/433).
 
 ### Other fixes
 
