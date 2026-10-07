@@ -44,6 +44,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `50002290013` (29 February 2000) and rejects `70002290015` (29 February 2100). `checksum()` is unchanged.
   First-digit policy for `0` and `9` remains out of scope in [#337](https://github.com/identique/idnumbers/issues/337).
 
+- **LVA** personal code ([#301](https://github.com/identique/idnumbers/issues/301)): legacy codes now require a valid
+  calendar date and century digit `0`/`1`/`2`; unsupported prefixes `00` and `40`-`99` are rejected even with a correct
+  check digit. Date-free modern prefixes `32`-`39` remain accepted per current primary sources. `checksum()` is
+  unchanged; the modern checksum requirement remains out of scope in
+  [#440](https://github.com/identique/idnumbers/issues/440).
+
 ### Other fixes
 
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
