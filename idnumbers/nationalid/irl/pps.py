@@ -11,7 +11,14 @@ def normalize(id_number: str) -> str:
 class PersonalPublicServiceNumber:
     """
     Ireland Personal Public Service Number
-    https://en.wikipedia.org/wiki/Personal_Public_Service_Number
+
+    The current check-character algorithm follows python-stdnum 2.2:
+    https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/ie/pps.py
+    The algorithm recognizes optional suffixes A, B, H, W and space. A, B and
+    H contribute to the check-character calculation; W and space are ignored.
+    This describes validation behavior and does not claim H is issued to
+    individuals. Historical T/X suffix handling is not implemented here and
+    is tracked separately: https://github.com/identique/idnumbers/issues/433
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'IE',
@@ -19,8 +26,8 @@ class PersonalPublicServiceNumber:
         'max_length': 10,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{7}[A-W][A-W ]?$|'
-                             r'^\d{7}[A-W]/[A-W ]?$'),
+        'regexp': re.compile(r'^\d{7}[A-W][ABHW ]?$|'
+                             r'^\d{7}[A-W]/[ABHW ]?$'),
         'alias_of': None,
         'names': ['Personal Public Service Number',
                   'PPS',
@@ -29,7 +36,7 @@ class PersonalPublicServiceNumber:
                   'Revenue and Social Insurance Number',
                   'RSI No'],
         'links': ['https://en.wikipedia.org/wiki/Personal_Public_Service_Number',
-                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ie/pps.py'],
+                  'https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/ie/pps.py'],
         'deprecated': False
     })
 
