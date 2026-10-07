@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from typing import Optional, Union, TypedDict, cast
+from typing import Optional, TypedDict, cast
 from types import SimpleNamespace
 
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp

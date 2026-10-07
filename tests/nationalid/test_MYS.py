@@ -1,7 +1,7 @@
 from unittest import TestCase, main
 
 from idnumbers.nationalid import MYS
-from idnumbers.nationalid.constant import Gender, Citizenship
+from idnumbers.nationalid.constant import Citizenship
 
 
 class TestMYSValidation(TestCase):

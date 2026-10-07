@@ -1,1 +1,1 @@
-from .pak.national_id import NationalID
+from .pak.national_id import NationalID as NationalID

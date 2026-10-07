@@ -1,4 +1,4 @@
-from .pol.pesel import PESEL
+from .pol.pesel import PESEL as PESEL
 from .util import alias_of
 
 NationalID = alias_of(PESEL)

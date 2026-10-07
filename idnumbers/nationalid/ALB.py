@@ -1,4 +1,4 @@
-from .alb.identity_number import IdentityNumber
+from .alb.identity_number import IdentityNumber as IdentityNumber
 from .util import alias_of
 
 NationalID = alias_of(IdentityNumber)

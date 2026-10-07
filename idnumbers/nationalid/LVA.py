@@ -1,6 +1,6 @@
 from typing import Union
-from .lva.personal_code import PersonalCode
-from .lva.old_personal_code import OldPersonalCode
+from .lva.personal_code import PersonalCode as PersonalCode
+from .lva.old_personal_code import OldPersonalCode as OldPersonalCode
 from .util import alias_of
 
 

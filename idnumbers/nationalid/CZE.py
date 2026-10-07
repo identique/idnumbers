@@ -1,6 +1,6 @@
 from types import SimpleNamespace
-from .cze.birth_number import BirthNumber
-from .cze.dic import TaxNumber
+from .cze.birth_number import BirthNumber as BirthNumber
+from .cze.dic import TaxNumber as TaxNumber
 from .util import alias_of
 
 NationalID = alias_of(BirthNumber)

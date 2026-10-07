@@ -1,1 +1,1 @@
-from .lux.national_id import NationalID
+from .lux.national_id import NationalID as NationalID

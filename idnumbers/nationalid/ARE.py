@@ -1,4 +1,4 @@
-from .are.emirates_id import EmiratesIDNumber
+from .are.emirates_id import EmiratesIDNumber as EmiratesIDNumber
 from .util import alias_of
 
 NationalID = alias_of(EmiratesIDNumber)
