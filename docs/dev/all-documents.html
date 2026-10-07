@@ -189,6 +189,14 @@
             <div class="kind">Package</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">The idnumbers package enables your application to parse, validate against to different specs. For example, it supports [national ID](idnumbers/nationalid.html) for parsing and validating all citizen/resident ID numbers among different countries.</div>
+          </li><li id="idnumbers.api">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api</div>
+            <div class="url">idnumbers.api.html</div>
+            <div class="type">Module</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">One entry point to validate an ID number of any supported country.</div>
           </li><li id="idnumbers.nationalid">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid</div>
@@ -2565,6 +2573,158 @@
             <div class="kind">Function</div>
             <div class="privacy">PRIVATE</div>
             <div class="summary">Accept only the registration that repeats an earlier one exactly, raise <tt class="rst-docutils literal">ValueError</tt> otherwise.</div>
+          </li><li id="idnumbers.api.FailureReason">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason</div>
+            <div class="url">idnumbers.api.FailureReason.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Why the validation of an ID number failed.</div>
+          </li><li id="idnumbers.api.FailureReason.UNSUPPORTED_COUNTRY">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.UNSUPPORTED<wbr></wbr>_COUNTRY</div>
+            <div class="url">idnumbers.api.FailureReason.html#UNSUPPORTED_COUNTRY</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The country code is unknown, or it isn't a <tt class="rst-docutils literal">str</tt>.</div>
+          </li><li id="idnumbers.api.FailureReason.INVALID_LENGTH">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.INVALID<wbr></wbr>_LENGTH</div>
+            <div class="url">idnumbers.api.FailureReason.html#INVALID_LENGTH</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The ID number has a length the ID type doesn't allow. Not produced yet: issue #322 adds it.</div>
+          </li><li id="idnumbers.api.FailureReason.INVALID_FORMAT">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.INVALID<wbr></wbr>_FORMAT</div>
+            <div class="url">idnumbers.api.FailureReason.html#INVALID_FORMAT</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The ID number doesn't have the format of the ID type. Not produced yet: issue #322 adds it.</div>
+          </li><li id="idnumbers.api.FailureReason.CHECKSUM_MISMATCH">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.CHECKSUM<wbr></wbr>_MISMATCH</div>
+            <div class="url">idnumbers.api.FailureReason.html#CHECKSUM_MISMATCH</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The check digit or check characters are wrong. Not produced yet: issue #322 adds it.</div>
+          </li><li id="idnumbers.api.FailureReason.INVALID_BIRTHDATE">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.INVALID<wbr></wbr>_BIRTHDATE</div>
+            <div class="url">idnumbers.api.FailureReason.html#INVALID_BIRTHDATE</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The birth date inside the ID number isn't a real date. Not produced yet: issue #322 adds it.</div>
+          </li><li id="idnumbers.api.FailureReason.VALIDATION_FAILED">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.VALIDATION<wbr></wbr>_FAILED</div>
+            <div class="url">idnumbers.api.FailureReason.html#VALIDATION_FAILED</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The validator rejected the ID number without a more precise reason, or it raised an exception.</div>
+          </li><li id="idnumbers.api.FailureReason.NOT_PARSABLE">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.NOT<wbr></wbr>_PARSABLE</div>
+            <div class="url">idnumbers.api.FailureReason.html#NOT_PARSABLE</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The ID type of the country can't be parsed. Only <tt class="rst-docutils literal">parse_id_info()</tt> (issue #319) produces it.</div>
+          </li><li id="idnumbers.api.ValidationResult">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result</div>
+            <div class="url">idnumbers.api.ValidationResult.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The outcome of validating one ID number. Instances are immutable, and a result is truthy when it is valid.</div>
+          </li><li id="idnumbers.api.ValidationResult.is_valid">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result<wbr></wbr>.is<wbr></wbr>_valid</div>
+            <div class="url">idnumbers.api.ValidationResult.html#is_valid</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><tt class="rst-docutils literal">True</tt> when the ID number is valid.</div>
+          </li><li id="idnumbers.api.ValidationResult.country_code">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result<wbr></wbr>.country<wbr></wbr>_code</div>
+            <div class="url">idnumbers.api.ValidationResult.html#country_code</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The resolved ISO 3166-1 alpha-3 code, such as <tt class="rst-docutils literal">'TWN'</tt> for <tt class="rst-docutils literal">'tw'</tt>, or <tt class="rst-docutils literal">None</tt> for an unsupported country.</div>
+          </li><li id="idnumbers.api.ValidationResult.id_number">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result<wbr></wbr>.id<wbr></wbr>_number</div>
+            <div class="url">idnumbers.api.ValidationResult.html#id_number</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The ID number exactly as it was passed in.</div>
+          </li><li id="idnumbers.api.ValidationResult.extracted_info">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result<wbr></wbr>.extracted<wbr></wbr>_info</div>
+            <div class="url">idnumbers.api.ValidationResult.html#extracted_info</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The <tt class="rst-docutils literal">parse()</tt> result of a valid ID number, or <tt class="rst-docutils literal">None</tt> when it is invalid or the ID type isn't parsable.</div>
+          </li><li id="idnumbers.api.ValidationResult.reason">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result<wbr></wbr>.reason</div>
+            <div class="url">idnumbers.api.ValidationResult.html#reason</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Why the validation failed. It is set if and only if <tt class="rst-docutils literal">is_valid</tt> is <tt class="rst-docutils literal">False</tt>.</div>
+          </li><li id="idnumbers.api.ValidationResult.error_message">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result<wbr></wbr>.error<wbr></wbr>_message</div>
+            <div class="url">idnumbers.api.ValidationResult.html#error_message</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The detail of an unsupported country, or of an exception raised by a validator or a parser, else <tt class="rst-docutils literal">None</tt>.</div>
+          </li><li id="idnumbers.api.ValidationResult.__bool__">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result<wbr></wbr>.__bool__</div>
+            <div class="url">idnumbers.api.ValidationResult.html#__bool__</div>
+            <div class="type">Function</div>
+            <div class="kind">Method</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="idnumbers.api.validate">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.validate</div>
+            <div class="url">idnumbers.api.html#validate</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Validate an ID number of a country.</div>
+          </li><li id="idnumbers.api.validate_many">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.validate<wbr></wbr>_many</div>
+            <div class="url">idnumbers.api.html#validate_many</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Validate several ID numbers, each with its own country.</div>
+          </li><li id="idnumbers.api._check">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>._check</div>
+            <div class="url">idnumbers.api.html#_check</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Validate with the ID class of a resolved country, and parse a valid ID number when the class can.</div>
           </li><li id="idnumbers.nationalid.constant.Gender">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.constant<wbr></wbr>.<wbr></wbr>Gender</div>
