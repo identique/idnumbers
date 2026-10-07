@@ -3,7 +3,8 @@
 Hypothesis runs 100 arbitrary Unicode strings per class, without an example database.
 A failing unittest names the country/type and Hypothesis prints its minimized input.
 Mutation checks exhaust the synthetic example's digits, not all possible valid IDs.
-Valid-example, mask, regexp and in-range length checks remain in test_metadata.py.
+Valid-example, mask and in-range length checks remain in test_metadata.py.
+This module checks regexp agreement using that suite's existing compact-layout helper.
 """
 from typing import Any, Callable, Type
 from unittest import TestCase
@@ -14,7 +15,7 @@ from tests.helpers.checksum_limits import SINGLE_DIGIT_CHANGE_UNDETECTED
 from tests.helpers.contract import (
     check_character_mutations, iter_id_classes, length_out_of_range_variants, single_digit_mutations,
 )
-from tests.test_metadata import class_key
+from tests.test_metadata import class_key, compact
 
 # Zero-based alphanumeric index, not raw string index. Each exception is class-specific.
 CHECK_CHARACTER_INDEX = {
@@ -30,6 +31,13 @@ CHECK_CHARACTER_INDEX = {
 
 
 class TestValidatorContracts(TestCase):
+    def test_examples_agree_with_metadata_regexp(self) -> None:
+        for entry, cls in iter_id_classes():
+            metadata = cls.METADATA
+            candidates = (metadata.example, compact(metadata.example, metadata.masks))
+            with self.subTest(country=entry.alpha3, cls=class_key(cls)):
+                self.assertTrue(any(metadata.regexp.fullmatch(value) for value in candidates))
+
     def test_metadata_methods_are_consistent(self) -> None:
         for entry, cls in iter_id_classes():
             with self.subTest(country=entry.alpha3, cls=class_key(cls)):

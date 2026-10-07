@@ -1,6 +1,6 @@
 """Registry-wide contract helpers; runtime code never imports this module.
 
-The metadata suite owns valid-example, mask, regexp and in-range length checks.
+The metadata suite owns valid-example, mask and in-range length checks.
 Reuse its compact-layout helper instead of inventing another normalization rule.
 """
 from typing import Any, Iterator, Tuple, Type
