@@ -20,6 +20,14 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   seventh digit and the two-digit year, as the CPR office's table defines it, instead of `yy > 50`. `parse()` reads
   `0101451234` as 1945-01-01 instead of 2045-01-01, and 1858-1899 births are recognised. `2902000000` (29 February 1900)
   is now rejected and `2902004000` (29 February 2000) is valid. A birth date in the future is rejected.
+- **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): birth department `96` is now accepted. It
+  was used for Tunisia before 1964, like 91-95 for Algeria and Morocco, so `145089612304582` is now valid.
+
+### Other fixes
+
+- **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
+  temporary number for a man, as male. Codes `3` and `4` are still reported as female, because no source says which sex
+  they stand for ([#429](https://github.com/identique/idnumbers/issues/429)).
 
 ## 1.12.0 (2026-10-07)
 
