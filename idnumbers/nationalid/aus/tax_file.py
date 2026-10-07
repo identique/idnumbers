@@ -50,9 +50,14 @@ class TaxFileNumber:
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
+        """
+        Calculate the weighted sum of the tax file number modulo 11; a valid number gives 0.
+        Returns None when the input is not a well-formed tax file number.
+
+        algorithm: https://en.wikipedia.org/wiki/Tax_file_number#Check_digit
+        """
         if not validate_regexp(id_number, TaxFileNumber.METADATA.regexp):
             return None
-        """algorithm: https://en.wikipedia.org/wiki/Tax_file_number#Check_digit"""
         normalized = normalize(id_number)
         if len(normalized) == 8:
             normalized = normalized[0:7] + '0' + normalized[7]

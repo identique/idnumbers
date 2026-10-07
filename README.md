@@ -150,8 +150,8 @@ not if it is an actual issued ID number.
 - Separators and letter case are type specific. Several ID types accept their usual written form (for example spaces,
   dashes or dots inside the number, as in `8924 7352 8038`), and a few accept lower case letters. Most types are case
   sensitive. The `METADATA.regexp` of each type shows the accepted written form. A few types (for example the Czech
-  `TaxNumber`, which drops a `/` before matching) also normalize the input before checking it, so for those the regexp
-  alone does not show everything they accept.
+  `TaxNumber`, which drops every `/` anywhere in the input before matching) also normalize the input before checking
+  it, so for those the regexp alone does not show everything they accept.
 - `parse()` returns `None` for invalid input.
 
 ## Parse National IDs

@@ -31,12 +31,14 @@ class UniqueMasterCitizenNumber(YugoslaviaJMBG):
 
     @staticmethod
     def check_location(location: str) -> Optional[Tuple[Citizenship, str]]:
+        """
+        Serbia shares the JMBG code base with the other former Yugoslav republics.
+        Returns (CITIZEN, location) when location > 70, (RESIDENT, location) for any other valid location,
+        and None for an invalid location.
+        """
         result = YugoslaviaJMBG.check_location(location)
         if not result:
             return None
-        """
-        Since the Serbia is an independent country, they share the same id code base. So, the citizenship location > 70
-        """
         if int(location) > 70:
             return Citizenship.CITIZEN, location
         return Citizenship.RESIDENT, location

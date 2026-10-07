@@ -53,9 +53,14 @@ class MedicareNumber:
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
+        """
+        Calculate the medicare check digit: the weighted sum of the first 8 digits modulo 10.
+        Returns None when the input is not a well-formed medicare number.
+
+        algorithm: https://stackoverflow.com/questions/3589345/how-do-i-validate-an-australian-medicare-number.
+        """
         if not validate_regexp(id_number, MedicareNumber.METADATA.regexp):
             return None
-        """algorithm: https://stackoverflow.com/questions/3589345/how-do-i-validate-an-australian-medicare-number."""
         normalized = normalize(id_number)
         # only validate first 8 digits
         number_list = [int(char) for char in list(normalized)][:8]

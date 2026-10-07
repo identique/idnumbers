@@ -31,13 +31,14 @@ class UniqueMasterCitizenNumber(YugoslaviaJMBG):
 
     @staticmethod
     def check_location(location: str) -> Optional[Tuple[Citizenship, str]]:
+        """
+        North Macedonia shares the JMBG code base with the other former Yugoslav republics.
+        Returns (CITIZEN, location) when 40 < location < 50, (RESIDENT, location) for any other valid location,
+        and None for an invalid location.
+        """
         result = YugoslaviaJMBG.check_location(location)
         if not result:
             return None
-        """
-        Since the North Macedonia is an independent country, they share the same id code base. So, the citizenship
-        is 40 < location < 50
-        """
         if 40 < int(location) < 50:
             return Citizenship.CITIZEN, location
         return Citizenship.RESIDENT, location
