@@ -44,6 +44,9 @@ Never publish to PyPI without the maintainer's approval.
 
 ## Commands
 
+Before running the full test suite, install its dev-only dependencies in your environment:
+`python3 -m pip install -r requirements-dev.txt`. The library itself remains dependency-free.
+
 | Task          | Command                                                                                         |
 | ------------- | ----------------------------------------------------------------------------------------------- |
 | All tests     | `python3 -m unittest` (CI runs it on every supported Python version)                            |
@@ -64,7 +67,7 @@ root; the plain-Python commands above remain supported:
 
 ```bash
 uv venv
-uv pip install -e .
+uv pip install -e . -r requirements-dev.txt
 uv run python -m unittest
 uv run python -m unittest tests.nationalid.test_CHN
 ```
