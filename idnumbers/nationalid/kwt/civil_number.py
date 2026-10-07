@@ -82,11 +82,12 @@ class CivilNumber:
         return {
             'yyyymmdd': birthday,
             'sn': match_obj.group('sn'),
-            'checksum': checksum
+            # it equals the single matched digit above, so it is in 0..9
+            'checksum': cast(CHECK_DIGIT, checksum)
         }
 
     @staticmethod
-    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[int]:
         """
         https://prakhar.me/articles/kuwait-civil-id-checksum/
         """
@@ -98,4 +99,4 @@ class CivilNumber:
         if modulus > 10:
             # according to the algorithm, it will not be greater than 10
             return None
-        return cast(CHECK_DIGIT, modulus)
+        return modulus

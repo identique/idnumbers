@@ -8,8 +8,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 - Ship the PEP 561 `py.typed` marker, so type checkers use the package's annotations, and correct the annotations
   that disagreed with the runtime values: the `CHECK_DIGIT` alias, the untyped `normalize` and `checksum` helpers,
-  the COL and KAZ `checksum` methods that return `False` for malformed input, and the LTU
-  `extract_year_base_gender` result, which is never `None`
+  the COL and KAZ `checksum` methods that return `False` for malformed input, the AUS TFN and KWT civil-number
+  `checksum` methods, which can return 10, and the LTU `extract_year_base_gender` result, which is never `None`
   ([#325](https://github.com/identique/idnumbers/issues/325)).
 - Move the build metadata from `setup.py` to a PEP 621 `pyproject.toml`. The license is now the SPDX expression `MIT`
   instead of the deprecated license classifier ([#465](https://github.com/identique/idnumbers/issues/465)), and
