@@ -21,3 +21,14 @@ pydoctor --docformat=restructuredtext --make-html --html-output=docs/$(cat ./VER
 ```
 
 It outputs the API docs to a folder named `docs/version`. Have fun with it!
+
+## Unified API
+
+`idnumbers.api` implements validation and primary-ID parsing, re-exported by `idnumbers`. `parse_id_info()` calls
+`validate()` and consumes its shared `_check()` result, so country lookup, failure reasons and parser exception
+handling agree without a second parse call. `ParseIdInfoResult` is a union of frozen `ParseSuccess` and
+`ParseFailure` dataclasses, discriminated by the literal `ok` field. It selects only the registry's `NationalID`,
+leaving the country-specific classes and their typed `parse()` results unchanged.
+
+The tracked `tests/typing/parse_api_consumer.py` fixture is included in the default strict mypy configuration, so the
+CI type-check job checks both discriminator and class-based consumer narrowing as well as package re-exports.

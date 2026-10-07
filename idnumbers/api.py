@@ -1,11 +1,13 @@
 """
-One entry point to validate an ID number of any supported country.
+Unified validation and parsing of the primary ID number of any supported country.
 
 :func:`validate` takes the code of a country and an ID number, and returns a :class:`ValidationResult` that says
 whether the ID number is valid, which country was used, what the ID number contains and why it failed. It never
 raises: an unknown country, a malformed ID number and an unexpected error inside a validator all give a result with
 ``is_valid`` set to ``False``. The country is found with :func:`idnumbers.registry.resolve_country`, so an alpha-2
 or alpha-3 code in any letter case works. The ID number is validated exactly as given, without any normalization.
+
+:func:`parse_id_info` uses the same validation path and returns a discriminated parsing result.
 
 The country classes of :mod:`idnumbers.nationalid` are unchanged, and :func:`validate` uses the ``NationalID`` of the
 country. Importing :mod:`idnumbers` stays cheap, as the country module is imported on the first call that needs it.
@@ -26,11 +28,14 @@ Example::
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Iterable, List, Mapping, Optional, Tuple
+from typing import Any, Iterable, List, Literal, Mapping, Optional, Tuple, Union
 
 from . import registry
 
-__all__ = ['FailureReason', 'ValidationResult', 'validate', 'validate_many']
+__all__ = [
+    'FailureReason', 'ValidationResult', 'ParseSuccess', 'ParseFailure', 'ParseIdInfoResult',
+    'validate', 'validate_many', 'parse_id_info',
+]
 
 
 class FailureReason(str, Enum):
@@ -59,7 +64,10 @@ class FailureReason(str, Enum):
     """The validator rejected the ID number without a more precise reason, or it raised an exception."""
 
     NOT_PARSABLE = 'not_parsable'
-    """The ID type of the country can't be parsed. Only ``parse_id_info()`` (issue #319) produces it."""
+    """A valid ID has no extractable information, including when its type has no parser.
+
+    Only :func:`parse_id_info` produces this reason.
+    """
 
 
 @dataclass(frozen=True)
@@ -86,6 +94,72 @@ class ValidationResult:
 
     def __bool__(self) -> bool:
         return self.is_valid
+
+
+@dataclass(frozen=True)
+class ParseSuccess:
+    """Parsed information from a valid primary ID. Fields are frozen; ``info`` is a fresh, shallow dictionary."""
+
+    country_code: str
+    """The resolved ISO 3166-1 alpha-3 code."""
+
+    id_number: str
+    """The ID number exactly as it was passed in."""
+
+    info: Mapping[str, Any]
+    """The country class's parsed fields, without conversion of dates, enums or other values."""
+
+    ok: Literal[True] = True
+    """The discriminator for successful parsing."""
+
+
+@dataclass(frozen=True)
+class ParseFailure:
+    """An unsupported country, invalid ID, unparseable valid ID or validator/parser exception."""
+
+    country_code: Optional[str]
+    """The resolved alpha-3 code, or ``None`` for an unsupported country."""
+
+    id_number: str
+    """The ID number exactly as it was passed in."""
+
+    reason: FailureReason
+    """Why no parsed information is available."""
+
+    error_message: Optional[str] = None
+    """Unsupported-country or exception detail, with the same formatting as :func:`validate`."""
+
+    ok: Literal[False] = False
+    """The discriminator for unsuccessful parsing."""
+
+
+ParseIdInfoResult = Union[ParseSuccess, ParseFailure]
+"""The discriminated result of :func:`parse_id_info`; narrow with ``result.ok`` or ``isinstance``."""
+
+
+def parse_id_info(country: str, id_number: str) -> ParseIdInfoResult:
+    """
+    Validate and parse the primary ``NationalID`` of a country, without normalizing the input.
+
+    Country lookup and validation failures match :func:`validate`. A valid ID whose class has no parser, or whose
+    parser returns ``None``, gives :attr:`FailureReason.NOT_PARSABLE`. Validator/parser exceptions give
+    :attr:`FailureReason.VALIDATION_FAILED` with their detail in ``error_message``. This function never raises.
+    Country-specific ``parse()`` methods are unchanged; secondary ID types are not selected by this entry point.
+
+    :param country: an alpha-2 or alpha-3 code, or a registered alias, in any letter case.
+    :param id_number: the ID number exactly as supplied.
+    :return: a frozen :class:`ParseSuccess` with a fresh dictionary of parsed fields, or a :class:`ParseFailure`.
+    """
+    result = validate(country, id_number)
+    if not result.is_valid:
+        # validate() always supplies a reason on failure.
+        assert result.reason is not None
+        return ParseFailure(result.country_code, result.id_number, result.reason, result.error_message)
+    if result.extracted_info is None:
+        return ParseFailure(result.country_code, result.id_number, FailureReason.NOT_PARSABLE)
+    # Successful validation always resolves the country; _check() already copied the parsed dictionary.
+    assert result.country_code is not None
+    return ParseSuccess(result.country_code, result.id_number, result.extracted_info)
 
 
 def validate(country: str, id_number: str) -> ValidationResult:

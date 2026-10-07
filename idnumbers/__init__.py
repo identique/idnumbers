@@ -9,6 +9,10 @@ The country registry in ``idnumbers.registry`` finds the validator of a country 
 """
 
 from .api import FailureReason as FailureReason
+from .api import ParseSuccess as ParseSuccess
+from .api import ParseFailure as ParseFailure
+from .api import ParseIdInfoResult as ParseIdInfoResult
+from .api import parse_id_info as parse_id_info
 from .api import ValidationResult as ValidationResult
 from .api import validate as validate
 from .api import validate_many as validate_many

@@ -6,6 +6,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### New features
 
+- Add `idnumbers.parse_id_info(country, id_number)` for a country's primary `NationalID`, returning the frozen
+  `ParseSuccess` / `ParseFailure` union `ParseIdInfoResult`. The `ok` discriminator supports strict type narrowing;
+  success includes a fresh dictionary of the country parser's information. Lookup and validation failures match
+  `validate()`, while valid IDs without extractable information give `NOT_PARSABLE`. Country parsers are unchanged
+  ([#319](https://github.com/identique/idnumbers/issues/319)).
+
 - Add a country registry, `idnumbers.registry`, which is re-exported from `idnumbers`. `get_validator('tw')`,
   `get_country('TWN')` and `resolve_country('tw')` find the `NationalID` class, a `CountryEntry` (alpha-3 and alpha-2
   code, name, `NationalID` and all ID types) or the alpha-3 code of a country by its alpha-2 or alpha-3 code in any
