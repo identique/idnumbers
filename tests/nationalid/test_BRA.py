@@ -39,6 +39,19 @@ class TestBRACPFNumberValidation(TestCase):
         self.assertIsNotNone(BRA.CPFNumber.METADATA)
         self.assertTrue(BRA.CPFNumber.METADATA.checksum)
 
+    def test_repeated_digit_numbers_are_rejected(self):
+        for digit in '0123456789':
+            for number in (digit * 11, f'{digit * 3}.{digit * 3}.{digit * 3}-{digit * 2}'):
+                with self.subTest(number=number):
+                    self.assertFalse(BRA.CPFNumber.validate(number))
+                    self.assertFalse(BRA.NationalID.validate(number))
+
+    def test_repeated_digit_rule_is_separate_from_checksum(self):
+        # The repeated digits pass the check digits, so checksum() stays the pure check-digit computation
+        self.assertTrue(BRA.CPFNumber.checksum('111.111.111-11'))
+        self.assertFalse(BRA.CPFNumber.validate('111.111.111-11'))
+        self.assertTrue(BRA.CPFNumber.validate('111.333.666-86'))
+
 
 if __name__ == '__main__':
     main()
