@@ -7,10 +7,10 @@ class PersonalNumber:
     """
     Georgia personal number format
 
-    The personal number is 11 digits and may start with 0. The format and any
-    check digit are not public, so only the length and the digits are checked.
-    The same 11 digit number is used as the tax identification number of a
-    Georgian citizen.
+    The personal number is 11 digits and may start with 0. No public
+    check-digit algorithm is documented, so only the length and the digits are
+    checked. The same 11 digit number is used as the tax identification number
+    of a Georgian citizen.
 
     A 9 digit number is not a personal number: it is an identity document
     number, or a tax identification number issued to a non-citizen or a company.
