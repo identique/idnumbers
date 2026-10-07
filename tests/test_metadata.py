@@ -178,6 +178,14 @@ class TestNewKeys(TestCase):
         self.assertIs(cls.validate(example), True, example)
         if metadata.parsable:
             self.assertIsNotNone(cls.parse(example), example)
+        # The example is written in the first (preferred) layout of the masks, as docs/nationalid/METADATA.md states.
+        first = metadata.masks[0]
+        self.assertEqual(len(example), len(first), f'{example} is not written in {first}')
+        for char, mask_char in zip(example, first):
+            if mask_char in SLOT_CHARS:
+                self.assertTrue(slot_accepts(mask_char, char), f'{example} is not written in {first}')
+            else:
+                self.assertEqual(char, mask_char, f'{example} is not written in {first}')
         compact_id = compact(example, metadata.masks)
         self.assertLessEqual(metadata.min_length, len(compact_id), example)
         self.assertLessEqual(len(compact_id), metadata.max_length, example)

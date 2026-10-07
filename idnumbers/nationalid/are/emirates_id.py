@@ -45,9 +45,9 @@ class EmiratesIDNumber:
         'id_type': 'Emirates ID',
         'official_name': 'رقم الهوية',
         'display_format': '784-YYYY-SSSSSSS-C',
-        'example': '784198012345678',
+        'example': '784-1980-1234567-8',
         'checksum_algorithm': 'Luhn (mod 10)',
-        'masks': ('###-####-#######-#',)
+        'masks': ('###-####-#######-#', '###############')
     })
 
     @staticmethod
