@@ -375,6 +375,15 @@
 Steuer-IdNr., IdNr or Steuer-ID.
 <a class="rst-reference rst-external" href="https://allaboutberlin.com/guides/german-tax-id-steuernummer" target="_top">https://allaboutberlin.com/guides/german-tax-id-steuernummer</a>
 python version of <a class="rst-reference rst-external" href="https://github.com/kontist/validate-steuerid" target="_top">https://github.com/kontist/validate-steuerid</a></p>
+<p>The digit rules follow section 2.2 of the ELSTER document "Prüfung der Steuer- und Steueridentifikationsnummer"
+(Bayerisches Landesamt für Steuern):
+<a class="rst-reference rst-external" href="https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf" target="_top">https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf</a></p>
+<ul class="rst-simple">
+<li>The first digit is not 0. Numbers with a leading 0 are test IdNrs, not real IDs, and are rejected.</li>
+<li>Among the first 10 digits exactly one digit occurs two or three times, every other digit at most once.</li>
+<li>A digit that occurs three times in the first 10 digits never fills three directly consecutive positions.</li>
+<li>The 11th digit is the check digit.</li>
+</ul>
 </div>
         </div>
 
@@ -386,12 +395,12 @@ python version of <a class="rst-reference rst-external" href="https://github.com
     
     <td>Static Method</td>
     <td><code><a href="#check_consecutive_position" class="internal-link" title="idnumbers.nationalid.deu.tax_id.TaxID.check_consecutive_position">check<wbr></wbr>_consecutive<wbr></wbr>_position</a></code></td>
-    <td>We can have a number with 2 consecutive position at most.</td>
+    <td>Within the first 10 digits (the check digit is excluded), no digit may fill three directly consecutive positions. Two adjacent equal digits are allowed.</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
     <td><code><a href="#check_multiple_occurrence" class="internal-link" title="idnumbers.nationalid.deu.tax_id.TaxID.check_multiple_occurrence">check<wbr></wbr>_multiple<wbr></wbr>_occurrence</a></code></td>
-    <td>We can only have 1 digit with multiple occurrence in the number</td>
+    <td>Among the first 10 digits (the check digit is excluded), exactly one digit must occur two or three times and every other digit at most once.</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
@@ -441,7 +450,8 @@ python version of <a class="rst-reference rst-external" href="https://github.com
   </div>
   <div class="docstring functionBody">
     
-    <div><p>We can have a number with 2 consecutive position at most.</p>
+    <div><p>Within the first 10 digits (the check digit is excluded), no digit may fill three directly consecutive
+positions. Two adjacent equal digits are allowed.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -465,7 +475,8 @@ python version of <a class="rst-reference rst-external" href="https://github.com
   </div>
   <div class="docstring functionBody">
     
-    <div><p>We can only have 1 digit with multiple occurrence in the number</p>
+    <div><p>Among the first 10 digits (the check digit is excluded), exactly one digit must occur two or three times and
+every other digit at most once.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -566,7 +577,7 @@ python version of <a class="rst-reference rst-external" href="https://github.com
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">max_length</span><span class="rst-variable-quote">'</span>: 11,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">parsable</span><span class="rst-variable-quote">'</span>: False,
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">checksum</span><span class="rst-variable-quote">'</span>: True,
-                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^\d<span class="rst-re-op">{2}</span> <span class="rst-re-op">?</span>\d<span class="rst-re-op">{3}</span> <span class="rst-re-op">?</span>\d<span class="rst-re-op">{3}</span> <span class="rst-re-op">?</span>\d<span class="rst-re-op">{3}</span>$<span class="rst-variable-quote">'</span>),
+                   <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">[</span>1<span class="rst-re-op">-</span>9<span class="rst-re-group">]</span>\d <span class="rst-re-op">?</span>\d<span class="rst-re-op">{3}</span> <span class="rst-re-op">?</span>\d<span class="rst-re-op">{3}</span> <span class="rst-re-op">?</span>\d<span class="rst-re-op">{3}</span>$<span class="rst-variable-quote">'</span>),
                    <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">alias_of</span><span class="rst-variable-quote">'</span>: None,
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
   </div>
@@ -582,7 +593,7 @@ python version of <a class="rst-reference rst-external" href="https://github.com
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-07 03:30:12.
+    22.9.1 at 2026-10-07 03:34:55.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
