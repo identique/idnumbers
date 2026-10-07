@@ -4,6 +4,16 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ## Unreleased
 
+### New features
+
+- Add a country registry, `idnumbers.registry`, which is re-exported from `idnumbers`. `get_validator('tw')`,
+  `get_country('TWN')` and `resolve_country('tw')` find the `NationalID` class, a `CountryEntry` (alpha-3 and alpha-2
+  code, name, `NationalID` and all ID types) or the alpha-3 code of a country by its alpha-2 or alpha-3 code in any
+  letter case, and give `None` for anything unknown instead of raising. `list_supported_countries()` lists the 78
+  countries, and `register()` adds a custom country. The names are the English names of Unicode CLDR 48.2.3. AUS and
+  GRC keep their current `NationalID`, and a country module is imported on the first lookup of its country
+  ([#318](https://github.com/identique/idnumbers/issues/318)).
+
 ### Packaging and typing
 
 - Ship the PEP 561 `py.typed` marker, so type checkers use the package's annotations, and correct the annotations
