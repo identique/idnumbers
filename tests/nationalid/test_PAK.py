@@ -2,9 +2,14 @@ from unittest import TestCase
 
 from idnumbers.nationalid import PAK
 from idnumbers.nationalid.constant import Gender
+from idnumbers.nationalid.pak.national_id import CNIC
 
 
 class TestPAKValidation(TestCase):
+    def test_country_metadata(self):
+        self.assertEqual(PAK.NationalID.METADATA.iso3166_alpha2, 'PK')
+        self.assertEqual(CNIC.METADATA.iso3166_alpha2, 'PK')
+
     def test_normal_case(self):
         self.assertTrue(PAK.NationalID.validate('57469-0532456-7'))
         self.assertTrue(PAK.NationalID.validate('0975345678053'))
