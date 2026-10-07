@@ -38,7 +38,7 @@ class EntityVAT:
         'country_name': 'Belgium',
         'id_type': 'VAT Identification Number',
         'official_name': 'BTW identificatienummer',
-        'display_format': '0########',
+        'display_format': '0#########',
         'example': '0123456749',
         'checksum_algorithm': 'Mod 97 (the last two digits are 97 - (the first eight digits mod 97))',
         'masks': ('##########', '#########')
