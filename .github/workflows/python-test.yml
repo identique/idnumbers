@@ -1,5 +1,6 @@
-# This workflow will install Python dependencies, run the unit tests on every supported version of Python and
-# type-check the package with mypy
+# This workflow runs the unit tests on every supported version of Python, then type-checks the package with mypy,
+# lints it with ruff, enforces the coverage floor, prints informational benchmarks, and finishes with a single
+# ci-summary result that fails unless every other job succeeded.
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: Python Unit Test
@@ -100,3 +101,17 @@ jobs:
     - name: Run the benchmarks
       shell: bash
       run: python bench/run.py | tee -a "$GITHUB_STEP_SUMMARY"
+
+  ci-summary:
+    # One result to mark as required in branch protection: fails unless every job above succeeded.
+    if: always()
+    needs: [build, typecheck, lint, coverage, bench]
+
+    runs-on: ubuntu-24.04
+
+    steps:
+    - name: Fail unless every job succeeded
+      if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+      run: exit 1
+    - name: All jobs succeeded
+      run: echo "build, typecheck, lint, coverage and bench all succeeded"
