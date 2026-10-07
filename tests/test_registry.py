@@ -277,6 +277,23 @@ class TestRegister(RegistryStateCase):
                     registry.register(alpha3, bad_validator, **kwargs)
         self.assertEqual(self.snapshot(), before)
 
+    def test_non_ascii_codes_that_uppercase_to_ascii_are_rejected(self) -> None:
+        # 'ß'.upper() == 'SS' and 'ﬀ'.upper() == 'FF', so only the original string shows the code isn't ASCII.
+        before = self.snapshot()
+        for alpha3 in ('ßq', 'ﬀa'):
+            with self.subTest(alpha3=alpha3):
+                with self.assertRaises(ValueError):
+                    registry.register(alpha3, make_validator())
+        for alpha2 in ('ß', 'ﬀ', 'ßQ', 'ﬀQ'):
+            with self.subTest(alpha2=alpha2):
+                with self.assertRaises(ValueError):
+                    registry.register('abc', make_validator(), alpha2=alpha2)
+                with self.assertRaises(ValueError):
+                    registry.register('abc', make_validator(alpha2))
+        self.assertEqual(self.snapshot(), before)
+        self.assertIsNone(registry.resolve_country('SSQ'))
+        self.assertIsNone(registry.resolve_country('FFA'))
+
     def test_error_messages_name_the_code(self) -> None:
         with self.assertRaisesRegex(ValueError, "'ab'"):
             registry.register('ab', make_validator())

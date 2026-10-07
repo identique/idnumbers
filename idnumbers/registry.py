@@ -239,9 +239,9 @@ def register(
         already taken by another country or the registration conflicts with an earlier one.
     """
     _check_types(alpha3, validator, alpha2, name, aliases)
-    key3 = alpha3.upper()
-    if not _is_code(key3, 3):
+    if not _is_code(alpha3, 3):
         raise ValueError(f'alpha3 must be exactly 3 ASCII letters, got {alpha3!r}')
+    key3 = alpha3.upper()
     code2 = alpha2 if alpha2 is not None else getattr(validator.METADATA, 'iso3166_alpha2', None)
     if not isinstance(code2, str) or not _is_code(code2, 2):
         raise ValueError(f'alpha2 must be exactly 2 ASCII letters, got {code2!r} for {key3}')

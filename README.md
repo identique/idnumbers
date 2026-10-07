@@ -303,7 +303,7 @@ nothing.
 # Supported Countries
 
 Here's the list of the countries we have
-implemented [Country List](https://identique.github.io/idnumbers/idnumbers/nationalid.html)
+implemented [Country List](https://identique.github.io/idnumbers/idnumbers/nationalid.html).
 The `list_supported_countries()` function returns them at run time.
 
 # Metadata Structure of each ID
