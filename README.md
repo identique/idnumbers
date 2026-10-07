@@ -81,6 +81,80 @@ or
 conda deactivate
 ```
 
+## Using idnumbers with uv
+
+Install [uv](https://docs.astral.sh/uv/) first, then choose the workflow that fits your use case.
+
+### Project dependency
+
+From an existing uv project directory:
+
+```shell
+uv add idnumbers
+```
+
+For a new project, first run:
+
+```shell
+uv init idnumbers-example
+cd idnumbers-example
+```
+
+Then run `uv add idnumbers` to record the dependency and update the project's environment and lockfile.
+
+### Existing virtual environment
+
+In an activated virtual environment, or a directory containing `.venv`:
+
+```shell
+uv pip install idnumbers
+```
+
+If you need a new environment, run `uv venv` first. To install a specific released version instead:
+
+```shell
+uv pip install idnumbers==1.13.0
+```
+
+### One-off validation
+
+```shell
+uvx --with idnumbers python -c "from idnumbers.nationalid import TWN; print(TWN.NationalID.validate('A123456789'))"
+```
+
+This prints `True`. uv installs the dependency in a temporary uv-managed isolated environment, without adding it to
+an existing project's dependencies or requiring a manually activated environment. Validation checks format and
+checksum, not whether an ID was issued.
+
+### Standalone script
+
+Save this as `uv_example.py`. The [PEP 723](https://peps.python.org/pep-0723/) metadata declares its Python requirement
+and dependency:
+
+```python
+# /// script
+# requires-python = ">=3.9"
+# dependencies = ["idnumbers"]
+# ///
+
+from idnumbers.nationalid import TWN
+
+id_number = "A123456789"
+print(TWN.NationalID.validate(id_number))
+print(TWN.NationalID.parse(id_number))
+```
+
+Run it with:
+
+```shell
+uv run uv_example.py
+```
+
+uv reads the metadata and manages an isolated environment for the script. See the
+[uv scripts guide](https://docs.astral.sh/uv/guides/scripts/) for details. A companion repository example at
+`docs/examples/uv_script.py` is planned in [#471](https://github.com/identique/idnumbers/issues/471); it is not yet
+included in this change.
+
 # Usage
 
 ## Verify National IDs
