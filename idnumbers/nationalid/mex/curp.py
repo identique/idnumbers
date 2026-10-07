@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
@@ -124,10 +125,13 @@ class CURP:
         year_base = 1900 if ord(sn) < 65 else 2000
         gender = match_obj.group('gender')
         try:
+            calendar_date = _calendar_date(yy + year_base, mm, dd)
+            if calendar_date is None:
+                return None
             return {
                 'name_initial_chars': match_obj.group('initial'),
                 'name_consonants': match_obj.group('consonant'),
-                'yyyymmdd': date(yy + year_base, mm, dd),
+                'yyyymmdd': calendar_date,
                 'gender': CURP.GENDER_MAP[gender],
                 'location': match_obj.group('location'),
                 'sn': sn,

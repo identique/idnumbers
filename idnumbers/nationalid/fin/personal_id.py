@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast, get_args
@@ -99,8 +100,11 @@ class PersonalIdentityCode:
         sn = match_obj.group('sn')
         yyyy_base = PersonalIdentityCode.DOB_BASE_MAP[century]
         try:
+            calendar_date = _calendar_date(yyyy_base + yy, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(yyyy_base + yy, mm, dd),
+                'yyyymmdd': calendar_date,
                 'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
                 'sn': sn,
                 'checksum': cast(CHECKSUM_TYPE, match_obj.group('check'))

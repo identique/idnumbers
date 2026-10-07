@@ -1,6 +1,7 @@
 import re
 from ..metadata import IdMetadata
 from typing import Optional, TypedDict, Union
+from ..util import birth_date as _calendar_date
 from datetime import date
 
 from ..constant import Gender
@@ -112,7 +113,9 @@ class NationalID:
             month -= NationalID.NUMBER_OFFSET
 
         try:
-            birth_date = date(int(f'{birth_century}{yy}'), month, day)
+            birth_date = _calendar_date(int(f'{birth_century}{yy}'), month, day)
+            if birth_date is None:
+                return None
         except ValueError:
             return None
 

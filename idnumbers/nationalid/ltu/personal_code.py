@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict, cast
@@ -86,15 +87,15 @@ class PersonalCode:
         yy = int(match_obj.group('yy'))
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
-        try:
-            return {
-                'yyyymmdd': date(year_base + yy, mm, dd),
-                'gender': gender,
-                'sn': match_obj.group('sn'),
-                'checksum': checksum
-            }
-        except ValueError:
+        calendar_date = _calendar_date(year_base + yy, mm, dd)
+        if calendar_date is None:
             return None
+        return {
+            'yyyymmdd': calendar_date,
+            'gender': gender,
+            'sn': match_obj.group('sn'),
+            'checksum': checksum
+        }
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:

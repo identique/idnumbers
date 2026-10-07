@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict, cast
@@ -176,13 +177,14 @@ class FiscalCode:
         mm = FiscalCode.MONTH_MAP[m]
         day = dd if dd < 40 else dd - 40
         gender = Gender.MALE if dd < 40 else Gender.FEMALE
-        try:
-            birthday = date(2000 + yy, mm, day)
-            if birthday > date.today():
-                birthday = date(1900 + yy, mm, day)
-            return birthday, gender
-        except ValueError:
+        birthday = _calendar_date(2000 + yy, mm, day)
+        if birthday is None:
             return None
+        if birthday > date.today():
+            birthday = _calendar_date(1900 + yy, mm, day)
+            if birthday is None:
+                return None
+        return birthday, gender
 
     @staticmethod
     def sterilize_numbers(source: str) -> Optional[str]:

@@ -6,6 +6,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### New features
 
+- Add `failure_reason(id_class, id_number)` for primary and secondary ID types. Unified validation and parsing now
+  report best-effort length, format, checksum and embedded-calendar-date reasons; inconclusive checks and exceptions
+  retain `VALIDATION_FAILED`. Date tracing is isolated between nested calls, threads and async tasks, and country
+  validity, parser and checksum behavior is unchanged ([#322](https://github.com/identique/idnumbers/issues/322)).
+
 - Add `idnumbers.parse_id_info(country, id_number)` for a country's primary `NationalID`, returning the frozen
   `ParseSuccess` / `ParseFailure` union `ParseIdInfoResult`. The `ok` discriminator supports strict type narrowing;
   success includes a fresh dictionary of the country parser's information. Lookup and validation failures match
@@ -23,7 +28,7 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   frozen `ValidationResult` with `is_valid`, the alpha-3 `country_code`, the `id_number`, the `extracted_info` of a
   valid ID number (the `parse()` result, `None` when the ID type isn't parsable), a `reason` and an `error_message`. It
   never raises, and a result is truthy when it is valid. An unknown country gives the reason `unsupported_country`,
-  any other failure `validation_failed` for now. `validate_many()` validates `(country, id_number)` pairs, and
+  other failures a best-effort diagnostic reason. `validate_many()` validates `(country, id_number)` pairs, and
   `FailureReason` lists the reasons, which later releases may extend. The country classes are unchanged
   ([#317](https://github.com/identique/idnumbers/issues/317)).
 - Describe every ID class with seven more `METADATA` keys: `country_name`, `id_type`, `official_name` (`None` for an

@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from typing import Optional, TypedDict, cast
 from ..metadata import IdMetadata
@@ -89,8 +90,11 @@ class OldPersonalCode:
         dd = int(match_obj.group('dd'))
         sn = match_obj.group('sn')
         try:
+            calendar_date = _calendar_date(yy + year_base, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(yy + year_base, mm, dd),
+                'yyyymmdd': calendar_date,
                 'sn': sn,
                 'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
             }

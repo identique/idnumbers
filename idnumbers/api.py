@@ -23,18 +23,18 @@ Example::
 
     result = validate('TWN', 'A123456780')
     bool(result)                # False
-    result.reason               # <FailureReason.VALIDATION_FAILED: 'validation_failed'>
+    result.reason               # <FailureReason.CHECKSUM_MISMATCH: 'checksum_mismatch'>
 """
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Iterable, List, Literal, Mapping, Optional, Tuple, Union
+from typing import Any, Iterable, List, Literal, Mapping, Optional, Tuple, Type, Union
 
 from . import registry
 
 __all__ = [
     'FailureReason', 'ValidationResult', 'ParseSuccess', 'ParseFailure', 'ParseIdInfoResult',
-    'validate', 'validate_many', 'parse_id_info',
+    'validate', 'validate_many', 'parse_id_info', 'failure_reason',
 ]
 
 
@@ -49,16 +49,16 @@ class FailureReason(str, Enum):
     """The country code is unknown, or it isn't a ``str``."""
 
     INVALID_LENGTH = 'invalid_length'
-    """The ID number has a length the ID type doesn't allow. Not produced yet: issue #322 adds it."""
+    """The ID number has a length the ID type doesn't allow."""
 
     INVALID_FORMAT = 'invalid_format'
-    """The ID number doesn't have the format of the ID type. Not produced yet: issue #322 adds it."""
+    """The ID number doesn't have the format of the ID type."""
 
     CHECKSUM_MISMATCH = 'checksum_mismatch'
-    """The check digit or check characters are wrong. Not produced yet: issue #322 adds it."""
+    """The check digit or check characters are wrong."""
 
     INVALID_BIRTHDATE = 'invalid_birthdate'
-    """The birth date inside the ID number isn't a real date. Not produced yet: issue #322 adds it."""
+    """The birth date inside the ID number isn't a real date."""
 
     VALIDATION_FAILED = 'validation_failed'
     """The validator rejected the ID number without a more precise reason, or it raised an exception."""
@@ -194,6 +194,18 @@ def validate_many(items: Iterable[Tuple[str, str]]) -> List[ValidationResult]:
 
 
 def _check(alpha3: str, validator: Any, id_number: str) -> ValidationResult:
+    # A supported validator has already been selected: this local import leaves package imports
+    # and unsupported-country lookups lazy. Nested unified calls must not contaminate a caller's trace.
+    from .nationalid import util
+
+    token = util._birth_date_trace.set(None)
+    try:
+        return _check_validator(alpha3, validator, id_number)
+    finally:
+        util._birth_date_trace.reset(token)
+
+
+def _check_validator(alpha3: str, validator: Any, id_number: str) -> ValidationResult:
     """Validate with the ID class of a resolved country, and parse a valid ID number when the class can."""
     try:
         if not validator.validate(id_number):
@@ -201,7 +213,7 @@ def _check(alpha3: str, validator: Any, id_number: str) -> ValidationResult:
                 is_valid=False,
                 country_code=alpha3,
                 id_number=id_number,
-                reason=FailureReason.VALIDATION_FAILED,
+                reason=_derive_failure_reason(validator, id_number),
             )
         extracted_info = None
         if callable(getattr(validator, 'parse', None)):
@@ -217,3 +229,69 @@ def _check(alpha3: str, validator: Any, id_number: str) -> ValidationResult:
             error_message='%s: %s' % (type(exc).__name__, exc),
         )
     return ValidationResult(is_valid=True, country_code=alpha3, id_number=id_number, extracted_info=extracted_info)
+
+
+def failure_reason(id_class: Type[Any], id_number: str) -> Optional[FailureReason]:
+    """Explain a rejected ID, including secondary types; return None for a valid ID. Never raises.
+
+    Reasons are best effort, not a replacement for validation. Candidates preserve the input and remove whitespace
+    and ``. - / ( )`` for diagnosis only. Format, definite checksum mismatch, and traced calendar failure are checked
+    in that order; inconclusive checks and exceptions give :attr:`FailureReason.VALIDATION_FAILED`.
+    """
+    # A nested diagnostic's first validation must not contaminate its caller's trace.
+    from .nationalid import util
+
+    token = util._birth_date_trace.set(None)
+    try:
+        try:
+            if id_class.validate(id_number):
+                return None
+        except Exception:
+            return FailureReason.VALIDATION_FAILED
+        return _derive_failure_reason(id_class, id_number)
+    finally:
+        util._birth_date_trace.reset(token)
+
+
+def _derive_failure_reason(id_class: Type[Any], id_number: str) -> FailureReason:
+    if not isinstance(id_number, str):
+        return FailureReason.INVALID_FORMAT
+    try:
+        # Keep importing the package and unsupported-country lookup free of country-module imports.
+        from .nationalid import util
+
+        stripped = ''.join(char for char in id_number if not char.isspace() and char not in '.-/()')
+        candidates = list(dict.fromkeys((id_number, stripped)))
+        metadata = id_class.METADATA
+        matches = [(candidate, util.match_regexp(candidate, metadata.regexp)) for candidate in candidates]
+        matching = [(candidate, match) for candidate, match in matches if match is not None]
+        if not matching:
+            if not any(metadata.min_length <= len(candidate) <= metadata.max_length for candidate in candidates):
+                return FailureReason.INVALID_LENGTH
+            return FailureReason.INVALID_FORMAT
+        checksum = getattr(id_class, 'checksum', None)
+        if callable(checksum):
+            mismatches = []
+            for candidate, match in matching:
+                try:
+                    computed = checksum(candidate)
+                    group = match.groupdict().get('checksum')
+                    mismatches.append(computed is False or (
+                        computed is not None and not isinstance(computed, bool)
+                        and group is not None and str(computed) != group
+                    ))
+                except Exception:
+                    mismatches.append(False)
+            if all(mismatches):
+                return FailureReason.CHECKSUM_MISMATCH
+        token = util._birth_date_trace.set(False)
+        try:
+            for candidate, _ in matching:
+                id_class.validate(candidate)
+            if util._birth_date_trace.get():
+                return FailureReason.INVALID_BIRTHDATE
+        finally:
+            util._birth_date_trace.reset(token)
+    except Exception:
+        return FailureReason.VALIDATION_FAILED
+    return FailureReason.VALIDATION_FAILED

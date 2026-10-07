@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, TypedDict, Tuple, cast
@@ -84,8 +85,11 @@ class PersonalID:
         dd = int(match_obj.group('dd'))
         sn = match_obj.group('sn')
         try:
+            calendar_date = _calendar_date(yy + year_base, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(yy + year_base, mm, dd),
+                'yyyymmdd': calendar_date,
                 'gender': gender,
                 'citizenship': citizenship,
                 'sn': sn,

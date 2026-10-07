@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, Pattern, TypedDict
@@ -116,9 +117,12 @@ def _parse(id_number: str, regexp: Pattern[str], day_offset: int = 0) -> Optiona
         base_year = date.today().year - (100 if match_obj.group('sep') == '+' else 0)
         yyyy = int((base_year - ((base_year - yy) % 100)) / 100) * 100 + yy
     try:
+        calendar_date = _calendar_date(yyyy, int(match_obj.group('mm')), int(match_obj.group('dd')) - day_offset)
+        if calendar_date is None:
+            return None
         return {
             'gender': Gender.FEMALE if int(match_obj.group('birth_number')) % 2 == 0 else Gender.MALE,
-            'yyyymmdd': date(yyyy, int(match_obj.group('mm')), int(match_obj.group('dd')) - day_offset),
+            'yyyymmdd': calendar_date,
             'checksum': checksum
         }
     except ValueError:

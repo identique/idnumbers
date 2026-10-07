@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from typing import Optional, TypedDict
 from ..metadata import IdMetadata
@@ -78,8 +79,11 @@ class NationalID:
         year = int(match_obj.group('yy'))
         year += 2000 if year < 50 else 1900
         try:
+            calendar_date = _calendar_date(year, int(match_obj.group('mm')), int(match_obj.group('dd')))
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(year, int(match_obj.group('mm')), int(match_obj.group('dd'))),
+                'yyyymmdd': calendar_date,
                 'sn': match_obj.group('sn'),
                 'gender': Gender.MALE if int(match_obj.group('sn')[0]) > 4 else Gender.FEMALE,
                 'citizenship': Citizenship.CITIZEN if match_obj.group('citizenship') == '0' else Citizenship.RESIDENT,

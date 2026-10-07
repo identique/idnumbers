@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from re import Match
 from typing import Optional, TypedDict, cast
@@ -44,9 +45,8 @@ def _birth_date(match_obj: Match[str]) -> Optional[date]:
     else:
         # 10-digit numbers exist from 1954 only, so yy 00-53 is 2000-2053 and 54-99 is 1954-1999
         year = (2000 if yy < 54 else 1900) + yy
-    try:
-        birth_date = date(year, mm, dd)
-    except ValueError:
+    birth_date = _calendar_date(year, mm, dd)
+    if birth_date is None:
         return None
     return birth_date if birth_date <= date.today() else None
 

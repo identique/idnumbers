@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, TypedDict, cast
@@ -79,8 +80,11 @@ class IcelandicID:
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
         try:
+            calendar_date = _calendar_date(yy + year_base, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(yy + year_base, mm, dd),
+                'yyyymmdd': calendar_date,
                 'sn': match_obj.group('sn'),
                 'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum'))),
             }

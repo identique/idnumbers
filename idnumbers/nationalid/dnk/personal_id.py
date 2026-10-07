@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, TypedDict
@@ -83,7 +84,9 @@ class PersonalIdentityNumber:
         dd = int(match_obj.group('dd'))
         sn = match_obj.group('sn')
         try:
-            birth_date = date(_century_base(yy, int(sn[0])) + yy, mm, dd)
+            birth_date = _calendar_date(_century_base(yy, int(sn[0])) + yy, mm, dd)
+            if birth_date is None:
+                return None
         except ValueError:
             return None
         if birth_date > date.today():

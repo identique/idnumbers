@@ -73,7 +73,7 @@ class TestValidate(TestCase):
                 invalid = api.validate(country, TWN_INVALID)
                 self.assertFalse(invalid.is_valid)
                 self.assertEqual(invalid.country_code, 'TWN')
-                self.assertEqual(invalid.reason, api.FailureReason.VALIDATION_FAILED)
+                self.assertEqual(invalid.reason, api.FailureReason.CHECKSUM_MISMATCH)
                 self.assertIsNone(invalid.error_message)
                 self.assertIsNone(invalid.extracted_info)
 
@@ -120,7 +120,7 @@ class TestValidate(TestCase):
                 result = api.validate('tw', id_number)  # type: ignore[arg-type]
                 self.assertFalse(result.is_valid)
                 self.assertEqual(result.country_code, 'TWN')
-                self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
+                self.assertEqual(result.reason, api.FailureReason.INVALID_FORMAT)
                 self.assertIsNone(result.extracted_info)
                 self.assertIs(result.id_number, id_number)
 
@@ -253,7 +253,7 @@ class TestPackageExports(TestCase):
     def test_all(self) -> None:
         self.assertEqual(api.__all__, [
             'FailureReason', 'ValidationResult', 'ParseSuccess', 'ParseFailure', 'ParseIdInfoResult',
-            'validate', 'validate_many', 'parse_id_info',
+            'validate', 'validate_many', 'parse_id_info', 'failure_reason',
         ])
         for name in api.__all__:
             self.assertTrue(hasattr(api, name))

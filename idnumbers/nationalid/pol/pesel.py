@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict
@@ -84,8 +85,11 @@ class PESEL:
         year_base, mm = PESEL.get_year_base_month(mm_coded)
         sn = match_obj.group('sn')
         try:
+            calendar_date = _calendar_date(year_base + yy, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(year_base + yy, mm, dd),
+                'yyyymmdd': calendar_date,
                 'gender': Gender.MALE if int(sn[-1]) % 2 == 1 else Gender.FEMALE,
                 'sn': sn,
                 'checksum': checksum

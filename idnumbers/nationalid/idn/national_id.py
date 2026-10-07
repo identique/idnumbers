@@ -1,5 +1,5 @@
 import re
-from datetime import date
+from ..util import birth_date as _calendar_date
 from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..util import validate_regexp, match_regexp
@@ -92,11 +92,8 @@ class NIK:
 
         # NIK has no century bit, so validate against either possible century.
         for century in (1900, 2000):
-            try:
-                date(century + int(yy), int(mm), day)
+            if _calendar_date(century + int(yy), int(mm), day) is not None:
                 break
-            except ValueError:
-                continue
         else:
             return None
 

@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, TypedDict
@@ -84,8 +85,11 @@ class NRIC:
         sn = match_obj.group('sn')
         yyyy_base = 1900 if int(sn[0]) > 4 else 2000
         try:
+            calendar_date = _calendar_date(yyyy_base + yy, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(yyyy_base + yy, mm, dd),
+                'yyyymmdd': calendar_date,
                 'location': location,
                 'citizenship': Citizenship.CITIZEN if int(location) < 60 else Citizenship.RESIDENT,
                 'sn': sn

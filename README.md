@@ -257,7 +257,7 @@ country class's `parse()` output, including its date and enum values. Result fie
 itself is not immutable. The supplied `id_number` is preserved without normalization.
 
 An unknown or non-string country gives `UNSUPPORTED_COUNTRY` with `country_code=None`. Invalid IDs have the same
-reason as `validate()` (`VALIDATION_FAILED` for now). A valid ID with no parser, or a parser returning `None`, gives
+reason as `validate()` (best-effort granular reasons). A valid ID with no parser, or a parser returning `None`, gives
 `NOT_PARSABLE`. Validator/parser exceptions give `VALIDATION_FAILED` with `error_message` formatted as
 `ExceptionType: message`; this entry point does not raise. Failure results have `reason` and `error_message`, not
 `info`. The existing country-specific `Cls.parse()` methods and their return types are unchanged; use those classes
@@ -339,8 +339,10 @@ nothing.
 number, and returns a `ValidationResult` with `is_valid`, the alpha-3 `country_code`, the `id_number` as you passed it,
 the `extracted_info` of a valid ID number whose type can be parsed, and a `reason` for a failure. A result is truthy
 when it is valid, and `validate()` never raises: an unknown country or a malformed ID number gives an invalid result.
-For now the `reason` of every invalid ID number is `validation_failed`; more precise reasons come later. The classes
-of the country modules work as before.
+Reasons are best effort: `invalid_length`, `invalid_format`, `checksum_mismatch` and `invalid_birthdate` are derived
+from metadata, definite checksum mismatches and traced calendar checks, in that order. Inconclusive checks and
+validator/parser exceptions retain `validation_failed`. The country classes and their validity rules are unchanged.
+The enum is non-exhaustive: callers should handle unknown future reasons with a generic fallback.
 
 ```python
 from idnumbers import validate, validate_many
@@ -357,6 +359,24 @@ print(validate('XX', 'A123456789').reason.value)
 
 # Validate several ID numbers, each with its own country
 print([result.is_valid for result in validate_many([('tw', 'A123456789'), ('XX', '1')])])
+```
+
+### Explain a failure of any ID type
+
+`failure_reason(id_class, id_number)` also supports secondary types. It returns `None` for a valid ID and never raises.
+For diagnosis only, it considers both the original input and a candidate with whitespace and `. - / ( )` removed.
+This does **not** normalize validation input or make a rejected ID valid. A computed checksum without a named
+`checksum` regexp group is inconclusive, so it retains the generic reason rather than guessing.
+
+```python
+from idnumbers import FailureReason, failure_reason, validate
+from idnumbers.nationalid import AUS
+
+assert validate('TW', 'A12345').reason == FailureReason.INVALID_LENGTH
+assert validate('TW', 'A123456788').reason == FailureReason.CHECKSUM_MISMATCH
+assert validate('ZA', '7602300675085').reason == FailureReason.INVALID_BIRTHDATE
+assert failure_reason(AUS.MedicareNumber, '2123 45670 1') is None
+print(validate('TW', 'A12345').reason.value)
 ```
 
 # Supported Countries

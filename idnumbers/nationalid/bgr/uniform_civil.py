@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import TypedDict, Optional, cast
@@ -86,8 +87,11 @@ class UniformCivilNumber:
         else:
             yyyy = yy + 1900
         try:
+            calendar_date = _calendar_date(yyyy, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(yyyy, mm, dd),
+                'yyyymmdd': calendar_date,
                 "checksum": cast(CHECK_DIGIT, int(checksum)),
                 'gender': Gender.MALE if int(match_obj.group("gender")) % 2 == 0 else Gender.FEMALE
             }
