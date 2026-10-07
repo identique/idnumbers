@@ -63,3 +63,15 @@ InlandRevenueDepartmentNumber.METADATA.example  # '49-091-850'
 InlandRevenueDepartmentNumber.METADATA.masks    # ('##-###-###', '###-###-###', '########', '#########')
 
 ```
+
+### Formatting helpers and UI patterns
+
+The primary-only [formatting helpers](../../README.md#primary-id-formatting-and-input-masks) consume `masks`;
+`format_id()` chooses the first layout with a matching slot count, without validating characters or checksums.
+`get_input_mask()` returns a frozen `InputMask` with tuple masks and a case-sensitive whole-input pattern.
+Its `#`, `L` and `X` tokens deliberately restrict digits/letters to ASCII; `*` matches Unicode non-whitespace.
+The pattern describes a UI layout, not all inputs the country validator accepts. Greece's primary example uses
+accepted Latin `AB-123456`; Greek letters remain valid and format unchanged but intentionally fail the ASCII
+`L` pattern. No transliteration is performed. Normalization does not change the country validators' handling of
+compact inputs: measured on primary examples, CHE, CHL, KOR and USA reject compact text; all formatted examples
+validate. See the [format API documentation](https://identique.github.io/idnumbers/idnumbers.format.html).
