@@ -26,8 +26,9 @@ STR_INPUTS: List[str] = [
 FUZZ_SUBSTITUTES = '09AZ- |.²①\n١/'
 """
 Substituted at, and inserted before, every position. Besides the plain digit, letter and separator cases it
-holds the characters that regexps and checksum code mishandle: '|' and '.' (sloppy character classes),
-'²' and '①' (str.isdigit() is True, int() raises), a newline, an Arabic-Indic digit and '/'.
+holds the characters that regexps and checksum code mishandle: '|' and '.' (characters a loose regexp, such as a
+'|' inside a character class or an unescaped '.', would wrongly accept), '²' and '①' (str.isdigit() is True,
+int() raises), a newline, an Arabic-Indic digit and '/'.
 """
 FUZZ_EXTENSIONS = '0A'
 
