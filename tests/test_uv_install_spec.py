@@ -75,10 +75,14 @@ class TestUVInstallSpec(TestCase):
                     patch.object(spec.sysconfig, 'get_path', return_value=str(site)), \
                     patch.object(spec.importlib.metadata, 'distribution', return_value=distribution), \
                     patch.object(idnumbers, '__file__', str(installed)):
+                # The marker is opt-in: releases without it must still pass by default.
+                self.assertEqual(spec.check_install('1.13.0'), installed.resolve())
+                self.assertEqual(spec.check_install('1.13.0', require_py_typed=False), installed.resolve())
                 with self.assertRaisesRegex(RuntimeError, 'py.typed'):
-                    spec.check_install('1.13.0')
+                    spec.check_install('1.13.0', require_py_typed=True)
                 (site / 'idnumbers').mkdir(parents=True)
                 (site / 'idnumbers/py.typed').touch()
+                self.assertEqual(spec.check_install('1.13.0', require_py_typed=True), installed.resolve())
                 self.assertEqual(spec.check_install('1.13.0'), installed.resolve())
                 with self.assertRaises(RuntimeError):
                     spec.check_install('0.0.0')
