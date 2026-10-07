@@ -238,6 +238,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     except SetupError as error:
         print("sync_parity_corpus.py: %s" % error, file=sys.stderr)
         return 2
+    except OSError as error:
+        print("sync_parity_corpus.py: %s" % error, file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":
