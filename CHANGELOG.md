@@ -21,6 +21,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   final check character; parsed and calculated check characters remain canonical `X` or integers. Checksum arithmetic,
   calendar validation and region policy are unchanged; region/issuance checks remain deferred to
   [#451](https://github.com/identique/idnumbers/issues/451).
+- **CYP** tax number ([#348](https://github.com/identique/idnumbers/issues/348)): prefix `12` is rejected;
+  `checksum()` remains unchanged.
 - **DEU** tax ID (IdNr) ([#289](https://github.com/identique/idnumbers/issues/289)): the digit rules now follow the
   ELSTER specification. A leading `0` is rejected, which includes ELSTER test numbers such as `02476291358`. Among the
   first ten digits, exactly one digit must appear twice or three times, so `39825979193` (four 9s) and `36794081522`
