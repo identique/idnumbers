@@ -157,9 +157,10 @@ class TestEveryIDTypeRejectsMalformedInput(TestCase):
         self.assertTrue(set(SWEEP_EXCLUSIONS).issubset(names))
 
 
-class TestKnownGoodVectorsRejectTrailingNewline(TestCase):
+class TestKnownGoodVectorsFollowCountryNewlinePolicy(TestCase):
     # Each vector is a valid id taken from the first `assertTrue(...validate(...))` of the matching
-    # tests/nationalid/test_<ISO3>.py, so it is accepted on its own and rejected once "\n" is appended.
+    # tests/nationalid/test_<ISO3>.py, so it is accepted on its own.
+    # Only ESP deliberately strips boundary newlines (#349).
     VECTORS = [
         (CHN.ResidentID, '11010219840406970X'),  # tests/nationalid/test_CHN.py
         (TWN.NationalID, 'A123456789'),  # tests/nationalid/test_TWN.py
@@ -177,12 +178,16 @@ class TestKnownGoodVectorsRejectTrailingNewline(TestCase):
         (IRL.PersonalPublicServiceNumber, '1234567T'),  # tests/nationalid/test_IRL.py (3rd assertTrue)
     ]
 
-    def test_vector_is_valid_and_newline_variant_is_not(self):
+    def test_vector_is_valid_and_newline_variants_follow_country_policy(self):
         for cls, vector in self.VECTORS:
             with self.subTest(id_type=f'{cls.METADATA.iso3166_alpha2}.{cls.__qualname__}', vector=vector):
                 self.assertTrue(cls.validate(vector))
-                self.assertFalse(cls.validate(vector + '\n'))
-                self.assertFalse(cls.validate('\n' + vector))
+                if cls is ESP.NationalID:  # #349: DNI normalizes surrounding whitespace before validation.
+                    self.assertTrue(cls.validate(vector + '\n'))
+                    self.assertTrue(cls.validate('\n' + vector))
+                else:
+                    self.assertFalse(cls.validate(vector + '\n'))
+                    self.assertFalse(cls.validate('\n' + vector))
 
     def test_parse_does_not_accept_the_newline_variant(self):
         for cls, vector in self.VECTORS:
