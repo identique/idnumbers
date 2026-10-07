@@ -40,7 +40,15 @@ class TaxNumber:
                   'https://en.wikipedia.org/wiki/VAT_identification_number',
                   'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/Cyprus-TIN.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Cyprus',
+        'id_type': 'Tax Number',
+        'official_name': 'αριθμός φορολογικού μητρώου',
+        'display_format': '########L',
+        'example': '01234567U',
+        'checksum_algorithm': 'Mod 26 check letter (the 2nd, 4th, 6th and 8th digits are added to a table value of '
+                              'each of the 1st, 3rd, 5th and 7th digits)',
+        'masks': ('########L',)
     })
 
     NUM_MAP = {0: 1, 1: 0, 2: 5, 3: 7, 4: 9, 5: 13, 6: 15, 7: 17, 8: 19, 9: 21}

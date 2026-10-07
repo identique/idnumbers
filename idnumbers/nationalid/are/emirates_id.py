@@ -40,7 +40,14 @@ class EmiratesIDNumber:
                   'Resident ID',
                   'رقم الهوية'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'United Arab Emirates',
+        'id_type': 'Emirates ID',
+        'official_name': 'رقم الهوية',
+        'display_format': '784-YYYY-SSSSSSS-C',
+        'example': '784198012345678',
+        'checksum_algorithm': 'Luhn (mod 10)',
+        'masks': ('###-####-#######-#',)
     })
 
     @staticmethod

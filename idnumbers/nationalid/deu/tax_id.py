@@ -43,7 +43,14 @@ class TaxID:
                   'Steuer-ID'],
         'links': ['https://allaboutberlin.com/guides/german-tax-id-steuernummer',
                   'https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Germany',
+        'id_type': 'Tax Identification Number',
+        'official_name': 'Steuerliche Identifikationsnummer',
+        'display_format': '## ### ### ###',
+        'example': '12 345 678 911',
+        'checksum_algorithm': 'ISO 7064 MOD 11,10 (iterative product mod 11 and 10)',
+        'masks': ('## ### ### ###', '###########')
     })
 
     @staticmethod

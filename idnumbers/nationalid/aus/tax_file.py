@@ -33,7 +33,14 @@ class TaxFileNumber:
             'https://en.wikipedia.org/wiki/Tax_file_number',
             'https://www.ato.gov.au/General/What-is-a-tax-file-number----Easy-Read/',
             'https://en-academic.com/dic.nsf/enwiki/436130'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Australia',
+        'id_type': 'Tax File Number',
+        'official_name': None,
+        'display_format': '#########',
+        'example': '123456782',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 1, 4, 3, 7, 5, 8, 6, 9, 10; the sum must be 0)',
+        'masks': ('#########', '########')
     })
 
     MULTIPLIER = [1, 4, 3, 7, 5, 8, 6, 9, 10]

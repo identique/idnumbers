@@ -37,7 +37,14 @@ class PersonalNumber:
                   'CPR',
                   'الرقم السكاني'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bahrain'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Bahrain',
+        'id_type': 'Personal Number',
+        'official_name': 'الرقم الشخصي',
+        'display_format': 'YYMMSSSSC',
+        'example': '800101001',
+        'checksum_algorithm': None,
+        'masks': ('#########',)
     })
 
     @staticmethod

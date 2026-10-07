@@ -30,7 +30,15 @@ class TaxIDNumber:
                   'tax-identification-numbers/Austria-TIN.pdf',
                   'https://www.glasbenamatica.org/wp-content/uploads/2017/05/TIN_-_country_sheet_AT_en.pdf',
                   'https://taxid.pro/docs/countries/austria'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Austria',
+        'id_type': 'Tax Identification Number',
+        'official_name': 'Abgabenkontonummer',
+        'display_format': '##-###/####',
+        'example': '12-345/6782',
+        'checksum_algorithm': 'Luhn-style mod 10 (weights 1, 2 alternating; products of 10 or more are replaced by '
+                              'their digit sum)',
+        'masks': ('##-###/####', '#########')
     })
 
     MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2]

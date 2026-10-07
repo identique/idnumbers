@@ -37,7 +37,15 @@ class BusinessID:
             'enterprise-identification/uid-general.html',
             'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ch/uid.py'
         ],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Switzerland',
+        'id_type': 'Business Identification Number',
+        'official_name': 'Unternehmens-Identifikationsnummer',
+        'display_format': 'CHE-###.###.###',
+        'example': 'CHE-123.456.788',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 5, 4, 3, 2, 7, 6, 5, 4; check = 11 - remainder, a result '
+                              'of 10 is invalid)',
+        'masks': ('LLL-###.###.###', 'LLL#########')
     })
 
     @staticmethod

@@ -40,7 +40,14 @@ class SocialSecurityNumber:
                   'https://www.ech.ch/sites/default/files/dosvers/hauptdokument/'
                   'STAN_d_DEF_2014-04-02_eCH-0044_V4.1_Datenstandard%20Austausch%20von%20Personenidentifikationen.pdf'],
         'deprecated': False
-
+,
+        'country_name': 'Switzerland',
+        'id_type': 'Social Security Number',
+        'official_name': 'AHV-Nr. / No AVS',
+        'display_format': '756.####.####.##',
+        'example': '756.1234.5678.97',
+        'checksum_algorithm': 'EAN-13 check digit (weights 1 and 3)',
+        'masks': ('###.####.####.##',)
     })
 
     @staticmethod

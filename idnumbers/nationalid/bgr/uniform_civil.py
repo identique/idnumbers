@@ -44,7 +44,14 @@ class UniformCivilNumber:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bulgaria',
                   'https://en.wikipedia.org/wiki/Unique_citizenship_number',
                   'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/bg/egn.py'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Bulgaria',
+        'id_type': 'Uniform Civil Number',
+        'official_name': 'Единен граждански номер',
+        'display_format': 'YYMMDDRRGC',
+        'example': '7501020018',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 4, 8, 5, 10, 9, 7, 3, 6; a remainder of 10 becomes 0)',
+        'masks': ('##########',)
     })
 
     @staticmethod

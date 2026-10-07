@@ -24,8 +24,6 @@ OLD_KEYS = ('iso3166_alpha2', 'min_length', 'max_length', 'parsable', 'checksum'
 NEW_KEYS = ('country_name', 'id_type', 'official_name', 'display_format', 'example', 'checksum_algorithm', 'masks')
 
 PENDING: FrozenSet[str] = frozenset({
-    'ALB', 'ARE', 'ARG', 'AUS', 'AUT', 'BEL', 'BGD', 'BGR', 'BHR', 'BIH',
-    'BRA', 'CAN', 'CHE', 'CHL', 'CHN', 'COL', 'CYP', 'CZE', 'DEU', 'DNK',
     'ESP', 'EST', 'FIN', 'FRA', 'GBR', 'GEO', 'GRC', 'HKG', 'HRV', 'HUN',
     'IDN', 'IND', 'IRL', 'IRN', 'IRQ', 'ISL', 'ISR', 'ITA', 'JPN', 'KAZ',
     'KOR', 'KWT', 'LKA', 'LTU', 'LUX', 'LVA', 'MAC', 'MDA', 'MEX', 'MKD',

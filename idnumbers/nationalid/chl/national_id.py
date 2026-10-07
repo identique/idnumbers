@@ -33,7 +33,15 @@ class NationalID:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Chile',
                   'https://es.wikipedia.org/wiki/Rol_%C3%9Anico_Tributario#Algoritmo',
                   'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cl/rut.py'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Chile',
+        'id_type': 'National Unique Role Number',
+        'official_name': 'Rol Único Nacional',
+        'display_format': '##.###.###-C',
+        'example': '11.111.111-1',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2-7 repeating from the right; 11 becomes 0 and 10 becomes '
+                              'K)',
+        'masks': ('##.###.###-X', '#.###.###-X')
     })
 
     # The weights are applied to the digits of the body counted from the RIGHT and cycle: 2, 3, 4, 5, 6, 7, 2, 3, ...

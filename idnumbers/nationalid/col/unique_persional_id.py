@@ -49,7 +49,15 @@ class UniquePersonalID:
         'links': ['https://en.wikipedia.org/wiki/Colombian_identity_card',
                   'https://en.wikipedia.org/wiki/National_identification_number#Colombia',
                   'https://validatetin.com/colombia/#'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Colombia',
+        'id_type': 'Unique Personal ID',
+        'official_name': 'Número único de identidad personal',
+        'display_format': '##.###.###-#',
+        'example': '12.345.678-8',
+        'checksum_algorithm': 'Weighted sum mod 11 (prime weights 3, 7, 13, 17, 19, ... from the right; check = 11 - '
+                              'remainder, 11 becomes 0 and 10 becomes 1)',
+        'masks': ('##.###.###-#', '###.###.###-#')
     })
 
     WEIGHTS = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]

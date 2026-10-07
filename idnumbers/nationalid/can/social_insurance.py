@@ -24,7 +24,14 @@ class SocialInsuranceNumber:
         'names': ['Social Insurance Number',
                   'SIN'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Canada'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Canada',
+        'id_type': 'Social Insurance Number',
+        'official_name': None,
+        'display_format': '#########',
+        'example': '123456782',
+        'checksum_algorithm': 'Luhn (mod 10)',
+        'masks': ('#########',)
     })
 
     MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2, 1]

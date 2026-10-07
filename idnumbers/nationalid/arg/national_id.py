@@ -28,7 +28,14 @@ class NationalID:
                   'https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Argentina)',
                   'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ar/dni.py'],
         'deprecated': False
-
+,
+        'country_name': 'Argentina',
+        'id_type': 'National Identity Document',
+        'official_name': 'Documento Nacional de Identidad',
+        'display_format': '##.###.###',
+        'example': '12.345.678',
+        'checksum_algorithm': None,
+        'masks': ('##.###.###', '#.###.###')
     })
 
     @staticmethod

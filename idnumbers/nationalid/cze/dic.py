@@ -41,7 +41,15 @@ class TaxNumber:
                   'tax-identification-numbers/CZ-TIN.pdf',
                   'https://gist.github.com/svschannak/e79892f4fbc56df15bdb5496d0e67b85',
                   'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cz/dic.py'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Czechia',
+        'id_type': 'Tax Identification Number',
+        'official_name': 'daňové identifikační číslo',
+        'display_format': '########',
+        'example': '25123891',
+        'checksum_algorithm': 'Legal entities: weighted sum mod 11 (weights 8-2) mapped to the check digit; '
+                              'individuals: birth number rules',
+        'masks': ('########', '#########', '##########')
     })
 
     MULTIPLIER = [8, 7, 6, 5, 4, 3, 2]

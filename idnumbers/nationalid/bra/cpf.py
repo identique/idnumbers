@@ -24,7 +24,14 @@ class CPFNumber:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil',
                   'https://www.sirc.gov.br/guias/guias-e-tutoriais-complementares-sirc/acompanhamentos-sirc/'
                   'tutorial-para-a-analise-de-cpfs-irregulares/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Brazil',
+        'id_type': 'CPF Number',
+        'official_name': 'Cadastro de Pessoas Físicas',
+        'display_format': '###.###.###-##',
+        'example': '111.444.777-35',
+        'checksum_algorithm': 'Two weighted mod 11 check digits (weights 10-2, then 11-3)',
+        'masks': ('###.###.###-##', '###########')
     })
 
     MULTIPLIER1 = [10, 9, 8, 7, 6, 5, 4, 3, 2]

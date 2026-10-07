@@ -35,7 +35,14 @@ class DriverLicenseNumber:
             'data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/'
             'library-of-system-data-identifiers-v95989112-d327e56315/'
             'australia-driver-s-license-number-v130004514-d327e56830.html'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Australia',
+        'id_type': 'Driver Licence Number',
+        'official_name': None,
+        'display_format': '### ### ###',
+        'example': '123 456 789',
+        'checksum_algorithm': None,
+        'masks': ('### ### ###', '#########', '## ### ###', '########', 'L#####', '###-###-####', '##########')
     })
 
     BLACK_TRAILING_NUMBER = ['00000', '11111', '22222', '33333', '44444', '55555', '66666', '77777', '88888', '99999']

@@ -51,7 +51,14 @@ class IdentityNumber:
                   'NIPT'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Albania',
                   'https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/albania-tin.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Albania',
+        'id_type': 'Identity Number',
+        'official_name': 'Numri i Identitetit',
+        'display_format': 'YYMMDDSSSC',
+        'example': 'J50101001A',
+        'checksum_algorithm': None,
+        'masks': ('X########L',)
     })
 
     BASE_YEAR_MAP = '0123456789ABCDEFGHIJKLMNOPQRST'

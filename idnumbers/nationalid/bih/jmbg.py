@@ -6,6 +6,14 @@ from ..util import alias_of
 
 BIH_METADATA = copy(YugoslaviaJMBG.METADATA)
 BIH_METADATA.iso3166_alpha2 = 'BA'
+BIH_METADATA.country_name = 'Bosnia and Herzegovina'
+BIH_METADATA.id_type = 'Unique Master Citizen Number'
+BIH_METADATA.official_name = 'Jedinstveni matični broj građana'
+BIH_METADATA.display_format = 'DDMMYYYRRSSSC'
+BIH_METADATA.example = '0101990150002'
+BIH_METADATA.checksum_algorithm = ('Weighted sum mod 11 (digits 1-6 added to digits 7-12, weights 7, 6, 5, 4, 3, 2; '
+                                   'check = 11 - remainder, 10 and 11 become 0)')
+BIH_METADATA.masks = ('#############',)
 
 
 class UniqueMasterCitizenNumber(YugoslaviaJMBG):
