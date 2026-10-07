@@ -6,6 +6,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Documentation
 
+- Add a runnable uv script and isolated wheel-install CI checks for the script and README one-liner
+  ([#471](https://github.com/identique/idnumbers/issues/471)).
+
 - Document project, virtual-environment, one-off and standalone-script usage with uv in the README
   ([#470](https://github.com/identique/idnumbers/issues/470)).
 

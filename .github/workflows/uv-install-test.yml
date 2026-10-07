@@ -1,0 +1,45 @@
+name: uv wheel install test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  wheel-install:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ['3.9', '3.14']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      # https://docs.astral.sh/uv/guides/integration/github/
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: '0.12.1'
+          enable-cache: false
+      - name: Build the checkout wheel with uv
+        run: uv build
+      - name: Install and check the wheel outside the checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          environment="$RUNNER_TEMP/idnumbers-wheel-env"
+          scratch=$(mktemp -d "$RUNNER_TEMP/idnumbers-uv-smoke.XXXXXX")
+          uv venv --python "${{ matrix.python-version }}" "$environment"
+          wheels=("$GITHUB_WORKSPACE"/dist/*.whl)
+          test "${#wheels[@]}" -eq 1
+          uv pip install --python "$environment/bin/python" "${wheels[0]}"
+          cp tests/uv_install_spec.py docs/examples/uv_script.py README.md "$scratch/"
+          version=$(cat VERSION)
+          cd "$scratch"
+          "$environment/bin/python" -I uv_install_spec.py --version "$version" \
+            --readme README.md --example uv_script.py
+          uvx --python "${{ matrix.python-version }}" --with "${wheels[0]}" python -I \
+            uv_install_spec.py --version "$version" --readme README.md

@@ -151,9 +151,9 @@ uv run uv_example.py
 ```
 
 uv reads the metadata and manages an isolated environment for the script. See the
-[uv scripts guide](https://docs.astral.sh/uv/guides/scripts/) for details. A companion repository example at
-`docs/examples/uv_script.py` is planned in [#471](https://github.com/identique/idnumbers/issues/471); it is not yet
-included in this change.
+[uv scripts guide](https://docs.astral.sh/uv/guides/scripts/) for details. The runnable
+[companion example](docs/examples/uv_script.py) validates and parses three countries and fails if any result is
+unexpected. From this checkout, run `uv run docs/examples/uv_script.py`.
 
 # Usage
 
