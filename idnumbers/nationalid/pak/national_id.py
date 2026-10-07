@@ -25,7 +25,7 @@ class NationalID:
     check website: https://cnic.com.pk/
     """
     METADATA = SimpleNamespace(**{
-        'iso3166_alpha2': 'PA',
+        'iso3166_alpha2': 'PK',
         'min_length': 13,
         'max_length': 13,
         'parsable': True,

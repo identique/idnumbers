@@ -79,6 +79,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **NZL** passport ([#306](https://github.com/identique/idnumbers/issues/306)): remove the unrelated `NIN` metadata
   name; passport validation is unchanged.
 
+- **PAK** national ID ([#307](https://github.com/identique/idnumbers/issues/307)): correct the alpha-2 metadata from
+  `PA` to `PK`; validation and parsing are unchanged.
+
 ## 1.12.0 (2026-10-07)
 
 The first release since 1.11.0. It fixes validity bugs that were found by comparing the library with its Node.js port
