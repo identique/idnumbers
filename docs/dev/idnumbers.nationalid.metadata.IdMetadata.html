@@ -1,0 +1,1028 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>idnumbers.nationalid.metadata.IdMetadata</title>
+    <meta name="generator" content="pydoctor 22.9.1"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+</head>
+
+  <body>
+
+    <head>
+    
+    <script type="text/javascript" src="current_version.js"></script>
+    <script type="text/javascript" src="../versions.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", function init() {
+            // change the container style
+            const container = document.getElementById("search-box-container").parentNode;
+            // version text
+            const textSpan = document.createElement("span");
+            textSpan.textContent = "Versions:";
+            textSpan.style.paddingRight = "12px";
+
+            // use div as a group for version dropdown
+            const div = document.createElement("div");
+            div.style.alignSelf = "center";
+            div.style.paddingLeft = "12px";
+            div.classList.add("input-group");
+            // create the select dropdown
+            const select = document.createElement("select");
+            select.classList.add("form-control");
+            select.araLabel= "version dropdown";
+            select.title = "version dropdown";
+            select.style.display = "inline-block";
+            select.style.width = "90px";
+            select.style.float = "none";
+            // dev is always there
+            const devOption = document.createElement("option");
+            devOption.value = "dev";
+            devOption.textContent = "Dev"
+            devOption.selected = window._CURRENT_VERSION === "dev";
+            select.appendChild(devOption);
+            (window._VERSIONS || []).forEach(function(version) {
+                const verOption = document.createElement("option");
+                verOption.value = version;
+                verOption.textContent = version;
+                verOption.selected = window._CURRENT_VERSION === version;
+                select.appendChild(verOption);
+            });
+            select.addEventListener("change", function handleChange(evt) {
+                const version = evt.target.value;
+                window.location = version === 'dev' ? '../dev/' : `../v${version}/`;
+            });
+            // put all of them
+            div.appendChild(textSpan);
+            div.appendChild(select);
+            container.insertBefore(div, document.getElementById("search-box-container"));
+        });
+    </script>
+</head>
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a> <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div class="hint" id="search-help-box">
+          <p class="rst-last">
+      
+            Search bar offers the following options:
+            <ul>   
+                <li>
+                  <strong>Term presence.</strong> The below example searches for documents that 
+                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
+                </li> 
+
+                <li>
+                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
+                </li> 
+
+                <li>
+                  <strong>Search in specific fields.</strong> The following search matches all objects 
+                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
+
+                  <p>
+                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
+                    Last two fields are only applicable if "search in docstrings" is enabled.
+                  </p>
+                </li>
+
+                <li>
+                  <strong>Fuzzy matches.</strong> The following search matches all documents 
+                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
+                </li>
+            </ul>
+
+          </p>
+        </div>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 8px;">
+          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Class</span>
+        <code class="thisobject"><a href="idnumbers.nationalid.metadata.IdMetadata.html" class="internal-link" title="This class"><wbr></wbr>Id<wbr></wbr>Metadata</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        
+        
+
+        
+         
+
+        
+         
+
+        <div class="childrenKindTitle">Attributes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#alias_of" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.alias_of">alias<wbr></wbr>_of</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.checksum">checksum</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#checksum_algorithm" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.checksum_algorithm">checksum<wbr></wbr>_algorithm</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#country_name" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.country_name">country<wbr></wbr>_name</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#deprecated" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.deprecated">deprecated</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#display_format" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.display_format">display<wbr></wbr>_format</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#example" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.example">example</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#id_type" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.id_type">id<wbr></wbr>_type</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#iso3166_alpha2" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.iso3166_alpha2">iso3166<wbr></wbr>_alpha2</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#links" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.links">links</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#masks" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.masks">masks</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#max_length" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.max_length">max<wbr></wbr>_length</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#min_length" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.min_length">min<wbr></wbr>_length</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#names" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.names">names</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#official_name" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.official_name">official<wbr></wbr>_name</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#parsable" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.parsable">parsable</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#regexp" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.regexp">regexp</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code><a href="idnumbers.nationalid.metadata.html" class="internal-link" title="The parent of this class">metadata</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.metadata.IdMetadata.html" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata"><wbr></wbr>Id<wbr></wbr>Metadata</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        
+         
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="class"><code><code><a href="index.html" class="internal-link">idnumbers</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.html" class="internal-link" title="idnumbers.nationalid">nationalid</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.metadata.html" class="internal-link" title="idnumbers.nationalid.metadata">metadata</a></code><wbr></wbr>.<code><a href="idnumbers.nationalid.metadata.IdMetadata.html" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata">IdMetadata</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          class documentation
+        </div>
+
+        <div class="extrasDocstring">
+          <p><code><span class="py-keyword">class</span> <span class="py-defname">IdMetadata</span>(SimpleNamespace):</code></p>
+          <p><a href="classIndex.html#idnumbers.nationalid.metadata.IdMetadata">View In Hierarchy</a></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>The description of one ID class.</p>
+<p>It is a <tt class="rst-docutils literal">types.SimpleNamespace</tt> with annotated fields, built from keyword arguments such as
+<tt class="rst-docutils literal"><span class="pre">IdMetadata(**{'iso3166_alpha2':</span> 'TW', <span class="pre">...})</span></tt>. <tt class="rst-docutils literal">isinstance(metadata, SimpleNamespace)</tt> stays true.</p>
+</div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id292">
+  
+  
+  <tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#alias_of" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.alias_of">alias<wbr></wbr>_of</a></code></td>
+    <td>The class this class is an alias of, or <tt class="rst-docutils literal">None</tt> if it is not an alias.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.checksum">checksum</a></code></td>
+    <td>Whether the design of the ID has a check digit or check letter. If it is true, the class has a <tt class="rst-docutils literal">checksum</tt> function.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#checksum_algorithm" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.checksum_algorithm">checksum<wbr></wbr>_algorithm</a></code></td>
+    <td>A short description of the algorithm that <tt class="rst-docutils literal">checksum</tt> computes, such as <tt class="rst-docutils literal">'Luhn (mod 10)'</tt>. It is <tt class="rst-docutils literal">None</tt> when <tt class="rst-docutils literal">checksum</tt> is false.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#country_name" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.country_name">country<wbr></wbr>_name</a></code></td>
+    <td>The English name of the issuing country, the same as in the country registry, such as <tt class="rst-docutils literal">'Taiwan'</tt>.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#deprecated" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.deprecated">deprecated</a></code></td>
+    <td>Whether the country has replaced the ID with a newer format.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#display_format" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.display_format">display<wbr></wbr>_format</a></code></td>
+    <td>A human-readable layout of the ID, such as <tt class="rst-docutils literal"><span class="pre">'###-##-####'</span></tt> or <tt class="rst-docutils literal"><span class="pre">'YYMMDD-SSSC'</span></tt>.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#example" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.example">example</a></code></td>
+    <td>A synthetic ID that the class validates. It is constructed with a valid check digit and is not the number of any real person.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#id_type" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.id_type">id<wbr></wbr>_type</a></code></td>
+    <td>The English name of the kind of ID, such as <tt class="rst-docutils literal">'National Identification Card'</tt>.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#iso3166_alpha2" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.iso3166_alpha2">iso3166<wbr></wbr>_alpha2</a></code></td>
+    <td>The ISO 3166-1 alpha-2 code of the issuing country, such as <tt class="rst-docutils literal">'TW'</tt>.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#links" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.links">links</a></code></td>
+    <td>The reference links of the ID, such as the official page or the description of the algorithm.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#masks" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.masks">masks</a></code></td>
+    <td>The layouts the class accepts, the preferred display layout first. <tt class="rst-docutils literal">#</tt> is a digit, <tt class="rst-docutils literal">L</tt> a letter, <tt class="rst-docutils literal">X</tt> a letter or a digit and <tt class="rst-docutils literal">*</tt> any non-space character. Every other character is a separator, one of <tt class="rst-docutils literal">' <span class="pre">-./()'</span></tt>.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#max_length" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.max_length">max<wbr></wbr>_length</a></code></td>
+    <td>The maximum length of the ID in its compact form, that is without separators.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#min_length" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.min_length">min<wbr></wbr>_length</a></code></td>
+    <td>The minimum length of the ID in its compact form, that is without separators.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#names" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.names">names</a></code></td>
+    <td>The names and abbreviations under which the ID is known.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#official_name" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.official_name">official<wbr></wbr>_name</a></code></td>
+    <td>The official name of the ID in the local language, such as <tt class="rst-docutils literal">'國民身分證統一編號'</tt>. It is <tt class="rst-docutils literal">None</tt> when the ID has no local-language name, as with an ID that is named in English.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#parsable" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.parsable">parsable</a></code></td>
+    <td>Whether information can be parsed from the ID. If it is true, the class has a <tt class="rst-docutils literal">parse</tt> function.</td>
+  </tr><tr class="classvariable">
+    
+    <td>Class Variable</td>
+    <td><code><a href="#regexp" class="internal-link" title="idnumbers.nationalid.metadata.IdMetadata.regexp">regexp</a></code></td>
+    <td>The compiled pattern that describes the whole ID.</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.alias_of">
+    
+  </a>
+  <a name="alias_of">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">alias_of</span>: <code>Optional[<wbr></wbr>Type[<wbr></wbr>Any]]</code> =
+    
+    <a class="headerLink" href="#alias_of" title="idnumbers.nationalid.metadata.IdMetadata.alias_of">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The class this class is an alias of, or <tt class="rst-docutils literal">None</tt> if it is not an alias.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.checksum">
+    
+  </a>
+  <a name="checksum">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">checksum</span>: <code>bool</code> =
+    
+    <a class="headerLink" href="#checksum" title="idnumbers.nationalid.metadata.IdMetadata.checksum">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Whether the design of the ID has a check digit or check letter. If it is true, the class has a <tt class="rst-docutils literal">checksum</tt>
+function.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.checksum_algorithm">
+    
+  </a>
+  <a name="checksum_algorithm">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">checksum_algorithm</span>: <code>Optional[<wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#checksum_algorithm" title="idnumbers.nationalid.metadata.IdMetadata.checksum_algorithm">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>A short description of the algorithm that <tt class="rst-docutils literal">checksum</tt> computes, such as <tt class="rst-docutils literal">'Luhn (mod 10)'</tt>. It is <tt class="rst-docutils literal">None</tt>
+when <tt class="rst-docutils literal">checksum</tt> is false.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.country_name">
+    
+  </a>
+  <a name="country_name">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">country_name</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#country_name" title="idnumbers.nationalid.metadata.IdMetadata.country_name">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The English name of the issuing country, the same as in the country registry, such as <tt class="rst-docutils literal">'Taiwan'</tt>.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.deprecated">
+    
+  </a>
+  <a name="deprecated">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">deprecated</span>: <code>bool</code> =
+    
+    <a class="headerLink" href="#deprecated" title="idnumbers.nationalid.metadata.IdMetadata.deprecated">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Whether the country has replaced the ID with a newer format.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.display_format">
+    
+  </a>
+  <a name="display_format">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">display_format</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#display_format" title="idnumbers.nationalid.metadata.IdMetadata.display_format">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>A human-readable layout of the ID, such as <tt class="rst-docutils literal"><span class="pre">'###-##-####'</span></tt> or <tt class="rst-docutils literal"><span class="pre">'YYMMDD-SSSC'</span></tt>.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.example">
+    
+  </a>
+  <a name="example">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">example</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#example" title="idnumbers.nationalid.metadata.IdMetadata.example">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>A synthetic ID that the class validates. It is constructed with a valid check digit and is not the number of
+any real person.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.id_type">
+    
+  </a>
+  <a name="id_type">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">id_type</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#id_type" title="idnumbers.nationalid.metadata.IdMetadata.id_type">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The English name of the kind of ID, such as <tt class="rst-docutils literal">'National Identification Card'</tt>.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.iso3166_alpha2">
+    
+  </a>
+  <a name="iso3166_alpha2">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">iso3166_alpha2</span>: <code>str</code> =
+    
+    <a class="headerLink" href="#iso3166_alpha2" title="idnumbers.nationalid.metadata.IdMetadata.iso3166_alpha2">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The ISO 3166-1 alpha-2 code of the issuing country, such as <tt class="rst-docutils literal">'TW'</tt>.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.links">
+    
+  </a>
+  <a name="links">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">links</span>: <code>List[<wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#links" title="idnumbers.nationalid.metadata.IdMetadata.links">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The reference links of the ID, such as the official page or the description of the algorithm.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.masks">
+    
+  </a>
+  <a name="masks">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">masks</span>: <code>Tuple[<wbr></wbr>str, <wbr></wbr><span class="rst-variable-ellipsis">...</span>]</code> =
+    
+    <a class="headerLink" href="#masks" title="idnumbers.nationalid.metadata.IdMetadata.masks">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The layouts the class accepts, the preferred display layout first. <tt class="rst-docutils literal">#</tt> is a digit, <tt class="rst-docutils literal">L</tt> a letter, <tt class="rst-docutils literal">X</tt> a
+letter or a digit and <tt class="rst-docutils literal">*</tt> any non-space character. Every other character is a separator, one of
+<tt class="rst-docutils literal">' <span class="pre">-./()'</span></tt>.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.max_length">
+    
+  </a>
+  <a name="max_length">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">max_length</span>: <code>int</code> =
+    
+    <a class="headerLink" href="#max_length" title="idnumbers.nationalid.metadata.IdMetadata.max_length">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The maximum length of the ID in its compact form, that is without separators.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.min_length">
+    
+  </a>
+  <a name="min_length">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">min_length</span>: <code>int</code> =
+    
+    <a class="headerLink" href="#min_length" title="idnumbers.nationalid.metadata.IdMetadata.min_length">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The minimum length of the ID in its compact form, that is without separators.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.names">
+    
+  </a>
+  <a name="names">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">names</span>: <code>List[<wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#names" title="idnumbers.nationalid.metadata.IdMetadata.names">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The names and abbreviations under which the ID is known.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.official_name">
+    
+  </a>
+  <a name="official_name">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">official_name</span>: <code>Optional[<wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#official_name" title="idnumbers.nationalid.metadata.IdMetadata.official_name">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The official name of the ID in the local language, such as <tt class="rst-docutils literal">'國民身分證統一編號'</tt>. It is <tt class="rst-docutils literal">None</tt> when the ID
+has no local-language name, as with an ID that is named in English.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.parsable">
+    
+  </a>
+  <a name="parsable">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">parsable</span>: <code>bool</code> =
+    
+    <a class="headerLink" href="#parsable" title="idnumbers.nationalid.metadata.IdMetadata.parsable">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Whether information can be parsed from the ID. If it is true, the class has a <tt class="rst-docutils literal">parse</tt> function.</p>
+</div>
+    
+  </div>
+</div><div class="baseclassvariable">
+  
+  
+  <a name="idnumbers.nationalid.metadata.IdMetadata.regexp">
+    
+  </a>
+  <a name="regexp">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">regexp</span>: <code>Pattern[<wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#regexp" title="idnumbers.nationalid.metadata.IdMetadata.regexp">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The compiled pattern that describes the whole ID.</p>
+</div>
+    
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container">
+    <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    22.9.1 at 2026-10-07 14:30:41.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>
