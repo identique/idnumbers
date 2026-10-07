@@ -6,6 +6,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Validity changes
 
+- **ALB** identity number ([#344](https://github.com/identique/idnumbers/issues/344)): decoded birth dates after today
+  are rejected, using the date rather than a fixed decade cap. The existing historical year range is unchanged,
+  pending confirmation in [#446](https://github.com/identique/idnumbers/issues/446).
 - **ARG** DNI ([#280](https://github.com/identique/idnumbers/issues/280)): 7-digit numbers (below 10 million), such as
   `5.123.456` and `5123456`, are now accepted. `METADATA.min_length` is 7.
 - **BRA** CPF ([#284](https://github.com/identique/idnumbers/issues/284)): numbers made of one repeated digit,
@@ -71,6 +74,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Other fixes
 
+- **ALB** identity number ([#344](https://github.com/identique/idnumbers/issues/344)): the missing metadata comma is
+  restored, separating `Numri i Identitetit të Shtetasit` and `NISH` into the intended six names.
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
   temporary number for a man, as male. Codes `3` and `4` are still reported as female, because no source says which sex
   they stand for ([#429](https://github.com/identique/idnumbers/issues/429)).

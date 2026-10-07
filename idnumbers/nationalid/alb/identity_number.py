@@ -23,7 +23,11 @@ class ParseResult(TypedDict):
 class IdentityNumber:
     """
     Albania Identity Number, Numri i Identitetit (NID),  Numri i Identitetit të Shtetasit (NISH), NIPT
-    https://en.wikipedia.org/wiki/National_identification_number#Albania
+
+    The individual NID encodes the year, month (including gender) and day of birth:
+    https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/albania-tin.pdf (section II).
+    Validation checks format and calendar dates and rejects future births; it does not verify the check letter
+    algorithm or whether a number was issued. The existing historical year mapping is retained pending confirmation.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'AL',
@@ -38,10 +42,11 @@ class IdentityNumber:
         'names': ['Albania Identity Number',
                   'Numri i Identitetit',
                   'NID',
-                  'Numri i Identitetit të Shtetasit'
+                  'Numri i Identitetit të Shtetasit',
                   'NISH',
                   'NIPT'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Albania'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Albania',
+                  'https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/albania-tin.pdf'],
         'deprecated': False
     })
 
@@ -50,7 +55,7 @@ class IdentityNumber:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the id number
+        Validate format and a non-future calendar birth date, not checksum or issuance.
         """
         if not isinstance(id_number, str) or not id_number:
             return False
@@ -58,7 +63,7 @@ class IdentityNumber:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        """parse the result"""
+        """Parse the result, or return None for malformed input or a future birth date."""
         match_obj = match_regexp(id_number, IdentityNumber.METADATA.regexp)
         if not match_obj:
             return None
@@ -66,8 +71,11 @@ class IdentityNumber:
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
         try:
+            birth_date = date(yyyy, mm if mm < 50 else mm - 50, dd)
+            if birth_date > date.today():
+                return None
             return {
-                'yyyymmdd': date(yyyy, mm if mm < 50 else mm - 50, dd),
+                'yyyymmdd': birth_date,
                 'gender': Gender.MALE if mm < 50 else Gender.FEMALE,
                 'sn': match_obj.group('sn'),
                 'checksum': match_obj.group('checksum')
