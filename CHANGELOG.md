@@ -40,6 +40,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `checksum()` and within-range date decoding are unchanged; leap-year-specific decoding remains out of scope in
   [#437](https://github.com/identique/idnumbers/issues/437).
 
+- **LTU** personal code ([#300](https://github.com/identique/idnumbers/issues/300)): century decoding now accepts
+  `50002290013` (29 February 2000) and rejects `70002290015` (29 February 2100). `checksum()` is unchanged.
+  First-digit policy for `0` and `9` remains out of scope in [#337](https://github.com/identique/idnumbers/issues/337).
+
 ### Other fixes
 
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
@@ -52,6 +56,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **KAZ** BIN ([#297](https://github.com/identique/idnumbers/issues/297)): `parse()` now reports entity code `5` as
   `NonResidentEntity` and code `6` as `IP` (individual entrepreneurs in a joint enterprise), rather than
   `ResidentEntity`. Code `4` remains `ResidentEntity`.
+
+- **LTU** personal code ([#300](https://github.com/identique/idnumbers/issues/300)): `parse()` now maps first digits
+  `1`/`2` to the 1800s, `3`/`4` to the 1900s, `5`/`6` to the 2000s and `7`/`8` to the 2100s. Odd digits still
+  report male and even digits female; `39001010077` now reports 1990-01-01 instead of 1890-01-01.
 
 ## 1.12.0 (2026-10-07)
 

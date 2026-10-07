@@ -1,6 +1,5 @@
 import re
 from datetime import date
-from math import floor
 from types import SimpleNamespace
 from typing import Optional, Tuple, TypedDict
 from ..constant import Gender
@@ -21,6 +20,17 @@ class ParseResult(TypedDict):
 class PersonalCode:
     """
     Lithuania personal code, asmens kodas
+
+    The first-digit century mapping for 1-8 follows python-stdnum 2.2's Lithuanian
+    module and its shared birth-date decoder (pairs 1/2: 1800s, 3/4: 1900s,
+    5/6: 2000s, 7/8: 2100s):
+
+    https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/lt/asmens.py
+    https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/ee/ik.py
+
+    The OECD sheet documents the birth-date structure and two-pass checksum:
+    https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/lithuania-tin.pdf
+
     https://en.wikipedia.org/wiki/National_identification_number#Lithuania
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Lithuania-TIN.pdf
     """
@@ -46,7 +56,7 @@ class PersonalCode:
     @staticmethod
     def validate(id_number: str) -> bool:
         """
-        Validate the Italy fiscal code
+        Validate the Lithuania personal code
         """
         if not isinstance(id_number, str) or not id_number:
             return False
@@ -107,11 +117,14 @@ class PersonalCode:
     @staticmethod
     def extract_year_base_gender(g: CHECK_DIGIT) -> Optional[Tuple[int, Gender]]:
         """
-        algorithm: G = floor(year / 100) * 2 - 34 - gender while gender = {female: 0, male: 1}
-        if the value is odd -> male, if the value is even -> female
+        First digits 1/2, 3/4, 5/6 and 7/8 encode the 1800s, 1900s, 2000s and 2100s.
+        Odd digits encode male and even digits encode female.
+        The historical mapping outside 1-8 is retained for compatibility; this does
+        not establish that codes starting with 0 or 9 are government-issued.
         """
         gender = Gender.FEMALE if g % 2 == 0 else Gender.MALE
-        # remove the affect of gender, -1 if it is male otherwise it should be the original value
-        year_g = (g // 2) * 2
-        year_base = floor((year_g + 34) / 2) * 100
+        if 1 <= g <= 8:
+            year_base = 1800 + ((g - 1) // 2) * 100
+        else:
+            year_base = 1700 + (g // 2) * 100
         return year_base, gender
