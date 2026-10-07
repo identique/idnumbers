@@ -37,7 +37,7 @@ EXPECTED_PATH = Path(__file__).with_name("expected_python.json")
 
 # The port's `SEPARATORS = /[\s.\-/()]/g`. `\s` is spelled out because JavaScript's whitespace set differs from
 # Python's `re` one (for example U+FEFF is whitespace in JavaScript only).
-SEPARATORS = re.compile("[\t\n\v\f\r    -     　﻿.\\-/()]")
+SEPARATORS = re.compile("[\t\n\v\f\r \u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff.\\-/()]")
 
 # Countries whose compared class is not `<CODE>:NationalID`, as "module:Class" relative to `idnumbers.nationalid`.
 # An input is valid when any class accepts it.
