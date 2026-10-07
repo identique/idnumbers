@@ -34,6 +34,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        python -m pip install -r requirements-dev.txt
     - name: Test with python test
       run: |
         python -m unittest
@@ -80,7 +81,7 @@ jobs:
       with:
         python-version: "3.12"
     - name: Install coverage
-      run: python -m pip install coverage==7.16.2
+      run: python -m pip install coverage==7.16.2 -r requirements-dev.txt
     - name: Run the unit tests under coverage
       run: python -m coverage run -m unittest
     - name: Report coverage (fails below fail_under in pyproject.toml)

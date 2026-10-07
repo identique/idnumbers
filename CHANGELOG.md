@@ -49,6 +49,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Internal, docs and CI
 
+- Add dev-only Hypothesis checks of arbitrary Unicode inputs for every registered ID type, metadata method
+  contracts, out-of-range lengths and checksum mutations, with explicit synthetic witnesses for checksum limits
+  ([#324](https://github.com/identique/idnumbers/issues/324)).
+
 - CI lints with ruff, enforces a 97% line-and-branch coverage floor, runs the README Python examples and
   informational benchmarks, keeps GitHub Actions updated with Dependabot, and reports a single `ci-summary` result
   ([#326](https://github.com/identique/idnumbers/issues/326)). Formatting with `ruff format` and a coverage badge
