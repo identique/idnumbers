@@ -33,6 +33,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **IRN** national ID ([#295](https://github.com/identique/idnumbers/issues/295)): codes made of one repeated digit,
   `0000000000` to `9999999999`, are now rejected, including supported hyphenated formats. `checksum()` is unchanged.
 
+- **KAZ** BIN ([#297](https://github.com/identique/idnumbers/issues/297)): registration months outside `01`-`12` are
+  now rejected, including checksum-correct `750061381659` (month `00`). `checksum()` is unchanged.
+
 ### Other fixes
 
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
@@ -41,6 +44,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **IDN** NIK ([#293](https://github.com/identique/idnumbers/issues/293)): `parse()` now decodes women's day numbers by
   subtracting 40, reports gender from the encoded day, and always returns `dd` as two digits. The alpha-2 metadata is
   corrected from `IDN` to `ID`.
+
+- **KAZ** BIN ([#297](https://github.com/identique/idnumbers/issues/297)): `parse()` now reports entity code `5` as
+  `NonResidentEntity` and code `6` as `IP` (individual entrepreneurs in a joint enterprise), rather than
+  `ResidentEntity`. Code `4` remains `ResidentEntity`.
 
 ## 1.12.0 (2026-10-07)
 
