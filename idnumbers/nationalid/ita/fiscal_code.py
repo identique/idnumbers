@@ -130,7 +130,7 @@ class FiscalCode:
         }
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_ALPHA]:
+    def checksum(id_number: str) -> Optional[CHECK_ALPHA]:
         """
         build the checksum after the sterilization
         """

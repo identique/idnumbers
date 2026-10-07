@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 
 
@@ -82,11 +82,12 @@ class CivilNumber:
         return {
             'yyyymmdd': birthday,
             'sn': match_obj.group('sn'),
-            'checksum': checksum
+            # it equals the single matched digit above, so it is in 0..9
+            'checksum': cast(CHECK_DIGIT, checksum)
         }
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[int]:
         """
         https://prakhar.me/articles/kuwait-civil-id-checksum/
         """

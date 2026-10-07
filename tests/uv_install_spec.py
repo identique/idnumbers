@@ -12,7 +12,7 @@ import sysconfig
 EXAMPLE_OUTPUT = 'Validated and parsed TWN, CHN and ZAF examples.\n'
 
 
-def check_install(expected_version: str) -> Path:
+def check_install(expected_version: str, require_py_typed: bool = False) -> Path:
     import idnumbers
 
     distribution = importlib.metadata.distribution('idnumbers')
@@ -25,6 +25,10 @@ def check_install(expected_version: str) -> Path:
         raise RuntimeError('idnumbers was not imported from this interpreter\'s installed distribution: ' + str(origin))
     if Path(sys.prefix).resolve() not in origin.parents:
         raise RuntimeError('idnumbers was not installed in this environment: ' + str(origin))
+    # Opt-in: releases up to 1.14.0 do not ship the marker, and the PyPI check also covers them.
+    if require_py_typed and not (origin.parent / 'py.typed').is_file():
+        raise RuntimeError('The PEP 561 py.typed marker is missing from the installed idnumbers package: '
+                           + str(origin.parent))
     return origin
 
 
@@ -49,8 +53,10 @@ def main() -> None:
     parser.add_argument('--version', required=True)
     parser.add_argument('--readme', type=Path, required=True)
     parser.add_argument('--example', type=Path)
+    parser.add_argument('--require-py-typed', action='store_true',
+                        help='fail when the PEP 561 py.typed marker is missing from the installed package')
     args = parser.parse_args()
-    print('Installed idnumbers origin: ' + str(check_install(args.version)))
+    print('Installed idnumbers origin: ' + str(check_install(args.version, require_py_typed=args.require_py_typed)))
     if args.example is not None:
         # Direct execution deliberately ignores PEP 723: use the installed wheel, not PyPI.
         check_output([sys.executable, '-I', '-O', str(args.example)], EXAMPLE_OUTPUT)

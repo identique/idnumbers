@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict, get_args
+from typing import Literal, Optional, TypedDict, cast, get_args
 from ..util import validate_regexp, match_regexp
 from ..constant import Gender
 
@@ -95,7 +95,7 @@ class PersonalIdentityCode:
                 'yyyymmdd': date(yyyy_base + yy, mm, dd),
                 'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
                 'sn': sn,
-                'checksum': match_obj.group('check')
+                'checksum': cast(CHECKSUM_TYPE, match_obj.group('check'))
             }
         except ValueError:
             return None
@@ -107,5 +107,5 @@ class PersonalIdentityCode:
         if not match_obj:
             return False
         numbers = int(match_obj.group('dd') + match_obj.group('mm') + match_obj.group('yy') + match_obj.group('sn'))
-        check_digit = PersonalIdentityCode.CHECKSUM_LIST[numbers % 31]
+        check_digit: str = PersonalIdentityCode.CHECKSUM_LIST[numbers % 31]
         return match_obj.group('check') == check_digit

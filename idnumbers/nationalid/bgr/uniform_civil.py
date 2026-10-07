@@ -81,7 +81,7 @@ class UniformCivilNumber:
         try:
             return {
                 'yyyymmdd': date(yyyy, mm, dd),
-                "checksum": int(checksum),
+                "checksum": cast(CHECK_DIGIT, int(checksum)),
                 'gender': Gender.MALE if int(match_obj.group("gender")) % 2 == 0 else Gender.FEMALE
             }
         except ValueError:

@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from typing import Optional
+from typing import Optional, cast
 from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit
 
 
@@ -54,4 +54,4 @@ class NationalID:
         normalized = normalize(id_number)
         numbers = [int(i) for i in normalized]
         modulus = weighted_modulus_digit(numbers[:-1], NationalID.MULTIPLIER, 11, True)
-        return modulus if modulus < 2 else 11 - modulus
+        return cast(CHECK_DIGIT, modulus if modulus < 2 else 11 - modulus)

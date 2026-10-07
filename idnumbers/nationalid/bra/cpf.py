@@ -1,5 +1,6 @@
 import re
 from types import SimpleNamespace
+from typing import List
 from ..util import validate_regexp
 from .util import normalize
 
@@ -58,14 +59,14 @@ class CPFNumber:
             10] == CPFNumber.second_digit_checksum(number_list)
 
     @staticmethod
-    def first_digit_checksum(number_list) -> str:
+    def first_digit_checksum(number_list: List[int]) -> str:
         """Get the first checksum digit"""
 
         total = sum([value * CPFNumber.MULTIPLIER1[index] for (index, value) in enumerate(number_list)])
         return str(CPFNumber.get_checksum(total))
 
     @staticmethod
-    def second_digit_checksum(number_list) -> str:
+    def second_digit_checksum(number_list: List[int]) -> str:
         """Get the second checksum digit"""
 
         first_checksum = CPFNumber.first_digit_checksum(number_list)

@@ -1,9 +1,10 @@
 import re
 from types import SimpleNamespace
+from typing import Literal, Union, cast
 from idnumbers.nationalid.util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'[-. ]', '', id_number)
 
@@ -21,7 +22,7 @@ def colombia_checksum(id_number: str) -> CHECK_DIGIT:
     elif modulus == 10:
         return 1
     else:
-        return modulus
+        return cast(CHECK_DIGIT, modulus)
 
 
 class UniquePersonalID:
@@ -63,7 +64,7 @@ class UniquePersonalID:
         return UniquePersonalID.checksum(id_number) == int(id_number[-1])
 
     @staticmethod
-    def checksum(id_number: str) -> CHECK_DIGIT:
+    def checksum(id_number: str) -> Union[CHECK_DIGIT, Literal[False]]:
         if not validate_regexp(id_number, UniquePersonalID.METADATA.regexp):
             return False
         return colombia_checksum(id_number)

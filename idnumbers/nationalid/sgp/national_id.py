@@ -60,7 +60,7 @@ class NationalID:
         return NationalID.checksum(id_number)
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """
         algorithm from:
         https://www.ngiam.net/NRIC/NRIC_numbers.pdf

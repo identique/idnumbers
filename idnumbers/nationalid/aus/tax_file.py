@@ -1,7 +1,7 @@
 import re
 from types import SimpleNamespace
 from typing import Optional
-from ..util import CHECK_DIGIT, alias_of, validate_regexp
+from ..util import alias_of, validate_regexp
 from .util import normalize
 
 
@@ -49,7 +49,7 @@ class TaxFileNumber:
         return TaxFileNumber.checksum(id_number) == 0
 
     @staticmethod
-    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[int]:
         """
         Calculate the weighted sum of the tax file number modulo 11; a valid number gives 0.
         Returns None when the input is not a well-formed tax file number.

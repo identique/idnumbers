@@ -42,13 +42,14 @@ Never publish to PyPI without the maintainer's approval.
 
 ## Commands
 
-| Task        | Command                                                                  |
-| ----------- | ------------------------------------------------------------------------ |
-| All tests   | `python3 -m unittest` (CI runs it on every supported Python version)     |
-| One country | `python3 -m unittest tests.nationalid.test_CHN`                          |
-| Quick check | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."` |
-| Regexp dump | `python3 -m tools.collect_regexp`                                        |
-| Docs        | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`       |
+| Task        | Command                                                                           |
+| ----------- | --------------------------------------------------------------------------------- |
+| All tests   | `python3 -m unittest` (CI runs it on every supported Python version)              |
+| One country | `python3 -m unittest tests.nationalid.test_CHN`                                   |
+| Type check  | `python3 -m mypy` with mypy 1.20.2 on Python >= 3.10 (config in `pyproject.toml`) |
+| Quick check | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."`          |
+| Regexp dump | `python3 -m tools.collect_regexp`                                                 |
+| Docs        | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`                |
 
 ### Optional contributor quickstart with uv
 
@@ -74,7 +75,7 @@ working directories.
 - **Python 3.9 compatibility:** the oldest supported version is 3.9. Don't use `match`, `X | Y` unions at runtime, or
   other 3.10+ syntax.
 - **CI:** `.github/workflows/python-test.yml` runs the unittest suite on every supported Python version for pushes and
-  PRs to `main`.
+  PRs to `main`. The same workflow also runs a strict mypy job.
 
 ## Architecture
 

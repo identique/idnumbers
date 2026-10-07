@@ -100,7 +100,7 @@ class ResidentRegistration:
         return ResidentRegistration.build_parse_result(match_obj)
 
     @staticmethod
-    def build_parse_result(match_obj: re.Match[str]) -> Optional[ParseResult]:
+    def build_parse_result(match_obj: Optional[re.Match[str]]) -> Optional[ParseResult]:
         if not match_obj:
             return None
         yy = int(match_obj.group('yy'))

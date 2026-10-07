@@ -26,6 +26,9 @@ jobs:
           enable-cache: false
       - name: Build the checkout wheel with uv
         run: uv build
+      - name: Check the built distributions with twine
+        if: matrix.python-version == '3.14'
+        run: uvx --from 'twine==7.0.0' twine check --strict dist/*
       - name: Install and check the wheel outside the checkout
         shell: bash
         run: |
@@ -40,6 +43,6 @@ jobs:
           version=$(cat VERSION)
           cd "$scratch"
           "$environment/bin/python" -I uv_install_spec.py --version "$version" \
-            --readme README.md --example uv_script.py
+            --readme README.md --example uv_script.py --require-py-typed
           uvx --python "${{ matrix.python-version }}" --with "${wheels[0]}" python -I \
-            uv_install_spec.py --version "$version" --readme README.md
+            uv_install_spec.py --version "$version" --readme README.md --require-py-typed

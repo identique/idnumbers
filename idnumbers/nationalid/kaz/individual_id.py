@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, Tuple, TypedDict
+from typing import Literal, Optional, Tuple, TypedDict, Union, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 from .util import checksum
@@ -65,7 +65,7 @@ class IndividualIDNumber:
         iin_checksum = IndividualIDNumber.checksum(id_number)
         if iin_checksum is None or iin_checksum != int(match_obj.group('checksum')):
             return None
-        gender_year_base = IndividualIDNumber.get_gender_year_base(int(match_obj.group('century')))
+        gender_year_base = IndividualIDNumber.get_gender_year_base(cast(CHECK_DIGIT, int(match_obj.group('century'))))
         if not gender_year_base:
             return None
         gender, year_base = gender_year_base
@@ -77,14 +77,14 @@ class IndividualIDNumber:
                 'yyyymmdd': date(yy + year_base, mm, dd),
                 'gender': gender,
                 'sn': match_obj.group('sn'),
-                'checksum': int(match_obj.group('checksum')),
+                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum'))),
             }
         except ValueError:
             # catch the date error
             return None
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Union[CHECK_DIGIT, Literal[False], None]:
         if not validate_regexp(id_number, IndividualIDNumber.METADATA.regexp):
             return False
         return checksum(id_number)

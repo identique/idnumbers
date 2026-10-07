@@ -4,7 +4,7 @@ from typing import Optional, TypedDict
 from ..util import CHECK_DIGIT, luhn_digit, validate_regexp, match_regexp
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'[ \-/]', '', id_number)
 
@@ -72,7 +72,7 @@ class EmiratesIDNumber:
             }
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """use luhn algorithm to calculate the check digit"""
         if not validate_regexp(id_number, EmiratesIDNumber.METADATA.regexp):
             return None

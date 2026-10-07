@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Literal, Optional, TypedDict, Union, cast
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 from .util import EntityType, EntityDivision, checksum
 
@@ -92,11 +92,11 @@ class BusinessIDNumber:
             'entity_type': BusinessIDNumber.ENTITY_TYPE_MAP[entity_type],
             'entity_division': BusinessIDNumber.DIVISION_TYPE_MAP[division],
             'sn': match_obj.group('sn'),
-            'checksum': int(match_obj.group('checksum')),
+            'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum'))),
         }
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Union[CHECK_DIGIT, Literal[False], None]:
         if not validate_regexp(id_number, BusinessIDNumber.METADATA.regexp):
             return False
         return checksum(id_number)

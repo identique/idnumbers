@@ -1,6 +1,6 @@
 import re
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'[\-/]|[./]', '', id_number)

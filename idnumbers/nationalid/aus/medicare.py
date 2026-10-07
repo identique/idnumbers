@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from typing import Optional
+from typing import Optional, cast
 from ..util import CHECK_DIGIT, validate_regexp
 from .util import normalize
 
@@ -65,4 +65,4 @@ class MedicareNumber:
         # only validate first 8 digits
         number_list = [int(char) for char in list(normalized)][:8]
         total = sum([value * MedicareNumber.MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)])
-        return total % 10
+        return cast(CHECK_DIGIT, total % 10)

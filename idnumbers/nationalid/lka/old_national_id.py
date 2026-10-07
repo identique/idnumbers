@@ -72,7 +72,7 @@ class OldNationalID:
         }
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """use new format to check the checksum"""
         new_id_num = OldNationalID.to_new(id_number)
         if not new_id_num:

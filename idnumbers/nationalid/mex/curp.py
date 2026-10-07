@@ -1,9 +1,9 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict
+from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
-from ..util import validate_regexp, match_regexp
+from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 
 
 # RENAPO's March 2006 Instructivo Normativo, Annex 2 (printed page 59), lists these
@@ -123,13 +123,13 @@ class CURP:
                 'gender': CURP.GENDER_MAP[gender],
                 'location': match_obj.group('location'),
                 'sn': sn,
-                'checksum': int(match_obj.group('checksum'))
+                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
             }
         except ValueError:
             return None
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """check the checksum"""
         if not validate_regexp(id_number, CURP.METADATA.regexp):
             return False

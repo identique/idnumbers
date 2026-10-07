@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from re import Match
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, cast
 from types import SimpleNamespace
 
 from ..constant import Gender
@@ -135,7 +135,7 @@ class BirthNumber:
             'yyyymmdd': birth_date,
             'gender': Gender.MALE if int(match_obj.group('mm')) < 50 else Gender.FEMALE,
             'sn': match_obj.group('sn'),
-            'checksum': int(match_obj.group('checksum'))
+            'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
         }
 
     @staticmethod

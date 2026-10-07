@@ -39,7 +39,7 @@ class NationalID:
         return NationalID.checksum(id_number)
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """use verhoeff checksum"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
