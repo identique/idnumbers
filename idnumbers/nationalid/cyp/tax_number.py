@@ -6,6 +6,11 @@ from ..util import validate_regexp
 class TaxNumber:
     """
     Cyprus tax number format
+
+    Prefix ``12`` is excluded from validation by the python-stdnum 2.2 Cypriot VAT algorithm,
+    independently of the check letter. ``checksum()`` remains an arithmetic-only check.
+    https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/cy/vat.py
+
     https://en.wikipedia.org/wiki/VAT_identification_number
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Cyprus-TIN.pdf
     https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698
@@ -44,6 +49,8 @@ class TaxNumber:
     def validate(id_number: str) -> bool:
         """validate the id"""
         if not validate_regexp(id_number, TaxNumber.METADATA.regexp):
+            return False
+        if id_number.startswith('12'):
             return False
         return TaxNumber.checksum(id_number)
 
