@@ -25,6 +25,9 @@ def check_install(expected_version: str) -> Path:
         raise RuntimeError('idnumbers was not imported from this interpreter\'s installed distribution: ' + str(origin))
     if Path(sys.prefix).resolve() not in origin.parents:
         raise RuntimeError('idnumbers was not installed in this environment: ' + str(origin))
+    if not (origin.parent / 'py.typed').is_file():
+        raise RuntimeError('The PEP 561 py.typed marker is missing from the installed idnumbers package: '
+                           + str(origin.parent))
     return origin
 
 
