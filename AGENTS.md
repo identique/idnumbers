@@ -21,16 +21,13 @@ national ID numbers for 78 countries, has no runtime dependencies, and supports 
 
 ### Git and pull requests
 
-- **No direct pushes to `main`:** every change goes through a pull request.
-- **No force-pushes:** never force-push to any branch.
-- **Commit messages:** use `type(#issue): subject`, for example `fix(#282): accept BEL month 00`. Types: `feat`, `fix`,
-  `docs`, `test`, `refactor`, `perf`, `build`, `ci`, `chore`, `revert`.
-- **No tool attribution:** commit messages and PR bodies carry no AI or tool attribution, such as
-  `Co-Authored-By:` trailers, "Generated with" lines or session links.
-- **One worktree per issue:** work each issue on its own branch, ideally in its own worktree
-  (`../idnumbers-issue-<N>`, created from `origin/main`).
-- **PR bodies:** `Closes #N` closes the issue on merge, wherever it appears in the body. A PR that only partly
-  addresses an issue says `Part of #N` instead.
+- **Issue first:** every change starts from a GitHub issue.
+- **Pull requests:** changes reach `main` through a pull request, which is squash-merged.
+- **Branch name:** `x<issue>`, for example `x244` for issue #244.
+- **PR title:** `Fix #<issue> - <description>`, for example `Fix #244 - link Croatia TIN with OIB for both entity and
+  individual`. The squash merge turns it into the commit subject, `Fix #244 - ... (#259)`.
+- **Work in progress:** a PR that isn't ready yet is titled `WIP #<issue> - <description>`.
+- **Version bumps:** the bump workflow's bot PR is titled `Bump version to <X.Y.Z>`; see the release procedure.
 
 ### Releases
 
@@ -85,21 +82,6 @@ Never publish to PyPI without the maintainer's approval.
 5. Run the full suite (`python3 -m unittest`) before pushing.
 6. Add the change to `CHANGELOG.md` under the next release.
 
-## Backlog
-
-The umbrella issue is [#336](https://github.com/identique/idnumbers/issues/336). The work is split into milestones,
-and each milestone has a `[meta]` issue (label `epic`) whose checklist is the implementation order.
-
-- **Skip:**
-  - issues labelled `question`: they need a maintainer decision first;
-  - `[meta]` issues: they only track order.
-- **Evidence:** each finding's examples are real outputs from both libraries, cross-checked with python-stdnum. Use
-  them as test vectors, and record their source in the test.
-- **Low-confidence findings:** for anything marked *medium* or *low* confidence, confirm the source before changing
-  behaviour. If it can't be confirmed, stop and ask.
-- **Public API:** the maintainer approves each new public API's shape (names, signatures, return types) before it is
-  implemented.
-
 ## Release procedure
 
 Releases run through GitHub Actions and need the maintainer's approval. Don't edit `VERSION` by hand.
@@ -115,6 +97,6 @@ Releases run through GitHub Actions and need the maintainer's approval. Don't ed
    - Any other value publishes to test.pypi.org.
 4. **Verify:** check that `https://pypi.org/pypi/idnumbers/json` reports the new version.
 5. **GitHub release:** create release `v<X.Y.Z>` titled `Release <X.Y.Z>` on the released commit, with notes from
-   the changelog.
+   the changelog, and tick **Create a discussion for this release** (see `RELEASE.md`).
 
 See `RELEASE.md` for the manual fallback.
