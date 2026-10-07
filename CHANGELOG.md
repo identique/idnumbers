@@ -65,6 +65,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   with encoded birth day +60 and decoded dates in `parse()`. `NationalID` remains personnummer-only; existing
   10-digit `-`/`+` decoding and checksum-calculator behavior are unchanged.
 
+- **UKR** EDRPOU ([#312](https://github.com/identique/idnumbers/issues/312)): a second-pass remainder of `10` now
+  maps to check digit `0`, so `57334830` and `43089360` are accepted. Existing weight selection is unchanged;
+  the separate selection question remains tracked in [#342](https://github.com/identique/idnumbers/issues/342).
+
 ### Other fixes
 
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
