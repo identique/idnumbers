@@ -21,8 +21,8 @@ class NationalID(OldNationalID):
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'BD',
         # length without insignificant chars
-        'min_length': 13,
-        'max_length': 13,
+        'min_length': 17,
+        'max_length': 17,
         'parsable': True,
         'checksum': False,
         'regexp': re.compile(r'^(?P<yyyy>\d{4})'
@@ -65,5 +65,5 @@ class NationalID(OldNationalID):
             return None
         return {
             **old_result,
-            'yyyy': int(id_number[0:4])
+            'yyyy': id_number[:4]
         }

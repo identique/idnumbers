@@ -79,6 +79,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 - **ALB** identity number ([#344](https://github.com/identique/idnumbers/issues/344)): the missing metadata comma is
   restored, separating `Numri i Identitetit të Shtetasit` and `NISH` into the intended six names.
+- **BGD** national ID ([#346](https://github.com/identique/idnumbers/issues/346)): `parse()` returns `yyyy` as
+  the declared four-character string, preserving leading zeros. The national ID metadata lengths are corrected to 17;
+  old national ID metadata remains 13.
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
   temporary number for a man, as male. Codes `3` and `4` are still reported as female, because no source says which sex
   they stand for ([#429](https://github.com/identique/idnumbers/issues/429)).
