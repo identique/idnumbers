@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, Tuple, TypedDict
+from typing import Optional, Tuple, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, match_regexp
 
@@ -97,7 +97,7 @@ class PersonalID:
         return gender, year_base
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """algorithm: https://et.wikipedia.org/wiki/Isikukood#Kontrollnumber"""
         if not validate_regexp(id_number, PersonalID.METADATA.regexp):
             return None
@@ -109,4 +109,4 @@ class PersonalID:
             if checksum == 10:
                 # reset to 0 if it is 10 at the 2nd phase
                 checksum = 0
-        return checksum
+        return cast(CHECK_DIGIT, checksum)

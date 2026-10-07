@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, match_regexp
 
 
@@ -62,5 +62,5 @@ class PersonalNumber:
         return {
             'yymm': match_obj.group('yymm'),
             'sn': match_obj.group('sn'),
-            'checksum': int(match_obj.group('checksum'))
+            'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
         }

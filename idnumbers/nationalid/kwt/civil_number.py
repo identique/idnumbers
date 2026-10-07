@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 
 
@@ -86,7 +86,7 @@ class CivilNumber:
         }
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """
         https://prakhar.me/articles/kuwait-civil-id-checksum/
         """
@@ -98,4 +98,4 @@ class CivilNumber:
         if modulus > 10:
             # according to the algorithm, it will not be greater than 10
             return None
-        return modulus
+        return cast(CHECK_DIGIT, modulus)

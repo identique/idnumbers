@@ -1,9 +1,15 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict
+from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import match_regexp
+
+
+CHECKSUM_LETTER = Literal['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                          'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'Y', 'U',
+                          'V', 'W']  # cannot use CHECK_ALPHA because it ends with W
+"""check letter of the id number"""
 
 
 class ParseResult(TypedDict):
@@ -14,9 +20,7 @@ class ParseResult(TypedDict):
     """serial number"""
     gender: Gender
     """gender: male or female"""
-    checksum: Literal['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-                      'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'Y', 'U',
-                      'V', 'W']  # cannot use CHECK_ALPHA because it ends with W
+    checksum: CHECKSUM_LETTER
     """check digits"""
 
 
@@ -78,7 +82,7 @@ class IdentityNumber:
                 'yyyymmdd': birth_date,
                 'gender': Gender.MALE if mm < 50 else Gender.FEMALE,
                 'sn': match_obj.group('sn'),
-                'checksum': match_obj.group('checksum')
+                'checksum': cast(CHECKSUM_LETTER, match_obj.group('checksum'))
             }
         except ValueError:
             return None

@@ -1,11 +1,11 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, match_regexp
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'[ -]', '', id_number)
 
@@ -74,14 +74,14 @@ class IcelandicID:
             return {
                 'yyyymmdd': date(yy + year_base, mm, dd),
                 'sn': match_obj.group('sn'),
-                'checksum': int(match_obj.group('checksum')),
+                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum'))),
             }
         except ValueError:
             # catch the date error
             return None
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """
         check the checksum
         https://en.wikipedia.org/wiki/Icelandic_identification_number

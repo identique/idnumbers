@@ -100,7 +100,7 @@ class PESEL:
             return 1900, month
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """
         python implementation of https://en.wikipedia.org/wiki/PESEL#Checksum_calculation
         """

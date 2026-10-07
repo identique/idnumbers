@@ -5,7 +5,7 @@ from typing import List
 from ..util import CHECK_DIGIT, mn_modulus_digit, modulus_overflow_mod10, validate_regexp
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r' ', '', id_number)
 

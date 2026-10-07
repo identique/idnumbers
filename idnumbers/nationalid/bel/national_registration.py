@@ -151,7 +151,7 @@ class NationalRegistrationNumber:
         }
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """
         calculated as the remainder of dividing xxxxxxxxxx by 97
         (if the remainder is 0, the check number is set to 97).

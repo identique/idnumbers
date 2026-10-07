@@ -1,12 +1,12 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, TypedDict, Tuple
+from typing import Optional, TypedDict, Tuple, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 from ..constant import Citizenship, Gender
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'[ -]', '', id_number)
 
@@ -81,13 +81,13 @@ class PersonalID:
                 'gender': gender,
                 'citizenship': citizenship,
                 'sn': sn,
-                'checksum': int(match_obj.group('checksum'))
+                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
             }
         except ValueError:
             return None
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """
         It's hard to find it. The algorithm is the 11-modulus on a weighted sum.
         algorithm: https://github.com/loonkwil/hungarian-validator-bundle/blob/master/Validator/PersonalIdValidator.php

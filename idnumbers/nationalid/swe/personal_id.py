@@ -6,7 +6,7 @@ from ..constant import Gender
 from ..util import validate_regexp, luhn_digit, match_regexp
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'[+-]', '', id_number)
 

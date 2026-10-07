@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from typing import Optional, Union, TypedDict
+from typing import Optional, Union, TypedDict, cast
 from types import SimpleNamespace
 
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
@@ -85,7 +85,7 @@ class OldPersonalCode:
             return {
                 'yyyymmdd': date(yy + year_base, mm, dd),
                 'sn': sn,
-                'checksum': int(match_obj.group('checksum'))
+                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
             }
         except ValueError:
             # check of wrong date data

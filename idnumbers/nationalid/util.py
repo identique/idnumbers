@@ -2,7 +2,7 @@ import re
 from copy import copy
 from functools import lru_cache
 from re import Match, Pattern
-from typing import List, Literal, Optional, Type, cast
+from typing import Any, List, Literal, Optional, Type, TypeVar, cast
 
 VERHOEFF = {
     'D_TABLE': [
@@ -31,7 +31,7 @@ VERHOEFF = {
 }
 """[Table](https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm) for the Verhoeff algorithm"""
 
-CHECK_DIGIT: Type[int] = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+CHECK_DIGIT = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 """Check digit type. Numeric check digits are only allowed in 0 to 9"""
 
 CHECK_ALPHA = Literal['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
@@ -41,7 +41,7 @@ CHECK_ALPHA = Literal['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
 
 
 @lru_cache(maxsize=256)
-def _ascii_pattern(regexp: Pattern) -> Pattern:
+def _ascii_pattern(regexp: Pattern[Any]) -> Pattern[Any]:
     """
     Build the ASCII-only twin of a compiled pattern.
 
@@ -178,7 +178,7 @@ def modulus_overflow_mod10(modulus: int) -> CHECK_DIGIT:
     return cast(CHECK_DIGIT, modulus % 10 if modulus > 9 else modulus)
 
 
-def letter_to_number(letter: str, capital: bool = True):
+def letter_to_number(letter: str, capital: bool = True) -> int:
     """
     English letter to its index. A = 1, B = 2...
     """
@@ -209,12 +209,15 @@ def ean13_digit(numbers: List[int]) -> CHECK_DIGIT:
                 0 if modulus == 0 else (10 - modulus))
 
 
-def alias_of(cls: Type) -> Type:
+_T = TypeVar('_T', bound=Type[Any])
+
+
+def alias_of(cls: _T) -> _T:
     assert hasattr(cls, 'METADATA'), f'the type {cls} must have METADATA attribute'
     metadata = copy(cls.METADATA)
     metadata.alias_of = cls
 
-    class AliasType(cls):
+    class AliasType(cls):  # type: ignore[valid-type,misc]  # the base class is only known at runtime
         METADATA = metadata
 
-    return AliasType
+    return cast(_T, AliasType)

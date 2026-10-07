@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from typing import Optional
+from typing import Optional, cast
 from ..util import CHECK_DIGIT, alias_of, validate_regexp
 from .util import normalize
 
@@ -62,7 +62,8 @@ class TaxFileNumber:
         if len(normalized) == 8:
             normalized = normalized[0:7] + '0' + normalized[7]
         number_list = [int(char) for char in list(normalized)]
-        return sum([value * TaxFileNumber.MULTIPLIER[index] for (index, value) in enumerate(number_list)]) % 11
+        return cast(CHECK_DIGIT, sum([value * TaxFileNumber.MULTIPLIER[index]
+                                      for (index, value) in enumerate(number_list)]) % 11)
 
 
 TFN = alias_of(TaxFileNumber)

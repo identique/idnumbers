@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, validate_regexp, luhn_digit, verhoeff_check, match_regexp
 
 
@@ -64,15 +64,15 @@ class NationalID:
             return {
                 'yyyymmdd': date(yyyy, mm, dd),
                 'sn': match_obj.group('sn'),
-                'checksum1': int(match_obj.group('checksum1')),
-                'checksum2': int(match_obj.group('checksum2'))
+                'checksum1': cast(CHECK_DIGIT, int(match_obj.group('checksum1'))),
+                'checksum2': cast(CHECK_DIGIT, int(match_obj.group('checksum2')))
             }
         except ValueError:
             # catch the date error
             return None
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """check the checksum"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False

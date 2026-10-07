@@ -6,7 +6,7 @@ from ..constant import Gender
 from ..util import match_regexp
 
 
-def normalize(id_number: str) -> str:
+def normalize(id_number: str) -> Optional[str]:
     """make all characters to upper case"""
     return id_number.upper() if id_number else None
 

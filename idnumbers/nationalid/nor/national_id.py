@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, Union
 from datetime import date
 
 from ..constant import Gender
@@ -83,7 +83,7 @@ class NationalID:
         mm = match_obj.group('mm')
         dd = match_obj.group('dd')
 
-        birth_century = '20'
+        birth_century: Union[str, int] = '20'
         individual_num = int(individual_code)
         if 0 <= individual_num < 500:
             birth_century = 19

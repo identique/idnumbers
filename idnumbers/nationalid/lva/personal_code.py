@@ -1,6 +1,6 @@
 import re
 from types import SimpleNamespace
-from typing import Optional
+from typing import Optional, cast
 
 from ..util import CHECK_DIGIT, validate_regexp
 from .util import normalize
@@ -75,4 +75,4 @@ class PersonalCode:
             return None
         numbers = [int(i) for i in normalize(id_number)[:10]]
         weighted_value = sum([value * PersonalCode.MULTIPLIER[index] for (index, value) in enumerate(numbers)])
-        return (1101 - weighted_value) % 11 % 10
+        return cast(CHECK_DIGIT, (1101 - weighted_value) % 11 % 10)

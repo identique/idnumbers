@@ -1,11 +1,11 @@
 import re
 from types import SimpleNamespace
-from typing import Literal, Optional
-from ..util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
+from typing import Literal, Optional, cast
+from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
 from .resident_registration import ResidentRegistration, ParseResult
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'-', '', id_number)
 
@@ -64,7 +64,8 @@ class OldResidentRegistration(ResidentRegistration):
     @staticmethod
     def parse(id_number: str) -> Optional[OldIDParseResult]:
         """prase the result"""
-        match_obj = match_regexp(id_number, OldResidentRegistration.METADATA.regexp)
+        # a truthy new_result and checksum both come from this same 14-character layout, so it matched
+        match_obj = cast(re.Match[str], match_regexp(id_number, OldResidentRegistration.METADATA.regexp))
         new_result = ResidentRegistration.parse(id_number)
         if not new_result:
             return None
@@ -74,11 +75,11 @@ class OldResidentRegistration(ResidentRegistration):
             **new_result,
             'sn': match_obj.group('sn'),
             'location': match_obj.group('location'),
-            'checksum': int(match_obj.group('checksum'))
+            'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
         }
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """multiply the magic number and find the modulus"""
         if not validate_regexp(id_number, OldResidentRegistration.METADATA.regexp):
             return False

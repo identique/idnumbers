@@ -1,15 +1,19 @@
 import re
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict
+from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 
 
+LOCATION_CODE = Literal['A', 'B', 'C', 'D', 'E', 'F', 'G',
+                        'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                        'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                        'V', 'W', 'X', 'Y', 'Z']
+"""letter of the location code"""
+
+
 class ParseResult(TypedDict):
-    location: Literal['A', 'B', 'C', 'D', 'E', 'F', 'G',
-                      'H', 'I', 'J', 'K', 'L', 'M', 'N',
-                      'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-                      'V', 'W', 'X', 'Y', 'Z']
+    location: LOCATION_CODE
     """location code"""
     gender: Gender
     """gender: male or female"""
@@ -76,10 +80,10 @@ class NationalID:
         gender = match_obj.group('gender')
         sn = match_obj.group('sn')
         return {
-            'location': location,
+            'location': cast(LOCATION_CODE, location),
             'gender': Gender.MALE if gender == '1' else Gender.FEMALE,
             'sn': sn,
-            'checksum': int(match_obj.group('checksum'))
+            'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
         }
 
     @staticmethod
@@ -99,4 +103,4 @@ class NationalID:
         location = id_number[0]
         numbers = NationalID.LOCATION_NUM[ord(location) - 65] + [int(char) for char in id_number[1:]]
         # a weighted sum that is a multiple of 10 gives check digit 0, not 10
-        return weighted_modulus_digit(numbers[:-1], NationalID.MAGIC_MULTIPLIER, 10) % 10
+        return cast(CHECK_DIGIT, weighted_modulus_digit(numbers[:-1], NationalID.MAGIC_MULTIPLIER, 10) % 10)

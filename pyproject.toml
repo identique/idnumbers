@@ -45,3 +45,8 @@ exclude = ["*tests*"]
 
 [tool.setuptools.package-data]
 idnumbers = ["py.typed"]
+
+[tool.mypy]
+python_version = "3.9"
+strict = true
+files = ["idnumbers"]

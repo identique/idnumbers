@@ -1,12 +1,12 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict
+from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import validate_regexp, match_regexp
 
 
-def normalize(id_number: str) -> str:
+def normalize(id_number: str) -> Optional[str]:
     """strip out useless characters/whitespaces"""
     return id_number.upper() if id_number else None
 
@@ -90,11 +90,11 @@ class ResidentID:
             return None
 
     @staticmethod
-    def checksum(id_number) -> Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']]:
+    def checksum(id_number: str) -> Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']]:
         """algorithm: https://en.wikipedia.org/wiki/Resident_Identity_Card#Identity_card_number"""
         if not validate_regexp(id_number, ResidentID.METADATA.regexp):
             return None
-        normalized = normalize(id_number)
+        normalized = cast(str, normalize(id_number))  # non-empty: it matched the regexp
         source_list = [int(char) for char in normalized[:-1]]
         # The magic number is calculated from 2^(18 - i) % 11 (the first number is 1).
         total = sum([value * (pow(2, 17 - index) % 11) for (index, value) in enumerate(source_list)])

@@ -5,7 +5,7 @@ from typing import Optional, TypedDict
 from ..util import validate_regexp, match_regexp
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'/\(\)', '', id_number)
 

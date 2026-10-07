@@ -1,7 +1,7 @@
 
 
 from enum import Enum
-from typing import Optional
+from typing import Optional, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit
 
 
@@ -24,7 +24,7 @@ WEIGHTS1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 WEIGHTS2 = [3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2]
 
 
-def checksum(id_number) -> Optional[CHECK_DIGIT]:
+def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
     """
     check the checksum
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Kazakhstan-TIN.pdf
@@ -34,4 +34,4 @@ def checksum(id_number) -> Optional[CHECK_DIGIT]:
     if modulus == 10:
         modulus = weighted_modulus_digit(numbers[0:-1], WEIGHTS2, 11, True)
         # the second modulus will not be 10. If it is, it's wrong id number
-    return modulus if modulus < 10 else None
+    return cast(CHECK_DIGIT, modulus) if modulus < 10 else None

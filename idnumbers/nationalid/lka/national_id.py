@@ -1,9 +1,9 @@
 import re
 from datetime import date, timedelta
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict
+from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
-from ..util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
+from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -83,7 +83,7 @@ class NationalID:
                 'yyyymmdd': yyyymmdd,
                 'gender': Gender.MALE if days < 500 else Gender.FEMALE,
                 'sn': sn,
-                'checksum': int(match_obj.group('checksum'))
+                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
             }
         except (ValueError, OverflowError):
             # an out of range date raises ValueError, a year near 0001 or 9999 whose day offset
@@ -91,7 +91,7 @@ class NationalID:
             return None
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """algorithm: https://lk.linkedin.com/posts/nuwansenaratna_srilanka-activity-6926883712584335360-E_69"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False

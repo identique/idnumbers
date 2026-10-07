@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from types import SimpleNamespace
-from typing import Optional, Tuple, TypedDict
+from typing import Optional, Tuple, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 
@@ -74,7 +74,7 @@ class PersonalCode:
         checksum = PersonalCode.checksum(id_number)
         if checksum is None or str(checksum) != match_obj.group('checksum'):
             return None
-        year_base, gender = PersonalCode.extract_year_base_gender(int(match_obj.group('g')))
+        year_base, gender = PersonalCode.extract_year_base_gender(cast(CHECK_DIGIT, int(match_obj.group('g'))))
         yy = int(match_obj.group('yy'))
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
@@ -89,7 +89,7 @@ class PersonalCode:
             return None
 
     @staticmethod
-    def checksum(id_number) -> Optional[CHECK_DIGIT]:
+    def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """
         algorithm https://en.wikipedia.org/wiki/National_identification_number#Lithuania
         """
@@ -108,14 +108,14 @@ class PersonalCode:
         d %= 11
         e %= 11
         if d < 10:
-            return d
+            return cast(CHECK_DIGIT, d)
         elif e < 10:
-            return e
+            return cast(CHECK_DIGIT, e)
         else:
             return 0
 
     @staticmethod
-    def extract_year_base_gender(g: CHECK_DIGIT) -> Optional[Tuple[int, Gender]]:
+    def extract_year_base_gender(g: CHECK_DIGIT) -> Tuple[int, Gender]:
         """
         First digits 1/2, 3/4, 5/6 and 7/8 encode the 1800s, 1900s, 2000s and 2100s.
         Odd digits encode male and even digits encode female.

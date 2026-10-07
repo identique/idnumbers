@@ -1,8 +1,8 @@
 import re
 from enum import Enum
 from types import SimpleNamespace
-from typing import Literal, Optional, TypedDict
-from ..util import weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
+from typing import Literal, Optional, TypedDict, cast
+from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
 
 
 class ThaiCitizenship(Enum):
@@ -27,7 +27,7 @@ class ThaiCitizenship(Enum):
     # Foreign Nationals living permanently, or Thai nationals by naturalisation.
 
 
-def normalize(id_number):
+def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
     return re.sub(r'[ \-/]', '', id_number)
 
@@ -136,11 +136,11 @@ class NationalID:
                 'province_code': province,
                 'district_code': district,
                 'sn': sn,
-                'checksum': int(match_obj.group('checksum'))
+                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
             }
 
     @staticmethod
-    def checksum(id_number) -> bool:
+    def checksum(id_number: str) -> bool:
         """algorithm: https://github.com/awcode/thai-laravel"""
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
