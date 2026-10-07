@@ -101,6 +101,8 @@ working directories.
 - **Country registry:** `idnumbers/registry.py` maps every public country module to its alpha-3 code, alpha-2 code and
   CLDR English name, and `idnumbers` re-exports its functions. A new country module must be added to its `_BUILTIN`
   table; `tests/test_registry.py` fails otherwise.
+- **Unified API:** `idnumbers/api.py` has `validate()` / `validate_many()`, which use the registry's `NationalID`;
+  `idnumbers` re-exports them.
 - **Input contract:** `validate()` never raises. It returns `False` for non-`str`, empty or malformed input, and
   `parse()` returns `None` for the same inputs. Regexps must match the whole input, with ASCII digits only.
 - **Tests:** `tests/nationalid/test_<ISO3>.py` (unittest).
