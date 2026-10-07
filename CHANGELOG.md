@@ -86,6 +86,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   prefixes now require two ASCII letters, preserving lowercase acceptance and the trailing-digit blacklist. IRD
   numbers must be within the current inclusive 10,000,000-200,000,000 range and pass the existing checksum.
 
+- **PRT** ([#353](https://github.com/identique/idnumbers/issues/353)): add `CitizenCard` for compact 12-character
+  document numbers with the full-card checksum. `CivilIDNumber` and `NationalID` remain BI/NIC-only. NIF now accepts
+  prefixes `74`, `75`, `77`, `78` and `79`; its checksum arithmetic and other prefix rules are unchanged.
+
 - **SWE** ([#311](https://github.com/identique/idnumbers/issues/311)): personnummer now accepts 10- and 12-digit
   compact forms and optional `-`/`+` separators; explicit four-digit years determine the century. Only the two
   century digits are excluded from the checksum. Add separate `CoordinationNumber` support for samordningsnummer,
@@ -123,6 +127,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 - **PAK** national ID ([#307](https://github.com/identique/idnumbers/issues/307)): correct the alpha-2 metadata from
   `PA` to `PK`; validation and parsing are unchanged.
+
+- **PRT** NIF ([#353](https://github.com/identique/idnumbers/issues/353)): restore the missing metadata comma,
+  separating `Número de identificação fiscal` and `NIF` into the intended three names.
 
 ## 1.12.0 (2026-10-07)
 
