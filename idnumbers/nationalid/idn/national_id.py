@@ -22,19 +22,27 @@ class ParseResult(TypedDict):
 
 class NIK:
     """
-    Indonesia ID number format
-    NIK (Nomor Induk Kependudukan)
-    https://en.wikipedia.org/wiki/National_identification_number#Indonesia
-    https://www.npmjs.com/package/nik-validator?activeTab=explore
+    Indonesia ID number format, NIK (Nomor Induk Kependudukan).
+
+    The day field is 01-31 for men and 41-71 for women; subtract 40 from a
+    woman's encoded day. Since NIK stores only a two-digit birth year, a date
+    is valid when it exists in either 19yy or 20yy. Parsing preserves ``yy``
+    and does not claim a century. The date rule follows python-stdnum's
+    century fallback; the day encoding and serial-number rule are described
+    at the sources below.
+
+    Sources:
+    https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/id/nik.py
+    https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan
     """
     METADATA = SimpleNamespace(**{
-        'iso3166_alpha2': 'IDN',
+        'iso3166_alpha2': 'ID',
         'min_length': 16,
         'max_length': 16,
         'parsable': True,
         'checksum': False,
         'regexp': re.compile(r'^(?P<district>\d{6})'
-                             r'(?P<dd>[0-7]\d)'
+                             r'(?P<dd>0[1-9]|[12]\d|3[01]|4[1-9]|[56]\d|7[01])'
                              r'(?P<mm>(0[1-9]|1[012]))'
                              r'(?P<yy>\d{2})'
                              r'(?!0000)\d{4}$'),
@@ -42,7 +50,8 @@ class NIK:
         'names': ['ID Number',
                   'NIK',
                   'Nomor Induk Kependudukan'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Indonesia'],
+        'links': ['https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/id/nik.py',
+                  'https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan'],
         'deprecated': False
     })
 
@@ -68,23 +77,27 @@ class NIK:
         if district not in NIK.DISTRICT:
             return None
 
-        gender = Gender.FEMALE if int(match_obj.group('dd')[0]) <= 3 else Gender.MALE
+        encoded_day = int(match_obj.group('dd'))
+        gender = Gender.FEMALE if encoded_day > 40 else Gender.MALE
         yy = match_obj.group('yy')
         mm = match_obj.group('mm')
-        dd = match_obj.group('dd') if gender == Gender.FEMALE else int(match_obj.group('dd')) - 30
+        day = encoded_day - 40 if gender == Gender.FEMALE else encoded_day
 
-        # Validate the date
-        try:
-            date(int(f'20{yy}'), int(mm), int(dd))
-            date(int(f'19{yy}'), int(mm), int(dd))
-        except ValueError:
+        # NIK has no century bit, so validate against either possible century.
+        for century in (1900, 2000):
+            try:
+                date(century + int(yy), int(mm), day)
+                break
+            except ValueError:
+                continue
+        else:
             return None
 
         return {
             "gender": gender,
             'yy': yy,
             'mm': mm,
-            'dd': str(dd),
+            'dd': f'{day:02d}',
             "district": district,
         }
 

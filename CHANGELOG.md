@@ -22,12 +22,18 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   is now rejected and `2902004000` (29 February 2000) is valid. A birth date in the future is rejected.
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): birth department `96` is now accepted. It
   was used for Tunisia before 1964, like 91-95 for Algeria and Morocco, so `145089612304582` is now valid.
+- **IDN** NIK ([#293](https://github.com/identique/idnumbers/issues/293)): encoded birth days are now validated as
+  `01`-`31` for men and `41`-`71` for women. Impossible dates are rejected, while 29 February with year `00` is
+  accepted because it exists in 2000 even though it does not exist in 1900; NIK does not identify the century.
 
 ### Other fixes
 
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
   temporary number for a man, as male. Codes `3` and `4` are still reported as female, because no source says which sex
   they stand for ([#429](https://github.com/identique/idnumbers/issues/429)).
+- **IDN** NIK ([#293](https://github.com/identique/idnumbers/issues/293)): `parse()` now decodes women's day numbers by
+  subtracting 40, reports gender from the encoded day, and always returns `dd` as two digits. The alpha-2 metadata is
+  corrected from `IDN` to `ID`.
 
 ## 1.12.0 (2026-10-07)
 
