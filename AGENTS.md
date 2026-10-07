@@ -16,6 +16,8 @@ national ID numbers for many countries, has no runtime dependencies, and support
 - The port was ported from this repo and has since fixed several bugs and added features.
 - Its differential parity check compares the two libraries' validity for the shared countries; see the port's
   `docs/PARITY.md`. Known divergences are listed with their tracking issues in its `parity/allowlist.json`.
+- The port's `parity/corpus.json` is vendored in `tests/parity/` at a pinned port commit, with Python's own results in
+  `tests/parity/expected_python.json`; refresh both with `scripts/sync_parity_corpus.py --from-port <port checkout>`.
 - Use the port as a **reference, not an authority**. Every validity fix here must be justified by an authoritative
   source: an official spec, government documentation, or a well-sourced algorithm description. Cite that source in
   the class docstring or in `METADATA.links`.
@@ -42,17 +44,18 @@ Never publish to PyPI without the maintainer's approval.
 
 ## Commands
 
-| Task        | Command                                                                                         |
-| ----------- | ----------------------------------------------------------------------------------------------- |
-| All tests   | `python3 -m unittest` (CI runs it on every supported Python version)                            |
-| One country | `python3 -m unittest tests.nationalid.test_CHN`                                                 |
-| Type check  | `python3 -m mypy` with mypy 1.20.2 on Python >= 3.10 (config in `pyproject.toml`)               |
-| Lint        | `ruff check .` with ruff 0.16.10 (rules in `pyproject.toml`)                                    |
-| Coverage    | `python3 -m coverage run -m unittest && python3 -m coverage report` (floor in `pyproject.toml`) |
-| Benchmarks  | `python3 bench/run.py` (informational)                                                          |
-| Quick check | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."`                        |
-| Regexp dump | `python3 -m tools.collect_regexp`                                                               |
-| Docs        | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`                              |
+| Task          | Command                                                                                         |
+| ------------- | ----------------------------------------------------------------------------------------------- |
+| All tests     | `python3 -m unittest` (CI runs it on every supported Python version)                            |
+| One country   | `python3 -m unittest tests.nationalid.test_CHN`                                                 |
+| Type check    | `python3 -m mypy` with mypy 1.20.2 on Python >= 3.10 (config in `pyproject.toml`)               |
+| Lint          | `ruff check .` with ruff 0.16.10 (rules in `pyproject.toml`)                                    |
+| Coverage      | `python3 -m coverage run -m unittest && python3 -m coverage report` (floor in `pyproject.toml`) |
+| Benchmarks    | `python3 bench/run.py` (informational)                                                          |
+| Parity golden | `python3 scripts/sync_parity_corpus.py` (`--check`, `--from-port <port checkout>`)              |
+| Quick check   | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."`                        |
+| Regexp dump   | `python3 -m tools.collect_regexp`                                                               |
+| Docs          | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`                              |
 
 ### Optional contributor quickstart with uv
 
@@ -108,7 +111,9 @@ working directories.
 3. Add tests for every behaviour change, with both valid and invalid vectors. For real-world vectors, note where they
    come from.
 4. If the change alters validity for a country the port shares, note it on `identique/idnumbers-npm`, so that the
-   port's parity pin and allowlist get updated.
+   port's parity pin and allowlist get updated. `tests/parity/test_corpus.py` fails when a change alters Python's
+   validity on the port's shared parity corpus; regenerate the golden file with
+   `python3 scripts/sync_parity_corpus.py` and list the changed vectors in the port note.
 5. Run the full suite (`python3 -m unittest`) before pushing.
 6. Add the change to `CHANGELOG.md` under the next release.
 
