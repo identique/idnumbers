@@ -10,6 +10,8 @@ class EntityIDNumber:
     https://uk.wikipedia.org/wiki/%D0%9A%D0%BE%D0%B4_%D0%84%D0%94%D0%A0%D0%9F%D0%9E%D0%A3
     https://1cinfo.com.ua/Article/Detail/Proverka_koda_po_EDRPOU/
     This is a python version of https://github.com/alazurenko/validate-edrpou
+    Second-pass remainder mapping reference:
+    https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/ua/edrpou.py
     alias: ["EDRPOU", "ЄДРПОУ"]
     """
     METADATA = SimpleNamespace(**{
@@ -59,8 +61,6 @@ class EntityIDNumber:
         if modulus < 10:
             return modulus
         multiplier = [val + 2 for val in multiplier]
-        # what happen when modulus is also greater than 10 in the 2nd phase?
-        # implement the recursive in sequential to prevent infinite loops because I don't know what we should do
-        # if the modulus is also greater than 10.
+        # A second-pass remainder of 10 maps to check digit 0.
         modulus = sum([value * multiplier[index] for (index, value) in enumerate(source_list)]) % 11
-        return modulus
+        return modulus % 10
