@@ -54,6 +54,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `123456782` are now accepted, while the existing fully dotted layout `1234.56.782` remains accepted. All-zero
   numbers remain rejected in both formats; the 11-proof and `checksum()` are unchanged.
 
+- **NZL** ([#306](https://github.com/identique/idnumbers/issues/306)): the expanded NHI checksum now uses modulus
+  23 and check-letter indices 1-23, per HISO 10046:2024; the legacy numeric checksum is unchanged. Driver licence
+  prefixes now require two ASCII letters, preserving lowercase acceptance and the trailing-digit blacklist. IRD
+  numbers must be within the current inclusive 10,000,000-200,000,000 range and pass the existing checksum.
+
 ### Other fixes
 
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
@@ -70,6 +75,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **LTU** personal code ([#300](https://github.com/identique/idnumbers/issues/300)): `parse()` now maps first digits
   `1`/`2` to the 1800s, `3`/`4` to the 1900s, `5`/`6` to the 2000s and `7`/`8` to the 2100s. Odd digits still
   report male and even digits female; `39001010077` now reports 1990-01-01 instead of 1890-01-01.
+
+- **NZL** passport ([#306](https://github.com/identique/idnumbers/issues/306)): remove the unrelated `NIN` metadata
+  name; passport validation is unchanged.
 
 ## 1.12.0 (2026-10-07)
 

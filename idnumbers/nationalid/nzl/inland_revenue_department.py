@@ -13,6 +13,8 @@ class InlandRevenueDepartmentNumber:
     """
     New Zealand inland revenue department(IRD) number format
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/New%20Zealand-TIN.pdf
+    Range and checksum: IRD's 2026 overseas pension transfers file specification,
+    section 5.3 (inclusive range 10,000,000 to 200,000,000).
     This is a python version of this one: https://github.com/jarden-digital/nz-ird-validator
     """
     METADATA = SimpleNamespace(**{
@@ -32,7 +34,11 @@ class InlandRevenueDepartmentNumber:
         'alias_of': None,
         'names': ['Inland Revenue Department Number',
                   'IRD'],
-        'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
+        'links': ['https://www.ird.govt.nz/-/media/project/ir/home/documents/kiwisaver/'
+                  'file-upload-spec-for-opt/file-upload-specification---overseas-pension-transfers-return---2026.pdf'
+                  '?modified=20260302011849',
+                  'https://www.ird.govt.nz/updates/news-folder/2026/increase-to-ird-number-validation-upper-limit',
+                  'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/New%20Zealand-TIN.pdf'],
         'deprecated': False
     })
@@ -53,6 +59,8 @@ class InlandRevenueDepartmentNumber:
         if not validate_regexp(id_number, InlandRevenueDepartmentNumber.METADATA.regexp):
             return False
         normalized = normalize(id_number)
+        if not 10000000 <= int(normalized) <= 200000000:
+            return False
         if len(normalized) == 8:
             # pre-pad a 0 if it is the short one
             normalized = '0' + normalized
