@@ -97,7 +97,9 @@ class INSEE:
     @staticmethod
     def validate_birth_department(birth_department: str) -> Optional[BirthDepartment]:
         department_code = birth_department[:2].upper()
-        if (department_code.isdigit() and 1 <= int(department_code) <= 95) or department_code in ['2A', '2B']:
+        # 91-96 were used for Algeria, Morocco and Tunisia before 1964 (fr.wikipedia, see METADATA.links),
+        # 97-98 are overseas and 99 is abroad
+        if (department_code.isdigit() and 1 <= int(department_code) <= 96) or department_code in ['2A', '2B']:
             return {
                 "department": birth_department[:2],
                 "city": birth_department[2:],
