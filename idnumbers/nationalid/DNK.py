@@ -1,6 +1,6 @@
 from types import SimpleNamespace
-from .dnk.personal_id import PersonalIdentityNumber
-from .dnk.entity_vat import EntityVAT
+from .dnk.personal_id import PersonalIdentityNumber as PersonalIdentityNumber
+from .dnk.entity_vat import EntityVAT as EntityVAT
 from .util import alias_of
 
 NationalID = alias_of(PersonalIdentityNumber)

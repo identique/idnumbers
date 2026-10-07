@@ -1,1 +1,1 @@
-from .arg.national_id import NationalID
+from .arg.national_id import NationalID as NationalID

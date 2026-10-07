@@ -1,5 +1,5 @@
-from .che.social_security import SocialSecurityNumber
-from .che.business_id import BusinessID
+from .che.social_security import SocialSecurityNumber as SocialSecurityNumber
+from .che.business_id import BusinessID as BusinessID
 from .util import alias_of
 
 AVH = alias_of(SocialSecurityNumber)

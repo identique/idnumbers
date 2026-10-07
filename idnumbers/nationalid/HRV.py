@@ -1,5 +1,5 @@
 from types import SimpleNamespace
-from .hrv.personal_id import PersonalID
+from .hrv.personal_id import PersonalID as PersonalID
 from .util import alias_of
 
 NationalID = alias_of(PersonalID)

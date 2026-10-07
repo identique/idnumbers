@@ -1,4 +1,4 @@
-from .deu.tax_id import TaxID
+from .deu.tax_id import TaxID as TaxID
 from .util import alias_of
 
 NationalID = alias_of(TaxID)

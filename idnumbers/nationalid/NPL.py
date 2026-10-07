@@ -1,4 +1,4 @@
-from .npl.national_id import NationalID
+from .npl.national_id import NationalID as NationalID
 from .util import alias_of
 
 NIN = alias_of(NationalID)

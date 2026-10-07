@@ -1,4 +1,4 @@
-from .esp.dni import DNI
+from .esp.dni import DNI as DNI
 from .util import alias_of
 
 NationalID = alias_of(DNI)

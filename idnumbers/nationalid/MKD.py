@@ -1,4 +1,4 @@
-from .mkd.jmbg import UniqueMasterCitizenNumber
+from .mkd.jmbg import UniqueMasterCitizenNumber as UniqueMasterCitizenNumber
 from .util import alias_of
 
 NationalID = alias_of(UniqueMasterCitizenNumber)

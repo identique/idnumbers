@@ -1,4 +1,4 @@
-from .bih.jmbg import UniqueMasterCitizenNumber
+from .bih.jmbg import UniqueMasterCitizenNumber as UniqueMasterCitizenNumber
 from .util import alias_of
 
 NationalID = alias_of(UniqueMasterCitizenNumber)

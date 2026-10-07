@@ -1,4 +1,4 @@
-from .bhr.personal_number import PersonalNumber
+from .bhr.personal_number import PersonalNumber as PersonalNumber
 from .util import alias_of
 
 NationalID = alias_of(PersonalNumber)

@@ -1,1 +1,1 @@
-from .irq.national_id import NationalID
+from .irq.national_id import NationalID as NationalID

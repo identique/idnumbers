@@ -1,4 +1,4 @@
-from .nld.national_id import BSN
+from .nld.national_id import BSN as BSN
 from .util import alias_of
 
 NationalID = alias_of(BSN)

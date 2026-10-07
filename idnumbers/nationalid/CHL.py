@@ -1,4 +1,4 @@
-from .chl.national_id import NationalID
+from .chl.national_id import NationalID as NationalID
 from .util import alias_of
 
 RUN = alias_of(NationalID)

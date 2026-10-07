@@ -1,6 +1,6 @@
 from types import SimpleNamespace
-from .bel.national_registration import NationalRegistrationNumber
-from .bel.entity_vat import EntityVAT
+from .bel.national_registration import NationalRegistrationNumber as NationalRegistrationNumber
+from .bel.entity_vat import EntityVAT as EntityVAT
 from .util import alias_of
 
 NationalID = alias_of(NationalRegistrationNumber)

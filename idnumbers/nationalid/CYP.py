@@ -1,5 +1,5 @@
 from types import SimpleNamespace
-from .cyp.tax_number import TaxNumber
+from .cyp.tax_number import TaxNumber as TaxNumber
 from .util import alias_of
 
 NationalID = alias_of(TaxNumber)

@@ -1,1 +1,1 @@
-from .png.national_id import NationalID
+from .png.national_id import NationalID as NationalID

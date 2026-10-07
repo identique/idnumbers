@@ -1,1 +1,1 @@
-from .nga.national_id import NationalID
+from .nga.national_id import NationalID as NationalID

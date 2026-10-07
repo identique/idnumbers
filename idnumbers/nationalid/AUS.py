@@ -1,6 +1,6 @@
-from .aus.driver_license import DriverLicenseNumber
-from .aus.medicare import MedicareNumber
-from .aus.tax_file import TaxFileNumber
+from .aus.driver_license import DriverLicenseNumber as DriverLicenseNumber
+from .aus.medicare import MedicareNumber as MedicareNumber
+from .aus.tax_file import TaxFileNumber as TaxFileNumber
 from .util import alias_of
 
 
