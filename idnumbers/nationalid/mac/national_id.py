@@ -48,7 +48,6 @@ class NationalID:
         # The lookahead pairs parentheses without changing the capture groups.
         'regexp': re.compile(r'^(?P<doc_type>[01578])'
                              r'(?P<sn>\d{6})'
-                             r'(?=\d$|\(\d\)$)\(?(?P<extra>\d)\)?$'),
         'alias_of': None,
         'names': ['National ID Number',
                   'Permanent Resident Identity Card',
@@ -81,7 +80,7 @@ class NationalID:
             return None
         doc_type = match_obj.group('doc_type')
         sn = match_obj.group('sn')
-        extra = match_obj.group('extra')
+        extra = match_obj.group('extra') or match_obj.group('extra_plain')
         try:
             return {
                 'doc_type': NationalID.TYPE_MAP[doc_type],
