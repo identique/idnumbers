@@ -57,6 +57,8 @@ You can also install a specific version of idnumbers by specifying the version n
 pip install idnumbers==<version>
 ```
 
+See the [changelog](https://github.com/identique/idnumbers/blob/main/CHANGELOG.md) for the changes in each release.
+
 Alternatively, you can install from source by cloning the git repository and installing it via
 
 ```shell
