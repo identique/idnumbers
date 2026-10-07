@@ -24,7 +24,12 @@ class BINParseResult(TypedDict):
 class BusinessIDNumber:
     """
     Kazakhstan Business identification number, Бизнес-идентификационный номер
-    https://korgan-zan.kz/en/obtaining-iin-and-bin-in-kazakhstan/
+
+    The first four digits encode the registration year (last two digits) and month (01-12).
+    The fifth digit identifies resident legal entities (4), nonresident legal entities (5),
+    or individual entrepreneurs operating in a joint enterprise, IP(C) (6).
+
+    https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/kazakhstan-tin.pdf
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'KZ',
@@ -46,8 +51,8 @@ class BusinessIDNumber:
 
     ENTITY_TYPE_MAP = {
         '4': EntityType.ResidentEntity,
-        '5': EntityType.ResidentEntity,
-        '6': EntityType.ResidentEntity
+        '5': EntityType.NonResidentEntity,
+        '6': EntityType.IP
     }
 
     DIVISION_TYPE_MAP = {
@@ -69,6 +74,8 @@ class BusinessIDNumber:
         """parse the result"""
         match_obj = match_regexp(id_number, BusinessIDNumber.METADATA.regexp)
         if not match_obj:
+            return None
+        if not 1 <= int(match_obj.group('mm')) <= 12:
             return None
         bin_checksum = BusinessIDNumber.checksum(id_number)
         if bin_checksum is None or bin_checksum != int(match_obj.group('checksum')):
