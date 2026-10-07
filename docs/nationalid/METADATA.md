@@ -18,10 +18,32 @@ The `METADATA` structure are the same among all classes. If you find any inconsi
 | names          | Array of string                                                                 | The possible names we could see in the ID cards or other places.                                              |
 | links          | Array of string                                                                 | The reference links of this ID                                                                                |
 | deprecated     | boolean                                                                         | To indicate if the ID is deprecated by the country of not. New or Old version.                                |
+| country_name   | string                                                                          | The English name of the issuing country, the same as in the [country registry](../../idnumbers/registry.py), such as `Taiwan`. |
+| id_type        | string                                                                          | The English name of the kind of ID in Title Case, such as `Medicare Number`.                                  |
+| official_name  | string or None                                                                  | The official name of the ID in the local language, such as `Henkilötunnus` or `國民身分證統一編號`. It is `None` when the ID has no local-language name, as with an ID that is named in English (the UK NINO, the US SSN, the Australian Medicare number). It is never the same as `id_type`. |
+| display_format | string                                                                          | A human-readable layout of the ID, such as `###-##-####` or `YYMMDD-SSSC`.                                     |
+| example        | string                                                                          | A synthetic ID that the class validates: constructed with a valid check digit, or a number documented as a sample by the issuing authority. It is not the number of a real person. It is written in the first (preferred) layout of `masks`. |
+| checksum_algorithm | string or None                                                              | A short description of the algorithm that the `checksum` function computes, such as `Luhn (mod 10)`. It is `None` when `checksum` is false. |
+| masks          | Tuple of string                                                                 | The layouts the class accepts, the preferred display layout first. See [the mask vocabulary](#mask-vocabulary). |
+
+### Mask vocabulary
+
+A mask describes one accepted layout of the ID, one character per character of the ID:
+
+| character | meaning                                   |
+|-----------|-------------------------------------------|
+| `#`       | a digit                                   |
+| `L`       | a letter                                  |
+| `X`       | a letter or a digit                       |
+| `*`       | any character except white space          |
+
+Every other character of a mask is a separator, and it is one of space, `-`, `.`, `/`, `(` and `)`. A separator is part of the layout, so a validator that rejects separators has masks without them: the masks are layouts the class accepts, not the way an authority prints the ID. A mask has one slot for each character that the ID has without its separators, so the number of slots of a mask is a length between `min_length` and `max_length`. A slot that stands for a fixed character of the ID, such as the `U` of an Austrian UID, is written as the kind of character (`L`), not as the character.
+
+The tests in `tests/test_metadata.py` check every ID class: the example is valid, it has a layout in `masks`, and it is accepted when it is laid into each of those masks.
 
 ## Use properties
 
-The METADATA is build from [SimpleNamespace](https://docs.python.org/3/library/types.html#types.SimpleNamespace). We could use the following syntax to access them:
+The METADATA is an `IdMetadata` (in `idnumbers/nationalid/metadata.py`), a subclass of [SimpleNamespace](https://docs.python.org/3/library/types.html#types.SimpleNamespace) that adds a type annotation for every property. It is still a `SimpleNamespace`, so attribute access, `vars()`, `copy.copy()` and `getattr()` work as before. We could use the following syntax to access the properties:
 
 ```python
 from idnumbers.nationalid.NZL import InlandRevenueDepartmentNumber
@@ -34,5 +56,10 @@ parsable = InlandRevenueDepartmentNumber.METADATA.parsable
 
 # to access the metadata property with getattr to be backward-compatible
 getattr(InlandRevenueDepartmentNumber.METADATA, 'checksum', False)
+
+# the descriptive properties that the ID classes have since the typed IdMetadata
+InlandRevenueDepartmentNumber.METADATA.id_type  # 'Inland Revenue Department Number'
+InlandRevenueDepartmentNumber.METADATA.example  # '49-091-850'
+InlandRevenueDepartmentNumber.METADATA.masks    # ('##-###-###', '###-###-###', '########', '#########')
 
 ```

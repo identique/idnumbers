@@ -2,7 +2,7 @@
 The typed ``METADATA`` object of an ID class.
 
 Every ID class has a class attribute ``METADATA``. It is an :class:`IdMetadata`, a subclass of
-:class:`types.SimpleNamespace`, so the access that predates the typed class keeps working: attribute access,
+``types.SimpleNamespace``, so the access that predates the typed class keeps working: attribute access,
 ``vars()``, ``copy.copy()`` and ``getattr(metadata, 'name', default)``. The annotations only add what a type checker
 and the documentation need.
 """
@@ -18,7 +18,7 @@ class IdMetadata(SimpleNamespace):
     """
     The description of one ID class.
 
-    It is a :class:`types.SimpleNamespace` with annotated fields, built from keyword arguments such as
+    It is a ``types.SimpleNamespace`` with annotated fields, built from keyword arguments such as
     ``IdMetadata(**{'iso3166_alpha2': 'TW', ...})``. ``isinstance(metadata, SimpleNamespace)`` stays true.
     """
 

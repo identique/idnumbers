@@ -1,61 +1,46 @@
 import argparse
 import importlib
-import inspect
 import json
-import os
+from typing import Any, Dict, List
+
+from idnumbers.registry import list_supported_countries
 
 
-def collect_ids(package_name, output_filename):
-    # Find the root package directory
-    package_directory = importlib.import_module(package_name).__path__[0]
+def collect_ids(package_name: str, output_filename: str) -> None:
+    """
+    Dump the METADATA of every non-alias ID class into a JSON file.
 
-    # Recursively collect metadata for all modules and classes
-    metadata = []
-    modules_count = 0
+    The classes come from the country registry (``idnumbers.registry.list_supported_countries``), one entry for each
+    module that defines them, so the shared Yugoslav base class and the alias names are not listed.
+    """
+    # Import the package first so a wrong package name fails with a clear error
+    importlib.import_module(package_name)
+
+    modules: Dict[str, Dict[str, Any]] = {}
     classes_count = 0
-    country_codes = []
-    for root, _, files in os.walk(package_directory):
-        for file in files:
-            if file.endswith('.py'):
-                # Convert the file path to a package path
-                module_name = os.path.splitext(os.path.relpath(os.path.join(root, file), package_directory))[0]
-                module_name = module_name.replace(os.path.sep, '.')
-                # No upper case module name. They are aliases
-                if module_name == module_name.upper():
-                    continue
+    for entry in list_supported_countries():
+        for cls in entry.id_types:
+            # Work on a copy: the live METADATA, shared with the library, must stay unchanged
+            cls_metadata = dict(vars(cls.METADATA))
+            cls_metadata['regexp'] = cls_metadata['regexp'].pattern
+            cls_metadata['masks'] = list(cls_metadata['masks'])
+            alias_of = cls_metadata['alias_of']
+            cls_metadata['alias_of'] = None if alias_of is None else alias_of.__name__
+            module = modules.setdefault(cls.__module__, {
+                'package_name': cls.__module__,
+                'country_code': cls.__module__.split('.')[2],
+                'ids': []
+            })
+            module['ids'].append({
+                'class_name': cls.__name__,
+                'metadata': cls_metadata
+            })
+            classes_count += 1
 
-                # Import the module and collect metadata for its classes
-                module = importlib.import_module(package_name + '.' + module_name)
-                module_metadata = []
-                for name, obj in inspect.getmembers(module):
-                    if inspect.isclass(obj) \
-                            and hasattr(obj, 'METADATA') \
-                            and obj.METADATA.iso3166_alpha2 is not None \
-                            and obj.METADATA.alias_of is None \
-                            and name[0:2] != '__':
-                        cls_metadata = obj.METADATA.__dict__
-                        if type(cls_metadata['regexp']) is not str:
-                            cls_metadata['regexp'] = cls_metadata['regexp'].pattern
-                        module_metadata.append({
-                            'class_name': name,
-                            'metadata': obj.METADATA.__dict__
-                        })
-
-                # Append the module's metadata to the overall list
-                if module_metadata:
-                    modules_count += 1
-                    classes_count += len(module_metadata)
-                    country_code = str(module_name).split('.')[0]
-                    if country_code not in country_codes:
-                        country_codes.append(country_code)
-                    metadata.append({
-                        'package_name': package_name + '.' + module_name,
-                        'country_code': country_code,
-                        'ids': module_metadata
-                    })
-
+    metadata: List[Dict[str, Any]] = list(modules.values())
+    country_codes = {module['country_code'] for module in metadata}
     print('----------------------------------------------------------------------------')
-    print(f'Modules: {modules_count}')
+    print(f'Modules: {len(metadata)}')
     print(f'Countries: {len(country_codes)}')
     print(f'IDs: {classes_count}')
     print('----------------------------------------------------------------------------')

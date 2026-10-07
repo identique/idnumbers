@@ -20,6 +20,14 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   any other failure `validation_failed` for now. `validate_many()` validates `(country, id_number)` pairs, and
   `FailureReason` lists the reasons, which later releases may extend. The country classes are unchanged
   ([#317](https://github.com/identique/idnumbers/issues/317)).
+- Describe every ID class with seven more `METADATA` keys: `country_name`, `id_type`, `official_name` (`None` for an
+  ID with no local-language name), `display_format`, `example` (a synthetic number the class validates),
+  `checksum_algorithm` (`None` without a check digit) and `masks`, the layouts the class accepts. `METADATA` is now an
+  `IdMetadata`, a typed `SimpleNamespace` subclass in `idnumbers.nationalid.metadata`, so attribute access, `vars()`,
+  `copy()` and `getattr()` work as before. A class made by `alias_of`, such as `AUS.NationalID`, now has the name,
+  module and docstring of its target instead of `AliasType`, which changes its `repr`. `CAN.SocialInsuranceNumber`
+  gets the `deprecated` key the other classes already had, and `tools.scan_ids` lists the classes through the country
+  registry ([#320](https://github.com/identique/idnumbers/issues/320)).
 
 ### Packaging and typing
 

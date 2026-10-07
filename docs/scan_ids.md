@@ -2,48 +2,62 @@
 
 We create a new tool for dumping the metadata of all non-alias IDs into JSON.
 
-We could run it with the following command:
+The tool lists the ID classes through the [country registry](../idnumbers/registry.py) (`list_supported_countries()`),
+so it lists every ID class of every country module exactly once. The aliases (such as `NationalID` and `JMBG`) are not
+listed, and neither is the shared `idnumbers.nationalid.yugoslavia.UniqueMasterCitizenNumber`, the base class of the
+JMBG of the former Yugoslav republics, which has no country. The dump is built from a copy of each `METADATA`, so
+running the tool changes nothing in the library.
+
+We could run it with the following command, which takes the package and the path of the JSON file:
 ```commandline
-python -m tools.scan_ids
+python -m tools.scan_ids idnumbers.nationalid ids.json
 ```
 
-The result looks like:
+The result is a list with one item for each module, and looks like this (shortened to one ID):
 ```json
 [
   {
-    "package_name": "idnumbers.nationalid.yugoslavia",
-    "country_code": "yugoslavia",
+    "package_name": "idnumbers.nationalid.twn.national_id",
+    "country_code": "twn",
     "ids": [
       {
-        "class_name": "UniqueMasterCitizenNumber",
+        "class_name": "NationalID",
         "metadata": {
-          "iso3166_alpha2": null,
-          "min_length": 13,
-          "max_length": 13,
+          "iso3166_alpha2": "TW",
+          "min_length": 10,
+          "max_length": 10,
           "parsable": true,
           "checksum": true,
-          "regexp": "^(?P<dd>\\d{2})(?P<mm>\\d{2})(?P<yyy>\\d{3})(?P<location>\\d{2})(?P<sn>\\d{3})(?P<checksum>\\d)$",
+          "regexp": "^(?P<location>[A-Z])(?P<gender>[12])(?P<sn>\\d{7})(?P<checksum>\\d)$",
           "alias_of": null,
           "names": [
-            "Unique  master citizen number",
-            "JMBG",
-            "Jedinstveni mati\u010dni broj gra\u0111ana",
-            "\u0408\u0435\u0434\u0438\u043d\u0441\u0442\u0432\u0435\u043d\u0438 \u043c\u0430\u0442\u0438\u0447\u043d\u0438 \u0431\u0440\u043e\u0458 \u0433\u0440\u0430\u0452\u0430\u043d\u0430",
-            "\u0408\u041c\u0411\u0413",
-            "\u0415\u0434\u0438\u043d\u0441\u0442\u0432\u0435\u043d \u043c\u0430\u0442\u0438\u0447\u0435\u043d \u0431\u0440\u043e\u0458 \u043d\u0430 \u0433\u0440\u0430\u0453\u0430\u043d\u0438\u043d\u043e\u0442",
-            "\u0415\u041c\u0411\u0413",
-            "Enotna mati\u010dna \u0161tevilka ob\u010dana,",
-            "EM\u0160O"
+            "National ID Number",
+            "\u570b\u6c11\u8eab\u5206\u8b49\u7d71\u4e00\u7de8\u865f",
+            "\u8eab\u5206\u8b49\u5b57\u865f"
           ],
           "links": [
-            "https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number"
+            "https://en.wikipedia.org/wiki/National_identification_number#Taiwan",
+            "https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%B0%91%E8%BA%AB%E5%88%86%E8%AD%89"
           ],
-          "deprecated": false
+          "deprecated": false,
+          "country_name": "Taiwan",
+          "id_type": "National Identification Card Number",
+          "official_name": "\u570b\u6c11\u8eab\u5206\u8b49\u7d71\u4e00\u7de8\u865f",
+          "display_format": "L#########",
+          "example": "A123456789",
+          "checksum_algorithm": "Weighted sum mod 10 (the location letter becomes two digits; weights 1, 9, 8, 7, 6, 5, 4, 3, 2, 1; check = (10 - remainder) mod 10)",
+          "masks": [
+            "L#########"
+          ]
         }
       }
     ]
   }
 ]
 ```
+
+`regexp` is the pattern of the compiled regular expression, `masks` is a list and `alias_of` is `None` or the name of
+the class. The `country_name`, `id_type`, `official_name`, `display_format`, `example`, `checksum_algorithm` and `masks`
+properties are described in [METADATA.md](nationalid/METADATA.md).
 
 We could use the info/JSON to build a reference doc or generating the sample codes.

@@ -11,7 +11,7 @@ import pkgutil
 import re
 from copy import copy
 from types import SimpleNamespace
-from typing import Any, FrozenSet, Iterator, List, Tuple, Type
+from typing import Any, Iterator, List, Tuple, Type
 from unittest import TestCase, main
 
 import idnumbers.nationalid as nationalid_package
@@ -22,11 +22,6 @@ from idnumbers.registry import CountryEntry
 OLD_KEYS = ('iso3166_alpha2', 'min_length', 'max_length', 'parsable', 'checksum', 'regexp', 'alias_of', 'names',
             'links', 'deprecated')
 NEW_KEYS = ('country_name', 'id_type', 'official_name', 'display_format', 'example', 'checksum_algorithm', 'masks')
-
-PENDING: FrozenSet[str] = frozenset({
-    
-})
-"""The countries whose ID classes do not have the new keys yet. Each of them has none of the seven keys."""
 
 SLOT_CHARS = '#LX*'
 SEPARATORS = ' -./()'
@@ -140,27 +135,14 @@ class TestMetadataType(TestCase):
 
 
 class TestNewKeys(TestCase):
-    def test_pending_countries_are_countries(self) -> None:
-        self.assertLessEqual(PENDING, {entry.alpha3 for entry in list_supported_countries()})
-
-    def test_pending_countries_have_none_of_the_new_keys(self) -> None:
+    def test_every_class_has_all_the_new_keys(self) -> None:
         for entry, cls in id_classes():
-            if entry.alpha3 in PENDING:
-                with self.subTest(alpha3=entry.alpha3, cls=cls.__qualname__):
-                    for key in NEW_KEYS:
-                        self.assertNotIn(key, vars(cls.METADATA))
-
-    def test_every_other_class_has_all_the_new_keys(self) -> None:
-        for entry, cls in id_classes():
-            if entry.alpha3 not in PENDING:
-                with self.subTest(alpha3=entry.alpha3, cls=cls.__qualname__):
-                    for key in NEW_KEYS:
-                        self.assertIn(key, vars(cls.METADATA))
+            with self.subTest(alpha3=entry.alpha3, cls=cls.__qualname__):
+                for key in NEW_KEYS:
+                    self.assertIn(key, vars(cls.METADATA))
 
     def test_the_new_keys_are_valid(self) -> None:
         for entry, cls in id_classes():
-            if entry.alpha3 in PENDING:
-                continue
             with self.subTest(alpha3=entry.alpha3, cls=cls.__qualname__):
                 self.check_class(entry, cls)
 
@@ -188,6 +170,7 @@ class TestNewKeys(TestCase):
             self.assertTrue(mask)
             self.assertTrue(all(char in SLOT_CHARS + SEPARATORS for char in mask), mask)
             self.assertTrue(slots(mask), mask)
+            self.assertTrue(cls.METADATA.min_length <= slots(mask) <= cls.METADATA.max_length, mask)
 
     def check_example(self, cls: Type[Any]) -> None:
         metadata = cls.METADATA
