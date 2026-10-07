@@ -13,6 +13,8 @@ doc_env/bin/activate
 pip install pydoctor
 ```
 
+Use `--docformat=restructuredtext`: the default epytext parser cannot parse shared utility docstring continuations.
+
 And run it:
 ```shell
 pydoctor --docformat=restructuredtext --make-html --html-output=docs/$(cat ./VERSION) --project-name="idnumbers" --project-version=$(cat ./VERSION) --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers

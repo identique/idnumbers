@@ -46,7 +46,7 @@ class DNI:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
-        """algorithm: https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Spain)#Number"""
+        """algorithm: https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Spain%29#Number"""
         if not isinstance(id_number, str):
             return False
         id_number = id_number.strip()

@@ -19,7 +19,7 @@ class NationalID:
     """
     Pakistan National ID Card number format, CNIC, NIC, قومی شناختی کارڈ
     https://en.wikipedia.org/wiki/National_identification_number#Pakistan
-    https://en.wikipedia.org/wiki/CNIC_(Pakistan)#Security_features
+    https://en.wikipedia.org/wiki/CNIC_(Pakistan%29#Security_features
     https://www.geo.tv/latest/250118-mystery-behind-13-digit-cnic-number
     https://www.informationpk.com/interesting-information-about-or-meaning-of-nadra-cnic-13-digits-number/
     check website: https://cnic.com.pk/

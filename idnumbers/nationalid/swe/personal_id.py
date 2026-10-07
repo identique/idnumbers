@@ -34,7 +34,7 @@ class PersonalIdentityNumber:
     https://www.skatteverket.se/privat/folkbokforing/personnummer.4.3810a01c150939e893f18c29.html
     https://www4.skatteverket.se/rattsligvagledning/edition/2026.12/330242.html
     https://en.wikipedia.org/wiki/National_identification_number#Sweden
-    https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)
+    https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden%29
     https://swedish.identityinfo.net/
     https://personnummer.dev/
     """
@@ -78,7 +78,7 @@ class PersonalIdentityNumber:
     @staticmethod
     def checksum(id_number: str) -> Optional[int]:
         """
-        algorithm: https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)#Checksum
+        algorithm: https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden%29#Checksum
         Multiplier start by 2
         """
         return _checksum(id_number, PersonalIdentityNumber.METADATA.regexp)

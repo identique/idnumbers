@@ -143,6 +143,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **USA** ([#354](https://github.com/identique/idnumbers/issues/354)): clarify that SSN metadata counts nine
   significant digits; validation still requires the two hyphens in the 11-character printed layout.
 
+- **Documentation** ([#409](https://github.com/identique/idnumbers/issues/409)): escape closing parentheses in
+  docstring URLs so API reference links preserve complete paths and fragments. Validation and metadata are unchanged.
+
 ## 1.12.0 (2026-10-07)
 
 The first release since 1.11.0. It fixes validity bugs that were found by comparing the library with its Node.js port
