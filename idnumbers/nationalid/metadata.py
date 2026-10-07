@@ -60,8 +60,8 @@ class IdMetadata(SimpleNamespace):
     """The English name of the kind of ID, such as ``'National Identification Card'``."""
 
     official_name: Optional[str]
-    """The official name of the ID in the local language, such as ``'國民身分證統一編號'``. It is ``None`` when the ID has
-    no local-language name, as with an ID that is named in English."""
+    """The official name of the ID in the local language, such as ``'國民身分證統一編號'``. It is ``None`` when the ID
+    has no local-language name, as with an ID that is named in English."""
 
     display_format: str
     """A human-readable layout of the ID, such as ``'###-##-####'`` or ``'YYMMDD-SSSC'``."""
