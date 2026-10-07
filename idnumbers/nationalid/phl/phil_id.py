@@ -27,7 +27,14 @@ class PhilID:
                   'https://en.wikipedia.org/wiki/Philippine_national_identity_card',
                   'https://psa.gov.ph/content/psa-bsp-promote-philid-card-security-and-verification-features'],
         'deprecated': False
-
+,
+        'country_name': 'Philippines',
+        'id_type': 'PhilSys Number',
+        'official_name': None,
+        'display_format': '####-#######-#',
+        'example': '1234-5678901-2',
+        'checksum_algorithm': None,
+        'masks': ('####-#######-#', '############')
     })
 
     @staticmethod

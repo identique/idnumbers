@@ -50,7 +50,15 @@ class PersonalCode:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Lithuania',
                   'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/Lithuania-TIN.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Lithuania',
+        'id_type': 'Personal Code',
+        'official_name': 'asmens kodas',
+        'display_format': 'GYYMMDDSSSC',
+        'example': '39001010077',
+        'checksum_algorithm': 'Weighted sum mod 11 in two passes (weights 1-9 and 1; then 3-9, 1, 2 and 3 when the '
+                              'remainder is 10; a second 10 becomes 0)',
+        'masks': ('###########',)
     })
 
     @staticmethod

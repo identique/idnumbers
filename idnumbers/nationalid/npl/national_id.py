@@ -26,7 +26,14 @@ class NationalID:
                   'NIN'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Nepal',
                   'https://nimc.gov.ng/about-nin/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Nepal',
+        'id_type': 'National ID Number',
+        'official_name': None,
+        'display_format': '###########',
+        'example': '12345678901',
+        'checksum_algorithm': None,
+        'masks': ('###########',)
     })
 
     @staticmethod

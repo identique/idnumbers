@@ -43,7 +43,14 @@ class OldPersonalCode:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Latvia',
                   'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/Latvia-TIN.pdf'],
-        'deprecated': True
+        'deprecated': True,
+        'country_name': 'Latvia',
+        'id_type': 'Personal Code (Old)',
+        'official_name': 'personas kods',
+        'display_format': 'DDMMYY-CSSSK',
+        'example': '161175-19997',
+        'checksum_algorithm': '(1101 - weighted sum) mod 11 mod 10 (weights 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)',
+        'masks': ('######-#####', '###########')
     })
 
     MULTIPLIER = [1, 6, 3, 7, 9, 10, 5, 8, 4, 2]

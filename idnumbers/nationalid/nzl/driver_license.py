@@ -29,7 +29,14 @@ class DriverLicenseNumber:
                   'library-of-system-data-identifiers-v95989112-d327e56315/'
                   'new-zealand-driver-s-licence-number-v130004625-d327e90104/'
                   'new-zealand-driver-s-licence-number-narrow-breadth-v130007408-d327e90179.html#v130007408'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'New Zealand',
+        'id_type': 'Driver Licence Number',
+        'official_name': None,
+        'display_format': 'LL######',
+        'example': 'AB123456',
+        'checksum_algorithm': None,
+        'masks': ('LL######',)
     })
 
     @staticmethod

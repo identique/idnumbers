@@ -24,7 +24,14 @@ class NationalID:
         'names': ['National ID Number',
                   'NID'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Papua_New_Guinea'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Papua New Guinea',
+        'id_type': 'National ID Number',
+        'official_name': None,
+        'display_format': '##########',
+        'example': '1234567890',
+        'checksum_algorithm': None,
+        'masks': ('##########',)
     })
 
     @staticmethod

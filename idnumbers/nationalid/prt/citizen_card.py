@@ -25,7 +25,14 @@ class CitizenCard:
             'Valida%C3%A7%C3%A3o%2Bde%2BN%C3%BAmero%2Bde%2BDocumento%2Bdo%2BCart%C3%A3o%2Bde%2BCidad%C3%A3o%2B'
             '%281%29.pdf/7d5745ba-2bcc-e861-3954-bafe9f7591a0?t=1658411665319'
         ],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Portugal',
+        'id_type': 'Citizen Card Document Number',
+        'official_name': 'Cartão de Cidadão',
+        'display_format': '#########XX#',
+        'example': '123456789ZZ1',
+        'checksum_algorithm': 'Luhn (mod 10) over the first eleven characters, letters counting as 10-35',
+        'masks': ('#########XX#',)
     })
 
     @staticmethod

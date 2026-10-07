@@ -40,7 +40,15 @@ class InlandRevenueDepartmentNumber:
                   'https://www.ird.govt.nz/updates/news-folder/2026/increase-to-ird-number-validation-upper-limit',
                   'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/New%20Zealand-TIN.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'New Zealand',
+        'id_type': 'Inland Revenue Department Number',
+        'official_name': None,
+        'display_format': '##-###-###',
+        'example': '49-091-850',
+        'checksum_algorithm': 'Weighted sum mod 11 in two passes (weights 3, 2, 7, 6, 5, 4, 3, 2; then 7, 4, 3, 2, 5, '
+                              '2, 7, 6 when the first check digit is 10)',
+        'masks': ('##-###-###', '###-###-###', '########', '#########')
     })
 
     PHASE1_MULTIPLIER = [3, 2, 7, 6, 5, 4, 3, 2]

@@ -58,7 +58,14 @@ class NationalID:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Macau',
                   'https://en.wikipedia.org/wiki/Macau_Resident_Identity_Card',
                   'https://validatetin.com/macao/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Macao',
+        'id_type': 'Resident Identity Card Number',
+        'official_name': 'Bilhete de Identidade de Residente',
+        'display_format': '#######(#)',
+        'example': '5215432(8)',
+        'checksum_algorithm': None,
+        'masks': ('#######(#)', '########')
     })
 
     TYPE_MAP = {'0': DocType.CI, '1': DocType.FIRST_GEN, '5': DocType.MCA, '7': DocType.MPSP, '8': DocType.ENTITY}

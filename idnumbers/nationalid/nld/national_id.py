@@ -39,7 +39,15 @@ class BSN:
                   'https://www.rvig.nl/veelgestelde-vragen-burgerservicenummer-bsn',
                   'https://www.rvig.nl/sites/default/files/2023-12/Logisch%20Ontwerp%20BSN%202024.Q1.pdf'],
         'deprecated': False
-
+,
+        'country_name': 'Netherlands',
+        'id_type': 'Citizen Service Number',
+        'official_name': 'Burgerservicenummer',
+        'display_format': '#########',
+        'example': '123456782',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 9-2 over the first eight digits; the remainder is the '
+                              'check digit, 10 is invalid)',
+        'masks': ('#########', '####.##.###')
     })
 
     @staticmethod

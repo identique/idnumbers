@@ -43,7 +43,14 @@ class NationalID:
                   'https://www.geo.tv/latest/250118-mystery-behind-13-digit-cnic-number',
                   'https://www.informationpk.com/'
                   'interesting-information-about-or-meaning-of-nadra-cnic-13-digits-number/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Pakistan',
+        'id_type': 'National ID Card Number',
+        'official_name': 'قومی شناختی کارڈ',
+        'display_format': '#####-#######-#',
+        'example': '12345-6789012-3',
+        'checksum_algorithm': None,
+        'masks': ('#####-#######-#', '#############')
     })
     """metadata of this id"""
 

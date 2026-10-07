@@ -32,7 +32,15 @@ class OldNationalID:
         'names': ['National ID Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka',
                   'https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html'],
-        'deprecated': True
+        'deprecated': True,
+        'country_name': 'Sri Lanka',
+        'id_type': 'National Identity Card Number (Old)',
+        'official_name': None,
+        'display_format': 'YYDDDSSSCV',
+        'example': '900120001V',
+        'checksum_algorithm': 'The check digit of the new 12-digit number that the old number converts to (weights 8, '
+                              '4, 3, 2, 7, 6, 5, 7, 4, 3, 2 mod 11)',
+        'masks': ('#########L',)
     })
 
     @staticmethod

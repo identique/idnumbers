@@ -67,7 +67,15 @@ class CURP:
                   'Personal ID Code Number'],
         'links': ['https://en.wikipedia.org/wiki/Unique_Population_Registry_Code',
                   'https://ordenjuridico.gob.mx/Federal/PE/APF/APC/SEGOB/Instructivos/InstructivoNormativo.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Mexico',
+        'id_type': 'Unique Population Registry Code',
+        'official_name': 'Clave Única de Registro de Población',
+        'display_format': 'AAAANNNNNNAAAAAANN',
+        'example': 'HEGG560427MVZRRL04',
+        'checksum_algorithm': 'Weighted sum mod 10 (positions weighted 18-2 over the alphabet 0-9, A-N, Ñ, O-Z; check '
+                              '= (10 - remainder) mod 10)',
+        'masks': ('LLLL######LLLLLLX#',)
     })
 
     ID_CHARS = '0123456789ABCDEFGHIJKLMNÑOPQRSTUVWXYZ'

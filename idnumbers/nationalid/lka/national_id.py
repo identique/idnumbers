@@ -48,7 +48,15 @@ class NationalID:
         'names': ['National ID Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka',
                   'https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Sri Lanka',
+        'id_type': 'National Identity Card Number',
+        'official_name': None,
+        'display_format': 'YYYYDDDSSSSC',
+        'example': '199001200001',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2 over the first eleven '
+                              'digits; check = 11 - remainder, reduced to its last digit)',
+        'masks': ('############',)
     })
 
     MAGIC_MULTIPLIER = [8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2]

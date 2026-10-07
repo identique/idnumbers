@@ -41,7 +41,14 @@ class PersonalCode:
                   'https://likumi.lv/ta/id/296185',
                   'https://www.pmlp.gov.lv/en/change-personal-identity-number',
                   'https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/latvia-tin.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Latvia',
+        'id_type': 'Personal Code',
+        'official_name': 'personas kods',
+        'display_format': 'DDMMYY-SSSSS',
+        'example': '161175-19997',
+        'checksum_algorithm': '(1101 - weighted sum) mod 11 mod 10 (weights 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)',
+        'masks': ('######-#####', '###########')
     })
 
     MULTIPLIER = [1, 6, 3, 7, 9, 10, 5, 8, 4, 2]

@@ -24,10 +24,8 @@ OLD_KEYS = ('iso3166_alpha2', 'min_length', 'max_length', 'parsable', 'checksum'
 NEW_KEYS = ('country_name', 'id_type', 'official_name', 'display_format', 'example', 'checksum_algorithm', 'masks')
 
 PENDING: FrozenSet[str] = frozenset({
-    'LKA', 'LTU', 'LUX', 'LVA', 'MAC', 'MDA', 'MEX', 'MKD', 'MNE', 'MYS',
-    'NGA', 'NLD', 'NOR', 'NPL', 'NZL', 'PAK', 'PHL', 'PNG', 'POL', 'PRT',
-    'ROU', 'SGP', 'SMR', 'SRB', 'SVK', 'SVN', 'SWE', 'THA', 'TUR', 'TWN',
-    'UKR', 'USA', 'VEN', 'VNM', 'ZAF', 'ZWE'
+    'SGP', 'SMR', 'SRB', 'SVK', 'SVN', 'SWE', 'THA', 'TUR', 'TWN', 'UKR',
+    'USA', 'VEN', 'VNM', 'ZAF', 'ZWE'
 })
 """The countries whose ID classes do not have the new keys yet. Each of them has none of the seven keys."""
 
@@ -64,6 +62,12 @@ def slot_accepts(slot: str, char: str) -> bool:
     if slot == 'X':
         return char.isalnum()
     return not char.isspace()
+
+
+def fits(compact_id: str, mask: str) -> bool:
+    """Whether a compact ID has as many characters as the mask has slots, and each character suits its slot."""
+    slot_chars = [char for char in mask if char in SLOT_CHARS]
+    return len(slot_chars) == len(compact_id) and all(slot_accepts(s, c) for s, c in zip(slot_chars, compact_id))
 
 
 def layout(compact_id: str, mask: str) -> str:
@@ -195,14 +199,13 @@ class TestNewKeys(TestCase):
         compact_id = compact(example, metadata.masks)
         self.assertLessEqual(metadata.min_length, len(compact_id), example)
         self.assertLessEqual(len(compact_id), metadata.max_length, example)
-        fitting = [mask for mask in metadata.masks if slots(mask) == len(compact_id)]
+        # A mask of the same length can describe another layout of the same length (NZL NHI: LLL#### and LLL##LL),
+        # so only the masks whose slot types fit the example are laid out; at least one must.
+        fitting = [mask for mask in metadata.masks if fits(compact_id, mask)]
         self.assertTrue(fitting, f'no mask for {example}')
         for mask in fitting:
             laid = layout(compact_id, mask)
             with self.subTest(mask=mask):
-                slot_chars = [char for char in mask if char in SLOT_CHARS]
-                for slot, char in zip(slot_chars, compact_id):
-                    self.assertTrue(slot_accepts(slot, char), f'{mask} {example}')
                 self.assertIs(cls.validate(laid), True, f'{mask} -> {laid}')
 
 

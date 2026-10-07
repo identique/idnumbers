@@ -7,6 +7,14 @@ from ..util import alias_of
 
 MNE_METADATA = copy(YugoslaviaJMBG.METADATA)
 MNE_METADATA.iso3166_alpha2 = 'ME'
+MNE_METADATA.country_name = 'Montenegro'
+MNE_METADATA.id_type = 'Unique Master Citizen Number'
+MNE_METADATA.official_name = 'Jedinstveni matični broj građana'
+MNE_METADATA.display_format = 'DDMMYYYRRSSSC'
+MNE_METADATA.example = '0101990210005'
+MNE_METADATA.checksum_algorithm = ('Weighted sum mod 11 (digits 1-6 added to digits 7-12, weights 7, 6, 5, 4, 3, 2; '
+                                   'check = 11 - remainder, 10 and 11 become 0)')
+MNE_METADATA.masks = ('#############',)
 
 
 class UniqueMasterCitizenNumber(YugoslaviaJMBG):

@@ -40,7 +40,15 @@ class NationalHealthIndexNumber:
                   'library-of-system-data-identifiers-v95989112-d327e56315/'
                   'new-zealand-national-health-index-number-v117807810-d327e90250/'
                   'new-zealand-national-health-index-number-narrow-br-v117808786-d327e90350.html'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'New Zealand',
+        'id_type': 'National Health Index Number',
+        'official_name': None,
+        'display_format': 'LLL####',
+        'example': 'ZZZ0016',
+        'checksum_algorithm': 'Weighted sum (weights 7-2; letters A-Z without I and O count as 1-24): mod 11 for the '
+                              'legacy format, mod 23 for the expanded format',
+        'masks': ('LLL####', 'LLL##LL')
     })
 
     ALPHABET_LIST = list('ABCDEFGHJKLMNPQRSTUVWXYZ')
