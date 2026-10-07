@@ -22,7 +22,15 @@ class NationalID:
                   'Türkiye Cumhuriyeti Kimlik Numarası',
                   'T.C. Kimlik No.'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Turkey'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Türkiye',
+        'id_type': 'National ID Number',
+        'official_name': 'Türkiye Cumhuriyeti Kimlik Numarası',
+        'display_format': '###########',
+        'example': '11111111110',
+        'checksum_algorithm': 'Two check digits: the 10th is (7 x the sum of the odd-position digits - the sum of the '
+                              'even-position digits) mod 10, the 11th is the sum of the first ten digits mod 10',
+        'masks': ('###########',)
     })
 
     MULTIPLIERS = [7, -1, 7, -1, 7, -1, 7, -1, 7]

@@ -45,7 +45,14 @@ class NationalID:
         'names': ['National ID Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#South_Africa',
                   'https://www.westerncape.gov.za/general-publication/decoding-your-south-african-id-number-0'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'South Africa',
+        'id_type': 'National ID Number',
+        'official_name': None,
+        'display_format': 'YYMMDDSSSSCAZ',
+        'example': '8001015009087',
+        'checksum_algorithm': 'Luhn (mod 10)',
+        'masks': ('#############',)
     })
 
     @staticmethod

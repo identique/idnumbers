@@ -25,7 +25,14 @@ class SocialSecurityNumber:
                   'SSI'],
         'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/San-Marino-TIN.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'San Marino',
+        'id_type': 'Social Security Number',
+        'official_name': None,
+        'display_format': '#########',
+        'example': '123456789',
+        'checksum_algorithm': None,
+        'masks': ('#########',)
     })
 
     @staticmethod

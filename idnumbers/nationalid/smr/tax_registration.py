@@ -25,7 +25,14 @@ class TaxRegistrationNumber:
                   'COE'],
         'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/San-Marino-TIN.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'San Marino',
+        'id_type': 'Entity Tax Registration Number',
+        'official_name': 'Codice Operatore Economico',
+        'display_format': 'SM#####',
+        'example': 'SM12345',
+        'checksum_algorithm': None,
+        'masks': ('LL#####',)
     })
 
     @staticmethod

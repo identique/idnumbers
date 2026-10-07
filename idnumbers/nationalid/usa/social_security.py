@@ -27,7 +27,14 @@ class SocialSecurityNumber:
         'names': ['Social Security number',
                   'SSN'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#United_States'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'United States',
+        'id_type': 'Social Security Number',
+        'official_name': None,
+        'display_format': '###-##-####',
+        'example': '123-45-6789',
+        'checksum_algorithm': None,
+        'masks': ('###-##-####',)
     })
 
     @staticmethod

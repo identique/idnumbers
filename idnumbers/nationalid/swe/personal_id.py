@@ -59,7 +59,14 @@ class PersonalIdentityNumber:
                   'https://swedish.identityinfo.net/',
                   'https://personnummer.dev/'],
         'deprecated': False
-
+,
+        'country_name': 'Sweden',
+        'id_type': 'Personal Identity Number',
+        'official_name': 'personnummer',
+        'display_format': 'YYMMDD-SSSC',
+        'example': '811218-9876',
+        'checksum_algorithm': 'Luhn (mod 10) over the last ten digits',
+        'masks': ('######-####', '########-####')
     })
 
     @staticmethod

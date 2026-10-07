@@ -36,7 +36,15 @@ class NationalID:
         'names': ['National ID Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Zimbabwe',
                   'https://www.slideshare.net/slideshow/zimbabwe-2018-biometric-voters-roll-analysis-pachedu/106248017'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Zimbabwe',
+        'id_type': 'National ID Number',
+        'official_name': None,
+        'display_format': 'RR######LDD',
+        'example': '63123456B02',
+        'checksum_algorithm': 'Mod 23 check letter (the office code and the national number read as one integer mod '
+                              '23, mapped to Z, A, B, C, D, E, F, G, H, J, K, L, M, N, P, Q, R, S, T, V, W, X, Y)',
+        'masks': ('########L##', '#########L##')
     })
 
     @staticmethod

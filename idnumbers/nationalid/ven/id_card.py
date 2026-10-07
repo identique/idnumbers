@@ -24,7 +24,14 @@ class IDCardNumber:
         'names': ['ID Card Number',
                   'Cédula de Identidad'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Venezuela'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Venezuela',
+        'id_type': 'Identity Card Number',
+        'official_name': 'Cédula de Identidad',
+        'display_format': 'L ##.###.###',
+        'example': 'V 12.345.678',
+        'checksum_algorithm': None,
+        'masks': ('L ##.###.###', 'L########')
     })
 
     @staticmethod

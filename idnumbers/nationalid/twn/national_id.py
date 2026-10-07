@@ -46,7 +46,15 @@ class NationalID:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Taiwan',
                   'https://zh.wikipedia.org/wiki/'
                   '%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%B0%91%E8%BA%AB%E5%88%86%E8%AD%89'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Taiwan',
+        'id_type': 'National Identification Card Number',
+        'official_name': '國民身分證統一編號',
+        'display_format': 'L#########',
+        'example': 'A123456789',
+        'checksum_algorithm': 'Weighted sum mod 10 (the location letter becomes two digits; weights 1, 9, 8, 7, 6, 5, '
+                              '4, 3, 2, 1; check = (10 - remainder) mod 10)',
+        'masks': ('L#########',)
     })
 
     LOCATION_NUM = [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6],

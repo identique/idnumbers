@@ -73,7 +73,14 @@ class NationalID:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Thailand',
                   'https://learn.microsoft.com/en-us/microsoft-365/compliance/'
                   'sit-defn-thai-population-identification-code?view=o365-worldwide'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Thailand',
+        'id_type': 'National ID Number',
+        'official_name': 'รหัสบัตรประชาชน',
+        'display_format': '#-####-#####-##-#',
+        'example': '3-1010-12345-67-3',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 13-2; check = 11 - remainder, reduced to its last digit)',
+        'masks': ('#-####-#####-##-#', '#############')
     })
 
     PROVINCE_LIST = ['10', '11', '12', '13', '14', '15', '16', '17', '18', '19',

@@ -24,8 +24,7 @@ OLD_KEYS = ('iso3166_alpha2', 'min_length', 'max_length', 'parsable', 'checksum'
 NEW_KEYS = ('country_name', 'id_type', 'official_name', 'display_format', 'example', 'checksum_algorithm', 'masks')
 
 PENDING: FrozenSet[str] = frozenset({
-    'SGP', 'SMR', 'SRB', 'SVK', 'SVN', 'SWE', 'THA', 'TUR', 'TWN', 'UKR',
-    'USA', 'VEN', 'VNM', 'ZAF', 'ZWE'
+    
 })
 """The countries whose ID classes do not have the new keys yet. Each of them has none of the seven keys."""
 

@@ -5,6 +5,14 @@ from ..yugoslavia import ParseResult, UniqueMasterCitizenNumber as YugoslaviaJMB
 
 SVN_METADATA = copy(YugoslaviaJMBG.METADATA)
 SVN_METADATA.iso3166_alpha2 = 'SI'
+SVN_METADATA.country_name = 'Slovenia'
+SVN_METADATA.id_type = 'Unique Master Citizen Number'
+SVN_METADATA.official_name = 'Enotna matična številka občana'
+SVN_METADATA.display_format = 'DDMMYYYRRSSSC'
+SVN_METADATA.example = '0101990500003'
+SVN_METADATA.checksum_algorithm = ('Weighted sum mod 11 (digits 1-6 added to digits 7-12, weights 7, 6, 5, 4, 3, 2; '
+                                   'check = 11 - remainder, 10 and 11 become 0)')
+SVN_METADATA.masks = ('#############',)
 
 
 class UniqueMasterCitizenNumber(YugoslaviaJMBG):
