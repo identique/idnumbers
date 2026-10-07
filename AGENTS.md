@@ -98,6 +98,9 @@ working directories.
     `modulus_overflow_mod10`, `letter_to_number`, `ean13_digit` and `alias_of`.
   - `constant.py`: `Gender`, `Citizenship` and the other shared enums.
   - `yugoslavia.py`: the JMBG logic shared by BIH, MKD, MNE, SRB and SVN.
+- **Country registry:** `idnumbers/registry.py` maps every public country module to its alpha-3 code, alpha-2 code and
+  CLDR English name, and `idnumbers` re-exports its functions. A new country module must be added to its `_BUILTIN`
+  table; `tests/test_registry.py` fails otherwise.
 - **Input contract:** `validate()` never raises. It returns `False` for non-`str`, empty or malformed input, and
   `parse()` returns `None` for the same inputs. Regexps must match the whole input, with ASCII digits only.
 - **Tests:** `tests/nationalid/test_<ISO3>.py` (unittest).

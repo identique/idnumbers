@@ -270,10 +270,41 @@ Please note that the returned parsed data may vary depending on the country and 
 important to keep in mind that the library is only able to validate the format and the checksum of the ID number, not if
 it is an actual issued ID number.
 
+## Look up a country
+
+When the country is only known at run time, for example from a form field, the country registry finds the validator for
+you. The lookup functions accept an ISO 3166-1 alpha-2 or alpha-3 code in any letter case, and return `None` for
+anything they don't know instead of raising an error. The registry imports a country module the first time it is
+needed, so `import idnumbers` stays fast. `register()` adds a custom country to the registry.
+
+```python
+import idnumbers
+
+# Find the validator of a country by its alpha-2 or alpha-3 code, in any letter case
+validator = idnumbers.get_validator('tw')
+print(validator.validate('A123456789'))
+
+# Describe a country
+australia = idnumbers.get_country('AUS')
+print(australia.name, australia.alpha2)
+print([id_type.__name__ for id_type in australia.id_types])
+
+# An unknown country gives None
+print(idnumbers.get_validator('XX') is None)
+
+# List the supported countries
+print(len(idnumbers.list_supported_countries()))
+```
+
+`get_country()` returns a `CountryEntry` with the `alpha3` and `alpha2` codes, the English `name`, the `national_id`
+class of the country and all its `id_types`. `resolve_country()` only turns a code into the alpha-3 code and imports
+nothing.
+
 # Supported Countries
 
 Here's the list of the countries we have
 implemented [Country List](https://identique.github.io/idnumbers/idnumbers/nationalid.html)
+The `list_supported_countries()` function returns them at run time.
 
 # Metadata Structure of each ID
 
