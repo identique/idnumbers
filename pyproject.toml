@@ -57,3 +57,14 @@ target-version = "py39"
 [tool.ruff.lint]
 # Ruff's default rule set, pinned so a ruff upgrade cannot change it: pycodestyle E4/E7/E9 and pyflakes.
 select = ["E4", "E7", "E9", "F"]
+
+[tool.coverage.run]
+branch = true
+source = ["idnumbers"]
+
+[tool.coverage.report]
+# The measured line-and-branch coverage when the floor was set (#326) was 97.54%.
+fail_under = 97
+precision = 2
+show_missing = true
+skip_covered = true
