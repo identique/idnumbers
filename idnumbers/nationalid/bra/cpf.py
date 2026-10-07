@@ -20,7 +20,9 @@ class CPFNumber:
         'alias_of': None,
         'names': ['CPF number',
                   'Cadastro de Pessoas Físicas'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil',
+                  'https://www.sirc.gov.br/guias/guias-e-tutoriais-complementares-sirc/acompanhamentos-sirc/'
+                  'tutorial-para-a-analise-de-cpfs-irregulares/'],
         'deprecated': False
     })
 
@@ -33,8 +35,15 @@ class CPFNumber:
         Validate the BRA Cadastro de Pessoas Físicas Number
         https://en.wikipedia.org/wiki/CPF_number
         https://4app.net/tools/validator/document/cpf_validator
+
+        A number made of one repeated digit, such as 111.111.111-11, is rejected: it passes the check digits, but the
+        federal civil-registry system SIRC lists repeated digits as a reason for an invalid CPF.
+        https://www.sirc.gov.br/guias/guias-e-tutoriais-complementares-sirc/acompanhamentos-sirc/tutorial-para-a-analise-de-cpfs-irregulares/
         """
         if not validate_regexp(id_number, CPFNumber.METADATA.regexp):
+            return False
+        # Repeated-digit numbers satisfy the check digits but are never issued
+        if len(set(normalize(id_number))) == 1:
             return False
         return CPFNumber.checksum(id_number)
 
