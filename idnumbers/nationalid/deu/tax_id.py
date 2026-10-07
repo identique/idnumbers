@@ -1,4 +1,5 @@
 import re
+from collections import Counter
 from types import SimpleNamespace
 from typing import List
 from ..util import CHECK_DIGIT, mn_modulus_digit, modulus_overflow_mod10, validate_regexp
@@ -15,6 +16,15 @@ class TaxID:
     Steuer-IdNr., IdNr or Steuer-ID.
     https://allaboutberlin.com/guides/german-tax-id-steuernummer
     python version of https://github.com/kontist/validate-steuerid
+
+    The digit rules follow section 2.2 of the ELSTER document "Prüfung der Steuer- und Steueridentifikationsnummer"
+    (Bayerisches Landesamt für Steuern):
+    https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf
+
+    - The first digit is not 0. Numbers with a leading 0 are test IdNrs, not real IDs, and are rejected.
+    - Among the first 10 digits exactly one digit occurs two or three times, every other digit at most once.
+    - A digit that occurs three times in the first 10 digits never fills three directly consecutive positions.
+    - The 11th digit is the check digit.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'DE',
@@ -22,7 +32,7 @@ class TaxID:
         'max_length': 11,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{2} ?\d{3} ?\d{3} ?\d{3}$'),
+        'regexp': re.compile(r'^[1-9]\d ?\d{3} ?\d{3} ?\d{3}$'),
         'alias_of': None,
         'names': ['Tax ID',
                   'Steuerliche Identifikationsnummer',
@@ -31,7 +41,8 @@ class TaxID:
                   'Steuer-IdNr.',
                   'IdNr',
                   'Steuer-ID'],
-        'links': ['https://allaboutberlin.com/guides/german-tax-id-steuernummer'],
+        'links': ['https://allaboutberlin.com/guides/german-tax-id-steuernummer',
+                  'https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf'],
         'deprecated': False
     })
 
@@ -64,31 +75,21 @@ class TaxID:
     @staticmethod
     def check_multiple_occurrence(id_number: str) -> bool:
         """
-        We can only have 1 digit with multiple occurrence in the number
+        Among the first 10 digits (the check digit is excluded), exactly one digit must occur two or three times and
+        every other digit at most once.
         """
-        normalized = list(normalize(id_number))[:-1]
-        normalized.sort()
-        first_multiple_digits = None
-        for index, digit in enumerate(normalized):
-            if index == 0:
-                continue
-            if not first_multiple_digits and digit == normalized[index - 1]:
-                # no first occurrence, we set the digit to the first_multiple_digits
-                first_multiple_digits = digit
-            elif first_multiple_digits != digit and digit == normalized[index - 1]:
-                # we already saw first_multiple_digits and find it again. it's wrong
-                return False
-            # first_multiple_digits == digit and digit == normalized[index - 1] means the 3rd occurrence. It's ok.
-        return True
+        counts = Counter(normalize(id_number)[:10])
+        repeated = [count for count in counts.values() if count > 1]
+        return len(repeated) == 1 and repeated[0] in (2, 3)
 
     @staticmethod
     def check_consecutive_position(id_number: str) -> bool:
         """
-        We can have a number with 2 consecutive position at most.
+        Within the first 10 digits (the check digit is excluded), no digit may fill three directly consecutive
+        positions. Two adjacent equal digits are allowed.
         """
-        normalized = list(normalize(id_number))
-        # minus one for getting rid of check digit
-        for index in range(len(normalized) - 2):
-            if normalized[index] == normalized[index + 1] and normalized[index] == normalized[index + 2]:
+        digits = normalize(id_number)[:10]
+        for index in range(len(digits) - 2):
+            if digits[index] == digits[index + 1] == digits[index + 2]:
                 return False
         return True
