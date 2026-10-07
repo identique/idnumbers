@@ -13,6 +13,9 @@ class NationalID:
     """
     Iran national id number, (کارت ملی/kart-e-meli)
     https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of
+
+    Repeated-digit codes are rejected, following the Persian Tools validator rule:
+    https://persian-tools.js.org/functions/verifyIranianNationalId.html
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'IR',
@@ -37,6 +40,9 @@ class NationalID:
         Validate
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
+            return False
+        normalized = normalize(id_number)
+        if len(set(normalized)) == 1:
             return False
         return NationalID.checksum(id_number) == int(id_number[-1])
 
