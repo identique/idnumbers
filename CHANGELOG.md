@@ -2,6 +2,13 @@
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Validity changes
+
+- **ARG** DNI ([#280](https://github.com/identique/idnumbers/issues/280)): 7-digit numbers (below 10 million), such as
+  `5.123.456` and `5123456`, are now accepted. `METADATA.min_length` is 7.
+
 ## 1.12.0 (2026-10-07)
 
 The first release since 1.11.0. It fixes validity bugs that were found by comparing the library with its Node.js port
