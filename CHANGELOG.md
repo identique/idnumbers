@@ -2,7 +2,7 @@
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
-## Unreleased
+## 1.13.0 (2026-10-07)
 
 ### Validity changes
 
