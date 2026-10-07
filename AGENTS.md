@@ -5,7 +5,7 @@ Instructions for coding agents and contributors working on `idnumbers`.
 ## Project overview
 
 This repository is the Python library [`idnumbers`](https://pypi.org/project/idnumbers/). It validates and parses
-national ID numbers for 78 countries, has no runtime dependencies, and supports Python >= 3.9.
+national ID numbers for many countries, has no runtime dependencies, and supports Python >= 3.9.
 
 **Sister project:** the Node.js/TypeScript port lives at
 [identique/idnumbers-npm](https://github.com/identique/idnumbers-npm) (npm `idnumbers`).
@@ -23,7 +23,8 @@ national ID numbers for 78 countries, has no runtime dependencies, and supports 
 
 - **Issue first:** every change starts from a GitHub issue.
 - **Pull requests:** changes reach `main` through a pull request, which is squash-merged.
-- **Branch name:** `x<issue>`, for example `x244` for issue #244.
+- **Branch name:** include the issue number, for example `244-croatia-tin` (GitHub's **Create a branch** default on
+  an issue) or `x244`.
 - **PR title:** `Fix #<issue> - <description>`, for example `Fix #244 - link Croatia TIN with OIB for both entity and
   individual`. The squash merge turns it into the commit subject, `Fix #244 - ... (#259)`.
 - **Work in progress:** a PR that isn't ready yet is titled `WIP #<issue> - <description>`.
@@ -37,7 +38,7 @@ Never publish to PyPI without the maintainer's approval.
 
 | Task        | Command                                                                  |
 | ----------- | ------------------------------------------------------------------------ |
-| All tests   | `python3 -m unittest` (CI runs it on Python 3.9 to 3.14)                 |
+| All tests   | `python3 -m unittest` (CI runs it on every supported Python version)     |
 | One country | `python3 -m unittest tests.nationalid.test_CHN`                          |
 | Quick check | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."` |
 | Regexp dump | `python3 -m tools.collect_regexp`                                        |
