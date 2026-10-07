@@ -2300,7 +2300,7 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">No module docstring; 2/2 type aliases, 0/1 type variable, 1/1 constant, 10/11 functions documented</span></div>
+            <div class="summary"><span class="undocumented">No module docstring; 0/1 variable, 2/2 type aliases, 0/1 type variable, 1/1 constant, 11/12 functions documented</span></div>
           </li><li id="idnumbers.nationalid.ven">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.ven</div>
@@ -2604,7 +2604,7 @@
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">The ID number has a length the ID type doesn't allow. Not produced yet: issue #322 adds it.</div>
+            <div class="summary">The ID number has a length the ID type doesn't allow.</div>
           </li><li id="idnumbers.api.FailureReason.INVALID_FORMAT">
             
             <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.INVALID<wbr></wbr>_FORMAT</div>
@@ -2612,7 +2612,7 @@
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">The ID number doesn't have the format of the ID type. Not produced yet: issue #322 adds it.</div>
+            <div class="summary">The ID number doesn't have the format of the ID type.</div>
           </li><li id="idnumbers.api.FailureReason.CHECKSUM_MISMATCH">
             
             <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.CHECKSUM<wbr></wbr>_MISMATCH</div>
@@ -2620,7 +2620,7 @@
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">The check digit or check characters are wrong. Not produced yet: issue #322 adds it.</div>
+            <div class="summary">The check digit or check characters are wrong.</div>
           </li><li id="idnumbers.api.FailureReason.INVALID_BIRTHDATE">
             
             <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.INVALID<wbr></wbr>_BIRTHDATE</div>
@@ -2628,7 +2628,7 @@
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">The birth date inside the ID number isn't a real date. Not produced yet: issue #322 adds it.</div>
+            <div class="summary">The birth date inside the ID number isn't a real date.</div>
           </li><li id="idnumbers.api.FailureReason.VALIDATION_FAILED">
             
             <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Failure<wbr></wbr>Reason<wbr></wbr>.VALIDATION<wbr></wbr>_FAILED</div>
@@ -2836,7 +2836,167 @@
             <div class="type">Function</div>
             <div class="kind">Function</div>
             <div class="privacy">PRIVATE</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="idnumbers.api._check_validator">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>._check<wbr></wbr>_validator</div>
+            <div class="url">idnumbers.api.html#_check_validator</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
             <div class="summary">Validate with the ID class of a resolved country, and parse a valid ID number when the class can.</div>
+          </li><li id="idnumbers.api.failure_reason">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.failure<wbr></wbr>_reason</div>
+            <div class="url">idnumbers.api.html#failure_reason</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Explain a rejected ID, including secondary types; return None for a valid ID. Never raises.</div>
+          </li><li id="idnumbers.api._derive_failure_reason">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>._derive<wbr></wbr>_failure<wbr></wbr>_reason</div>
+            <div class="url">idnumbers.api.html#_derive_failure_reason</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="idnumbers.nationalid.util.VERHOEFF">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.VERHOEFF</div>
+            <div class="url">idnumbers.nationalid.util.html#VERHOEFF</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">[Table](<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm" target="_top">https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</a>) for the Verhoeff algorithm</div>
+          </li><li id="idnumbers.nationalid.util.CHECK_DIGIT">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.CHECK<wbr></wbr>_DIGIT</div>
+            <div class="url">idnumbers.nationalid.util.html#CHECK_DIGIT</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Type Alias</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Check digit type. Numeric check digits are only allowed in 0 to 9</div>
+          </li><li id="idnumbers.nationalid.util.CHECK_ALPHA">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.CHECK<wbr></wbr>_ALPHA</div>
+            <div class="url">idnumbers.nationalid.util.html#CHECK_ALPHA</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Type Alias</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Check digit type. Numeric check digits are only allowed in A to Z (all in upper cases)</div>
+          </li><li id="idnumbers.nationalid.util._ascii_pattern">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>._ascii<wbr></wbr>_pattern</div>
+            <div class="url">idnumbers.nationalid.util.html#_ascii_pattern</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Build the ASCII-only twin of a compiled pattern.</div>
+          </li><li id="idnumbers.nationalid.util.match_regexp">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.match<wbr></wbr>_regexp</div>
+            <div class="url">idnumbers.nationalid.util.html#match_regexp</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Match the whole id number against the regular expression, in ASCII mode.</div>
+          </li><li id="idnumbers.nationalid.util.validate_regexp">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.validate<wbr></wbr>_regexp</div>
+            <div class="url">idnumbers.nationalid.util.html#validate_regexp</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Validate that the whole string matches the regular expression, using ASCII digits only.</div>
+          </li><li id="idnumbers.nationalid.util.luhn_digit">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.luhn<wbr></wbr>_digit</div>
+            <div class="url">idnumbers.nationalid.util.html#luhn_digit</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">implement the algorithm of Luhn. <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Luhn_algorithm" target="_top">https://en.wikipedia.org/wiki/Luhn_algorithm</a></div>
+          </li><li id="idnumbers.nationalid.util.verhoeff_check">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.verhoeff<wbr></wbr>_check</div>
+            <div class="url">idnumbers.nationalid.util.html#verhoeff_check</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">implement the verhoeff algorithm in table format: <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm" target="_top">https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</a></div>
+          </li><li id="idnumbers.nationalid.util.weighted_modulus_digit">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.weighted<wbr></wbr>_modulus<wbr></wbr>_digit</div>
+            <div class="url">idnumbers.nationalid.util.html#weighted_modulus_digit</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">It metrix-multiples numbers and weights and calculate the modulus by the divider.</div>
+          </li><li id="idnumbers.nationalid.util.mn_modulus_digit">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.mn<wbr></wbr>_modulus<wbr></wbr>_digit</div>
+            <div class="url">idnumbers.nationalid.util.html#mn_modulus_digit</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">MN modulus check, (official name TBD) ISO 7064 mod 11 (n), 10 (m)?</div>
+          </li><li id="idnumbers.nationalid.util.modulus_overflow_mod10">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.modulus<wbr></wbr>_overflow<wbr></wbr>_mod10</div>
+            <div class="url">idnumbers.nationalid.util.html#modulus_overflow_mod10</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">get the units digit of a modulus. Some modulus may not be calculated with 10. In some cases, we need the units digit to be the ID.</div>
+          </li><li id="idnumbers.nationalid.util.letter_to_number">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.letter<wbr></wbr>_to<wbr></wbr>_number</div>
+            <div class="url">idnumbers.nationalid.util.html#letter_to_number</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">English letter to its index. A = 1, B = 2...</div>
+          </li><li id="idnumbers.nationalid.util.ean13_digit">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.ean13<wbr></wbr>_digit</div>
+            <div class="url">idnumbers.nationalid.util.html#ean13_digit</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The EAN-13 validation. The EAN-13 is a [barcode format](<a class="rst-reference rst-external" href="https://boxshot.com/barcode/tutorials/ean-13-barcodes/" target="_top">https://boxshot.com/barcode/tutorials/ean-13-barcodes/</a>). This is the check digit of EAN-13: the 12 data digits are weighted 1, 3, 1, 3, ... from the left (the odd positions by 1, the even positions by 3), and the check digit completes the weighted sum to a multiple of 10...</div>
+          </li><li id="idnumbers.nationalid.util._T">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>._T</div>
+            <div class="url">idnumbers.nationalid.util.html#_T</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Type Variable</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="idnumbers.nationalid.util.alias_of">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.alias<wbr></wbr>_of</div>
+            <div class="url">idnumbers.nationalid.util.html#alias_of</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="idnumbers.nationalid.util._birth_date_trace">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>._birth<wbr></wbr>_date<wbr></wbr>_trace</div>
+            <div class="url">idnumbers.nationalid.util.html#_birth_date_trace</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Variable</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="idnumbers.nationalid.util.birth_date">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.birth<wbr></wbr>_date</div>
+            <div class="url">idnumbers.nationalid.util.html#birth_date</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the calendar date, or None on ValueError, recording failures only in an active diagnostic trace.</div>
           </li><li id="idnumbers.nationalid.metadata.IdMetadata">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.metadata<wbr></wbr>.<wbr></wbr>Id<wbr></wbr>Metadata</div>
@@ -3045,126 +3205,6 @@
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary">foreign may be naturalized citizen or a resident</div>
-          </li><li id="idnumbers.nationalid.util.VERHOEFF">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.VERHOEFF</div>
-            <div class="url">idnumbers.nationalid.util.html#VERHOEFF</div>
-            <div class="type">Attribute</div>
-            <div class="kind">Constant</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">[Table](<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm" target="_top">https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</a>) for the Verhoeff algorithm</div>
-          </li><li id="idnumbers.nationalid.util.CHECK_DIGIT">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.CHECK<wbr></wbr>_DIGIT</div>
-            <div class="url">idnumbers.nationalid.util.html#CHECK_DIGIT</div>
-            <div class="type">Attribute</div>
-            <div class="kind">Type Alias</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Check digit type. Numeric check digits are only allowed in 0 to 9</div>
-          </li><li id="idnumbers.nationalid.util.CHECK_ALPHA">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.CHECK<wbr></wbr>_ALPHA</div>
-            <div class="url">idnumbers.nationalid.util.html#CHECK_ALPHA</div>
-            <div class="type">Attribute</div>
-            <div class="kind">Type Alias</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Check digit type. Numeric check digits are only allowed in A to Z (all in upper cases)</div>
-          </li><li id="idnumbers.nationalid.util._ascii_pattern">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>._ascii<wbr></wbr>_pattern</div>
-            <div class="url">idnumbers.nationalid.util.html#_ascii_pattern</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PRIVATE</div>
-            <div class="summary">Build the ASCII-only twin of a compiled pattern.</div>
-          </li><li id="idnumbers.nationalid.util.match_regexp">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.match<wbr></wbr>_regexp</div>
-            <div class="url">idnumbers.nationalid.util.html#match_regexp</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Match the whole id number against the regular expression, in ASCII mode.</div>
-          </li><li id="idnumbers.nationalid.util.validate_regexp">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.validate<wbr></wbr>_regexp</div>
-            <div class="url">idnumbers.nationalid.util.html#validate_regexp</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">Validate that the whole string matches the regular expression, using ASCII digits only.</div>
-          </li><li id="idnumbers.nationalid.util.luhn_digit">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.luhn<wbr></wbr>_digit</div>
-            <div class="url">idnumbers.nationalid.util.html#luhn_digit</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">implement the algorithm of Luhn. <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Luhn_algorithm" target="_top">https://en.wikipedia.org/wiki/Luhn_algorithm</a></div>
-          </li><li id="idnumbers.nationalid.util.verhoeff_check">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.verhoeff<wbr></wbr>_check</div>
-            <div class="url">idnumbers.nationalid.util.html#verhoeff_check</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">implement the verhoeff algorithm in table format: <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm" target="_top">https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm</a></div>
-          </li><li id="idnumbers.nationalid.util.weighted_modulus_digit">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.weighted<wbr></wbr>_modulus<wbr></wbr>_digit</div>
-            <div class="url">idnumbers.nationalid.util.html#weighted_modulus_digit</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">It metrix-multiples numbers and weights and calculate the modulus by the divider.</div>
-          </li><li id="idnumbers.nationalid.util.mn_modulus_digit">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.mn<wbr></wbr>_modulus<wbr></wbr>_digit</div>
-            <div class="url">idnumbers.nationalid.util.html#mn_modulus_digit</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">MN modulus check, (official name TBD) ISO 7064 mod 11 (n), 10 (m)?</div>
-          </li><li id="idnumbers.nationalid.util.modulus_overflow_mod10">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.modulus<wbr></wbr>_overflow<wbr></wbr>_mod10</div>
-            <div class="url">idnumbers.nationalid.util.html#modulus_overflow_mod10</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">get the units digit of a modulus. Some modulus may not be calculated with 10. In some cases, we need the units digit to be the ID.</div>
-          </li><li id="idnumbers.nationalid.util.letter_to_number">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.letter<wbr></wbr>_to<wbr></wbr>_number</div>
-            <div class="url">idnumbers.nationalid.util.html#letter_to_number</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">English letter to its index. A = 1, B = 2...</div>
-          </li><li id="idnumbers.nationalid.util.ean13_digit">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.ean13<wbr></wbr>_digit</div>
-            <div class="url">idnumbers.nationalid.util.html#ean13_digit</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary">The EAN-13 validation. The EAN-13 is a [barcode format](<a class="rst-reference rst-external" href="https://boxshot.com/barcode/tutorials/ean-13-barcodes/" target="_top">https://boxshot.com/barcode/tutorials/ean-13-barcodes/</a>). This is the check digit of EAN-13: the 12 data digits are weighted 1, 3, 1, 3, ... from the left (the odd positions by 1, the even positions by 3), and the check digit completes the weighted sum to a multiple of 10...</div>
-          </li><li id="idnumbers.nationalid.util._T">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>._T</div>
-            <div class="url">idnumbers.nationalid.util.html#_T</div>
-            <div class="type">Attribute</div>
-            <div class="kind">Type Variable</div>
-            <div class="privacy">PRIVATE</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
-          </li><li id="idnumbers.nationalid.util.alias_of">
-            
-            <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.util<wbr></wbr>.alias<wbr></wbr>_of</div>
-            <div class="url">idnumbers.nationalid.util.html#alias_of</div>
-            <div class="type">Function</div>
-            <div class="kind">Function</div>
-            <div class="privacy">PUBLIC</div>
-            <div class="summary"><span class="undocumented">Undocumented</span></div>
           </li><li id="idnumbers.nationalid.alb.identity_number.CHECKSUM_LETTER">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.alb<wbr></wbr>.identity<wbr></wbr>_number<wbr></wbr>.CHECKSUM<wbr></wbr>_LETTER</div>

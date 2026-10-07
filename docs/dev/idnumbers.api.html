@@ -255,6 +255,16 @@
         
 
         
+            <div class="itemName"><code><a href="#failure_reason" class="internal-link" title="idnumbers.api.failure_reason">failure<wbr></wbr>_reason</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#parse_id_info" class="internal-link" title="idnumbers.api.parse_id_info">parse<wbr></wbr>_id<wbr></wbr>_info</a></code>
             </div>
         
@@ -286,6 +296,26 @@
 
         
             <div class="itemName"><code><a href="#_check" class="internal-link" title="idnumbers.api._check">_check</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_check_validator" class="internal-link" title="idnumbers.api._check_validator">_check<wbr></wbr>_validator</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_derive_failure_reason" class="internal-link" title="idnumbers.api._derive_failure_reason">_derive<wbr></wbr>_failure<wbr></wbr>_reason</a></code>
             </div>
         
 
@@ -431,7 +461,7 @@ result.extracted_info       # {'location': 'A', 'gender': &lt;Gender.MALE: 'male
 
 result = validate('TWN', 'A123456780')
 bool(result)                # False
-result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_failed'&gt;
+result.reason               # &lt;FailureReason.CHECKSUM_MISMATCH: 'checksum_mismatch'&gt;
 </pre>
 </div>
         </div>
@@ -463,6 +493,11 @@ result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_f
   </tr><tr class="function">
     
     <td>Function</td>
+    <td><code><a href="#failure_reason" class="internal-link" title="idnumbers.api.failure_reason">failure<wbr></wbr>_reason</a></code></td>
+    <td>Explain a rejected ID, including secondary types; return None for a valid ID. Never raises.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
     <td><code><a href="#parse_id_info" class="internal-link" title="idnumbers.api.parse_id_info">parse<wbr></wbr>_id<wbr></wbr>_info</a></code></td>
     <td>Validate and parse the primary <tt class="rst-docutils literal">NationalID</tt> of a country, without normalizing the input.</td>
   </tr><tr class="function">
@@ -484,7 +519,17 @@ result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_f
     
     <td>Function</td>
     <td><code><a href="#_check" class="internal-link" title="idnumbers.api._check">_check</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_check_validator" class="internal-link" title="idnumbers.api._check_validator">_check<wbr></wbr>_validator</a></code></td>
     <td>Validate with the ID class of a resolved country, and parse a valid ID number when the class can.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_derive_failure_reason" class="internal-link" title="idnumbers.api._derive_failure_reason">_derive<wbr></wbr>_failure<wbr></wbr>_reason</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
           
@@ -494,6 +539,33 @@ result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_f
 
         <div id="childList">
           <div class="basefunction">
+  
+  
+  <a name="idnumbers.api.failure_reason">
+    
+  </a>
+  <a name="failure_reason">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">failure_reason</span>(id_class, id_number):
+    
+    <a class="headerLink" href="#failure_reason" title="idnumbers.api.failure_reason">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Explain a rejected ID, including secondary types; return None for a valid ID. Never raises.</p>
+<p>Reasons are best effort, not a replacement for validation. Candidates preserve the input and remove whitespace
+and <tt class="rst-docutils literal">. - / ( )</tt> for diagnosis only. Format, definite checksum mismatch, and traced calendar failure are checked
+in that order; inconclusive checks and exceptions give <code><a href="idnumbers.api.FailureReason.html#VALIDATION_FAILED" class="internal-link" title="idnumbers.api.FailureReason.VALIDATION_FAILED">FailureReason.VALIDATION_FAILED</a></code>.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_class:</span><code>Type[<wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.api.FailureReason.html" class="internal-link" title="idnumbers.api.FailureReason">FailureReason</a>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
   
   
   <a name="idnumbers.api.parse_id_info">
@@ -615,8 +687,54 @@ Country-specific <tt class="rst-docutils literal">parse()</tt> methods are uncha
   </div>
   <div class="docstring functionBody">
     
+    <div><p class="undocumented">Undocumented</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">validator:</span><code>Any</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="idnumbers.api.ValidationResult.html" class="internal-link" title="idnumbers.api.ValidationResult">ValidationResult</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.api._check_validator">
+    
+  </a>
+  <a name="_check_validator">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_check_validator</span>(alpha3, validator, id_number):
+    
+    <a class="headerLink" href="#_check_validator" title="idnumbers.api._check_validator">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
     <div><p>Validate with the ID class of a resolved country, and parse a valid ID number when the class can.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">validator:</span><code>Any</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="idnumbers.api.ValidationResult.html" class="internal-link" title="idnumbers.api.ValidationResult">ValidationResult</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.api._derive_failure_reason">
+    
+  </a>
+  <a name="_derive_failure_reason">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_derive_failure_reason</span>(id_class, id_number):
+    
+    <a class="headerLink" href="#_derive_failure_reason" title="idnumbers.api._derive_failure_reason">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p class="undocumented">Undocumented</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_class:</span><code>Type[<wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="idnumbers.api.FailureReason.html" class="internal-link" title="idnumbers.api.FailureReason">FailureReason</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div>
         </div>
@@ -630,7 +748,7 @@ Country-specific <tt class="rst-docutils literal">parse()</tt> methods are uncha
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-07 22:51:44.
+    22.9.1 at 2026-10-07 23:21:35.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 

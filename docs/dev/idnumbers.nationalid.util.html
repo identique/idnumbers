@@ -222,6 +222,16 @@
         
 
         
+            <div class="itemName"><code><a href="#birth_date" class="internal-link" title="idnumbers.nationalid.util.birth_date">birth<wbr></wbr>_date</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#ean13_digit" class="internal-link" title="idnumbers.nationalid.util.ean13_digit">ean13<wbr></wbr>_digit</a></code>
             </div>
         
@@ -362,6 +372,16 @@
 
         
             <div class="itemName"><code><a href="#_T" class="internal-link" title="idnumbers.nationalid.util._T">_T</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_birth_date_trace" class="internal-link" title="idnumbers.nationalid.util._birth_date_trace">_birth<wbr></wbr>_date<wbr></wbr>_trace</a></code>
             </div>
         
 
@@ -2053,6 +2073,11 @@
   </tr><tr class="function">
     
     <td>Function</td>
+    <td><code><a href="#birth_date" class="internal-link" title="idnumbers.nationalid.util.birth_date">birth<wbr></wbr>_date</a></code></td>
+    <td>Return the calendar date, or None on ValueError, recording failures only in an active diagnostic trace.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
     <td><code><a href="#ean13_digit" class="internal-link" title="idnumbers.nationalid.util.ean13_digit">ean13<wbr></wbr>_digit</a></code></td>
     <td>The EAN-13 validation. The EAN-13 is a [barcode format](<a class="rst-reference rst-external" href="https://boxshot.com/barcode/tutorials/ean-13-barcodes/" target="_top">https://boxshot.com/barcode/tutorials/ean-13-barcodes/</a>). This is the check digit of EAN-13: the 12 data digits are weighted 1, 3, 1, 3, ... from the left (the odd positions by 1, the even positions by 3), and the check digit completes the weighted sum to a multiple of 10...</td>
   </tr><tr class="function">
@@ -2120,6 +2145,11 @@
     <td>Type Variable</td>
     <td><code><a href="#_T" class="internal-link" title="idnumbers.nationalid.util._T">_T</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="variable private">
+    
+    <td>Variable</td>
+    <td><code><a href="#_birth_date_trace" class="internal-link" title="idnumbers.nationalid.util._birth_date_trace">_birth<wbr></wbr>_date<wbr></wbr>_trace</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
           
@@ -2150,6 +2180,30 @@
   <div class="docstring functionBody">
     
     <div><p class="undocumented">Undocumented</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">cls:</span><code><a href="#_T" class="internal-link" title="idnumbers.nationalid.util._T">_T</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#_T" class="internal-link" title="idnumbers.nationalid.util._T">_T</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.nationalid.util.birth_date">
+    
+  </a>
+  <a name="birth_date">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">birth_date</span>(year, month, day):
+    
+    <a class="headerLink" href="#birth_date" title="idnumbers.nationalid.util.birth_date">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Return the calendar date, or None on ValueError, recording failures only in an active diagnostic trace.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">year:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">month:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">day:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>date]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basefunction">
   
@@ -2542,6 +2596,30 @@ A <tt class="rst-docutils literal">bytes</tt> pattern is ASCII-only already and 
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>TypeVar(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">_T</span><span class="rst-variable-quote">'</span>,
         <wbr></wbr>bound=Type[<wbr></wbr>Any])</code></pre></td></tr></table>
   </div>
+</div><div class="basevariable private">
+  
+  
+  <a name="idnumbers.nationalid.util._birth_date_trace">
+    
+  </a>
+  <a name="_birth_date_trace">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_birth_date_trace</span>: <code>ContextVar[<wbr></wbr>Optional[<wbr></wbr>bool]]</code> =
+    
+    <a class="headerLink" href="#_birth_date_trace" title="idnumbers.nationalid.util._birth_date_trace">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    
+  </div>
 </div>
         </div>
       
@@ -2554,7 +2632,7 @@ A <tt class="rst-docutils literal">bytes</tt> pattern is ASCII-only already and 
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-07 22:51:44.
+    22.9.1 at 2026-10-07 23:21:35.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
