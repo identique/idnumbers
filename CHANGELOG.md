@@ -28,6 +28,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   informational benchmarks, keeps GitHub Actions updated with Dependabot, and reports a single `ci-summary` result
   ([#326](https://github.com/identique/idnumbers/issues/326)). Formatting with `ruff format` and a coverage badge
   await a decision in [#485](https://github.com/identique/idnumbers/issues/485).
+- Vendor the Node port's parity corpus (78 countries, 17,960 vectors) at a pinned port commit and record Python's own
+  validity for it, so a validity change on any shared vector fails a test and gets a port note;
+  `scripts/sync_parity_corpus.py` refreshes both ([#323](https://github.com/identique/idnumbers/issues/323)).
 
 ## 1.14.0 (2026-10-07)
 
