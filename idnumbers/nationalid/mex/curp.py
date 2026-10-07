@@ -6,6 +6,21 @@ from ..constant import Gender
 from ..util import validate_regexp, match_regexp
 
 
+# RENAPO's March 2006 Instructivo Normativo, Annex 2 (printed page 59), lists these
+# original inconvenient prefixes; page 7 requires replacing their second letter with X.
+_INCONVENIENT_PREFIXES = frozenset({
+    'BACA', 'BAKA', 'BUEI', 'BUEY', 'CACA', 'CACO', 'CAGA', 'CAGO', 'CAKA',
+    'CAKO', 'COGE', 'COGI', 'COJA', 'COJE', 'COJI', 'COJO', 'COLA', 'CULO',
+    'FALO', 'FETO', 'GETA', 'GUEI', 'GUEY', 'JETA', 'JOTO', 'KACA', 'KACO',
+    'KAGA', 'KAGO', 'KAKA', 'KAKO', 'KOGE', 'KOGI', 'KOJA', 'KOJE', 'KOJI',
+    'KOJO', 'KOLA', 'KULO', 'LILO', 'LOCA', 'LOCO', 'LOKA', 'LOKO', 'MAME',
+    'MAMO', 'MEAR', 'MEAS', 'MEON', 'MIAR', 'MION', 'MOCO', 'MOKO', 'MULA',
+    'MULO', 'NACA', 'NACO', 'PEDA', 'PEDO', 'PENE', 'PIPI', 'PITO', 'POPO',
+    'PUTA', 'PUTO', 'QULO', 'RATA', 'ROBA', 'ROBE', 'ROBO', 'RUIN', 'SENO',
+    'TETA', 'VACA', 'VAGA', 'VAGO', 'VAKA', 'VUEI', 'VUEY', 'WUEI', 'WUEY',
+})
+
+
 class ParseResult(TypedDict):
     """The parse result of CURP"""
     name_initial_chars: str
@@ -28,7 +43,8 @@ class CURP:
     """
     Mexico National ID number format, CURP
     https://en.wikipedia.org/wiki/Unique_Population_Registry_Code
-    http://sistemas.uaeh.edu.mx/dce/admisiones/docs/guia_CURP.pdf
+    RENAPO, Instructivo Normativo (March 2006), printed pages 7 and 59:
+    https://ordenjuridico.gob.mx/Federal/PE/APF/APC/SEGOB/Instructivos/InstructivoNormativo.pdf
     python version of https://github.com/d3249/curp
     """
     METADATA = SimpleNamespace(**{
@@ -50,7 +66,7 @@ class CURP:
                   'Unique Population Registry Code',
                   'Personal ID Code Number'],
         'links': ['https://en.wikipedia.org/wiki/Unique_Population_Registry_Code',
-                  'http://sistemas.uaeh.edu.mx/dce/admisiones/docs/guia_CURP.pdf'],
+                  'https://ordenjuridico.gob.mx/Federal/PE/APF/APC/SEGOB/Instructivos/InstructivoNormativo.pdf'],
         'deprecated': False
     })
 
@@ -83,6 +99,8 @@ class CURP:
         """parse the result"""
         match_obj = match_regexp(id_number, CURP.METADATA.regexp)
         if not match_obj:
+            return None
+        if match_obj.group('initial') in _INCONVENIENT_PREFIXES:
             return None
         location = match_obj.group('location')
         checksum = CURP.checksum(id_number)

@@ -77,6 +77,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `123456782` are now accepted, while the existing fully dotted layout `1234.56.782` remains accepted. All-zero
   numbers remain rejected in both formats; the 11-proof and `checksum()` are unchanged.
 
+- **MEX** CURP ([#352](https://github.com/identique/idnumbers/issues/352)): `validate()` and `parse()` reject
+  the 81 original inconvenient name prefixes in RENAPO's catalogue. Their second-letter `X` replacements remain
+  accepted when otherwise valid; standalone `checksum()` is unchanged.
+
 - **NZL** ([#306](https://github.com/identique/idnumbers/issues/306)): the expanded NHI checksum now uses modulus
   23 and check-letter indices 1-23, per HISO 10046:2024; the legacy numeric checksum is unchanged. Driver licence
   prefixes now require two ASCII letters, preserving lowercase acceptance and the trailing-digit blacklist. IRD
