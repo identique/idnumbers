@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_ALPHA, validate_regexp, match_regexp
@@ -31,7 +31,7 @@ class FiscalCode:
     https://en.wikipedia.org/wiki/Italian_fiscal_code
     https://en.wikipedia.org/wiki/National_identification_number#Italy
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'IT',
         'min_length': 16,
         'max_length': 16,
@@ -49,7 +49,15 @@ class FiscalCode:
                   'Codice fiscale'],
         'links': ['https://en.wikipedia.org/wiki/Italian_fiscal_code',
                   'https://en.wikipedia.org/wiki/National_identification_number#Italy'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Italy',
+        'id_type': 'Fiscal Code',
+        'official_name': 'Codice fiscale',
+        'display_format': 'LLLLLLYYMDDXXXXC',
+        'example': 'RSSMRA85M01H501Q',
+        'checksum_algorithm': 'Mod 26 check letter (the characters at odd and at even positions are mapped through two '
+                              'tables and added)',
+        'masks': ('LLLLLLXXLXXLXXXL',)
     })
 
     MONTH_MAP = {'A': 1, 'B': 2, 'C': 3, 'D': 4,

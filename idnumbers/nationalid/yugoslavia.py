@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from .metadata import IdMetadata
 from typing import Optional, TypedDict, Tuple, cast
 from .util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 from .constant import Citizenship, Gender
@@ -29,7 +29,7 @@ class UniqueMasterCitizenNumber:
     Yugoslavia JMBG which is shared among all independent countries from Yugoslavia.
     https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': None,
         'min_length': 13,
         'max_length': 13,

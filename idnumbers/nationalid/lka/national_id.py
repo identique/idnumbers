@@ -1,6 +1,6 @@
 import re
 from datetime import date, timedelta
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
@@ -34,7 +34,7 @@ class NationalID:
     These sources establish the ranges, not leap-year-specific date decoding;
     the existing within-range decoding is retained.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'LK',
         'min_length': 12,
         'max_length': 12,
@@ -48,7 +48,15 @@ class NationalID:
         'names': ['National ID Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka',
                   'https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Sri Lanka',
+        'id_type': 'National Identity Card Number',
+        'official_name': None,
+        'display_format': 'YYYYDDDSSSSC',
+        'example': '199001200001',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2 over the first eleven '
+                              'digits; check = 11 - remainder, reduced to its last digit)',
+        'masks': ('############',)
     })
 
     MAGIC_MULTIPLIER = [8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2]

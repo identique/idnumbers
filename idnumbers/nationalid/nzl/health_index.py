@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -12,7 +12,7 @@ class NationalHealthIndexNumber:
     Expanded-format implementation is planned for 1 July 2027.
     Legacy implementation provenance: https://gist.github.com/mcshaz/b41dc6bd4aa3104d54da677e2b4f6b45
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'NZ',
         # length without insignificant chars
         'min_length': 7,
@@ -40,7 +40,15 @@ class NationalHealthIndexNumber:
                   'library-of-system-data-identifiers-v95989112-d327e56315/'
                   'new-zealand-national-health-index-number-v117807810-d327e90250/'
                   'new-zealand-national-health-index-number-narrow-br-v117808786-d327e90350.html'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'New Zealand',
+        'id_type': 'National Health Index Number',
+        'official_name': None,
+        'display_format': 'LLL####',
+        'example': 'ZZZ0016',
+        'checksum_algorithm': 'Weighted sum (weights 7-2; letters A-Z without I and O count as 1-24): mod 11 for the '
+                              'legacy format, mod 23 for the expanded format',
+        'masks': ('LLL####', 'LLL##LL')
     })
 
     ALPHABET_LIST = list('ABCDEFGHJKLMNPQRSTUVWXYZ')

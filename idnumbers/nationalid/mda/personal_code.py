@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp
 
@@ -9,7 +9,7 @@ class PersonalCode:
     Moldova Personal Code, IDNP
     https://en.wikipedia.org/wiki/National_identification_number#Moldova
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'MD',
         # length without insignificant chars
         'min_length': 13,
@@ -23,8 +23,16 @@ class PersonalCode:
         'alias_of': None,
         'names': ['Personal Code',
                   'IDNP'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Moldova'],
-        'deprecated': False
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Moldova',
+                  'https://ro.wikipedia.org/wiki/IDNP'],
+        'deprecated': False,
+        'country_name': 'Moldova',
+        'id_type': 'Personal Code',
+        'official_name': 'Identificatorul Numeric Personal',
+        'display_format': '#############',
+        'example': '1234567890123',
+        'checksum_algorithm': None,
+        'masks': ('#############',)
     })
 
     @staticmethod

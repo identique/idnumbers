@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..util import validate_regexp, match_regexp
 
@@ -38,7 +38,7 @@ class PersonalIdentityNumber:
     https://cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret .
     A birth date in the future is rejected.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'DK',
         'min_length': 10,
         'max_length': 10,
@@ -53,7 +53,14 @@ class PersonalIdentityNumber:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Denmark',
                   'https://cpr.dk/media/12066/personnummeret-i-cpr.pdf',
                   'https://cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Denmark',
+        'id_type': 'Personal Identity Number',
+        'official_name': 'CPR-nummer',
+        'display_format': 'DDMMYY-SSSS',
+        'example': '010100-1234',
+        'checksum_algorithm': None,
+        'masks': ('######-####',)
     })
 
     @staticmethod

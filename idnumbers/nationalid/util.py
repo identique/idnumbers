@@ -220,4 +220,9 @@ def alias_of(cls: _T) -> _T:
     class AliasType(cls):  # type: ignore[valid-type,misc]  # the base class is only known at runtime
         METADATA = metadata
 
+    # An alias reads as the class it stands for: AUS.NationalID.__name__ is 'DriverLicenseNumber', not 'AliasType'.
+    AliasType.__name__ = cls.__name__
+    AliasType.__qualname__ = cls.__qualname__
+    AliasType.__module__ = cls.__module__
+    AliasType.__doc__ = cls.__doc__
     return cast(_T, AliasType)

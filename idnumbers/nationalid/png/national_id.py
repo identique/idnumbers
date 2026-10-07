@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp
 
@@ -9,7 +9,7 @@ class NationalID:
     Papua New Guinea national id, NID
     https://en.wikipedia.org/wiki/National_identification_number#Papua_New_Guinea
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'PG',
         # length without insignificant chars
         'min_length': 10,
@@ -24,7 +24,14 @@ class NationalID:
         'names': ['National ID Number',
                   'NID'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Papua_New_Guinea'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Papua New Guinea',
+        'id_type': 'National ID Number',
+        'official_name': None,
+        'display_format': '##########',
+        'example': '1234567890',
+        'checksum_algorithm': None,
+        'masks': ('##########',)
     })
 
     @staticmethod

@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..constant import Citizenship
 from ..util import validate_regexp, match_regexp
@@ -31,7 +31,7 @@ class NRIC:
     .. _NRIC structure: https://en.wikipedia.org/wiki/Malaysian_identity_card
        #Structure_of_the_National_Registration_Identity_Card_Number_(NRIC%29
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'MY',
         'min_length': 12,
         'max_length': 12,
@@ -45,7 +45,14 @@ class NRIC:
                   'NRIC'],
         'links': ['https://en.wikipedia.org/wiki/Malaysian_identity_card#'
                   'Structure_of_the_National_Registration_Identity_Card_Number_(NRIC)'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Malaysia',
+        'id_type': 'National Registration Identity Card Number',
+        'official_name': None,
+        'display_format': 'YYMMDD-PB-###G',
+        'example': '800101-01-1234',
+        'checksum_algorithm': None,
+        'masks': ('######-##-####', '############')
     })
 
     WRONG_PB_CODE = ['00', '17', '18', '19', '20',

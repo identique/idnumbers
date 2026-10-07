@@ -89,8 +89,12 @@ working directories.
 - **Country modules:** `idnumbers/nationalid/<iso3>/` (lowercase directory) has one module per ID type, for example
   `chn/resident_id.py` or `aus/medicare.py`.
   - Each class has static `validate()`, `parse()` (when parsable) and `checksum()` methods.
-  - Each class also has a `METADATA` `SimpleNamespace` with these fields: `iso3166_alpha2`, `min_length`,
-    `max_length`, `parsable`, `checksum`, `regexp`, `alias_of`, `names`, `links` and `deprecated`.
+  - Each class also has a `METADATA`, an `IdMetadata` (a `SimpleNamespace` subclass with typed fields, in
+    `idnumbers/nationalid/metadata.py`) with these fields: `iso3166_alpha2`, `min_length`, `max_length`, `parsable`,
+    `checksum`, `regexp`, `alias_of`, `names`, `links`, `deprecated`, `country_name`, `id_type`, `official_name`,
+    `display_format`, `example`, `checksum_algorithm` and `masks`. `tests/test_metadata.py` requires all of them for
+    every ID class, so a new ID class needs a valid synthetic `example`, `masks` that its `validate()` accepts, and
+    the values described in `docs/nationalid/METADATA.md`.
 - **Public country modules:** `idnumbers/nationalid/<ISO3>.py` (uppercase) re-exports the classes and defines
   `NationalID = alias_of(<PrimaryClass>)`.
 - **Shared helpers:** check these before reimplementing anything.

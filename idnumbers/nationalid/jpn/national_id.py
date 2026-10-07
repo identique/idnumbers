@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 
 from ..util import validate_regexp, weighted_modulus_digit
@@ -12,7 +12,7 @@ class MyNumber:
     https://tin-check.com/en/
     https://github.com/kufu/tsubaki/blob/433d65aac341bcd58e7d8141f3f4ac374977617f/lib/tsubaki/my_number.rb#L12
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'JP',
         # length without insignificant chars
         'min_length': 12,
@@ -28,7 +28,15 @@ class MyNumber:
                   'My Number',
                   'マイナンバー'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Japan'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Japan',
+        'id_type': 'My Number',
+        'official_name': 'マイナンバー',
+        'display_format': '############',
+        'example': '765895492872',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2; a remainder of 0 or 1 '
+                              'gives 0, otherwise 11 - remainder)',
+        'masks': ('############',)
     })
 
     MULTIPLIER = [6, 5, 4, 3, 2, 7, 6, 5, 4, 3, 2]

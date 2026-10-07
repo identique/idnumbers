@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -14,7 +14,7 @@ class EntityTaxIDNumber:
 
     The official BMF construction rules are linked in METADATA.links.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'AT',
         # length without insignificant chars
         'min_length': 9,
@@ -32,7 +32,15 @@ class EntityTaxIDNumber:
                   'https://taxid.pro/docs/countries/austria',
                   'https://www.bmf.gv.at/dam/jcr:d6794f8f-d321-43df-9840-1a841f9bf5dc/'
                   'BMF_UID_Konstruktionsregeln_Stand_November%202020.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Austria',
+        'id_type': 'VAT Identification Number',
+        'official_name': 'Umsatzsteuer-Identifikationsnummer',
+        'display_format': 'U########',
+        'example': 'U12345675',
+        'checksum_algorithm': 'Luhn-style mod 10 (every second digit doubled and folded to its digit sum; the sum '
+                              'starts at 4)',
+        'masks': ('L########', 'L## ### ###')
     })
 
     @staticmethod

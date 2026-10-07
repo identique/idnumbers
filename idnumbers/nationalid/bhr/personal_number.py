@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, match_regexp
 
@@ -19,7 +19,7 @@ class PersonalNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Bahrain
     * According to the doc, we can know it has checksum algorithm. But we cannot find it.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BH',
         'min_length': 9,
         'max_length': 9,
@@ -37,7 +37,14 @@ class PersonalNumber:
                   'CPR',
                   'الرقم السكاني'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bahrain'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Bahrain',
+        'id_type': 'Personal Number',
+        'official_name': 'الرقم الشخصي',
+        'display_format': 'YYMMSSSSC',
+        'example': '800101001',
+        'checksum_algorithm': None,
+        'masks': ('#########',)
     })
 
     @staticmethod

@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..util import validate_regexp, match_regexp
 from ..constant import Gender
@@ -35,7 +35,7 @@ class NIK:
     https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/id/nik.py
     https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'ID',
         'min_length': 16,
         'max_length': 16,
@@ -52,7 +52,14 @@ class NIK:
                   'Nomor Induk Kependudukan'],
         'links': ['https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/id/nik.py',
                   'https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Indonesia',
+        'id_type': 'National ID Number',
+        'official_name': 'Nomor Induk Kependudukan',
+        'display_format': 'PPPPPPDDMMYYSSSS',
+        'example': '1101010101900001',
+        'checksum_algorithm': None,
+        'masks': ('################',)
     })
 
     @staticmethod

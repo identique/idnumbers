@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, cast
 
 from ..util import validate_regexp, CHECK_DIGIT, weighted_modulus_digit
@@ -10,7 +10,7 @@ class UnifiedIdCode:
     Bulgaria unified identification code, UIC
     https://validatetin.com/bulgaria/
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BG',
         # length without insignificant chars
         'min_length': 9,
@@ -37,7 +37,16 @@ class UnifiedIdCode:
                   'https://bg.wikipedia.org/wiki/%D0%95%D0%B4%D0%B8%D0%BD%D0%B5%D0%BD_'
                   '%D0%B8%D0%B4%D0%B5%D0%BD%D1%82%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B5%D0%BD_'
                   '%D0%BA%D0%BE%D0%B4'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Bulgaria',
+        'id_type': 'Unified Identification Code',
+        'official_name': 'Единен идентификационен код',
+        'display_format': '#########(####)',
+        'example': '123456786',
+        'checksum_algorithm': 'Weighted sum mod 11 in two passes (weights 1-8, then 3-10; a remainder of 10 in both '
+                              'passes becomes 0); the 13th digit of a 13-digit code uses weights 2, 7, 3, 5 then 4, 9, '
+                              '5, 7',
+        'masks': ('#########', '#############')
     })
 
     WEIGHTS9_1 = [1, 2, 3, 4, 5, 6, 7, 8]

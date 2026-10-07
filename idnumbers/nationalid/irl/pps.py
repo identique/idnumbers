@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit, letter_to_number
 
 
@@ -20,7 +20,7 @@ class PersonalPublicServiceNumber:
     individuals. Historical T/X suffix handling is not implemented here and
     is tracked separately: https://github.com/identique/idnumbers/issues/433
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'IE',
         'min_length': 8,
         'max_length': 10,
@@ -37,7 +37,15 @@ class PersonalPublicServiceNumber:
                   'RSI No'],
         'links': ['https://en.wikipedia.org/wiki/Personal_Public_Service_Number',
                   'https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/ie/pps.py'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Ireland',
+        'id_type': 'Personal Public Service Number',
+        'official_name': 'Uimhir Phearsanta Seirbhíse Poiblí',
+        'display_format': '#######L(L)',
+        'example': '1234567T',
+        'checksum_algorithm': 'Weighted sum mod 23 (weights 8-2, an A, B or H suffix added with weight 9) mapped to '
+                              'the check letter A-W',
+        'masks': ('#######L', '#######LL')
     })
 
     MAGIC_MULTIPLIER = [8, 7, 6, 5, 4, 3, 2, 9]

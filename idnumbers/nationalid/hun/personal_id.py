@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, Tuple, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 from ..constant import Citizenship, Gender
@@ -30,7 +30,7 @@ class PersonalID:
     Hungary Personal ID number format
     https://en.wikipedia.org/wiki/National_identification_number#Hungary
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'HU',
         'min_length': 11,
         'max_length': 11,
@@ -42,8 +42,16 @@ class PersonalID:
                              r'(?P<checksum>\d)$'),
         'alias_of': None,
         'names': ['Personal ID Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Hungary'],
-        'deprecated': False
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Hungary',
+                  'https://hu.wikipedia.org/wiki/Szem%C3%A9lyi_sz%C3%A1m'],
+        'deprecated': False,
+        'country_name': 'Hungary',
+        'id_type': 'Personal ID Number',
+        'official_name': 'személyi azonosító',
+        'display_format': 'GYYMMDDSSSC',
+        'example': '18001010016',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 1-10; a remainder of 10 is never valid)',
+        'masks': ('###########',)
     })
 
     MAGIC_MULTIPLIER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

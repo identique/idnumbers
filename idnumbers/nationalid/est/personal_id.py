@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, match_regexp
@@ -24,7 +24,7 @@ class PersonalID:
     https://en.wikipedia.org/wiki/National_identification_number#Estonia
     https://et.wikipedia.org/wiki/Isikukood
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'EE',
         'min_length': 11,
         'max_length': 11,
@@ -39,7 +39,15 @@ class PersonalID:
                   'isikukood'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Estonia',
                   'https://et.wikipedia.org/wiki/Isikukood'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Estonia',
+        'id_type': 'Personal ID Number',
+        'official_name': 'isikukood',
+        'display_format': 'GYYMMDDSSSC',
+        'example': '37605030299',
+        'checksum_algorithm': 'Weighted sum mod 11 in two passes (weights 1-9 and 1; then 3-9, 1, 2 and 3 when the '
+                              'remainder is 10; a second 10 becomes 0)',
+        'masks': ('###########',)
     })
 
     WEIGHTS1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1]

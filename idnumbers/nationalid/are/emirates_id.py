@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..util import CHECK_DIGIT, luhn_digit, validate_regexp, match_regexp
 
@@ -25,7 +25,7 @@ class EmiratesIDNumber:
     https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates
     This is the python version of https://gist.github.com/geordee/e51d111426de675c0c0f8503c2003047
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'AE',
         'min_length': 15,
         'max_length': 15,
@@ -40,7 +40,14 @@ class EmiratesIDNumber:
                   'Resident ID',
                   'رقم الهوية'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'United Arab Emirates',
+        'id_type': 'Emirates ID',
+        'official_name': 'رقم الهوية',
+        'display_format': '784-YYYY-SSSSSSS-C',
+        'example': '784-1980-1234567-8',
+        'checksum_algorithm': 'Luhn (mod 10)',
+        'masks': ('###-####-#######-#', '###############')
     })
 
     @staticmethod

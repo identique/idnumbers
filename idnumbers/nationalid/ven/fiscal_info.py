@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import alias_of, validate_regexp, weighted_modulus_digit
 
@@ -16,7 +16,7 @@ class FiscalInformationNumber:
     python version of
     https://github.com/anghelvalentin/CountryValidator/blob/master/CountryValidator/CountriesValidators/VenezuelaAfricaValidator.cs
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'VE',
         # length without insignificant chars
         'min_length': 10,
@@ -32,7 +32,15 @@ class FiscalInformationNumber:
                   'RIF',
                   'Registro de Informacion Fiscal'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Venezuela'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Venezuela',
+        'id_type': 'Fiscal Information Number',
+        'official_name': 'Registro de Información Fiscal',
+        'display_format': 'L-########-#',
+        'example': 'J-12345678-4',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 1, 3, 2, 7, 6, 5, 4, 3, 2 with the type letter V, E, J, P, '
+                              'G counted as 4, 8, 12, 16, 20; check = 11 - remainder, values above 9 become 0)',
+        'masks': ('L-########-#', 'L#########')
     })
 
     WEIGHTS = [1, 3, 2, 7, 6, 5, 4, 3, 2]

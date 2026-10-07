@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, Tuple, cast
 from ..constant import Citizenship, Gender
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
@@ -29,7 +29,7 @@ class PersonalNumericalCode:
     https://en.wikipedia.org/wiki/Romanian_identity_card
     https://github.com/vimishor/cnp-spec/blob/master/spec.md
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'RO',
         'min_length': 13,
         'max_length': 13,
@@ -48,7 +48,15 @@ class PersonalNumericalCode:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Romania',
                   'https://en.wikipedia.org/wiki/Romanian_identity_card',
                   'https://github.com/vimishor/cnp-spec/blob/master/spec.md'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Romania',
+        'id_type': 'Personal Numerical Code',
+        'official_name': 'Cod Numeric Personal',
+        'display_format': 'SAALLZZJJNNNC',
+        'example': '1800101226813',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9; a remainder of 10 '
+                              'becomes 1)',
+        'masks': ('#############',)
     })
 
     MAGIC_MULTIPLIER = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9]

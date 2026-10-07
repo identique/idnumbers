@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -8,7 +8,7 @@ class NationalID:
     Iraq National Card number. not enough docs to research.
     https://en.wikipedia.org/wiki/Iraq_National_Card
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'IQ',
         'min_length': 12,
         'max_length': 12,
@@ -20,7 +20,14 @@ class NationalID:
                   'البطاقة الوطنية',
                   'كارتى نيشتمانى'],
         'links': ['https://en.wikipedia.org/wiki/Iraq_National_Card'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Iraq',
+        'id_type': 'National Card Number',
+        'official_name': 'البطاقة الوطنية',
+        'display_format': '############',
+        'example': '123456789012',
+        'checksum_algorithm': None,
+        'masks': ('############',)
     })
 
     @staticmethod

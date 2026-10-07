@@ -2,7 +2,7 @@ import re
 from datetime import date
 from re import Match
 from typing import Optional, TypedDict, cast
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
@@ -80,7 +80,7 @@ class BirthNumber:
     ``stdnum/cz/rc.py``, which checks ``int(number[:9]) % 11 % 10`` for 10 digits and accepts 9 digits
     only up to 1953.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'SK',
         'min_length': 9,
         'max_length': 10,
@@ -102,7 +102,15 @@ class BirthNumber:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Slovakia',
                   'https://cs.wikipedia.org/wiki/Rodn%C3%A9_%C4%8D%C3%ADslo',
                   'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cz/rc.py'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Slovakia',
+        'id_type': 'Birth Number',
+        'official_name': 'rodné číslo',
+        'display_format': 'YYMMDD/SSSC',
+        'example': '000101/0009',
+        'checksum_algorithm': 'The whole 10-digit number is divisible by 11, except that a remainder of 10 gives the '
+                              'check digit 0 (a 9-digit number has no check digit)',
+        'masks': ('######/####', '######/###')
     })
 
     @staticmethod

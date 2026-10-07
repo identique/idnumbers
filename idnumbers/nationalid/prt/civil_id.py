@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit
 
 
@@ -10,7 +10,7 @@ class CivilIDNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Portugal
     https://www.atractor.pt/mat/alg_controlo/bifm2-_en.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'PT',
         # length without insignificant chars
         'min_length': 9,
@@ -25,7 +25,15 @@ class CivilIDNumber:
                   'BI'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Portugal',
                   'https://www.atractor.pt/mat/alg_controlo/bifm2-_en.html'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Portugal',
+        'id_type': 'Civil Identification Number',
+        'official_name': 'Número de identificação civil',
+        'display_format': '#########',
+        'example': '123456789',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 9-2; a remainder of 0 or 1 gives 0, otherwise 11 - '
+                              'remainder)',
+        'masks': ('#########',)
     })
 
     @staticmethod

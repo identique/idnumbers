@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 from .util import calc_check_digits
 
@@ -15,7 +15,7 @@ class EntityVAT:
     (FOD Economie). The old 9-digit form is the same number with the leading 0 left out, so a
     9-digit input has an implied leading 0 and its first digit may be any digit.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BE',
         'min_length': 9,
         'max_length': 10,
@@ -34,7 +34,14 @@ class EntityVAT:
                   'https://en.wikipedia.org/wiki/VAT_identification_number',
                   'https://www.vatcalc.com/belgium/belgian-vat-number-format-changes/',
                   'https://news.economie.fgov.be/228778-ondernemingsnummers-beginnen-nu-ook-met-het-cijfer-1/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Belgium',
+        'id_type': 'VAT Identification Number',
+        'official_name': 'BTW identificatienummer',
+        'display_format': '0#########',
+        'example': '0123456749',
+        'checksum_algorithm': 'Mod 97 (the last two digits are 97 - (the first eight digits mod 97))',
+        'masks': ('##########', '#########')
     })
 
     @staticmethod

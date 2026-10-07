@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit
 
 
@@ -11,7 +11,7 @@ class EntityVAT:
     CPR numbers issued after 1 October 2007 can have a different format meaning that the last digit is not a check digit
     and can therefore not be verified on the TIN on Europa web portal.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'DK',
         'min_length': 8,
         'max_length': 8,
@@ -26,7 +26,14 @@ class EntityVAT:
         'links': ['https://wiki.scn.sap.com/wiki/display/CRM/Denmark',
                   'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/Denmark-TIN.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Denmark',
+        'id_type': 'VAT Registration Number',
+        'official_name': 'Momsregistreringsnummer',
+        'display_format': '########',
+        'example': '12345674',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 7, 6, 5, 4, 3, 2, 1; the sum must be 0)',
+        'masks': ('########',)
     })
 
     MULTIPLIER = [2, 7, 6, 5, 4, 3, 2, 1]

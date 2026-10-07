@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import weighted_modulus_digit, validate_regexp
 
 
@@ -13,7 +13,7 @@ class NationalID:
     https://www.ica.gov.sg/news-and-publications/media-releases/media-release/new-m-fin-series-to-be-introduced-from-1-january-2022
     https://github.com/opengovsg/FormSG/blob/develop/packages/shared/utils/nric-validation.ts
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'SG',
         'min_length': 9,
         'max_length': 9,
@@ -32,7 +32,15 @@ class NationalID:
                   'https://www.ica.gov.sg/news-and-publications/media-releases/media-release/'
                   'new-m-fin-series-to-be-introduced-from-1-january-2022',
                   'https://github.com/opengovsg/FormSG/blob/develop/packages/shared/utils/nric-validation.ts'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Singapore',
+        'id_type': 'NRIC/FIN',
+        'official_name': None,
+        'display_format': 'L#######C',
+        'example': 'S1234567D',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 7, 6, 5, 4, 3, 2) mapped to a check letter by series '
+                              '(S, T, F, G, M); the M series adds 3 to the remainder',
+        'masks': ('L#######L',)
     })
 
     MAGIC_MULTIPLIER = [2, 7, 6, 5, 4, 3, 2]

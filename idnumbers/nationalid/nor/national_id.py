@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, Union
 from datetime import date
 
@@ -33,7 +33,7 @@ class NationalID:
     A number that has both additions is not a defined type and is invalid. FH-numbers (first digit 8 or 9) carry no
     birth date and are invalid as well.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'NO',
         # length without insignificant chars
         'min_length': 11,
@@ -53,7 +53,15 @@ class NationalID:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Norway',
                   'https://en.wikipedia.org/wiki/National_identity_number_(Norway)',
                   'https://no.wikipedia.org/wiki/F%C3%B8dselsnummer'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Norway',
+        'id_type': 'National Identity Number',
+        'official_name': 'fødselsnummer',
+        'display_format': 'DDMMYYIIIKK',
+        'example': '17054026641',
+        'checksum_algorithm': 'Two mod 11 check digits (weights 3, 7, 6, 1, 8, 9, 4, 5, 2, 1 over the first ten digits '
+                              'and 5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1 over all eleven; both sums must be divisible by 11)',
+        'masks': ('###########',)
     })
 
     @staticmethod

@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, Pattern, TypedDict
 from ..constant import Gender
 from ..util import validate_regexp, luhn_digit, match_regexp
@@ -38,7 +38,7 @@ class PersonalIdentityNumber:
     https://swedish.identityinfo.net/
     https://personnummer.dev/
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'SE',
         # length without insignificant chars
         'min_length': 10,
@@ -59,7 +59,14 @@ class PersonalIdentityNumber:
                   'https://swedish.identityinfo.net/',
                   'https://personnummer.dev/'],
         'deprecated': False
-
+,
+        'country_name': 'Sweden',
+        'id_type': 'Personal Identity Number',
+        'official_name': 'personnummer',
+        'display_format': 'YYMMDD-SSSC',
+        'example': '811218-9876',
+        'checksum_algorithm': 'Luhn (mod 10) over the last ten digits',
+        'masks': ('######-####', '########-####')
     })
 
     @staticmethod

@@ -7,6 +7,14 @@ from ..util import alias_of
 
 MKD_METADATA = copy(YugoslaviaJMBG.METADATA)
 MKD_METADATA.iso3166_alpha2 = 'MK'
+MKD_METADATA.country_name = 'North Macedonia'
+MKD_METADATA.id_type = 'Unique Master Citizen Number'
+MKD_METADATA.official_name = 'Единствен матичен број на граѓанинот'
+MKD_METADATA.display_format = 'DDMMYYYRRSSSC'
+MKD_METADATA.example = '0101990410004'
+MKD_METADATA.checksum_algorithm = ('Weighted sum mod 11 (digits 1-6 added to digits 7-12, weights 7, 6, 5, 4, 3, 2; '
+                                   'check = 11 - remainder, 10 and 11 become 0)')
+MKD_METADATA.masks = ('#############',)
 
 
 class UniqueMasterCitizenNumber(YugoslaviaJMBG):

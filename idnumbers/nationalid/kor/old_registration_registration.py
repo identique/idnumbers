@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
 from .resident_registration import ResidentRegistration, ParseResult
@@ -26,7 +26,7 @@ class OldResidentRegistration(ResidentRegistration):
     # https://en.wikipedia.org/wiki/Resident_registration_number
     # https://centers.ibs.re.kr/html/living_en/overview/arc.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'KR',
         # Significant characters only; separators are excluded.
         'min_length': 13,
@@ -46,7 +46,15 @@ class OldResidentRegistration(ResidentRegistration):
                   'Jumin Deungnok Beonho'],
         'links': ['https://en.wikipedia.org/wiki/Resident_registration_number',
                   'https://centers.ibs.re.kr/html/living_en/overview/arc.html'],
-        'deprecated': True
+        'deprecated': True,
+        'country_name': 'South Korea',
+        'id_type': 'Resident Registration Number (Old)',
+        'official_name': '주민등록번호',
+        'display_format': 'YYMMDD-GLLLLSC',
+        'example': '800101-1234560',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2-9, then 2-5 over the first twelve digits; '
+                              'check = 11 - remainder, reduced to its last digit)',
+        'masks': ('######-#######',)
     })
 
     MAGIC_MULTIPLIER = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5]

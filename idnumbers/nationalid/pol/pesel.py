@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict
 from ..constant import Gender
 from ..util import CHECK_DIGIT, modulus_overflow_mod10, validate_regexp, weighted_modulus_digit, match_regexp
@@ -26,7 +26,7 @@ class PESEL:
     https://en.wikipedia.org/wiki/PESEL
     https://en.wikipedia.org/wiki/National_identification_number#Poland
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'PL',
         'min_length': 11,
         'max_length': 11,
@@ -43,7 +43,15 @@ class PESEL:
                   'Universal Electronic System for Registration of the Population'],
         'links': ['https://en.wikipedia.org/wiki/PESEL',
                   'https://en.wikipedia.org/wiki/National_identification_number#Poland'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Poland',
+        'id_type': 'PESEL Number',
+        'official_name': 'Powszechny Elektroniczny System Ewidencji Ludności',
+        'display_format': 'YYMMDDSSSSC',
+        'example': '80010100000',
+        'checksum_algorithm': 'Weighted sum mod 10 (weights 1, 3, 7, 9 repeating; check = 10 - remainder, 10 becomes '
+                              '0)',
+        'masks': ('###########',)
     })
 
     MAGIC_NUMBERS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]

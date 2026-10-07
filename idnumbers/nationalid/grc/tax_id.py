@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, modulus_overflow_mod10
 
@@ -9,7 +9,7 @@ class TaxIdentityNumber:
     Greece Tax Identity Number, AFM - ΑΦΜ - Αριθμός Φορολογικού Μητρώου - Tax Registry Number
     https://en.wikipedia.org/wiki/National_identification_number#Greece
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'GR',
         'min_length': 9,
         'max_length': 9,
@@ -19,7 +19,15 @@ class TaxIdentityNumber:
         'alias_of': None,
         'names': ['Tax Identity Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Greece',
+        'id_type': 'Tax Identity Number',
+        'official_name': 'Αριθμός Φορολογικού Μητρώου',
+        'display_format': '#########',
+        'example': '123456783',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 256, 128, 64, 32, 16, 8, 4, 2; a remainder of 10 becomes '
+                              '0)',
+        'masks': ('#########',)
     })
 
     MULTIPLIER = [256, 128, 64, 32, 16, 8, 4, 2]

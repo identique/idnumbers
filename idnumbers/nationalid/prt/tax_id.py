@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit
 
 
@@ -9,7 +9,7 @@ class TaxIDNumber:
     Número de identificação fiscal or NIF
     https://en.wikipedia.org/wiki/National_identification_number#Portugal
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'PT',
         # length without insignificant chars
         'min_length': 9,
@@ -25,7 +25,15 @@ class TaxIDNumber:
             'https://en.wikipedia.org/wiki/National_identification_number#Portugal',
             'https://www.esma.europa.eu/sites/default/files/library/esma70-1861941480-56_qas_mifir_data_reporting.pdf'
         ],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Portugal',
+        'id_type': 'Tax Identification Number',
+        'official_name': 'Número de identificação fiscal',
+        'display_format': '#########',
+        'example': '123456789',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 9-2; a remainder of 0 or 1 gives 0, otherwise 11 - '
+                              'remainder)',
+        'masks': ('#########',)
     })
 
     @staticmethod

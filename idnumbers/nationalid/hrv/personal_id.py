@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp, mn_modulus_digit, modulus_overflow_mod10
 
@@ -9,7 +9,7 @@ class PersonalID:
     Croatia Personal ID number format, OIB
     https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia%29
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'HR',
         'min_length': 11,
         'max_length': 11,
@@ -24,7 +24,14 @@ class PersonalID:
         'links': ['https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)',
                   'https://www.porezna-uprava.hr/en/Pages/PIN.aspx'],
         'deprecated': False
-
+,
+        'country_name': 'Croatia',
+        'id_type': 'Personal Identification Number',
+        'official_name': 'Osobni identifikacijski broj',
+        'display_format': '###########',
+        'example': '12345678903',
+        'checksum_algorithm': 'ISO 7064 MOD 11,10',
+        'masks': ('###########',)
     })
 
     @staticmethod

@@ -1,6 +1,6 @@
 import math
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit, modulus_overflow_mod10
 from .birth_number import BirthNumber
 
@@ -24,7 +24,7 @@ class TaxNumber:
 
     Source: python-stdnum ``stdnum/cz/dic.py``.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CZ',
         'min_length': 8,
         'max_length': 10,
@@ -41,7 +41,15 @@ class TaxNumber:
                   'tax-identification-numbers/CZ-TIN.pdf',
                   'https://gist.github.com/svschannak/e79892f4fbc56df15bdb5496d0e67b85',
                   'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cz/dic.py'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Czechia',
+        'id_type': 'Tax Identification Number',
+        'official_name': 'daňové identifikační číslo',
+        'display_format': '########',
+        'example': '25123891',
+        'checksum_algorithm': 'Legal entities: weighted sum mod 11 (weights 8-2) mapped to the check digit; '
+                              'individuals: birth number rules',
+        'masks': ('########', '#########', '##########')
     })
 
     MULTIPLIER = [8, 7, 6, 5, 4, 3, 2]

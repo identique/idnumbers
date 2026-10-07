@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, Union, cast
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 from .util import EntityType, EntityDivision, checksum
@@ -31,7 +31,7 @@ class BusinessIDNumber:
 
     https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/kazakhstan-tin.pdf
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'KZ',
         'min_length': 12,
         'max_length': 12,
@@ -46,7 +46,15 @@ class BusinessIDNumber:
         'names': ['Business Identification Number',
                   'Бизнес-идентификационный номер'],
         'links': ['https://korgan-zan.kz/en/obtaining-iin-and-bin-in-kazakhstan/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Kazakhstan',
+        'id_type': 'Business Identification Number',
+        'official_name': 'Бизнес-идентификационный номер',
+        'display_format': 'YYMMTDSSSSSC',
+        'example': '100140000003',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 1-11; with a remainder of 10 the weights 3-11, 1, 2 are '
+                              'used and a second 10 is invalid)',
+        'masks': ('############',)
     })
 
     ENTITY_TYPE_MAP = {

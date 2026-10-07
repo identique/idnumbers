@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, validate_regexp, luhn_digit, verhoeff_check, match_regexp
 
@@ -23,7 +23,7 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#Luxembourg
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Luxembourg-TIN.pdf
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'LU',
         'min_length': 13,
         'max_length': 13,
@@ -38,7 +38,14 @@ class NationalID:
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Luxembourg',
                   'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/Luxembourg-TIN.pdf'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Luxembourg',
+        'id_type': 'National Identification Number',
+        'official_name': None,
+        'display_format': 'YYYYMMDDSSSCC',
+        'example': '1893120105732',
+        'checksum_algorithm': 'Luhn (mod 10) check digit at position 12 and a Verhoeff check digit at position 13',
+        'masks': ('#############',)
     })
 
     @staticmethod

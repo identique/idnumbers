@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 
@@ -20,7 +20,7 @@ class CivilNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Kuwait
     https://prakhar.me/articles/kuwait-civil-id-checksum/
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'KW',
         'min_length': 12,
         'max_length': 12,
@@ -37,7 +37,14 @@ class CivilNumber:
                   'الرقم المدني'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Kuwait',
                   'https://prakhar.me/articles/kuwait-civil-id-checksum/'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Kuwait',
+        'id_type': 'Civil Number',
+        'official_name': 'الرقم المدني',
+        'display_format': 'CYYMMDDSSSSK',
+        'example': '280010100004',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2; check = 11 - remainder)',
+        'masks': ('############',)
     })
 
     MULTIPLIER = [2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]

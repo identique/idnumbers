@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 from .util import normalize
 
@@ -10,7 +10,7 @@ class RGNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Brazil
     https://en.wikipedia.org/wiki/Brazilian_identity_card
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BR',
         # length without insignificant chars
         'min_length': 9,
@@ -23,7 +23,15 @@ class RGNumber:
                   'Registro Geral number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil',
                   'https://en.wikipedia.org/wiki/Brazilian_identity_cards'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Brazil',
+        'id_type': 'General Registry Number',
+        'official_name': 'Registro Geral',
+        'display_format': '##.###.###-X',
+        'example': '12.345.678-2',
+        'checksum_algorithm': 'Weighted sum mod 11 (weights 2-9 over the first eight digits, the check digit weighted '
+                              '100; X counts as 11)',
+        'masks': ('##.###.###-X',)
     })
 
     @staticmethod

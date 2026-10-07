@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast, get_args
 from ..util import validate_regexp, match_regexp
 from ..constant import Gender
@@ -30,7 +30,7 @@ class PersonalIdentityCode:
     Finland personal identity code, HETU
     https://en.wikipedia.org/wiki/National_identification_number#Finland
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'FI',
         'min_length': 11,
         'max_length': 11,
@@ -44,7 +44,15 @@ class PersonalIdentityCode:
         'names': ['personal identity code',
                   'HETU'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Finland'],
-        'deprecated': False
+        'deprecated': False,
+        'country_name': 'Finland',
+        'id_type': 'Personal Identity Code',
+        'official_name': 'henkilötunnus',
+        'display_format': 'DDMMYY[+-A]SSSC',
+        'example': '131052-308T',
+        'checksum_algorithm': 'Mod 31 check character (the nine digits DDMMYYSSS as a number mod 31, mapped to 0-9 and '
+                              'A-Y without G, I, O, Q)',
+        'masks': ('######*###X',)
     })
 
     DOB_BASE_MAP = {
