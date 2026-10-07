@@ -104,10 +104,14 @@ Releases run through GitHub Actions and need the maintainer's approval. Don't ed
      version.
    - Any other value publishes to test.pypi.org.
 4. **Verify:** check that `https://pypi.org/pypi/idnumbers/json` reports the new version.
-5. **GitHub release:** create release `v<X.Y.Z>` titled `Release <X.Y.Z>` on the released commit, with notes from
+5. **Test the published package:** run **Actions → PyPI install test with uv → Run workflow** with `version` set to
+   `<X.Y.Z>`. Wait for every Python matrix job to pass before creating the GitHub release. This workflow runs only
+   on demand (including after each release), not daily; leaving `version` blank checks the latest PyPI package.
+6. **GitHub release:** create release `v<X.Y.Z>` titled `Release <X.Y.Z>` on the released commit, with notes from
    the changelog, and tick **Create a discussion for this release** (see `RELEASE.md`).
 
-Both workflows can also be started from the GitHub CLI, which runs the same GitHub Action:
+The release workflows can also be started from the GitHub CLI, which runs the same GitHub Action:
 `gh workflow run bump_version.yml -f version=<X.Y.Z>` and `gh workflow run release_to_pypi.yml -f to-prod=yes`.
+Run the published-package check with `gh workflow run pypi-test-cronjob.yml -f version=<X.Y.Z>`.
 `RELEASE.md` also describes a manual release from a local machine (`scripts/publish.ps1`), for use only when the
 Actions release can't run.

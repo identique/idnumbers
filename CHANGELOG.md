@@ -6,6 +6,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Documentation
 
+- Check published PyPI packages with uv on Python 3.9 and 3.14 on demand, and document the post-release check
+  ([#472](https://github.com/identique/idnumbers/issues/472)).
+
 - Add a runnable uv script and isolated wheel-install CI checks for the script and README one-liner
   ([#471](https://github.com/identique/idnumbers/issues/471)).
 
