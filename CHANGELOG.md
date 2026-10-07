@@ -35,6 +35,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 - **KAZ** BIN ([#297](https://github.com/identique/idnumbers/issues/297)): registration months outside `01`-`12` are
   now rejected, including checksum-correct `750061381659` (month `00`). `checksum()` is unchanged.
+- **LKA** NIC ([#299](https://github.com/identique/idnumbers/issues/299)): both old and new formats now reject encoded
+  birth-day values outside `001`-`366` for men and `501`-`866` for women, even with a correct checksum.
+  `checksum()` and within-range date decoding are unchanged; leap-year-specific decoding remains out of scope in
+  [#437](https://github.com/identique/idnumbers/issues/437).
 
 ### Other fixes
 

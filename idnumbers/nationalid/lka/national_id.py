@@ -24,6 +24,15 @@ class NationalID:
     # https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka
     # https://lk.linkedin.com/posts/nuwansenaratna_srilanka-activity-6926883712584335360-E_69
     # https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html
+
+    The Canadian High Commission's 14 March 2008 report, published by the
+    `Immigration and Refugee Board of Canada
+    <https://www.irb-cisr.gc.ca/en/country-information/rir/Pages/index.aspx?doc=451823>`_,
+    specifies encoded day ranges 001-366 for men and 501-866 for women (500 added).
+    The `Department for Registration of Persons FAQ <https://drp.gov.lk/en/faq.php>`_
+    describes the old-to-new conversion, which preserves this day field.
+    These sources establish the ranges, not leap-year-specific date decoding;
+    the existing within-range decoding is retained.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'LK',
@@ -65,6 +74,8 @@ class NationalID:
         sn = match_obj.group('sn')
         checksum = NationalID.checksum(id_number)
         if not checksum:
+            return None
+        if not (1 <= days <= 366 or 501 <= days <= 866):
             return None
         try:
             yyyymmdd = date(year, 1, 1) + timedelta(days - 501 if days > 500 else days - 1)
