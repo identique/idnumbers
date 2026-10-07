@@ -6,10 +6,13 @@ from ..util import validate_regexp
 class OldIdentityCard:
     """
     Greece Identity Card, the old one.
+    Metadata counts seven significant characters: one Greek letter and six digits.
+    Validation accepts the compact layout or an optional hyphen after the letter (seven or eight characters).
     https://en.wikipedia.org/wiki/National_identification_number#Greece
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'GR',
+        # Significant characters only; separators are excluded.
         'min_length': 7,
         'max_length': 7,
         'parsable': False,

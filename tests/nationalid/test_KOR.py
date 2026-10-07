@@ -5,6 +5,22 @@ from idnumbers.nationalid.constant import Gender, Citizenship
 
 
 class TestKORValidation(TestCase):
+    def test_significant_lengths_preserve_required_hyphen(self):
+        # Reuse existing regression vectors, including a checksum-valid old RRN.
+        for cls, value in ((KOR.ResidentRegistration, '820701-2409184'),
+                           (KOR.OldResidentRegistration, '510724-1057122')):
+            with self.subTest(card=cls.__name__):
+                self.assertEqual(13, cls.METADATA.min_length)
+                self.assertEqual(13, cls.METADATA.max_length)
+                self.assertEqual(14, len(value))
+                self.assertTrue(cls.validate(value))
+                self.assertIsNotNone(cls.parse(value))
+                compact = value.replace('-', '')
+                self.assertEqual(13, len(compact))
+                self.assertFalse(cls.validate(compact))
+                self.assertIsNone(cls.parse(compact))
+        self.assertTrue(KOR.OldResidentRegistration.checksum('510724-1057122'))
+
     def test_normal_case(self):
         self.assertTrue(KOR.NationalID.validate('820701-2409184'))
         self.assertTrue(KOR.NationalID.validate('850408-5761193'))

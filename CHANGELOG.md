@@ -107,9 +107,13 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **BGD** national ID ([#346](https://github.com/identique/idnumbers/issues/346)): `parse()` returns `yyyy` as
   the declared four-character string, preserving leading zeros. The national ID metadata lengths are corrected to 17;
   old national ID metadata remains 13.
+- **BIH** ([#354](https://github.com/identique/idnumbers/issues/354)): correct the JMBG class country label to
+  Bosnia and Herzegovina; validation and parsing are unchanged.
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
   temporary number for a man, as male. Codes `3` and `4` are still reported as female, because no source says which sex
   they stand for ([#429](https://github.com/identique/idnumbers/issues/429)).
+- **GRC** ([#354](https://github.com/identique/idnumbers/issues/354)): correct new identity-card length metadata to
+  eight significant characters. Old-card metadata remains seven; optional-hyphen validation is unchanged.
 - **IDN** NIK ([#293](https://github.com/identique/idnumbers/issues/293)): `parse()` now decodes women's day numbers by
   subtracting 40, reports gender from the encoded day, and always returns `dd` as two digits. The alpha-2 metadata is
   corrected from `IDN` to `ID`.
@@ -118,6 +122,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `NonResidentEntity` and code `6` as `IP` (individual entrepreneurs in a joint enterprise), rather than
   `ResidentEntity`. Code `4` remains `ResidentEntity`.
 
+- **KOR** ([#354](https://github.com/identique/idnumbers/issues/354)): clarify that both RRN classes count 13
+  significant digits in metadata; validation and parsing still require the hyphenated 14-character layout.
 - **LTU** personal code ([#300](https://github.com/identique/idnumbers/issues/300)): `parse()` now maps first digits
   `1`/`2` to the 1800s, `3`/`4` to the 1900s, `5`/`6` to the 2000s and `7`/`8` to the 2100s. Odd digits still
   report male and even digits female; `39001010077` now reports 1990-01-01 instead of 1890-01-01.
@@ -128,8 +134,14 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **PAK** national ID ([#307](https://github.com/identique/idnumbers/issues/307)): correct the alpha-2 metadata from
   `PA` to `PK`; validation and parsing are unchanged.
 
+- **PHL** ([#354](https://github.com/identique/idnumbers/issues/354)): identify the existing 12-digit format as the
+  PhilSys Number (PSN), not the 16-digit PhilID Card Number (PCN). Public class names, aliases and validation are
+  unchanged.
 - **PRT** NIF ([#353](https://github.com/identique/idnumbers/issues/353)): restore the missing metadata comma,
   separating `Número de identificação fiscal` and `NIF` into the intended three names.
+
+- **USA** ([#354](https://github.com/identique/idnumbers/issues/354)): clarify that SSN metadata counts nine
+  significant digits; validation still requires the two hyphens in the 11-character printed layout.
 
 ## 1.12.0 (2026-10-07)
 
