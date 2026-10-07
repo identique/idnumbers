@@ -16,6 +16,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   first ten digits, exactly one digit must appear twice or three times, so `39825979193` (four 9s) and `36794081522`
   (no repeated digit) are rejected. A check digit equal to the two digits before it is no longer rejected, so
   `38056471999` is now valid.
+- **DNK** CPR number ([#290](https://github.com/identique/idnumbers/issues/290)): the century now comes from the
+  seventh digit and the two-digit year, as the CPR office's table defines it, instead of `yy > 50`. `parse()` reads
+  `0101451234` as 1945-01-01 instead of 2045-01-01, and 1858-1899 births are recognised. `2902000000` (29 February 1900)
+  is now rejected and `2902004000` (29 February 2000) is valid. A birth date in the future is rejected.
 
 ## 1.12.0 (2026-10-07)
 

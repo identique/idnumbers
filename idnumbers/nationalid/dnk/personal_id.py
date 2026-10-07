@@ -6,11 +6,23 @@ from ..util import validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
-    """The parse result of Finland personal identity code, HETU"""
+    """The parse result of the Danish personal identity number, CPR"""
     yyyymmdd: date
     """Birthday"""
     sn: str
     """The serial number born at the same date"""
+
+
+def _century_base(yy: int, first_sn_digit: int) -> int:
+    """
+    The first year of the century of the birth date, from the year digits and the first digit of the serial number.
+    https://cpr.dk/media/12066/personnummeret-i-cpr.pdf
+    """
+    if first_sn_digit <= 3:
+        return 1900
+    if first_sn_digit in (4, 9):
+        return 2000 if yy <= 36 else 1900
+    return 2000 if yy <= 57 else 1800
 
 
 class PersonalIdentityNumber:
@@ -19,6 +31,12 @@ class PersonalIdentityNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Denmark
     CPR numbers issued after 1 October 2007 can have a different format meaning that the last digit is not a check digit
     and can therefore not be verified on the TIN on Europa web portal.
+
+    The century of the birth date comes from the year digits (positions 5-6) together with the first digit of the
+    serial number (position 7), see the table "Personnummerets opbygning" in
+    https://cpr.dk/media/12066/personnummeret-i-cpr.pdf and
+    https://cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret .
+    A birth date in the future is rejected.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'DK',
@@ -32,7 +50,9 @@ class PersonalIdentityNumber:
         'names': ['personal identity number',
                   'CPR',
                   'Det Centrale Personregister'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Denmark'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Denmark',
+                  'https://cpr.dk/media/12066/personnummeret-i-cpr.pdf',
+                  'https://cpr.dk/cpr-systemet/opbygning-af-cpr-nummeret'],
         'deprecated': False
     })
 
@@ -55,11 +75,13 @@ class PersonalIdentityNumber:
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
         sn = match_obj.group('sn')
-        yyyy_base = 1900 if yy > 50 else 2000
         try:
-            return {
-                'yyyymmdd': date(yyyy_base + yy, mm, dd),
-                'sn': sn
-            }
+            birth_date = date(_century_base(yy, int(sn[0])) + yy, mm, dd)
         except ValueError:
             return None
+        if birth_date > date.today():
+            return None
+        return {
+            'yyyymmdd': birth_date,
+            'sn': sn
+        }
