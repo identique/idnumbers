@@ -132,3 +132,6 @@ dmypy.json
 .pyre/
 
 .idea/
+
+# Personal Claude Code notes (see AGENTS.md)
+CLAUDE.local.md
