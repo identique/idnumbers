@@ -8,6 +8,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 - **ARG** DNI ([#280](https://github.com/identique/idnumbers/issues/280)): 7-digit numbers (below 10 million), such as
   `5.123.456` and `5123456`, are now accepted. `METADATA.min_length` is 7.
+- **BRA** CPF ([#284](https://github.com/identique/idnumbers/issues/284)): numbers made of one repeated digit,
+  `000.000.000-00` to `999.999.999-99`, are now rejected. They pass the check digits, but the federal civil-registry
+  system SIRC lists repeated digits as a reason for an invalid CPF. `checksum()` is unchanged.
 
 ## 1.12.0 (2026-10-07)
 
