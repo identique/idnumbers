@@ -30,6 +30,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   The whitespace restriction was already fixed in [#369](https://github.com/identique/idnumbers/issues/369).
   Historical `T`/`X` suffix handling remains out of scope and is tracked in
   [#433](https://github.com/identique/idnumbers/issues/433).
+- **IRN** national ID ([#295](https://github.com/identique/idnumbers/issues/295)): codes made of one repeated digit,
+  `0000000000` to `9999999999`, are now rejected, including supported hyphenated formats. `checksum()` is unchanged.
 
 ### Other fixes
 
