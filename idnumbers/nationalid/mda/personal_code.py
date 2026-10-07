@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp
 
@@ -9,7 +9,7 @@ class PersonalCode:
     Moldova Personal Code, IDNP
     https://en.wikipedia.org/wiki/National_identification_number#Moldova
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'MD',
         # length without insignificant chars
         'min_length': 13,

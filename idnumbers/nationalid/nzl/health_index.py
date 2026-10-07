@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -12,7 +12,7 @@ class NationalHealthIndexNumber:
     Expanded-format implementation is planned for 1 July 2027.
     Legacy implementation provenance: https://gist.github.com/mcshaz/b41dc6bd4aa3104d54da677e2b4f6b45
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'NZ',
         # length without insignificant chars
         'min_length': 7,

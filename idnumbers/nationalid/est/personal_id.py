@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, match_regexp
@@ -24,7 +24,7 @@ class PersonalID:
     https://en.wikipedia.org/wiki/National_identification_number#Estonia
     https://et.wikipedia.org/wiki/Isikukood
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'EE',
         'min_length': 11,
         'max_length': 11,

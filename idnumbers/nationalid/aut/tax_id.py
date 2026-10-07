@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -13,7 +13,7 @@ class TaxIDNumber:
     Austria tax id number format
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Austria-TIN.pdf
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'AT',
         # length without insignificant chars
         'min_length': 9,

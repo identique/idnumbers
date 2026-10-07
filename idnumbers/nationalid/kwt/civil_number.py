@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 
@@ -20,7 +20,7 @@ class CivilNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Kuwait
     https://prakhar.me/articles/kuwait-civil-id-checksum/
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'KW',
         'min_length': 12,
         'max_length': 12,

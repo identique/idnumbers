@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, cast
 from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit
 
@@ -17,7 +17,7 @@ class NationalID:
     Repeated-digit codes are rejected, following the Persian Tools validator rule:
     https://persian-tools.js.org/functions/verifyIranianNationalId.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'IR',
         'min_length': 10,
         'max_length': 10,

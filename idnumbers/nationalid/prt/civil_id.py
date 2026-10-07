@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit
 
 
@@ -10,7 +10,7 @@ class CivilIDNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Portugal
     https://www.atractor.pt/mat/alg_controlo/bifm2-_en.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'PT',
         # length without insignificant chars
         'min_length': 9,

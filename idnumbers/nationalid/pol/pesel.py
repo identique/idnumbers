@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict
 from ..constant import Gender
 from ..util import CHECK_DIGIT, modulus_overflow_mod10, validate_regexp, weighted_modulus_digit, match_regexp
@@ -26,7 +26,7 @@ class PESEL:
     https://en.wikipedia.org/wiki/PESEL
     https://en.wikipedia.org/wiki/National_identification_number#Poland
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'PL',
         'min_length': 11,
         'max_length': 11,

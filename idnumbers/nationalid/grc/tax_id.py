@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, modulus_overflow_mod10
 
@@ -9,7 +9,7 @@ class TaxIdentityNumber:
     Greece Tax Identity Number, AFM - ΑΦΜ - Αριθμός Φορολογικού Μητρώου - Tax Registry Number
     https://en.wikipedia.org/wiki/National_identification_number#Greece
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'GR',
         'min_length': 9,
         'max_length': 9,

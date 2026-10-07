@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -13,7 +13,7 @@ class NationalID:
     ``##.###.###``, see python-stdnum ``stdnum/ar/dni.py``
     https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ar/dni.py
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'AR',
         # length without insignificant chars
         'min_length': 7,

@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 from ..util import validate_regexp, weighted_modulus_digit
 
@@ -14,7 +14,7 @@ class NationalID:
     CHL national ID number format, RUN (Rol Único Nacional), RUT (Rol Único Tributario)
     https://en.wikipedia.org/wiki/National_identification_number#Chile
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CL',
         # length without insignificant chars
         'min_length': 8,

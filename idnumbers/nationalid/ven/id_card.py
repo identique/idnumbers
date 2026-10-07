@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp
 
@@ -9,7 +9,7 @@ class IDCardNumber:
     Venezuela ID card number
     https://en.wikipedia.org/wiki/National_identification_number#Venezuela
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'VE',
         # length without insignificant chars
         'min_length': 9,

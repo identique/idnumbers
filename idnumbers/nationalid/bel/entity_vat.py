@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 from .util import calc_check_digits
 
@@ -15,7 +15,7 @@ class EntityVAT:
     (FOD Economie). The old 9-digit form is the same number with the leading 0 left out, so a
     9-digit input has an implied leading 0 and its first digit may be any digit.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BE',
         'min_length': 9,
         'max_length': 10,

@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 from ..util import alias_of, validate_regexp
 from .util import normalize
@@ -14,7 +14,7 @@ class TaxFileNumber:
     https://www.ato.gov.au/General/What-is-a-tax-file-number----Easy-Read/
     https://en-academic.com/dic.nsf/enwiki/436130
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'AU',
         # length without insignificant chars
         'min_length': 8,

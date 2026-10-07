@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -17,7 +17,7 @@ class DNI:
     This is a user-input policy, not a claim that issued DNI numbers use lowercase letters.
     The unchanged mod-23 check-letter table is documented by Spain's Ministry of Interior (see METADATA.links).
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'ES',
         # length without insignificant chars
         'min_length': 9,

@@ -1,6 +1,6 @@
 import re
 from enum import Enum
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import TypedDict, Optional
 
 from ..util import validate_regexp, match_regexp
@@ -35,7 +35,7 @@ class OldNationalID:
     http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html
     https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BD',
         # length without insignificant chars
         'min_length': 13,

@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, validate_regexp, luhn_digit, verhoeff_check, match_regexp
 
@@ -23,7 +23,7 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#Luxembourg
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Luxembourg-TIN.pdf
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'LU',
         'min_length': 13,
         'max_length': 13,

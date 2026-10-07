@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict
 from ..util import validate_regexp, match_regexp
 from ..constant import Citizenship, Gender
@@ -35,7 +35,7 @@ class ResidentRegistration:
     # https://en.wikipedia.org/wiki/Resident_registration_number
     # https://centers.ibs.re.kr/html/living_en/overview/arc.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'KR',
         # Significant characters only; separators are excluded.
         'min_length': 13,

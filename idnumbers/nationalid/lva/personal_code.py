@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, cast
 
 from ..util import CHECK_DIGIT, validate_regexp
@@ -21,7 +21,7 @@ class PersonalCode:
     The existing checksum behaviour is retained pending clarification in issue #440.
     https://github.com/identique/idnumbers/issues/440
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'LV',
         # length without insignificant chars
         'min_length': 11,

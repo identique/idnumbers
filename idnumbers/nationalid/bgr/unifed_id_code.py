@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, cast
 
 from ..util import validate_regexp, CHECK_DIGIT, weighted_modulus_digit
@@ -10,7 +10,7 @@ class UnifiedIdCode:
     Bulgaria unified identification code, UIC
     https://validatetin.com/bulgaria/
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BG',
         # length without insignificant chars
         'min_length': 9,

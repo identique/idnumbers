@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -10,7 +10,7 @@ class OldIdentityCard:
     Validation accepts the compact layout or an optional hyphen after the letter (seven or eight characters).
     https://en.wikipedia.org/wiki/National_identification_number#Greece
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'GR',
         # Significant characters only; separators are excluded.
         'min_length': 7,

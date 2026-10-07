@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import validate_regexp, match_regexp
@@ -35,7 +35,7 @@ class ResidentID:
     https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/cn/ric.py
     This does not adopt its whitespace normalization or region validation.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CN',
         'min_length': 18,
         'max_length': 18,

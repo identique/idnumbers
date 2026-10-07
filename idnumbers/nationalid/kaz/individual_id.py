@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, Tuple, TypedDict, Union, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
@@ -26,7 +26,7 @@ class IndividualIDNumber:
     https://korgan-zan.kz/en/obtaining-iin-and-bin-in-kazakhstan/
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Kazakhstan-TIN.pdf
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'KZ',
         'min_length': 12,
         'max_length': 12,

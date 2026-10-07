@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 
 from ..util import CHECK_DIGIT, validate_regexp, luhn_digit
@@ -15,7 +15,7 @@ class NationalID:
     https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/il/idnr.py
     This excludes the all-zero number; passing these checks does not establish that an ID was issued.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'IL',
         # length without insignificant chars
         'min_length': 9,

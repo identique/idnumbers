@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 from ..util import validate_regexp
 
@@ -14,7 +14,7 @@ class EntityIDNumber:
     https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/ua/edrpou.py
     alias: ["EDRPOU", "ЄДРПОУ"]
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'UA',
         # length without insignificant chars
         'min_length': 8,

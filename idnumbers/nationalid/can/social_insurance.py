@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp
 
@@ -9,7 +9,7 @@ class SocialInsuranceNumber:
     Canada social insurance number format
     https://en.wikipedia.org/wiki/National_identification_number#Canada
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CA',
         # length without insignificant chars
         'min_length': 9,
@@ -23,7 +23,8 @@ class SocialInsuranceNumber:
         'alias_of': None,
         'names': ['Social Insurance Number',
                   'SIN'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Canada']
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Canada'],
+        'deprecated': False
     })
 
     MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2, 1]

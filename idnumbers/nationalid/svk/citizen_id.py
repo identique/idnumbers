@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp
 
@@ -10,7 +10,7 @@ class CitizenIDNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Slovakia
     https://en.wikipedia.org/wiki/Slovak_identity_card
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'SK',
         'min_length': 8,
         'max_length': 8,

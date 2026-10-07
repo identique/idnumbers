@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
@@ -29,7 +29,7 @@ class NationalID:
     https://zh.wikipedia.org/wiki/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%B0%91%E8%BA%AB%E5%88%86%E8%AD%89
     python version of http://www2.lssh.tp.edu.tw/~hlf/class-1/lang-c/id/index.htm
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'TW',
         'min_length': 10,
         'max_length': 10,

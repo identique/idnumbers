@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import alias_of, validate_regexp, weighted_modulus_digit
 
@@ -16,7 +16,7 @@ class FiscalInformationNumber:
     python version of
     https://github.com/anghelvalentin/CountryValidator/blob/master/CountryValidator/CountriesValidators/VenezuelaAfricaValidator.cs
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'VE',
         # length without insignificant chars
         'min_length': 10,

@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit
 
 
@@ -11,7 +11,7 @@ class EntityVAT:
     CPR numbers issued after 1 October 2007 can have a different format meaning that the last digit is not a check digit
     and can therefore not be verified on the TIN on Europa web portal.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'DK',
         'min_length': 8,
         'max_length': 8,

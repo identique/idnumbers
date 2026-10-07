@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit
 
 
@@ -9,7 +9,7 @@ class TaxIDNumber:
     Número de identificação fiscal or NIF
     https://en.wikipedia.org/wiki/National_identification_number#Portugal
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'PT',
         # length without insignificant chars
         'min_length': 9,

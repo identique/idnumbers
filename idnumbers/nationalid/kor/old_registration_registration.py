@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
 from .resident_registration import ResidentRegistration, ParseResult
@@ -26,7 +26,7 @@ class OldResidentRegistration(ResidentRegistration):
     # https://en.wikipedia.org/wiki/Resident_registration_number
     # https://centers.ibs.re.kr/html/living_en/overview/arc.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'KR',
         # Significant characters only; separators are excluded.
         'min_length': 13,

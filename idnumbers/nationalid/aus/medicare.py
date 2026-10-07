@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, cast
 from ..util import CHECK_DIGIT, validate_regexp
 from .util import normalize
@@ -10,7 +10,7 @@ class MedicareNumber:
     Australia medicare number format
     https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/library-of-system-data-identifiers-v95989112-d327e56315/australian-medicare-number-v115447646-d327e57399.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'AU',
         # length without insignificant chars
         'min_length': 9,

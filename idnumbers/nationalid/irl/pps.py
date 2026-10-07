@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit, letter_to_number
 
 
@@ -20,7 +20,7 @@ class PersonalPublicServiceNumber:
     individuals. Historical T/X suffix handling is not implemented here and
     is tracked separately: https://github.com/identique/idnumbers/issues/433
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'IE',
         'min_length': 8,
         'max_length': 10,

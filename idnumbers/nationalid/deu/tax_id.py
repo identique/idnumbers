@@ -1,6 +1,6 @@
 import re
 from collections import Counter
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import List
 from ..util import CHECK_DIGIT, mn_modulus_digit, modulus_overflow_mod10, validate_regexp
 
@@ -26,7 +26,7 @@ class TaxID:
     - A digit that occurs three times in the first 10 digits never fills three directly consecutive positions.
     - The 11th digit is the check digit.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'DE',
         'min_length': 11,
         'max_length': 11,

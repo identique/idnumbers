@@ -1,6 +1,6 @@
 import re
 from datetime import date, timedelta
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import List, Optional, TypedDict
 from ..constant import Gender
 from ..util import validate_regexp
@@ -20,7 +20,7 @@ class TaxpayerIDNumber:
     This is a python version of https://github.com/therezor/ua-tax-number/blob/main/src/Decoder.php
     The alias: ['RNTRC', 'РНОКПП', 'taxpayer registration number']
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'UA',
         # length without insignificant chars
         'min_length': 10,

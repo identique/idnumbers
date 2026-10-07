@@ -1,7 +1,7 @@
 import calendar
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict
 from ..util import validate_regexp, match_regexp
 from ..constant import Gender
@@ -101,7 +101,7 @@ class NationalRegistrationNumber:
     Sources: the official Rijksregister instruction IT000 "Het identificatienummer" (15.05.2016)
     and python-stdnum ``stdnum/be/nn.py``.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BE',
         'min_length': 11,
         'max_length': 11,

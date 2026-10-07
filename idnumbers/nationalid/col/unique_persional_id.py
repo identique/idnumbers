@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Union, cast
 from idnumbers.nationalid.util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit
 
@@ -31,7 +31,7 @@ class UniquePersonalID:
     https://en.wikipedia.org/wiki/Colombian_identity_card
     https://validatetin.com/colombia/#
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CO',
         # length without insignificant chars
         'min_length': 9,

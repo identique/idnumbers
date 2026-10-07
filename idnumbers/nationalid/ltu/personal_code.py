@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
@@ -34,7 +34,7 @@ class PersonalCode:
     https://en.wikipedia.org/wiki/National_identification_number#Lithuania
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Lithuania-TIN.pdf
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'LT',
         'min_length': 11,
         'max_length': 11,

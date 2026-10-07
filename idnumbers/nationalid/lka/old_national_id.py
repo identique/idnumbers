@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 from ..constant import Citizenship
 from .national_id import NationalID, ParseResult
@@ -17,7 +17,7 @@ class OldNationalID:
     # https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka
     # https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'LK',
         'min_length': 10,
         'max_length': 10,

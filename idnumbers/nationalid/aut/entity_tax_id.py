@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -14,7 +14,7 @@ class EntityTaxIDNumber:
 
     The official BMF construction rules are linked in METADATA.links.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'AT',
         # length without insignificant chars
         'min_length': 9,

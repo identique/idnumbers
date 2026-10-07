@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, Union, cast
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 from .util import EntityType, EntityDivision, checksum
@@ -31,7 +31,7 @@ class BusinessIDNumber:
 
     https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/kazakhstan-tin.pdf
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'KZ',
         'min_length': 12,
         'max_length': 12,

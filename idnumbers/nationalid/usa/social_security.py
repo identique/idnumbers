@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp
 
@@ -12,7 +12,7 @@ class SocialSecurityNumber:
     https://en.wikipedia.org/wiki/National_identification_number#United_States
     https://www.geeksforgeeks.org/how-to-validate-ssn-social-security-number-using-regular-expression/
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'US',
         # Significant digits only; the two required hyphens are excluded.
         'min_length': 9,

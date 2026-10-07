@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import List
 from ..util import validate_regexp
 from .util import normalize
@@ -10,7 +10,7 @@ class CPFNumber:
        Brazil CPF number
        https://en.wikipedia.org/wiki/National_identification_number#Brazil
        """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BR',
         # length without insignificant chars
         'min_length': 11,

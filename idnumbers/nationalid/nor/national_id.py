@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, Union
 from datetime import date
 
@@ -33,7 +33,7 @@ class NationalID:
     A number that has both additions is not a defined type and is invalid. FH-numbers (first digit 8 or 9) carry no
     birth date and are invalid as well.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'NO',
         # length without insignificant chars
         'min_length': 11,

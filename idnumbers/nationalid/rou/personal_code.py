@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, Tuple, cast
 from ..constant import Citizenship, Gender
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
@@ -29,7 +29,7 @@ class PersonalNumericalCode:
     https://en.wikipedia.org/wiki/Romanian_identity_card
     https://github.com/vimishor/cnp-spec/blob/master/spec.md
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'RO',
         'min_length': 13,
         'max_length': 13,

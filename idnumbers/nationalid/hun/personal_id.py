@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict, Tuple, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 from ..constant import Citizenship, Gender
@@ -30,7 +30,7 @@ class PersonalID:
     Hungary Personal ID number format
     https://en.wikipedia.org/wiki/National_identification_number#Hungary
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'HU',
         'min_length': 11,
         'max_length': 11,

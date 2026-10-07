@@ -1,6 +1,6 @@
 import math
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit, modulus_overflow_mod10
 from .birth_number import BirthNumber
 
@@ -24,7 +24,7 @@ class TaxNumber:
 
     Source: python-stdnum ``stdnum/cz/dic.py``.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CZ',
         'min_length': 8,
         'max_length': 10,

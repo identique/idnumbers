@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..constant import Citizenship
 from ..util import validate_regexp, match_regexp
@@ -31,7 +31,7 @@ class NRIC:
     .. _NRIC structure: https://en.wikipedia.org/wiki/Malaysian_identity_card
        #Structure_of_the_National_Registration_Identity_Card_Number_(NRIC%29
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'MY',
         'min_length': 12,
         'max_length': 12,

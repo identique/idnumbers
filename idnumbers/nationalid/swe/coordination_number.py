@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional
 from .personal_id import ParseResult, _checksum, _parse
 
@@ -21,7 +21,7 @@ class CoordinationNumber:
         https://www.skatteverket.se/offentligaaktorer/folkbokforing/
         samordningsnummerforoffentligaaktorer.4.46ae6b26141980f1e2d3643.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'SE',
         # length without insignificant chars
         'min_length': 10,

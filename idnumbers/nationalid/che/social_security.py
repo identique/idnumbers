@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, ean13_digit
 
 
@@ -22,7 +22,7 @@ class SocialSecurityNumber:
     (it does not describe the check digit):
     https://www.ech.ch/sites/default/files/dosvers/hauptdokument/STAN_d_DEF_2014-04-02_eCH-0044_V4.1_Datenstandard%20Austausch%20von%20Personenidentifikationen.pdf
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CH',
         # length without insignificant chars
         'min_length': 13,

@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -16,7 +16,7 @@ class TaxNumber:
     https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698
 
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CY',
         'min_length': 9,
         'max_length': 9,

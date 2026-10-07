@@ -1,7 +1,7 @@
 import re
 from datetime import date
 from typing import Optional, TypedDict
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..constant import Citizenship, Gender
 from ..util import CHECK_DIGIT, luhn_digit, match_regexp
 
@@ -26,7 +26,7 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#South_Africa
     https://www.westerncape.gov.za/general-publication/decoding-your-south-african-id-number-0
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'ZA',
         # length without insignificant chars
         'min_length': 13,

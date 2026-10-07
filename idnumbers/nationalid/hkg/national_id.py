@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..util import validate_regexp
 
@@ -11,7 +11,7 @@ class NationalID:
     https://pinkylam.me/playground/hkid/
     https://github.com/hsyuen720/hkid-tools/blob/main/app/utils/validate.ts
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'HK',
         # length without insignificant chars
         'min_length': 8,

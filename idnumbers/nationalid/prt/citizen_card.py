@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import luhn_digit, validate_regexp
 
 
@@ -11,7 +11,7 @@ class CitizenCard:
     final check digit. Letters are values 10 through 35, not separate decimal digits. The
     full-card checksum does not check the inner civil ID checksum or prove that a card was issued.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'PT',
         'min_length': 12,
         'max_length': 12,

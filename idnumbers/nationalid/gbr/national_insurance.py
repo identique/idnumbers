@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 
@@ -9,7 +9,7 @@ class NationalInsuranceNumber:
     https://en.wikipedia.org/wiki/National_Insurance_number
     https://www.gov.uk/hmrc-internal-manuals/national-insurance-manual/nim39110
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'GB',
         'min_length': 9,
         'max_length': 9,

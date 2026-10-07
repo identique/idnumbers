@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import match_regexp
@@ -33,7 +33,7 @@ class IdentityNumber:
     Validation checks format and calendar dates and rejects future births; it does not verify the check letter
     algorithm or whether a number was issued. The existing historical year mapping is retained pending confirmation.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'AL',
         'min_length': 10,
         'max_length': 10,

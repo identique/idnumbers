@@ -2,7 +2,7 @@ import re
 from datetime import date
 from re import Match
 from typing import Optional, TypedDict, cast
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
@@ -80,7 +80,7 @@ class BirthNumber:
     ``stdnum/cz/rc.py``, which checks ``int(number[:9]) % 11 % 10`` for 10 digits and accepts 9 digits
     only up to 1953.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'SK',
         'min_length': 9,
         'max_length': 10,

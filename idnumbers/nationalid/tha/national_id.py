@@ -1,6 +1,6 @@
 import re
 from enum import Enum
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
 
@@ -54,7 +54,7 @@ class NationalID:
 
     This is the python version of https://github.com/awcode/thai-laravel
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'TH',
         'min_length': 13,
         'max_length': 13,

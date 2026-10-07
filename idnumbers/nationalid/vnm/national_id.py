@@ -1,6 +1,6 @@
 import re
 from math import floor
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..constant import Gender
 from ..util import match_regexp
@@ -29,7 +29,7 @@ class NationalID:
     https://vietnaminsider.vn/what-do-the-12-digits-on-the-citizen-id-card-with-chip-mean/
     https://lawnet.vn/en/vb/Circular-07-2016-TT-BCA-detailing-Law-on-Citizen-Identification-137-2015-ND-CP-5CCC3.html
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'VN',
         'min_length': 12,
         'max_length': 12,

@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, validate_regexp, match_regexp
@@ -47,7 +47,7 @@ class CURP:
     https://ordenjuridico.gob.mx/Federal/PE/APF/APC/SEGOB/Instructivos/InstructivoNormativo.pdf
     python version of https://github.com/d3249/curp
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'MX',
         'min_length': 18,
         'max_length': 18,

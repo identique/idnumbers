@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..util import validate_regexp, match_regexp
 from ..constant import Gender
@@ -37,7 +37,7 @@ class INSEE:
     https://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR
     https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'FR',
         # length without insignificant chars
         'min_length': 15,

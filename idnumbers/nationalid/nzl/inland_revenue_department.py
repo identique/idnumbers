@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import List
 from ..util import validate_regexp
 
@@ -17,7 +17,7 @@ class InlandRevenueDepartmentNumber:
     section 5.3 (inclusive range 10,000,000 to 200,000,000).
     This is a python version of this one: https://github.com/jarden-digital/nz-ird-validator
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'NZ',
         # length without insignificant chars
         'min_length': 8,

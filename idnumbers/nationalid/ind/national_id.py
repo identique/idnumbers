@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, verhoeff_check
 
 
@@ -15,7 +15,7 @@ class NationalID:
     https://archive.org/details/Aadhaar_numbering_scheme/page/n12/mode/1up?view=theater
     https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'IN',
         'min_length': 12,
         'max_length': 12,

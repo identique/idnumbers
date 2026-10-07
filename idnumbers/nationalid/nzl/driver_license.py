@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 from .util import BLACK_TRAILING_NUMBER
 
@@ -10,7 +10,7 @@ class DriverLicenseNumber:
     https://nzta.govt.nz/driver-licences/driver-check/help
     https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/library-of-system-data-identifiers-v95989112-d327e56315/new-zealand-driver-s-licence-number-v130004625-d327e90104/new-zealand-driver-s-licence-number-narrow-breadth-v130007408-d327e90179.html#v130007408
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'NZ',
         # length without insignificant chars
         'min_length': 8,

@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from idnumbers.nationalid.util import validate_regexp
 
 
@@ -8,7 +8,7 @@ class NationalID:
     Nigeria national ID number format
     https://en.wikipedia.org/wiki/National_identification_number#Nigeria
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'NG',
         # length without insignificant chars
         'min_length': 11,

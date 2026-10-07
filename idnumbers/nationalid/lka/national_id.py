@@ -1,6 +1,6 @@
 import re
 from datetime import date, timedelta
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
 from ..constant import Gender
 from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, validate_regexp, match_regexp
@@ -34,7 +34,7 @@ class NationalID:
     These sources establish the ranges, not leap-year-specific date decoding;
     the existing within-range decoding is retained.
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'LK',
         'min_length': 12,
         'max_length': 12,

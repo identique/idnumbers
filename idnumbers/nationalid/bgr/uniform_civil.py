@@ -1,6 +1,6 @@
 import re
 from datetime import date
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import TypedDict, Optional, cast
 
 from ..util import validate_regexp, CHECK_DIGIT, weighted_modulus_digit, match_regexp
@@ -22,7 +22,7 @@ class UniformCivilNumber:
     Bulgaria Uniform civil number
     https://en.wikipedia.org/wiki/National_identification_number#Bulgaria
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'BG',
         # length without insignificant chars
         'min_length': 10,

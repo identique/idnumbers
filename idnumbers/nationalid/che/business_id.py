@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp
 
 WEIGHTS = (5, 4, 3, 2, 7, 6, 5, 4)
@@ -21,7 +21,7 @@ class BusinessID:
     weighted sum divided by 11 (0 when the remainder is 0). A result of 10 has no single-digit check digit, so
     such a number is never valid. This follows python-stdnum (stdnum/ch/uid.py, ``calc_check_digit``).
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'CH',
         # length without insignificant chars: 'CHE' and 9 digits, the optional '-' and '.' do not count
         'min_length': 12,

@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..util import validate_regexp, match_regexp
 
@@ -22,7 +22,7 @@ class NationalID:
     The check letter rule (modulus 23) is described in Appendix 2 of
     https://www.slideshare.net/slideshow/zimbabwe-2018-biometric-voters-roll-analysis-pachedu/106248017
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'ZW',
         'min_length': 11,
         'max_length': 12,

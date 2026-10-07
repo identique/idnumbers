@@ -1,5 +1,5 @@
 import re
-from types import SimpleNamespace
+from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit
 
 
@@ -9,7 +9,7 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#Turkey
     https://stackoverflow.com/questions/53610208/turkish-identity-number-verification
     """
-    METADATA = SimpleNamespace(**{
+    METADATA = IdMetadata(**{
         'iso3166_alpha2': 'TR',
         # length without insignificant chars
         'min_length': 11,
