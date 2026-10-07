@@ -300,6 +300,32 @@ print(len(idnumbers.list_supported_countries()))
 class of the country and all its `id_types`. `resolve_country()` only turns a code into the alpha-3 code and imports
 nothing.
 
+## Validate by country
+
+`validate()` checks an ID number of any supported country in one call. It takes the code of the country and the ID
+number, and returns a `ValidationResult` with `is_valid`, the alpha-3 `country_code`, the `id_number` as you passed it,
+the `extracted_info` of a valid ID number whose type can be parsed, and a `reason` for a failure. A result is truthy
+when it is valid, and `validate()` never raises: an unknown country or a malformed ID number gives an invalid result.
+For now the `reason` of every invalid ID number is `validation_failed`; more precise reasons come later. The classes
+of the country modules work as before.
+
+```python
+from idnumbers import validate, validate_many
+
+# A valid ID number, with the data parsed from it
+result = validate('tw', 'A123456789')
+print(result.is_valid, result.country_code, result.extracted_info['gender'])
+
+# An invalid result is falsy and says why
+print(bool(validate('tw', 'A123456780')))
+
+# An unsupported country is reported, not raised
+print(validate('XX', 'A123456789').reason.value)
+
+# Validate several ID numbers, each with its own country
+print([result.is_valid for result in validate_many([('tw', 'A123456789'), ('XX', '1')])])
+```
+
 # Supported Countries
 
 Here's the list of the countries we have

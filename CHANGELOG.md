@@ -13,6 +13,13 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   countries, and `register()` adds a custom country. The names are the English names of Unicode CLDR 48.2.3. AUS and
   GRC keep their current `NationalID`, and a country module is imported on the first lookup of its country
   ([#318](https://github.com/identique/idnumbers/issues/318)).
+- Add `idnumbers.validate(country, id_number)`, which validates an ID number of any supported country and returns a
+  frozen `ValidationResult` with `is_valid`, the alpha-3 `country_code`, the `id_number`, the `extracted_info` of a
+  valid ID number (the `parse()` result, `None` when the ID type isn't parsable), a `reason` and an `error_message`. It
+  never raises, and a result is truthy when it is valid. An unknown country gives the reason `unsupported_country`,
+  any other failure `validation_failed` for now. `validate_many()` validates `(country, id_number)` pairs, and
+  `FailureReason` lists the reasons, which later releases may extend. The country classes are unchanged
+  ([#317](https://github.com/identique/idnumbers/issues/317)).
 
 ### Packaging and typing
 
