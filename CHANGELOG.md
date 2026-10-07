@@ -50,6 +50,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   unchanged; the modern checksum requirement remains out of scope in
   [#440](https://github.com/identique/idnumbers/issues/440).
 
+- **NLD** BSN ([#303](https://github.com/identique/idnumbers/issues/303)): compact nine-digit numbers such as
+  `123456782` are now accepted, while the existing fully dotted layout `1234.56.782` remains accepted. All-zero
+  numbers remain rejected in both formats; the 11-proof and `checksum()` are unchanged.
+
 ### Other fixes
 
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the

@@ -12,6 +12,12 @@ class BSN:
     """
     Netherlands National ID number
     Burgerservicenummer (BSN) (Citizen Service Number)
+
+    Accepts nine ASCII digits, with the existing 4.2.3 dotted layout retained for compatibility.
+    RvIG documents nine-digit BSNs; Logisch Ontwerp BSN 2024.Q1 describes number generation
+    on page 12 and the 11-proof on page 31, footnote 22.
+    https://www.rvig.nl/veelgestelde-vragen-burgerservicenummer-bsn
+    https://www.rvig.nl/sites/default/files/2023-12/Logisch%20Ontwerp%20BSN%202024.Q1.pdf
     https://en.wikipedia.org/wiki/National_identification_number#Netherlands
     https://nl.wikipedia.org/wiki/Burgerservicenummer
     """
@@ -22,14 +28,16 @@ class BSN:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'(?!0000.00.000)^\d{4}\.\d{2}\.\d{3}$'),
+        'regexp': re.compile(r'^(?!0{4}\.?0{2}\.?0{3}$)(?:[0-9]{9}|[0-9]{4}\.[0-9]{2}\.[0-9]{3})$'),
         'alias_of': None,
         'names': ['Burgerservicenummer',
                   'BSN',
                   'Citizen Service Number',
                   'Personal Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Netherlands',
-                  'https://nl.wikipedia.org/wiki/Burgerservicenummer'],
+                  'https://nl.wikipedia.org/wiki/Burgerservicenummer',
+                  'https://www.rvig.nl/veelgestelde-vragen-burgerservicenummer-bsn',
+                  'https://www.rvig.nl/sites/default/files/2023-12/Logisch%20Ontwerp%20BSN%202024.Q1.pdf'],
         'deprecated': False
 
     })
