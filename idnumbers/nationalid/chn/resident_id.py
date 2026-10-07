@@ -29,6 +29,11 @@ class ResidentID:
     """
     China Resident ID number format
     https://en.wikipedia.org/wiki/Resident_Identity_Card
+
+    Accept ASCII lowercase ``x`` as an input variant of check character ``X``, following
+    python-stdnum 2.2's RIC ``compact()`` uppercasing:
+    https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/cn/ric.py
+    This does not adopt its whitespace normalization or region validation.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'CN',
@@ -41,13 +46,14 @@ class ResidentID:
                              r'(?P<mm>0[1-9]|1[012])'
                              r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
                              r'(?P<sn>\d{3})'
-                             r'(?P<checksum>(\d|X))$'),
+                             r'(?P<checksum>(\d|[Xx]))$'),
         'alias_of': None,
         'names': ['Resident Identity Number',
                   '居民身份证',
                   'Jūmín Shēnfènzhèng'],
         'links': ['https://en.wikipedia.org/wiki/Resident_Identity_Card',
-                  'https://en.wikipedia.org/wiki/National_identification_number#China'],
+                  'https://en.wikipedia.org/wiki/National_identification_number#China',
+                  'https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/cn/ric.py'],
         'deprecated': False
     })
 
@@ -70,7 +76,7 @@ class ResidentID:
         sn = match_obj.group('sn')
         checksum_str = match_obj.group('checksum')
         checksum = ResidentID.checksum(id_number)
-        if checksum is None or str(checksum) != checksum_str:
+        if checksum is None or str(checksum) != checksum_str.upper():
             return None
         try:
             return {
