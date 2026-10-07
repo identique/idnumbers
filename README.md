@@ -230,6 +230,39 @@ not if it is an actual issued ID number.
   it, so for those the regexp alone does not show everything they accept.
 - `parse()` returns `None` for invalid input.
 
+## Parse a primary ID by country
+
+`parse_id_info(country, id_number)` uses the same country lookup and validation as `idnumbers.validate()`,
+selecting only the country's primary `NationalID`. It returns a frozen `ParseSuccess` or `ParseFailure`; use
+`result.ok` or `isinstance(result, ParseSuccess)` to narrow the result in typed code.
+
+```python
+from idnumbers import FailureReason, ParseSuccess, parse_id_info
+
+result = parse_id_info('tw', 'A123456789')
+if result.ok:
+    print(result.country_code, result.info['gender'])
+else:
+    print(result.reason, result.error_message)
+assert isinstance(result, ParseSuccess)
+
+# A valid primary ID need not contain extractable information.
+result = parse_id_info('us', '012-12-0928')
+assert not result.ok and result.reason == FailureReason.NOT_PARSABLE
+print(result.reason.value)
+```
+
+On success, `country_code` is the resolved alpha-3 code and `info` is a fresh shallow dictionary matching the
+country class's `parse()` output, including its date and enum values. Result fields are frozen, but the dictionary
+itself is not immutable. The supplied `id_number` is preserved without normalization.
+
+An unknown or non-string country gives `UNSUPPORTED_COUNTRY` with `country_code=None`. Invalid IDs have the same
+reason as `validate()` (`VALIDATION_FAILED` for now). A valid ID with no parser, or a parser returning `None`, gives
+`NOT_PARSABLE`. Validator/parser exceptions give `VALIDATION_FAILED` with `error_message` formatted as
+`ExceptionType: message`; this entry point does not raise. Failure results have `reason` and `error_message`, not
+`info`. The existing country-specific `Cls.parse()` methods and their return types are unchanged; use those classes
+when you need a secondary ID type.
+
 ## Parse National IDs
 
 The idnumbers library supports the parse function for certain national ID numbers, which allows you to easily extract
