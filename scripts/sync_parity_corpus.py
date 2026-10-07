@@ -23,7 +23,9 @@ Usage, from anywhere (standard library only, Python 3.9 or newer):
         tests/parity/test_corpus.py to the numbers in the port's docs/PARITY.md.
 
 Exit codes: 0 success, 1 `--check` found differences, 2 the script could not run (bad checkout, wrong `idnumbers`
-import, bad corpus, or a validate() that raised, which the library contract forbids).
+import, a corpus that is corrupt, has non-string seeds or names a country without a class, or a validate() that
+raised, which the library contract forbids). A failed run never leaves a half-updated tree: `--from-port` validates
+the port's corpus before writing and restores the previous files if regeneration fails.
 """
 import argparse
 import importlib
@@ -50,7 +52,10 @@ def import_corpus_module() -> Any:
     loaded_from = Path(str(idnumbers.__file__)).resolve()
     if REPOSITORY_ROOT not in loaded_from.parents:
         raise SetupError("imported idnumbers from %s, not from this checkout (%s)" % (loaded_from, REPOSITORY_ROOT))
-    return importlib.import_module("tests.parity.corpus")
+    try:
+        return importlib.import_module("tests.parity.corpus")
+    except ImportError as error:
+        raise SetupError("cannot import tests.parity.corpus from %s: %s" % (REPOSITORY_ROOT, error))
 
 
 def git_output(port: Path, *arguments: str) -> str:
@@ -92,15 +97,34 @@ def pin_commit(corpus_module: Path, commit: str) -> str:
     return "".join(lines)
 
 
+def check_corpus_data(corpus: Any, parsed: Any, source: str) -> None:
+    """Fail unless the data is a JSON object of country code to list of strings and every country's classes load."""
+    if not isinstance(parsed, dict):
+        raise SetupError("%s: expected a JSON object" % source)
+    for code, seeds in parsed.items():
+        if not isinstance(seeds, list) or not all(isinstance(seed, str) for seed in seeds):
+            raise SetupError("%s: %s must be a list of strings" % (source, code))
+        for spec in corpus.class_specs(code):
+            module_name, class_name = spec.split(":")
+            try:
+                module = importlib.import_module("idnumbers.nationalid.%s" % module_name)
+                getattr(module, class_name)
+            except (ImportError, AttributeError, ValueError) as error:
+                raise SetupError("%s: cannot load the Python class for %r (%s): %s" % (source, code, spec, error))
+
+
 def copy_from_port(port: Path, corpus: Any) -> Any:
-    """Vendor the port's corpus and commit pin, then reload the corpus module so it sees both."""
+    """Vendor the port's corpus and commit pin, then reload the corpus module so it sees both.
+
+    Everything is validated before the first write, so a bad port corpus leaves the tree untouched.
+    """
     data, commit = read_port(port)
+    source = "%s/parity/corpus.json" % port
     try:
         parsed = json.loads(data.decode("utf-8"))
     except ValueError as error:
-        raise SetupError("%s/parity/corpus.json is not valid JSON: %s" % (port, error))
-    if not isinstance(parsed, dict):
-        raise SetupError("%s/parity/corpus.json: expected a JSON object" % port)
+        raise SetupError("%s is not valid JSON: %s" % (source, error))
+    check_corpus_data(corpus, parsed, source)
     module_path = Path(corpus.__file__)
     pinned = pin_commit(module_path, commit)
     corpus.CORPUS_PATH.write_bytes(data)
@@ -156,16 +180,34 @@ def parse_arguments(argv: Optional[List[str]]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def restore(snapshot: Dict[Path, bytes]) -> None:
+    for path, content in snapshot.items():
+        path.write_bytes(content)
+
+
 def run(arguments: argparse.Namespace) -> int:
     corpus = import_corpus_module()
+    snapshot: Dict[Path, bytes] = {}
     if arguments.from_port is not None:
+        snapshot = {path: path.read_bytes() for path in (corpus.CORPUS_PATH, Path(corpus.__file__))}
         corpus = copy_from_port(arguments.from_port.resolve(), corpus)
+    try:
+        return regenerate(arguments, corpus)
+    except BaseException:
+        # A failure after --from-port wrote the corpus must not leave a half-updated tree.
+        restore(snapshot)
+        raise
 
+
+def regenerate(arguments: argparse.Namespace, corpus: Any) -> int:
     previous = read_previous(corpus.EXPECTED_PATH)
     try:
         current = corpus.build_expected()
     except corpus.ContractViolation as error:
         raise SetupError(str(error))
+    except (OSError, ValueError, ImportError, AttributeError) as error:
+        raise SetupError("cannot build the record from tests/parity/corpus.json: %s: %s"
+                         % (type(error).__name__, error))
     text = corpus.render_expected(current)
     changes = changed_vectors(previous, current)
     print(summary(current, changes))
