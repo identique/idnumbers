@@ -50,6 +50,24 @@ Never publish to PyPI without the maintainer's approval.
 | Regexp dump | `python3 -m tools.collect_regexp`                                        |
 | Docs        | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`       |
 
+### Optional contributor quickstart with uv
+
+With [uv installed](https://docs.astral.sh/uv/getting-started/installation/), run these commands from the repository
+root; the plain-Python commands above remain supported:
+
+```bash
+uv venv
+uv pip install -e .
+uv run python -m unittest
+uv run python -m unittest tests.nationalid.test_CHN
+```
+
+To test the oldest supported Python version, replace the first command with `uv venv --python 3.9` when creating
+the environment. The [editable install](https://docs.astral.sh/uv/pip/packages/#editable-packages) uses this checkout.
+The two `uv run python -m unittest` commands above run from the repository root and import the checkout, avoiding
+the standalone-script import gotcha below. This does not guarantee checkout imports for arbitrary scripts or
+working directories.
+
 - **Import gotcha:** `python3 some_script.py` may import a **pip-installed** `idnumbers` instead of this checkout,
   because `sys.path[0]` is the script's directory. Use `python3 -m` from the repo root, or set `PYTHONPATH` to the
   checkout.

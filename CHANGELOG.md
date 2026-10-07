@@ -6,6 +6,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Documentation
 
+- Add an optional uv contributor quickstart with editable installation and full-suite or single-country tests
+  ([#473](https://github.com/identique/idnumbers/issues/473)).
+
 - Check published PyPI packages with uv on Python 3.9 and 3.14 on demand, and document the post-release check
   ([#472](https://github.com/identique/idnumbers/issues/472)).
 
