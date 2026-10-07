@@ -13,6 +13,8 @@ from tests.parity import corpus
 
 # The vector count the port documents for this corpus: "78 countries, 17960 vectors" in docs/PARITY.md at the pinned
 # port commit. The Python expansion must reproduce it, which shows that both sides expand the seeds identically.
+# After `scripts/sync_parity_corpus.py --from-port` pins a newer port commit, update both numbers to the ones that
+# commit's docs/PARITY.md documents.
 PORT_DOCUMENTED_VECTORS = 17960
 PORT_DOCUMENTED_COUNTRIES = 78
 
