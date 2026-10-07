@@ -15,7 +15,11 @@ class BirthDepartment(TypedDict):
 class ParseResult(TypedDict):
     """parse result of INSEE"""
     gender: Gender
-    """gender, possible value: male, female"""
+    """
+    gender, possible value: male, female. The first digit 1 (and 7, a temporary number) is male, 2 (and 8) is female.
+    3 and 4 are also used for people being registered, but the sources don't say which sex they stand for, so
+    parse() reports them as female (see https://github.com/identique/idnumbers/issues/429).
+    """
     yy: str
     """year of birth"""
     mm: str
@@ -31,6 +35,7 @@ class INSEE:
     France National ID number, INSEE
     https://en.wikipedia.org/wiki/National_identification_number#France
     https://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR
+    https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'FR',
@@ -52,7 +57,8 @@ class INSEE:
                   'NIRPP'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#France',
                   'https://fr.wikipedia.org/wiki/'
-                  'Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR'],
+                  'Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR',
+                  'https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente'],
         'deprecated': False
 
     })
@@ -81,7 +87,7 @@ class INSEE:
         mm = match_obj.group('mm')
         control_key = match_obj.group('control_key')
         return {
-            'gender': Gender.MALE if gender == '1' else Gender.FEMALE,
+            'gender': Gender.MALE if gender in ('1', '7') else Gender.FEMALE,
             'yy': yy,
             'mm': mm,
             'birth_department': birth_department,
