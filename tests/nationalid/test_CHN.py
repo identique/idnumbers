@@ -1,3 +1,4 @@
+from datetime import date
 from unittest import TestCase, main
 
 from idnumbers.nationalid import CHN
@@ -9,6 +10,23 @@ class TestCHNValidation(TestCase):
         self.assertTrue(CHN.ResidentID.validate('11010219840406970X'))
         self.assertTrue(CHN.ResidentID.validate('440524188001010014'))
         self.assertTrue(CHN.ResidentID.validate('11010519491231002X'))
+
+    def test_october_birth_date(self):
+        # Regression vector from https://github.com/identique/idnumbers/issues/275.
+        number = '372925199510103222'
+        for cls in (CHN.ResidentID, CHN.NationalID):
+            with self.subTest(cls=cls.__name__):
+                self.assertTrue(cls.validate(number))
+                self.assertEqual({
+                    'address_code': '372925',
+                    'yyyymmdd': date(1995, 10, 10),
+                    'sn': '322',
+                    'gender': Gender.FEMALE,
+                    'checksum': 2,
+                }, cls.parse(number))
+                self.assertEqual(2, cls.checksum(number))
+                self.assertFalse(cls.validate(number[:-1] + '3'))
+                self.assertIsNone(cls.parse(number[:-1] + '3'))
 
     def test_error_case(self):
         self.assertFalse(CHN.ResidentID.validate('11010219840506970X'))

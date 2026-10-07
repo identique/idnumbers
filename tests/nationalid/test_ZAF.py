@@ -1,3 +1,4 @@
+from datetime import date
 from unittest import TestCase, main
 from idnumbers.nationalid import ZAF
 from idnumbers.nationalid.constant import Citizenship, Gender
@@ -6,6 +7,21 @@ from idnumbers.nationalid.constant import Citizenship, Gender
 class TestZAFValidation(TestCase):
     def test_normal_case(self):
         self.assertTrue(ZAF.NationalID.validate('7605300675088'))
+
+    def test_october_birth_date(self):
+        # Synthetic Luhn-correct vector, not issued; regression coverage for issue #275.
+        number = '9510105000086'
+        self.assertTrue(ZAF.NationalID.validate(number))
+        self.assertEqual({
+            'yyyymmdd': date(1995, 10, 10),
+            'sn': '5000',
+            'gender': Gender.MALE,
+            'citizenship': Citizenship.CITIZEN,
+            'checksum': 6,
+        }, ZAF.NationalID.parse(number))
+        self.assertEqual(6, ZAF.NationalID.checksum(number))
+        self.assertFalse(ZAF.NationalID.validate(number[:-1] + '7'))
+        self.assertIsNone(ZAF.NationalID.parse(number[:-1] + '7'))
 
     def test_error_case(self):
         self.assertFalse(ZAF.NationalID.validate('7605300675089'))

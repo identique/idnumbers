@@ -109,6 +109,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   old national ID metadata remains 13.
 - **BIH** ([#354](https://github.com/identique/idnumbers/issues/354)): correct the JMBG class country label to
   Bosnia and Herzegovina; validation and parsing are unchanged.
+- **CHN** resident ID ([#419](https://github.com/identique/idnumbers/issues/419)): add regression coverage for
+  October birth dates, already fixed in [#275](https://github.com/identique/idnumbers/issues/275); validity is unchanged.
 - **FRA** NIR ([#291](https://github.com/identique/idnumbers/issues/291)): `parse()` now reports gender code `7`, the
   temporary number for a man, as male. Codes `3` and `4` are still reported as female, because no source says which sex
   they stand for ([#429](https://github.com/identique/idnumbers/issues/429)).
@@ -143,8 +145,14 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **USA** ([#354](https://github.com/identique/idnumbers/issues/354)): clarify that SSN metadata counts nine
   significant digits; validation still requires the two hyphens in the 11-character printed layout.
 
+- **ZAF** national ID ([#419](https://github.com/identique/idnumbers/issues/419)): add regression coverage for
+  October birth dates, already fixed in [#275](https://github.com/identique/idnumbers/issues/275); validity is unchanged.
+
 - **Documentation** ([#409](https://github.com/identique/idnumbers/issues/409)): escape closing parentheses in
   docstring URLs so API reference links preserve complete paths and fragments. Validation and metadata are unchanged.
+
+- **Packaging** ([#419](https://github.com/identique/idnumbers/issues/419)): include `CHANGELOG.md` in the source
+  distribution; wheel contents are unchanged.
 
 ## 1.12.0 (2026-10-07)
 
