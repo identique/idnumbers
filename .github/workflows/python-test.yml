@@ -85,3 +85,18 @@ jobs:
     - name: Report coverage (fails below fail_under in pyproject.toml)
       shell: bash
       run: python -m coverage report --format=markdown | tee -a "$GITHUB_STEP_SUMMARY"
+
+  bench:
+
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v7
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v7
+      with:
+        python-version: "3.12"
+    # Informational: timings never fail the job, only a crash or a vector that no longer validates does.
+    - name: Run the benchmarks
+      shell: bash
+      run: python bench/run.py | tee -a "$GITHUB_STEP_SUMMARY"
