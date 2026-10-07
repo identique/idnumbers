@@ -10,8 +10,9 @@ def normalize(id_number):
 
 class EntityTaxIDNumber:
     """
-    Austria tax id number format
-    https://validatetin.com/austria/
+    Austrian UID: the local portion is U followed by eight digits, without the AT country code.
+
+    The official BMF construction rules are linked in METADATA.links.
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'AT',
@@ -23,13 +24,14 @@ class EntityTaxIDNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^([A-Z]\d{2}[- ]?\d{3}[ /]?\d{3})$'),  # is the first char always 'U'?
+        'regexp': re.compile(r'^(U\d{2}[- ]?\d{3}[ /]?\d{3})$'),
         'alias_of': None,
         'names': ['Entities Tax ID number', 'UID', 'Umsatzsteuer-Identifikationsnummer', 'VAT'],
         'links': ['https://www.finanz.at/en/taxes/vat-number/',
                   'https://www.glasbenamatica.org/wp-content/uploads/2017/05/TIN_-_country_sheet_AT_en.pdf',
                   'https://taxid.pro/docs/countries/austria',
-                  'https://www.bmf.gv.at/dam/jcr:9f9f8d5f-5496-4886-aa4f-81a4e39ba83e/BMF_UID_Konstruktionsregeln.pdf'],
+                  'https://www.bmf.gv.at/dam/jcr:d6794f8f-d321-43df-9840-1a841f9bf5dc/'
+                  'BMF_UID_Konstruktionsregeln_Stand_November%202020.pdf'],
         'deprecated': False
     })
 
@@ -46,7 +48,7 @@ class EntityTaxIDNumber:
     def checksum(id_number: str) -> bool:
         if not validate_regexp(id_number, EntityTaxIDNumber.METADATA.regexp):
             return False
-        # https://www.bmf.gv.at/dam/jcr:9f9f8d5f-5496-4886-aa4f-81a4e39ba83e/BMF_UID_Konstruktionsregeln.pdf
+        # BMF UID construction rules (November 2020), Austria; see METADATA.links.
         normalized = normalize(id_number)
         numbers = [int(char) for char in list(normalized[1:])]
         total = 4
