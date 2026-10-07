@@ -1,5 +1,6 @@
 import calendar
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, Tuple, TypedDict
@@ -55,9 +56,11 @@ def _is_valid_birth_date(century: int, match_obj: re.Match[str]) -> bool:
     day = int(match_obj.group('dd'))
     if month == 0:
         return True
-    if month > 12:
+    if month > 12 or day > calendar.monthrange(year, month)[1]:
+        # Unknown dates remain valid; mark only a definitely impossible full date.
+        _calendar_date(year, month, day)
         return False
-    return day <= calendar.monthrange(year, month)[1]
+    return True
 
 
 def _match_valid(id_number: str) -> Optional[Tuple[int, re.Match[str]]]:
@@ -151,8 +154,11 @@ class NationalRegistrationNumber:
             # incomplete birth date: the number is valid, but there is no date to return
             return None
         sn = match_obj.group('sn')
+        calendar_date = _calendar_date(century + yy, mm, dd)
+        if calendar_date is None:
+            return None
         return {
-            'yyyymmdd': date(century + yy, mm, dd),
+            'yyyymmdd': calendar_date,
             'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
             'sn': sn,
             'checksum': int(match_obj.group('checksum'))

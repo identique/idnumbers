@@ -2,7 +2,8 @@
 
 from typing import Any, Mapping, Optional
 
-from idnumbers import FailureReason, ParseFailure, ParseIdInfoResult, ParseSuccess, parse_id_info
+from idnumbers import FailureReason, ParseFailure, ParseIdInfoResult, ParseSuccess, parse_id_info, failure_reason
+from idnumbers.nationalid import AUS
 
 
 def by_discriminator(result: ParseIdInfoResult) -> None:
@@ -29,3 +30,7 @@ def by_class(result: ParseIdInfoResult) -> None:
 
 by_discriminator(parse_id_info('tw', 'A123456789'))
 by_class(parse_id_info('us', '012-12-0928'))
+
+
+secondary_reason: Optional[FailureReason] = failure_reason(AUS.MedicareNumber, '2123 45670 1')
+print(secondary_reason)

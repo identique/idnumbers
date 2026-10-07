@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, TypedDict, cast
@@ -81,10 +82,8 @@ class CivilNumber:
         yy = int(match_obj.group('yy'))
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
-        try:
-            birthday = date(year_base + yy, mm, dd)
-        except ValueError:
-            # an impossible birth date, e.g. 29 Feb 1900 or month 13
+        birthday = _calendar_date(year_base + yy, mm, dd)
+        if birthday is None:
             return None
         return {
             'yyyymmdd': birthday,

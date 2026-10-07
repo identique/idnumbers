@@ -1,4 +1,5 @@
 import re
+from .util import birth_date as _calendar_date
 from datetime import date
 from .metadata import IdMetadata
 from typing import Optional, TypedDict, Tuple, cast
@@ -88,8 +89,11 @@ class UniqueMasterCitizenNumber:
         year_base = 2000 if yyy < 800 else 1000
         sn = match_obj.group('sn')
         try:
+            calendar_date = _calendar_date(year_base + yyy, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(year_base + yyy, mm, dd),
+                'yyyymmdd': calendar_date,
                 'location': location,
                 'citizenship': citizenship,
                 'gender': Gender.MALE if int(sn) < 500 else Gender.FEMALE,

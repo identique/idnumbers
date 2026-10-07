@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
@@ -81,18 +82,17 @@ class IdentityNumber:
         yyyy = IdentityNumber.get_year(match_obj.group('yy'))
         mm = int(match_obj.group('mm'))
         dd = int(match_obj.group('dd'))
-        try:
-            birth_date = date(yyyy, mm if mm < 50 else mm - 50, dd)
-            if birth_date > date.today():
-                return None
-            return {
-                'yyyymmdd': birth_date,
-                'gender': Gender.MALE if mm < 50 else Gender.FEMALE,
-                'sn': match_obj.group('sn'),
-                'checksum': cast(CHECKSUM_LETTER, match_obj.group('checksum'))
-            }
-        except ValueError:
+        birth_date = _calendar_date(yyyy, mm if mm < 50 else mm - 50, dd)
+        if birth_date is None:
             return None
+        if birth_date > date.today():
+            return None
+        return {
+            'yyyymmdd': birth_date,
+            'gender': Gender.MALE if mm < 50 else Gender.FEMALE,
+            'sn': match_obj.group('sn'),
+            'checksum': cast(CHECKSUM_LETTER, match_obj.group('checksum'))
+        }
 
     @staticmethod
     def get_year(yy: str) -> int:

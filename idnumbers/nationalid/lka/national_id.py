@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date, timedelta
 from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
@@ -86,7 +87,10 @@ class NationalID:
         if not (1 <= days <= 366 or 501 <= days <= 866):
             return None
         try:
-            yyyymmdd = date(year, 1, 1) + timedelta(days - 501 if days > 500 else days - 1)
+            calendar_date = _calendar_date(year, 1, 1)
+            if calendar_date is None:
+                return None
+            yyyymmdd = calendar_date + timedelta(days - 501 if days > 500 else days - 1)
             return {
                 'yyyymmdd': yyyymmdd,
                 'gender': Gender.MALE if days < 500 else Gender.FEMALE,

@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict
@@ -117,8 +118,11 @@ class ResidentRegistration:
         sn = match_obj.group('sn')
         yyyy_base = ResidentRegistration.DOB_BASE_MAP[gender]
         try:
+            calendar_date = _calendar_date(yyyy_base + yy, mm, dd)
+            if calendar_date is None:
+                return None
             return {
-                'yyyymmdd': date(yyyy_base + yy, mm, dd),
+                'yyyymmdd': calendar_date,
                 'gender': Gender.MALE if gender % 2 == 1 else Gender.FEMALE,
                 'citizenship': ResidentRegistration.CITIZENSHIP_MAP[gender],
                 'sn': sn

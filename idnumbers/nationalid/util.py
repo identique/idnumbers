@@ -1,5 +1,7 @@
 import re
 from copy import copy
+from contextvars import ContextVar
+from datetime import date
 from functools import lru_cache
 from re import Match, Pattern
 from typing import Any, List, Literal, Optional, Type, TypeVar, cast
@@ -226,3 +228,16 @@ def alias_of(cls: _T) -> _T:
     AliasType.__module__ = cls.__module__
     AliasType.__doc__ = cls.__doc__
     return cast(_T, AliasType)
+
+
+_birth_date_trace: ContextVar[Optional[bool]] = ContextVar('_birth_date_trace', default=None)
+
+
+def birth_date(year: int, month: int, day: int) -> Optional[date]:
+    """Return the calendar date, or None on ValueError, recording failures only in an active diagnostic trace."""
+    try:
+        return date(year, month, day)
+    except ValueError:
+        if _birth_date_trace.get() is not None:
+            _birth_date_trace.set(True)
+        return None

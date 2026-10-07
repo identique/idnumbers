@@ -1,4 +1,5 @@
 import re
+from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Literal, Optional, TypedDict, cast
@@ -86,9 +87,12 @@ class ResidentID:
         if checksum is None or str(checksum) != checksum_str.upper():
             return None
         try:
+            calendar_date = _calendar_date(int(match_obj.group('yyyy')), int(match_obj.group('mm')), int(match_obj.group('dd')))
+            if calendar_date is None:
+                return None
             return {
                 'address_code': address_code,
-                'yyyymmdd': date(int(match_obj.group('yyyy')), int(match_obj.group('mm')), int(match_obj.group('dd'))),
+                'yyyymmdd': calendar_date,
                 'sn': sn,
                 'gender': Gender.FEMALE if int(sn) % 2 == 0 else Gender.MALE,
                 'checksum': checksum
