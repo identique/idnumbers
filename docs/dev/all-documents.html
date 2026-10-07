@@ -196,7 +196,7 @@
             <div class="type">Module</div>
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">One entry point to validate an ID number of any supported country.</div>
+            <div class="summary">Unified validation and parsing of the primary ID number of any supported country.</div>
           </li><li id="idnumbers.nationalid">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid</div>
@@ -2644,7 +2644,7 @@
             <div class="type">Attribute</div>
             <div class="kind">Constant</div>
             <div class="privacy">PUBLIC</div>
-            <div class="summary">The ID type of the country can't be parsed. Only <tt class="rst-docutils literal">parse_id_info()</tt> (issue #319) produces it.</div>
+            <div class="summary">A valid ID has no extractable information, including when its type has no parser.</div>
           </li><li id="idnumbers.api.ValidationResult">
             
             <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Validation<wbr></wbr>Result</div>
@@ -2709,6 +2709,110 @@
             <div class="kind">Method</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">Undocumented</span></div>
+          </li><li id="idnumbers.api.ParseSuccess">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Success</div>
+            <div class="url">idnumbers.api.ParseSuccess.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Parsed information from a valid primary ID. Fields are frozen; <tt class="rst-docutils literal">info</tt> is a fresh, shallow dictionary.</div>
+          </li><li id="idnumbers.api.ParseSuccess.country_code">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Success<wbr></wbr>.country<wbr></wbr>_code</div>
+            <div class="url">idnumbers.api.ParseSuccess.html#country_code</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The resolved ISO 3166-1 alpha-3 code.</div>
+          </li><li id="idnumbers.api.ParseSuccess.id_number">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Success<wbr></wbr>.id<wbr></wbr>_number</div>
+            <div class="url">idnumbers.api.ParseSuccess.html#id_number</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The ID number exactly as it was passed in.</div>
+          </li><li id="idnumbers.api.ParseSuccess.info">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Success<wbr></wbr>.info</div>
+            <div class="url">idnumbers.api.ParseSuccess.html#info</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The country class's parsed fields, without conversion of dates, enums or other values.</div>
+          </li><li id="idnumbers.api.ParseSuccess.ok">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Success<wbr></wbr>.ok</div>
+            <div class="url">idnumbers.api.ParseSuccess.html#ok</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The discriminator for successful parsing.</div>
+          </li><li id="idnumbers.api.ParseFailure">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Failure</div>
+            <div class="url">idnumbers.api.ParseFailure.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">An unsupported country, invalid ID, unparseable valid ID or validator/parser exception.</div>
+          </li><li id="idnumbers.api.ParseFailure.country_code">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Failure<wbr></wbr>.country<wbr></wbr>_code</div>
+            <div class="url">idnumbers.api.ParseFailure.html#country_code</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The resolved alpha-3 code, or <tt class="rst-docutils literal">None</tt> for an unsupported country.</div>
+          </li><li id="idnumbers.api.ParseFailure.id_number">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Failure<wbr></wbr>.id<wbr></wbr>_number</div>
+            <div class="url">idnumbers.api.ParseFailure.html#id_number</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The ID number exactly as it was passed in.</div>
+          </li><li id="idnumbers.api.ParseFailure.reason">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Failure<wbr></wbr>.reason</div>
+            <div class="url">idnumbers.api.ParseFailure.html#reason</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Why no parsed information is available.</div>
+          </li><li id="idnumbers.api.ParseFailure.error_message">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Failure<wbr></wbr>.error<wbr></wbr>_message</div>
+            <div class="url">idnumbers.api.ParseFailure.html#error_message</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Unsupported-country or exception detail, with the same formatting as <code><a href="idnumbers.api.html#validate" class="internal-link" title="idnumbers.api.validate">validate</a></code>.</div>
+          </li><li id="idnumbers.api.ParseFailure.ok">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Failure<wbr></wbr>.ok</div>
+            <div class="url">idnumbers.api.ParseFailure.html#ok</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The discriminator for unsuccessful parsing.</div>
+          </li><li id="idnumbers.api.ParseIdInfoResult">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.<wbr></wbr>Parse<wbr></wbr>Id<wbr></wbr>Info<wbr></wbr>Result</div>
+            <div class="url">idnumbers.api.html#ParseIdInfoResult</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Type Alias</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The discriminated result of <code><a href="idnumbers.api.html#parse_id_info" class="internal-link" title="idnumbers.api.parse_id_info">parse_id_info</a></code>; narrow with <tt class="rst-docutils literal">result.ok</tt> or <tt class="rst-docutils literal">isinstance</tt>.</div>
+          </li><li id="idnumbers.api.parse_id_info">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.parse<wbr></wbr>_id<wbr></wbr>_info</div>
+            <div class="url">idnumbers.api.html#parse_id_info</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Validate and parse the primary <tt class="rst-docutils literal">NationalID</tt> of a country, without normalizing the input.</div>
           </li><li id="idnumbers.api.validate">
             
             <div class="fullName">idnumbers<wbr></wbr>.api<wbr></wbr>.validate</div>

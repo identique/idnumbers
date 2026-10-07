@@ -219,6 +219,26 @@
         
 
         
+            <div class="itemName"><code><a href="idnumbers.api.ParseFailure.html" class="internal-link" title="idnumbers.api.ParseFailure"><wbr></wbr>Parse<wbr></wbr>Failure</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.api.ParseSuccess.html" class="internal-link" title="idnumbers.api.ParseSuccess"><wbr></wbr>Parse<wbr></wbr>Success</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="idnumbers.api.ValidationResult.html" class="internal-link" title="idnumbers.api.ValidationResult"><wbr></wbr>Validation<wbr></wbr>Result</a></code>
             </div>
         
@@ -230,6 +250,16 @@
         <ul>
     
     <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#parse_id_info" class="internal-link" title="idnumbers.api.parse_id_info">parse<wbr></wbr>_id<wbr></wbr>_info</a></code>
+            </div>
+        
+
+    </li><li class="">
         
         
         
@@ -265,8 +295,21 @@
         
          
 
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="">
         
-         
+        
+        
+
+        
+            <div class="itemName"><code><a href="#ParseIdInfoResult" class="internal-link" title="idnumbers.api.ParseIdInfoResult"><wbr></wbr>Parse<wbr></wbr>Id<wbr></wbr>Info<wbr></wbr>Result</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
 
         
          
@@ -368,12 +411,13 @@
         </div>
 
         <div class="moduleDocstring">
-          <div><p>One entry point to validate an ID number of any supported country.</p>
+          <div><p>Unified validation and parsing of the primary ID number of any supported country.</p>
 <p><code><a href="#validate" class="internal-link" title="idnumbers.api.validate">validate</a></code> takes the code of a country and an ID number, and returns a <code><a href="idnumbers.api.ValidationResult.html" class="internal-link" title="idnumbers.api.ValidationResult">ValidationResult</a></code> that says
 whether the ID number is valid, which country was used, what the ID number contains and why it failed. It never
 raises: an unknown country, a malformed ID number and an unexpected error inside a validator all give a result with
 <tt class="rst-docutils literal">is_valid</tt> set to <tt class="rst-docutils literal">False</tt>. The country is found with <code><a href="idnumbers.registry.html#resolve_country" class="internal-link">idnumbers.registry.resolve_country</a></code>, so an alpha-2
 or alpha-3 code in any letter case works. The ID number is validated exactly as given, without any normalization.</p>
+<p><code><a href="#parse_id_info" class="internal-link" title="idnumbers.api.parse_id_info">parse_id_info</a></code> uses the same validation path and returns a discriminated parsing result.</p>
 <p>The country classes of <code><a href="idnumbers.nationalid.html" class="internal-link">idnumbers.nationalid</a></code> are unchanged, and <code><a href="#validate" class="internal-link" title="idnumbers.api.validate">validate</a></code> uses the <tt class="rst-docutils literal">NationalID</tt> of the
 country. Importing <code><a href="index.html" class="internal-link">idnumbers</a></code> stays cheap, as the country module is imported on the first call that needs it.</p>
 <p>Example:</p>
@@ -404,8 +448,23 @@ result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_f
   </tr><tr class="class">
     
     <td>Class</td>
+    <td><code><a href="idnumbers.api.ParseFailure.html" class="internal-link" title="idnumbers.api.ParseFailure"><wbr></wbr>Parse<wbr></wbr>Failure</a></code></td>
+    <td>An unsupported country, invalid ID, unparseable valid ID or validator/parser exception.</td>
+  </tr><tr class="class">
+    
+    <td>Class</td>
+    <td><code><a href="idnumbers.api.ParseSuccess.html" class="internal-link" title="idnumbers.api.ParseSuccess"><wbr></wbr>Parse<wbr></wbr>Success</a></code></td>
+    <td>Parsed information from a valid primary ID. Fields are frozen; <tt class="rst-docutils literal">info</tt> is a fresh, shallow dictionary.</td>
+  </tr><tr class="class">
+    
+    <td>Class</td>
     <td><code><a href="idnumbers.api.ValidationResult.html" class="internal-link" title="idnumbers.api.ValidationResult"><wbr></wbr>Validation<wbr></wbr>Result</a></code></td>
     <td>The outcome of validating one ID number. Instances are immutable, and a result is truthy when it is valid.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#parse_id_info" class="internal-link" title="idnumbers.api.parse_id_info">parse<wbr></wbr>_id<wbr></wbr>_info</a></code></td>
+    <td>Validate and parse the primary <tt class="rst-docutils literal">NationalID</tt> of a country, without normalizing the input.</td>
   </tr><tr class="function">
     
     <td>Function</td>
@@ -416,6 +475,11 @@ result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_f
     <td>Function</td>
     <td><code><a href="#validate_many" class="internal-link" title="idnumbers.api.validate_many">validate<wbr></wbr>_many</a></code></td>
     <td>Validate several ID numbers, each with its own country.</td>
+  </tr><tr class="typealias">
+    
+    <td>Type Alias</td>
+    <td><code><a href="#ParseIdInfoResult" class="internal-link" title="idnumbers.api.ParseIdInfoResult"><wbr></wbr>Parse<wbr></wbr>Id<wbr></wbr>Info<wbr></wbr>Result</a></code></td>
+    <td>The discriminated result of <code><a href="idnumbers.api.html#parse_id_info" class="internal-link" title="idnumbers.api.parse_id_info">parse_id_info</a></code>; narrow with <tt class="rst-docutils literal">result.ok</tt> or <tt class="rst-docutils literal">isinstance</tt>.</td>
   </tr><tr class="function private">
     
     <td>Function</td>
@@ -430,6 +494,34 @@ result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_f
 
         <div id="childList">
           <div class="basefunction">
+  
+  
+  <a name="idnumbers.api.parse_id_info">
+    
+  </a>
+  <a name="parse_id_info">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">parse_id_info</span>(country, id_number):
+    
+    <a class="headerLink" href="#parse_id_info" title="idnumbers.api.parse_id_info">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Validate and parse the primary <tt class="rst-docutils literal">NationalID</tt> of a country, without normalizing the input.</p>
+<p>Country lookup and validation failures match <code><a href="#validate" class="internal-link" title="idnumbers.api.validate">validate</a></code>. A valid ID whose class has no parser, or whose
+parser returns <tt class="rst-docutils literal">None</tt>, gives <code><a href="idnumbers.api.FailureReason.html#NOT_PARSABLE" class="internal-link" title="idnumbers.api.FailureReason.NOT_PARSABLE">FailureReason.NOT_PARSABLE</a></code>. Validator/parser exceptions give
+<code><a href="idnumbers.api.FailureReason.html#VALIDATION_FAILED" class="internal-link" title="idnumbers.api.FailureReason.VALIDATION_FAILED">FailureReason.VALIDATION_FAILED</a></code> with their detail in <tt class="rst-docutils literal">error_message</tt>. This function never raises.
+Country-specific <tt class="rst-docutils literal">parse()</tt> methods are unchanged; secondary ID types are not selected by this entry point.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">country:</span><code>str</code></td><td class="fieldArgDesc">an alpha-2 or alpha-3 code, or a registered alias, in any letter case.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc">the ID number exactly as supplied.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="#ParseIdInfoResult" class="internal-link" title="idnumbers.api.ParseIdInfoResult">ParseIdInfoResult</a></code></td><td class="fieldArgDesc">a frozen <code><a href="idnumbers.api.ParseSuccess.html" class="internal-link" title="idnumbers.api.ParseSuccess">ParseSuccess</a></code> with a fresh dictionary of parsed fields, or a <code><a href="idnumbers.api.ParseFailure.html" class="internal-link" title="idnumbers.api.ParseFailure">ParseFailure</a></code>.</td></tr></table></div>
+  </div>
+</div><div class="basefunction">
   
   
   <a name="idnumbers.api.validate">
@@ -477,6 +569,31 @@ result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_f
     <div><p>Validate several ID numbers, each with its own country.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">items:</span><code>Iterable[<wbr></wbr>Tuple[<wbr></wbr>str, <wbr></wbr>str]]</code></td><td class="fieldArgDesc"><tt class="rst-docutils literal">(country, id_number)</tt> pairs, as the arguments of <code><a href="#validate" class="internal-link" title="idnumbers.api.validate">validate</a></code>.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>List[<wbr></wbr><a href="idnumbers.api.ValidationResult.html" class="internal-link" title="idnumbers.api.ValidationResult">ValidationResult</a>]</code></td><td class="fieldArgDesc">one <code><a href="idnumbers.api.ValidationResult.html" class="internal-link" title="idnumbers.api.ValidationResult">ValidationResult</a></code> per pair, in the order of <tt class="rst-docutils literal">items</tt>.</td></tr></table></div>
   </div>
+</div><div class="basetypealias">
+  
+  
+  <a name="idnumbers.api.ParseIdInfoResult">
+    
+  </a>
+  <a name="ParseIdInfoResult">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">ParseIdInfoResult</span> =
+    
+    <a class="headerLink" href="#ParseIdInfoResult" title="idnumbers.api.ParseIdInfoResult">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The discriminated result of <code><a href="#parse_id_info" class="internal-link" title="idnumbers.api.parse_id_info">parse_id_info</a></code>; narrow with <tt class="rst-docutils literal">result.ok</tt> or <tt class="rst-docutils literal">isinstance</tt>.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>Union[<wbr></wbr><a href="idnumbers.api.ParseSuccess.html" class="internal-link" title="idnumbers.api.ParseSuccess">ParseSuccess</a>, <wbr></wbr><a href="idnumbers.api.ParseFailure.html" class="internal-link" title="idnumbers.api.ParseFailure">ParseFailure</a>]</code></pre></td></tr></table>
+  </div>
 </div><div class="basefunction private">
   
   
@@ -513,7 +630,7 @@ result.reason               # &lt;FailureReason.VALIDATION_FAILED: 'validation_f
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-07 14:56:51.
+    22.9.1 at 2026-10-07 22:51:44.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
