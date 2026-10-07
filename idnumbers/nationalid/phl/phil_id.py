@@ -5,7 +5,10 @@ from ..util import validate_regexp
 
 class PhilID:
     """
-    Philippines PhilID Card Number, PCN
+    Philippine national identification: the 12-digit PhilSys Number (PSN),
+    not the separate 16-digit PhilID Card Number (PCN). The public class name PhilID is retained.
+    Metadata counts significant digits only. Validation retains the compact format or optional
+    spaces/hyphens after the fourth and eleventh digits.
     https://en.wikipedia.org/wiki/National_identification_number#Philippines
     """
     METADATA = SimpleNamespace(**{
@@ -17,11 +20,12 @@ class PhilID:
         'checksum': False,
         'regexp': re.compile(r'^(\d{4}[ -]?\d{7}[ -]?\d)$'),
         'alias_of': None,
-        'names': ['PhilID Card Number',
-                  'PCN',
-                  'PhilSys'],
+        'names': ['PhilSys Number',
+                  'PSN',
+                  'Philippine National ID'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Philippines',
-                  'https://en.wikipedia.org/wiki/Philippine_national_identity_card'],
+                  'https://en.wikipedia.org/wiki/Philippine_national_identity_card',
+                  'https://psa.gov.ph/content/psa-bsp-promote-philid-card-security-and-verification-features'],
         'deprecated': False
 
     })

@@ -30,11 +30,14 @@ class ResidentRegistration:
     """
     KOR resident registration number format. The ARC is the same as ResidentRegistration. KOR removed the checksum and location
     from Oct. 2020 to protect privacy.
+    Metadata counts 13 significant digits, excluding the hyphen. Validation and parsing require
+    the 14-character printed layout: six digits, a hyphen and seven digits.
     # https://en.wikipedia.org/wiki/Resident_registration_number
     # https://centers.ibs.re.kr/html/living_en/overview/arc.html
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'KR',
+        # Significant characters only; separators are excluded.
         'min_length': 13,
         'max_length': 13,
         'parsable': True,

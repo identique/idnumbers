@@ -3,6 +3,16 @@ from idnumbers.nationalid import USA
 
 
 class TestUSAValidation(TestCase):
+    def test_significant_length_preserves_required_hyphens(self):
+        value = '012-12-0928'  # Existing regression vector, not an issuance assertion.
+        self.assertEqual(9, USA.SocialSecurityNumber.METADATA.min_length)
+        self.assertEqual(9, USA.SocialSecurityNumber.METADATA.max_length)
+        self.assertEqual(11, len(value))
+        self.assertTrue(USA.SocialSecurityNumber.validate(value))
+        compact = value.replace('-', '')
+        self.assertEqual(9, len(compact))
+        self.assertFalse(USA.SocialSecurityNumber.validate(compact))
+
     def test_normal_case(self):
         self.assertTrue(USA.SocialSecurityNumber.validate('012-12-0928'))
 

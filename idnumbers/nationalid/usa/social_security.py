@@ -7,12 +7,14 @@ from ..util import validate_regexp
 class SocialSecurityNumber:
     """
     United States Social Security number (SSN) format
+    Metadata counts nine significant digits, excluding the two hyphens. Validation requires
+    the 11-character printed layout: three digits, a hyphen, two digits, a hyphen and four digits.
     https://en.wikipedia.org/wiki/National_identification_number#United_States
     https://www.geeksforgeeks.org/how-to-validate-ssn-social-security-number-using-regular-expression/
     """
     METADATA = SimpleNamespace(**{
         'iso3166_alpha2': 'US',
-        # length without insignificant chars
+        # Significant digits only; the two required hyphens are excluded.
         'min_length': 9,
         'max_length': 9,
         # has parse function

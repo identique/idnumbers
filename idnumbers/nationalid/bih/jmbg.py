@@ -10,7 +10,7 @@ BIH_METADATA.iso3166_alpha2 = 'BA'
 
 class UniqueMasterCitizenNumber(YugoslaviaJMBG):
     """
-    Serbia Unique Master Citizen Number format, JMBG
+    Bosnia and Herzegovina Unique Master Citizen Number format, JMBG
     https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number
     """
     METADATA = BIH_METADATA
