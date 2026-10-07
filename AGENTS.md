@@ -2,6 +2,9 @@
 
 Instructions for coding agents and contributors working on `idnumbers`.
 
+This file is the single source of truth. `CLAUDE.md` only imports it (`@AGENTS.md`), so edit the rules here, never in
+`CLAUDE.md`. Personal, machine-specific notes belong in an untracked `CLAUDE.local.md`, which is never committed.
+
 ## Project overview
 
 This repository is the Python library [`idnumbers`](https://pypi.org/project/idnumbers/). It validates and parses
@@ -23,10 +26,13 @@ national ID numbers for many countries, has no runtime dependencies, and support
 
 - **Issue first:** every change starts from a GitHub issue.
 - **Pull requests:** changes reach `main` through a pull request, which is squash-merged.
-- **Branch name:** include the issue number, for example `244-croatia-tin` (GitHub's **Create a branch** default on
-  an issue) or `x244`.
+- **Branch name:** `x<issue>` (for example `x244`) or `<issue>-<slug>` (for example `38-id-number-for-bulgaria`, the
+  name GitHub suggests under **Create a branch** on an issue).
 - **PR title:** `Fix #<issue> - <description>`, for example `Fix #244 - link Croatia TIN with OIB for both entity and
   individual`. The squash merge turns it into the commit subject, `Fix #244 - ... (#259)`.
+- **Link the issue:** the PR description must contain `Closes #<issue>`. That links the PR to the issue on GitHub and
+  closes the issue when the PR merges. A PR that only partly addresses an issue says `Part of #<issue>` instead: the PR then shows in the
+  issue's timeline, and the issue stays open.
 - **Work in progress:** a PR that isn't ready yet is titled `WIP #<issue> - <description>`.
 - **Version bumps:** the bump workflow's bot PR is titled `Bump version to <X.Y.Z>`; see the release procedure.
 
