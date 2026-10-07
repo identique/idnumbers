@@ -2365,6 +2365,206 @@
             <div class="kind">Module</div>
             <div class="privacy">PUBLIC</div>
             <div class="summary"><span class="undocumented">No module docstring; 2/2 classes documented</span></div>
+          </li><li id="idnumbers.registry">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry</div>
+            <div class="url">idnumbers.registry.html</div>
+            <div class="type">Module</div>
+            <div class="kind">Module</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">A registry of the supported countries, with lookup by ISO 3166-1 alpha-2 or alpha-3 code.</div>
+          </li><li id="idnumbers.registry.CountryEntry">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.<wbr></wbr>Country<wbr></wbr>Entry</div>
+            <div class="url">idnumbers.registry.CountryEntry.html</div>
+            <div class="type">Class</div>
+            <div class="kind">Class</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">One country of the registry.</div>
+          </li><li id="idnumbers.registry.CountryEntry.alpha3">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.<wbr></wbr>Country<wbr></wbr>Entry<wbr></wbr>.alpha3</div>
+            <div class="url">idnumbers.registry.CountryEntry.html#alpha3</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The ISO 3166-1 alpha-3 code in upper case, such as <tt class="rst-docutils literal">'TWN'</tt>. It is the key of the registry.</div>
+          </li><li id="idnumbers.registry.CountryEntry.alpha2">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.<wbr></wbr>Country<wbr></wbr>Entry<wbr></wbr>.alpha2</div>
+            <div class="url">idnumbers.registry.CountryEntry.html#alpha2</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The ISO 3166-1 alpha-2 code in upper case, such as <tt class="rst-docutils literal">'TW'</tt>.</div>
+          </li><li id="idnumbers.registry.CountryEntry.name">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.<wbr></wbr>Country<wbr></wbr>Entry<wbr></wbr>.name</div>
+            <div class="url">idnumbers.registry.CountryEntry.html#name</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The English name of the country, such as <tt class="rst-docutils literal">'Taiwan'</tt>.</div>
+          </li><li id="idnumbers.registry.CountryEntry.national_id">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.<wbr></wbr>Country<wbr></wbr>Entry<wbr></wbr>.national<wbr></wbr>_id</div>
+            <div class="url">idnumbers.registry.CountryEntry.html#national_id</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">The <tt class="rst-docutils literal">NationalID</tt> of the country module, such as <tt class="rst-docutils literal">idnumbers.nationalid.TWN.NationalID</tt>.</div>
+          </li><li id="idnumbers.registry.CountryEntry.id_types">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.<wbr></wbr>Country<wbr></wbr>Entry<wbr></wbr>.id<wbr></wbr>_types</div>
+            <div class="url">idnumbers.registry.CountryEntry.html#id_types</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Class Variable</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Every ID class the country module exports, in the order of the module, without the alias names.</div>
+          </li><li id="idnumbers.registry._BUILTIN">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._BUILTIN</div>
+            <div class="url">idnumbers.registry.html#_BUILTIN</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">The built-in countries: alpha-3 code -&gt; (alpha-2 code, English name). A new country module is added here.</div>
+          </li><li id="idnumbers.registry._KEYS">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._KEYS</div>
+            <div class="url">idnumbers.registry.html#_KEYS</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Upper-case lookup key (alpha-3, alpha-2 or custom alias) -&gt; alpha-3 code.</div>
+          </li><li id="idnumbers.registry._ENTRIES">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._ENTRIES</div>
+            <div class="url">idnumbers.registry.html#_ENTRIES</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">The loaded built-in entries and the registered custom entries, by alpha-3 code.</div>
+          </li><li id="idnumbers.registry._CUSTOM">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._CUSTOM</div>
+            <div class="url">idnumbers.registry.html#_CUSTOM</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">The alpha-3 code of every custom country -&gt; its extra aliases in upper case.</div>
+          </li><li id="idnumbers.registry._LOCK">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._LOCK</div>
+            <div class="url">idnumbers.registry.html#_LOCK</div>
+            <div class="type">Attribute</div>
+            <div class="kind">Constant</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Guards the lazy loads and <code><a href="idnumbers.registry.html#register" class="internal-link" title="idnumbers.registry.register">register</a></code>.</div>
+          </li><li id="idnumbers.registry.resolve_country">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.resolve<wbr></wbr>_country</div>
+            <div class="url">idnumbers.registry.html#resolve_country</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Resolve an alpha-2 code, an alpha-3 code or a registered alias to the alpha-3 code.</div>
+          </li><li id="idnumbers.registry.get_country">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.get<wbr></wbr>_country</div>
+            <div class="url">idnumbers.registry.html#get_country</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Look up a country by its alpha-2 code, alpha-3 code or a registered alias.</div>
+          </li><li id="idnumbers.registry.get_validator">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.get<wbr></wbr>_validator</div>
+            <div class="url">idnumbers.registry.html#get_validator</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Return the <tt class="rst-docutils literal">NationalID</tt> class of a country, which has the static <tt class="rst-docutils literal">validate()</tt> method.</div>
+          </li><li id="idnumbers.registry.list_supported_countries">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.list<wbr></wbr>_supported<wbr></wbr>_countries</div>
+            <div class="url">idnumbers.registry.html#list_supported_countries</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">List every country of the registry, the built-in ones and the registered ones.</div>
+          </li><li id="idnumbers.registry.register">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>.register</div>
+            <div class="url">idnumbers.registry.html#register</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PUBLIC</div>
+            <div class="summary">Add a country to the process-wide registry.</div>
+          </li><li id="idnumbers.registry._entry">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._entry</div>
+            <div class="url">idnumbers.registry.html#_entry</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Return the entry of a known alpha-3 code, importing the country module when it isn't loaded yet.</div>
+          </li><li id="idnumbers.registry._load_builtin">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._load<wbr></wbr>_builtin</div>
+            <div class="url">idnumbers.registry.html#_load_builtin</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Import <tt class="rst-docutils literal"><span class="pre">idnumbers.nationalid.&lt;alpha3&gt;</span></tt> and describe it.</div>
+          </li><li id="idnumbers.registry._is_id_type">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._is<wbr></wbr>_id<wbr></wbr>_type</div>
+            <div class="url">idnumbers.registry.html#_is_id_type</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Whether <tt class="rst-docutils literal">obj</tt> is an ID class of a country module, which has <tt class="rst-docutils literal">METADATA</tt> and is not an alias.</div>
+          </li><li id="idnumbers.registry._is_code">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._is<wbr></wbr>_code</div>
+            <div class="url">idnumbers.registry.html#_is_code</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Whether <tt class="rst-docutils literal">code</tt> is exactly <tt class="rst-docutils literal">length</tt> ASCII letters.</div>
+          </li><li id="idnumbers.registry._check_types">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._check<wbr></wbr>_types</div>
+            <div class="url">idnumbers.registry.html#_check_types</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Raise <tt class="rst-docutils literal">TypeError</tt> for an argument of <code><a href="idnumbers.registry.html#register" class="internal-link" title="idnumbers.registry.register">register</a></code> that has the wrong type.</div>
+          </li><li id="idnumbers.registry._alias_key">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._alias<wbr></wbr>_key</div>
+            <div class="url">idnumbers.registry.html#_alias_key</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Validate an alias of <tt class="rst-docutils literal">alpha3</tt> and return its upper-case lookup key.</div>
+          </li><li id="idnumbers.registry._check_builtin_noop">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._check<wbr></wbr>_builtin<wbr></wbr>_noop</div>
+            <div class="url">idnumbers.registry.html#_check_builtin_noop</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Accept only the registration that repeats a built-in country exactly, raise <tt class="rst-docutils literal">ValueError</tt> otherwise.</div>
+          </li><li id="idnumbers.registry._check_custom_noop">
+            
+            <div class="fullName">idnumbers<wbr></wbr>.registry<wbr></wbr>._check<wbr></wbr>_custom<wbr></wbr>_noop</div>
+            <div class="url">idnumbers.registry.html#_check_custom_noop</div>
+            <div class="type">Function</div>
+            <div class="kind">Function</div>
+            <div class="privacy">PRIVATE</div>
+            <div class="summary">Accept only the registration that repeats an earlier one exactly, raise <tt class="rst-docutils literal">ValueError</tt> otherwise.</div>
           </li><li id="idnumbers.nationalid.constant.Gender">
             
             <div class="fullName">idnumbers<wbr></wbr>.nationalid<wbr></wbr>.constant<wbr></wbr>.<wbr></wbr>Gender</div>

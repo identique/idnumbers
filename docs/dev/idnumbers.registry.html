@@ -1,0 +1,1115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "DTD/xhtml1-strict.dtd">
+<html>
+  
+
+  <head>
+    
+    <title>idnumbers.registry</title>
+    <meta name="generator" content="pydoctor 22.9.1"> 
+        
+    </meta>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="apidocs.css" />
+    <link rel="stylesheet" type="text/css" href="extra.css" />
+</head>
+
+  <body>
+
+    <head>
+    
+    <script type="text/javascript" src="current_version.js"></script>
+    <script type="text/javascript" src="../versions.js"></script>
+    <script type="text/javascript">
+        window.addEventListener("load", function init() {
+            // change the container style
+            const container = document.getElementById("search-box-container").parentNode;
+            // version text
+            const textSpan = document.createElement("span");
+            textSpan.textContent = "Versions:";
+            textSpan.style.paddingRight = "12px";
+
+            // use div as a group for version dropdown
+            const div = document.createElement("div");
+            div.style.alignSelf = "center";
+            div.style.paddingLeft = "12px";
+            div.classList.add("input-group");
+            // create the select dropdown
+            const select = document.createElement("select");
+            select.classList.add("form-control");
+            select.araLabel= "version dropdown";
+            select.title = "version dropdown";
+            select.style.display = "inline-block";
+            select.style.width = "90px";
+            select.style.float = "none";
+            // dev is always there
+            const devOption = document.createElement("option");
+            devOption.value = "dev";
+            devOption.textContent = "Dev"
+            devOption.selected = window._CURRENT_VERSION === "dev";
+            select.appendChild(devOption);
+            (window._VERSIONS || []).forEach(function(version) {
+                const verOption = document.createElement("option");
+                verOption.value = version;
+                verOption.textContent = version;
+                verOption.selected = window._CURRENT_VERSION === version;
+                select.appendChild(verOption);
+            });
+            select.addEventListener("change", function handleChange(evt) {
+                const version = evt.target.value;
+                window.location = version === 'dev' ? '../dev/' : `../v${version}/`;
+            });
+            // put all of them
+            div.appendChild(textSpan);
+            div.appendChild(select);
+            container.insertBefore(div, document.getElementById("search-box-container"));
+        });
+    </script>
+</head>
+
+    <nav class="navbar navbar-default mainnavbar">
+      
+  
+  <div class="container-fluid">
+
+
+    <div class="navbar-header">
+      
+      <div class="navlinks">
+        <span class="navbar-brand">
+          <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a> <a href="index.html">API Documentation</a>
+        </span>
+
+        <a href="moduleIndex.html">
+          Modules
+        </a>
+
+        <a href="classIndex.html">
+          Classes
+        </a>
+
+        <a href="nameIndex.html">
+          Names
+        </a>
+
+        <div id="search-box-container">
+          <div class="input-group">
+            <input id="search-box" type="search" name="search-query" placeholder="Search..." aria-label="Search" minlength="2" class="form-control" autocomplete="off" />
+            
+            <span class="input-group-btn">
+              <a style="display: none;" class="btn btn-default" id="search-clear-button" title="Clear" onclick="clearSearch()"><img src="fonts/x-circle.svg" alt="Clear" /></a>
+              <a class="btn btn-default" id="search-help-button" title="Help" onclick="toggleSearchHelpText()"><img src="fonts/info.svg" alt="Help" /></a>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="search-results-container" style="display: none;">
+        
+        <div id="search-buttons">
+          <span class="label label-default" id="search-docstrings-button">
+          <label class="checkbox-inline">
+            <input type="checkbox" id="toggle-search-in-docstrings-checkbox" value="false" onclick="toggleSearchInDocstrings()">
+              search in docstrings
+            </input>
+          </label>
+          </span>
+          
+        </div>
+        
+        <noscript>
+            <h1>Cannot search: JavaScript is not supported/enabled in your browser.</h1>
+        </noscript>
+
+        <div class="hint" id="search-help-box">
+          <p class="rst-last">
+      
+            Search bar offers the following options:
+            <ul>   
+                <li>
+                  <strong>Term presence.</strong> The below example searches for documents that 
+                    must contain “foo”, might contain “bar” and must not contain “baz”: <code>+foo bar -baz</code>
+                </li> 
+
+                <li>
+                  <strong>Wildcards.</strong> The below example searches for documents with words beginning with “foo”: <code>foo*</code>
+                </li> 
+
+                <li>
+                  <strong>Search in specific fields.</strong> The following search matches all objects 
+                  in "twisted.mail" that matches “search”: <code>+qname:twisted.mail.* +search</code>
+
+                  <p>
+                    Possible fields: 'name', 'qname' (fully qualified name), 'docstring', and 'kind'.
+                    Last two fields are only applicable if "search in docstrings" is enabled.
+                  </p>
+                </li>
+
+                <li>
+                  <strong>Fuzzy matches.</strong> The following search matches all documents 
+                  that have a word within 1 edit distance of “foo”: <code>foo~1</code>
+                </li>
+            </ul>
+
+          </p>
+        </div>
+
+        <div id="search-status"> </div>
+
+        <div class="warning" id="search-warn-box" style="display: none;">
+          <p class="rst-last"><span id="search-warn"></span></p>
+        </div>
+
+        <table id="search-results">
+          <!-- Filled dynamically by JS -->
+        </table>
+        
+        <div style="margin-top: 8px;">
+          <p>Results provided by <a href="https://lunrjs.com">Lunr.js</a></p>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</nav>
+    
+    <div class="container-fluid">
+
+      <!-- Side navigation -->
+      <div class="sidebarcontainer" style="display: none;">
+        
+        <div class="sidebar"><nav class="sidebar">
+  
+
+  <div>
+
+      <div class="thingTitle">
+        <span>Module</span>
+        <code class="thisobject"><a href="idnumbers.registry.html" class="internal-link" title="This module">registry</a></code> 
+      </div>
+      
+      <div>
+        
+
+        
+         
+
+        <div class="childrenKindTitle">Classes</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry"><wbr></wbr>Country<wbr></wbr>Entry</a></code>
+            </div>
+        
+
+    </li>
+</ul>
+
+        <div class="childrenKindTitle">Functions</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#get_country" class="internal-link" title="idnumbers.registry.get_country">get<wbr></wbr>_country</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#get_validator" class="internal-link" title="idnumbers.registry.get_validator">get<wbr></wbr>_validator</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#list_supported_countries" class="internal-link" title="idnumbers.registry.list_supported_countries">list<wbr></wbr>_supported<wbr></wbr>_countries</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#register" class="internal-link" title="idnumbers.registry.register">register</a></code>
+            </div>
+        
+
+    </li><li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#resolve_country" class="internal-link" title="idnumbers.registry.resolve_country">resolve<wbr></wbr>_country</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_alias_key" class="internal-link" title="idnumbers.registry._alias_key">_alias<wbr></wbr>_key</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_check_builtin_noop" class="internal-link" title="idnumbers.registry._check_builtin_noop">_check<wbr></wbr>_builtin<wbr></wbr>_noop</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_check_custom_noop" class="internal-link" title="idnumbers.registry._check_custom_noop">_check<wbr></wbr>_custom<wbr></wbr>_noop</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_check_types" class="internal-link" title="idnumbers.registry._check_types">_check<wbr></wbr>_types</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_entry" class="internal-link" title="idnumbers.registry._entry">_entry</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_is_code" class="internal-link" title="idnumbers.registry._is_code">_is<wbr></wbr>_code</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_is_id_type" class="internal-link" title="idnumbers.registry._is_id_type">_is<wbr></wbr>_id<wbr></wbr>_type</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_load_builtin" class="internal-link" title="idnumbers.registry._load_builtin">_load<wbr></wbr>_builtin</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+
+        <div class="childrenKindTitle">Variables</div>
+        <ul>
+    
+    <li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_BUILTIN" class="internal-link" title="idnumbers.registry._BUILTIN">_BUILTIN</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_CUSTOM" class="internal-link" title="idnumbers.registry._CUSTOM">_CUSTOM</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_ENTRIES" class="internal-link" title="idnumbers.registry._ENTRIES">_ENTRIES</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_KEYS" class="internal-link" title="idnumbers.registry._KEYS">_KEYS</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_LOCK" class="internal-link" title="idnumbers.registry._LOCK">_LOCK</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+         
+        
+      </div>
+  </div><div>
+
+      <div class="thingTitle">
+        <span>Package</span>
+        <code><a href="index.html" class="internal-link" title="The parent of this module">idnumbers</a></code> 
+      </div>
+      
+      <div>
+        
+
+        <div class="childrenKindTitle">Modules</div>
+        <ul>
+    
+    <li class="">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.nationalid.html" class="internal-link" title="idnumbers.nationalid">nationalid</a></code>
+            </div>
+        
+
+    </li><li class=" thisobject">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="idnumbers.registry.html" class="internal-link" title="idnumbers.registry">registry</a></code>
+            </div>
+        
+
+    </li>
+</ul> 
+
+        
+        
+
+        
+         
+
+        
+         
+
+        
+         
+
+        
+         
+        
+      </div>
+  </div>
+
+</nav>
+        </div>
+        <div id="collapseSideBar">
+          <a class="btn btn-link" onclick="toggleSideBarCollapse()" title="Toggle Sidebar Collapse">
+          </a>
+        </div> 
+        <script src="sidebartoggle.js" type="text/javascript"></script>
+       
+      </div>
+
+      <div id="main" class="">
+        
+
+        
+
+        <div class="page-header">
+          <h1 class="module"><code><code><a href="index.html" class="internal-link">idnumbers</a></code><wbr></wbr>.<code><a href="idnumbers.registry.html" class="internal-link" title="idnumbers.registry">registry</a></code></code></h1>
+          <div id="showPrivate">
+            <button class="btn btn-link" onclick="togglePrivate()">Toggle Private API</button>
+          </div>
+        </div>
+
+        <div class="categoryHeader">
+          module documentation
+        </div>
+
+        <div class="extrasDocstring">
+          
+          <p></p>
+        </div>
+
+        <div class="moduleDocstring">
+          <div><p>A registry of the supported countries, with lookup by ISO 3166-1 alpha-2 or alpha-3 code.</p>
+<p>The registry answers "which validator handles the ID numbers of this country?" without knowing the name of the
+country module in advance. Every public country module <tt class="rst-docutils literal"><span class="pre">idnumbers.nationalid.&lt;ISO3&gt;</span></tt> is listed by its alpha-3 code,
+its alpha-2 code and its English name. The lookups accept either code in any letter case, never raise, and return
+<tt class="rst-docutils literal">None</tt> for anything they don't know, such as a <tt class="rst-docutils literal">None</tt> argument, a non-<tt class="rst-docutils literal">str</tt> value, a code with surrounding
+whitespace or a non-ASCII look-alike such as the dotless <tt class="rst-docutils literal">'ın'</tt>.</p>
+<p>Importing <code><a href="index.html" class="internal-link">idnumbers</a></code> stays cheap: the table of codes and names is plain data, and a country module is imported
+the first time a lookup needs it. <code><a href="#list_supported_countries" class="internal-link" title="idnumbers.registry.list_supported_countries">list_supported_countries</a></code> imports them all.</p>
+<p><code><a href="#register" class="internal-link" title="idnumbers.registry.register">register</a></code> adds a country the library doesn't ship, or an extra alias such as a 3-letter code that isn't ISO,
+to the process-wide registry. A built-in country can't be replaced or widened.</p>
+<p>The country names are the English names of Unicode CLDR 48.2.3 (<tt class="rst-docutils literal"><span class="pre">cldr-localenames-full/main/en/territories.json</span></tt>)
+with three adjustments: <tt class="rst-docutils literal">BIH</tt> is written "Bosnia and Herzegovina" (CLDR writes "&amp;"), and <tt class="rst-docutils literal">HKG</tt> and <tt class="rst-docutils literal">MAC</tt> are
+written "Hong Kong" and "Macao" (the CLDR default names carry the suffix "SAR China").</p>
+<p>Example:</p>
+<pre class="rst-literal-block">
+from idnumbers import get_country, get_validator
+
+get_validator('tw').validate('A123456789')    # True
+get_country('AUS').name                       # 'Australia'
+get_country('XX')                             # None
+</pre>
+</div>
+        </div>
+
+        <div id="splitTables">
+          <table class="children sortable" id="id422">
+  
+  
+  <tr class="class">
+    
+    <td>Class</td>
+    <td><code><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry"><wbr></wbr>Country<wbr></wbr>Entry</a></code></td>
+    <td>One country of the registry.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#get_country" class="internal-link" title="idnumbers.registry.get_country">get<wbr></wbr>_country</a></code></td>
+    <td>Look up a country by its alpha-2 code, alpha-3 code or a registered alias.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#get_validator" class="internal-link" title="idnumbers.registry.get_validator">get<wbr></wbr>_validator</a></code></td>
+    <td>Return the <tt class="rst-docutils literal">NationalID</tt> class of a country, which has the static <tt class="rst-docutils literal">validate()</tt> method.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#list_supported_countries" class="internal-link" title="idnumbers.registry.list_supported_countries">list<wbr></wbr>_supported<wbr></wbr>_countries</a></code></td>
+    <td>List every country of the registry, the built-in ones and the registered ones.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#register" class="internal-link" title="idnumbers.registry.register">register</a></code></td>
+    <td>Add a country to the process-wide registry.</td>
+  </tr><tr class="function">
+    
+    <td>Function</td>
+    <td><code><a href="#resolve_country" class="internal-link" title="idnumbers.registry.resolve_country">resolve<wbr></wbr>_country</a></code></td>
+    <td>Resolve an alpha-2 code, an alpha-3 code or a registered alias to the alpha-3 code.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_alias_key" class="internal-link" title="idnumbers.registry._alias_key">_alias<wbr></wbr>_key</a></code></td>
+    <td>Validate an alias of <tt class="rst-docutils literal">alpha3</tt> and return its upper-case lookup key.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_check_builtin_noop" class="internal-link" title="idnumbers.registry._check_builtin_noop">_check<wbr></wbr>_builtin<wbr></wbr>_noop</a></code></td>
+    <td>Accept only the registration that repeats a built-in country exactly, raise <tt class="rst-docutils literal">ValueError</tt> otherwise.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_check_custom_noop" class="internal-link" title="idnumbers.registry._check_custom_noop">_check<wbr></wbr>_custom<wbr></wbr>_noop</a></code></td>
+    <td>Accept only the registration that repeats an earlier one exactly, raise <tt class="rst-docutils literal">ValueError</tt> otherwise.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_check_types" class="internal-link" title="idnumbers.registry._check_types">_check<wbr></wbr>_types</a></code></td>
+    <td>Raise <tt class="rst-docutils literal">TypeError</tt> for an argument of <code><a href="idnumbers.registry.html#register" class="internal-link" title="idnumbers.registry.register">register</a></code> that has the wrong type.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_entry" class="internal-link" title="idnumbers.registry._entry">_entry</a></code></td>
+    <td>Return the entry of a known alpha-3 code, importing the country module when it isn't loaded yet.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_is_code" class="internal-link" title="idnumbers.registry._is_code">_is<wbr></wbr>_code</a></code></td>
+    <td>Whether <tt class="rst-docutils literal">code</tt> is exactly <tt class="rst-docutils literal">length</tt> ASCII letters.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_is_id_type" class="internal-link" title="idnumbers.registry._is_id_type">_is<wbr></wbr>_id<wbr></wbr>_type</a></code></td>
+    <td>Whether <tt class="rst-docutils literal">obj</tt> is an ID class of a country module, which has <tt class="rst-docutils literal">METADATA</tt> and is not an alias.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_load_builtin" class="internal-link" title="idnumbers.registry._load_builtin">_load<wbr></wbr>_builtin</a></code></td>
+    <td>Import <tt class="rst-docutils literal"><span class="pre">idnumbers.nationalid.&lt;alpha3&gt;</span></tt> and describe it.</td>
+  </tr><tr class="constant private">
+    
+    <td>Constant</td>
+    <td><code><a href="#_BUILTIN" class="internal-link" title="idnumbers.registry._BUILTIN">_BUILTIN</a></code></td>
+    <td>The built-in countries: alpha-3 code -&gt; (alpha-2 code, English name). A new country module is added here.</td>
+  </tr><tr class="constant private">
+    
+    <td>Constant</td>
+    <td><code><a href="#_CUSTOM" class="internal-link" title="idnumbers.registry._CUSTOM">_CUSTOM</a></code></td>
+    <td>The alpha-3 code of every custom country -&gt; its extra aliases in upper case.</td>
+  </tr><tr class="constant private">
+    
+    <td>Constant</td>
+    <td><code><a href="#_ENTRIES" class="internal-link" title="idnumbers.registry._ENTRIES">_ENTRIES</a></code></td>
+    <td>The loaded built-in entries and the registered custom entries, by alpha-3 code.</td>
+  </tr><tr class="constant private">
+    
+    <td>Constant</td>
+    <td><code><a href="#_KEYS" class="internal-link" title="idnumbers.registry._KEYS">_KEYS</a></code></td>
+    <td>Upper-case lookup key (alpha-3, alpha-2 or custom alias) -&gt; alpha-3 code.</td>
+  </tr><tr class="constant private">
+    
+    <td>Constant</td>
+    <td><code><a href="#_LOCK" class="internal-link" title="idnumbers.registry._LOCK">_LOCK</a></code></td>
+    <td>Guards the lazy loads and <code><a href="idnumbers.registry.html#register" class="internal-link" title="idnumbers.registry.register">register</a></code>.</td>
+  </tr>
+</table>
+          
+
+            
+        </div>
+
+        <div id="childList">
+          <div class="basefunction">
+  
+  
+  <a name="idnumbers.registry.get_country">
+    
+  </a>
+  <a name="get_country">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_country</span>(country):
+    
+    <a class="headerLink" href="#get_country" title="idnumbers.registry.get_country">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Look up a country by its alpha-2 code, alpha-3 code or a registered alias.</p>
+<p>A built-in country module is imported on its first lookup, and only that module. This function never raises
+for a bad argument.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">country:</span><code>str</code></td><td class="fieldArgDesc">an ISO 3166-1 alpha-2 or alpha-3 code, or a registered alias, in any letter case.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry">CountryEntry</a>]</code></td><td class="fieldArgDesc">the <code><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry">CountryEntry</a></code> of the country, or <tt class="rst-docutils literal">None</tt> when the country is unknown.</td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.registry.get_validator">
+    
+  </a>
+  <a name="get_validator">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">get_validator</span>(country):
+    
+    <a class="headerLink" href="#get_validator" title="idnumbers.registry.get_validator">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Return the <tt class="rst-docutils literal">NationalID</tt> class of a country, which has the static <tt class="rst-docutils literal">validate()</tt> method.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">country:</span><code>str</code></td><td class="fieldArgDesc">an ISO 3166-1 alpha-2 or alpha-3 code, or a registered alias, in any letter case.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>Type[<wbr></wbr>Any]]</code></td><td class="fieldArgDesc">the <tt class="rst-docutils literal">NationalID</tt> class of the country, or <tt class="rst-docutils literal">None</tt> when the country is unknown.</td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.registry.list_supported_countries">
+    
+  </a>
+  <a name="list_supported_countries">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">list_supported_countries</span>():
+    
+    <a class="headerLink" href="#list_supported_countries" title="idnumbers.registry.list_supported_countries">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>List every country of the registry, the built-in ones and the registered ones.</p>
+<p>This imports every built-in country module.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>List[<wbr></wbr><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry">CountryEntry</a>]</code></td><td class="fieldArgDesc">a new list of <code><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry">CountryEntry</a></code>, sorted by the alpha-3 code.</td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.registry.register">
+    
+  </a>
+  <a name="register">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">register</span>(alpha3, validator, *, alpha2=None, name=None, aliases=()):
+    
+    <a class="headerLink" href="#register" title="idnumbers.registry.register">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Add a country to the process-wide registry.</p>
+<p>The call is atomic: when it raises, the registry is unchanged. A registered country can't be removed. Calling
+it again with exactly the same arguments does nothing, and so does registering a built-in country with its own
+<tt class="rst-docutils literal">NationalID</tt>. Any other attempt to change a built-in or an earlier registration raises <tt class="rst-docutils literal">ValueError</tt>.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>str</code></td><td class="fieldArgDesc">the 3-letter code of the country, which becomes the key of the entry. It is stored in upper case.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">validator:</span><code>Type[<wbr></wbr>Any]</code></td><td class="fieldArgDesc">a class with a <tt class="rst-docutils literal">METADATA</tt> attribute and a static <tt class="rst-docutils literal">validate()</tt> method.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha2:</span><code>Optional[<wbr></wbr>str]</code></td><td class="fieldArgDesc">the 2-letter code of the country. It defaults to <tt class="rst-docutils literal">validator.METADATA.iso3166_alpha2</tt>.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">name:</span><code>Optional[<wbr></wbr>str]</code></td><td class="fieldArgDesc">the English name of the country. It defaults to the upper-case <tt class="rst-docutils literal">alpha3</tt>.</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">aliases:</span><code>Sequence[<wbr></wbr>str]</code></td><td class="fieldArgDesc">extra lookup keys of the country, such as a legacy code. Each one is stored in upper case.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Raises</td></tr><tr><td class="fieldArgContainer"><code>TypeError</code></td><td>when <tt class="rst-docutils literal">validator</tt> isn't a class with <tt class="rst-docutils literal">METADATA</tt> and a callable <tt class="rst-docutils literal">validate</tt>, when a code, the
+name or an alias isn't a <tt class="rst-docutils literal">str</tt>, or when <tt class="rst-docutils literal">aliases</tt> is a single <tt class="rst-docutils literal">str</tt>.</td></tr><tr><td class="fieldArgContainer"><code>ValueError</code></td><td>when a code, the name or an alias is malformed, when a key is repeated, or when a key is
+already taken by another country or the registration conflicts with an earlier one.</td></tr></table></div>
+  </div>
+</div><div class="basefunction">
+  
+  
+  <a name="idnumbers.registry.resolve_country">
+    
+  </a>
+  <a name="resolve_country">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">resolve_country</span>(country):
+    
+    <a class="headerLink" href="#resolve_country" title="idnumbers.registry.resolve_country">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Resolve an alpha-2 code, an alpha-3 code or a registered alias to the alpha-3 code.</p>
+<p>The match ignores the letter case but nothing else: surrounding whitespace, non-ASCII look-alikes and anything
+that isn't a <tt class="rst-docutils literal">str</tt> give <tt class="rst-docutils literal">None</tt>. This function never raises and imports no country module.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">country:</span><code>str</code></td><td class="fieldArgDesc">an ISO 3166-1 alpha-2 or alpha-3 code, or a registered alias, such as <tt class="rst-docutils literal">'tw'</tt> or <tt class="rst-docutils literal">'TWN'</tt>.</td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr>str]</code></td><td class="fieldArgDesc">the upper-case alpha-3 code, such as <tt class="rst-docutils literal">'TWN'</tt>, or <tt class="rst-docutils literal">None</tt> when the country is unknown.</td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.registry._alias_key">
+    
+  </a>
+  <a name="_alias_key">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_alias_key</span>(alpha3, alias):
+    
+    <a class="headerLink" href="#_alias_key" title="idnumbers.registry._alias_key">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Validate an alias of <tt class="rst-docutils literal">alpha3</tt> and return its upper-case lookup key.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alias:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.registry._check_builtin_noop">
+    
+  </a>
+  <a name="_check_builtin_noop">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_check_builtin_noop</span>(alpha3, validator, alpha2, name, aliases):
+    
+    <a class="headerLink" href="#_check_builtin_noop" title="idnumbers.registry._check_builtin_noop">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Accept only the registration that repeats a built-in country exactly, raise <tt class="rst-docutils literal">ValueError</tt> otherwise.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">validator:</span><code>Type[<wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha2:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">name:</span><code>Optional[<wbr></wbr>str]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">aliases:</span><code>Tuple[<wbr></wbr>str, <wbr></wbr><span class="rst-variable-ellipsis">...</span>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.registry._check_custom_noop">
+    
+  </a>
+  <a name="_check_custom_noop">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_check_custom_noop</span>(alpha3, validator, alpha2, name, aliases):
+    
+    <a class="headerLink" href="#_check_custom_noop" title="idnumbers.registry._check_custom_noop">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Accept only the registration that repeats an earlier one exactly, raise <tt class="rst-docutils literal">ValueError</tt> otherwise.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">validator:</span><code>Type[<wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha2:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">name:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">aliases:</span><code>Tuple[<wbr></wbr>str, <wbr></wbr><span class="rst-variable-ellipsis">...</span>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.registry._check_types">
+    
+  </a>
+  <a name="_check_types">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_check_types</span>(alpha3, validator, alpha2, name, aliases):
+    
+    <a class="headerLink" href="#_check_types" title="idnumbers.registry._check_types">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Raise <tt class="rst-docutils literal">TypeError</tt> for an argument of <code><a href="#register" class="internal-link" title="idnumbers.registry.register">register</a></code> that has the wrong type.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>object</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">validator:</span><code>object</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha2:</span><code>object</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">name:</span><code>object</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">aliases:</span><code>Any</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.registry._entry">
+    
+  </a>
+  <a name="_entry">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_entry</span>(alpha3):
+    
+    <a class="headerLink" href="#_entry" title="idnumbers.registry._entry">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Return the entry of a known alpha-3 code, importing the country module when it isn't loaded yet.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry">CountryEntry</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.registry._is_code">
+    
+  </a>
+  <a name="_is_code">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_is_code</span>(code, length):
+    
+    <a class="headerLink" href="#_is_code" title="idnumbers.registry._is_code">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Whether <tt class="rst-docutils literal">code</tt> is exactly <tt class="rst-docutils literal">length</tt> ASCII letters.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">code:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">length:</span><code>int</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.registry._is_id_type">
+    
+  </a>
+  <a name="_is_id_type">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_is_id_type</span>(obj):
+    
+    <a class="headerLink" href="#_is_id_type" title="idnumbers.registry._is_id_type">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Whether <tt class="rst-docutils literal">obj</tt> is an ID class of a country module, which has <tt class="rst-docutils literal">METADATA</tt> and is not an alias.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">obj:</span><code>object</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.registry._load_builtin">
+    
+  </a>
+  <a name="_load_builtin">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_load_builtin</span>(alpha3):
+    
+    <a class="headerLink" href="#_load_builtin" title="idnumbers.registry._load_builtin">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Import <tt class="rst-docutils literal"><span class="pre">idnumbers.nationalid.&lt;alpha3&gt;</span></tt> and describe it.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">alpha3:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry">CountryEntry</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="baseconstant private">
+  
+  
+  <a name="idnumbers.registry._BUILTIN">
+    
+  </a>
+  <a name="_BUILTIN">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_BUILTIN</span>: <code>Dict[<wbr></wbr>str, <wbr></wbr>Tuple[<wbr></wbr>str, <wbr></wbr>str]]</code> =
+    
+    <a class="headerLink" href="#_BUILTIN" title="idnumbers.registry._BUILTIN">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The built-in countries: alpha-3 code -&gt; (alpha-2 code, English name). A new country module is added here.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">ALB</span><span class="rst-variable-quote">'</span>: (<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">AL</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">Albania</span><span class="rst-variable-quote">'</span>),
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">ARE</span><span class="rst-variable-quote">'</span>: (<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">AE</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">United Arab Emirates</span><span class="rst-variable-quote">'</span>),
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">ARG</span><span class="rst-variable-quote">'</span>: (<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">AR</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">Argentina</span><span class="rst-variable-quote">'</span>),
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">AUS</span><span class="rst-variable-quote">'</span>: (<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">AU</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">Australia</span><span class="rst-variable-quote">'</span>),
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">AUT</span><span class="rst-variable-quote">'</span>: (<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">AT</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">Austria</span><span class="rst-variable-quote">'</span>),
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">BEL</span><span class="rst-variable-quote">'</span>: (<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">BE</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">Belgium</span><span class="rst-variable-quote">'</span>),
+ <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">BGD</span><span class="rst-variable-quote">'</span>: (<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">BD</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">Bangladesh</span><span class="rst-variable-quote">'</span>),
+<span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant private">
+  
+  
+  <a name="idnumbers.registry._CUSTOM">
+    
+  </a>
+  <a name="_CUSTOM">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_CUSTOM</span>: <code>Dict[<wbr></wbr>str, <wbr></wbr>Tuple[<wbr></wbr>str, <wbr></wbr><span class="rst-variable-ellipsis">...</span>]]</code> =
+    
+    <a class="headerLink" href="#_CUSTOM" title="idnumbers.registry._CUSTOM">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The alpha-3 code of every custom country -&gt; its extra aliases in upper case.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{}</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant private">
+  
+  
+  <a name="idnumbers.registry._ENTRIES">
+    
+  </a>
+  <a name="_ENTRIES">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_ENTRIES</span>: <code>Dict[<wbr></wbr>str, <wbr></wbr><a href="idnumbers.registry.CountryEntry.html" class="internal-link" title="idnumbers.registry.CountryEntry">CountryEntry</a>]</code> =
+    
+    <a class="headerLink" href="#_ENTRIES" title="idnumbers.registry._ENTRIES">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The loaded built-in entries and the registered custom entries, by alpha-3 code.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{}</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant private">
+  
+  
+  <a name="idnumbers.registry._KEYS">
+    
+  </a>
+  <a name="_KEYS">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_KEYS</span>: <code>Dict[<wbr></wbr>str, <wbr></wbr>str]</code> =
+    
+    <a class="headerLink" href="#_KEYS" title="idnumbers.registry._KEYS">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Upper-case lookup key (alpha-3, alpha-2 or custom alias) -&gt; alpha-3 code.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{}</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant private">
+  
+  
+  <a name="idnumbers.registry._LOCK">
+    
+  </a>
+  <a name="_LOCK">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_LOCK</span> =
+    
+    <a class="headerLink" href="#_LOCK" title="idnumbers.registry._LOCK">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>Guards the lazy loads and <code><a href="#register" class="internal-link" title="idnumbers.registry.register">register</a></code>.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>threading.RLock()</code></pre></td></tr></table>
+  </div>
+</div>
+        </div>
+      
+      </div>
+    </div>
+
+    <footer class="navbar navbar-default">
+
+  
+  <div class="container">
+    <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
+  generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
+    22.9.1 at 2026-10-07 13:12:09.
+  </div>
+
+  <!-- Search related scripts needs to be loaded at the end of HTML 
+    parsing not to introduce overhead and display HTML data asap -->
+  <script src="ajax.js" type="text/javascript"></script>
+  <script src="searchlib.js" type="text/javascript"></script>
+  <script src="search.js" type="text/javascript"></script>
+
+</footer>
+  
+    <script src="pydoctor.js" type="text/javascript"></script>
+
+  </body>
+</html>
