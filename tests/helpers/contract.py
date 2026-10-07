@@ -3,11 +3,24 @@
 The metadata suite owns valid-example, mask and in-range length checks.
 Reuse its compact-layout helper instead of inventing another normalization rule.
 """
-from typing import Any, Iterator, Tuple, Type
+from typing import Any, Dict, Iterator, Tuple, Type
 
 from idnumbers import list_supported_countries
 from idnumbers.registry import CountryEntry
 from tests.test_metadata import compact
+
+
+# Zero-based alphanumeric index, not raw string index. Each exception is class-specific.
+CHECK_CHARACTER_INDEX: Dict[str, int] = {
+    # MedicareNumber.validate compares normalized[8], before the issue digit.
+    'idnumbers.nationalid.aus.medicare.MedicareNumber': 8,
+    # IcelandicID.checksum compares numbers[-2], before the century digit.
+    'idnumbers.nationalid.isl.icelandic_id.IcelandicID': -2,
+    # OldNationalID.to_new omits the citizenship letter after the check digit.
+    'idnumbers.nationalid.lka.old_national_id.OldNationalID': -2,
+    # NationalID.get_checksum excludes the two district digits (also for 12-character IDs).
+    'idnumbers.nationalid.zwe.national_id.NationalID': -3,
+}
 
 
 def iter_id_classes() -> Iterator[Tuple[CountryEntry, Type[Any]]]:

@@ -12,6 +12,7 @@ from idnumbers import FailureReason as R, api, failure_reason, parse_id_info, va
 from idnumbers.nationalid import AUS, BEL, ITA, LKA, TWN
 from idnumbers.nationalid import util
 from tests.helpers.failure_reasons import iter_reason_matrix
+from tests.helpers.contract import CHECK_CHARACTER_INDEX, check_character_mutations
 from tests.test_api import isolated_registry
 
 
@@ -50,6 +51,19 @@ class TestReasonMatrix(TestCase):
                         self.assertEqual(result.reason, vector.expected)
                         if vector.expected is not None:
                             self.assertEqual(parsed.reason, vector.expected)
+
+    def test_checksum_witnesses_change_only_check_character(self):
+        counts = {R.CHECKSUM_MISMATCH: 0, R.VALIDATION_FAILED: 0}
+        for row in iter_reason_matrix():
+            if row.checksum is None:
+                continue
+            with self.subTest(cls=row.key):
+                self.assertIn(row.checksum.id_number, check_character_mutations(
+                    row.valid.id_number, CHECK_CHARACTER_INDEX.get(row.key, -1)))
+                self.assertIsNotNone(util.match_regexp(row.checksum.id_number, row.id_class.METADATA.regexp))
+                self.assertFalse(row.id_class.validate(row.checksum.id_number))
+                counts[row.checksum.expected] += 1
+        self.assertEqual(counts, {R.CHECKSUM_MISMATCH: 60, R.VALIDATION_FAILED: 14})
 
     def test_all_date_migrations_have_witnesses(self):
         rows = list(iter_reason_matrix())

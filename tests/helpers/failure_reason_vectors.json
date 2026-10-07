@@ -24,7 +24,7 @@
     ],
     "format": "!!!!!!!!!!!!!!!",
     "checksum": {
-      "input": "784-0980-1234567-8",
+      "input": "784-1980-1234567-0",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -66,7 +66,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "3123 45670 1",
+      "input": "2123 45671 1",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -82,7 +82,7 @@
     ],
     "format": "!!!!!!!!",
     "checksum": {
-      "input": "023456782",
+      "input": "123456780",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -98,7 +98,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "U02345675",
+      "input": "U12345670",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -114,7 +114,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "02-345/6782",
+      "input": "12-345/6780",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -130,7 +130,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "05.07.30-033.28",
+      "input": "85.07.30-033.20",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -149,7 +149,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "1123456749",
+      "input": "0123456740",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -191,7 +191,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "0501020018",
+      "input": "7501020010",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -210,7 +210,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "023456786",
+      "input": "123456780",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -239,7 +239,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "1101990150002",
+      "input": "0101990150000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -258,7 +258,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "02.345.678-2",
+      "input": "12.345.678-0",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -274,7 +274,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "011.444.777-35",
+      "input": "111.444.777-30",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -290,7 +290,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "023456782",
+      "input": "123456780",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -306,7 +306,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "756.0234.5678.97",
+      "input": "756.1234.5678.90",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -322,7 +322,7 @@
     ],
     "format": "!!!!!!!!!!!!",
     "checksum": {
-      "input": "CHE-023.456.788",
+      "input": "CHE-123.456.780",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -338,7 +338,7 @@
     ],
     "format": "!!!!!!!!",
     "checksum": {
-      "input": "01.111.111-1",
+      "input": "11.111.111-0",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -354,7 +354,7 @@
     ],
     "format": "!!!!!!!!!!!!!!!!!!",
     "checksum": {
-      "input": "01010219840406970X",
+      "input": "110102198404069700",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -373,7 +373,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "02.345.678-8",
+      "input": "12.345.678-0",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -389,7 +389,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "11234567U",
+      "input": "01234567A",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -405,7 +405,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "100101/0009",
+      "input": "000101/0000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -424,7 +424,7 @@
     ],
     "format": "!!!!!!!!",
     "checksum": {
-      "input": "05123891",
+      "input": "25123890",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -440,7 +440,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "22 345 678 911",
+      "input": "12 345 678 910",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -472,7 +472,7 @@
     ],
     "format": "!!!!!!!!",
     "checksum": {
-      "input": "02345674",
+      "input": "12345670",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -488,7 +488,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "02345678Z",
+      "input": "12345678A",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -504,7 +504,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "07605030299",
+      "input": "37605030290",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -523,7 +523,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "031052-308T",
+      "input": "131052-3080",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -542,7 +542,7 @@
     ],
     "format": "!!!!!!!!!!!!!!!",
     "checksum": {
-      "input": "155081416802538",
+      "input": "255081416802530",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -584,7 +584,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "023456783",
+      "input": "123456780",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -626,7 +626,7 @@
     ],
     "format": "!!!!!!!!",
     "checksum": {
-      "input": "A0234563",
+      "input": "A1234560",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -642,7 +642,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "02345678903",
+      "input": "12345678900",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -658,7 +658,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "08001010016",
+      "input": "18001010010",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -693,7 +693,7 @@
     ],
     "format": "!!!!!!!!!!!!",
     "checksum": {
-      "input": "2924 7352 8038",
+      "input": "8924 7352 8030",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -709,7 +709,7 @@
     ],
     "format": "!!!!!!!!",
     "checksum": {
-      "input": "0234567T",
+      "input": "1234567A",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -725,7 +725,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "101-234567-9",
+      "input": "001-234567-0",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -754,7 +754,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "020174-3399",
+      "input": "120174-3309",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -773,7 +773,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "100000018",
+      "input": "000000010",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -789,7 +789,7 @@
     ],
     "format": "!!!!!!!!!!!!!!!!",
     "checksum": {
-      "input": "RSSMRA05M01H501Q",
+      "input": "RSSMRA85M01H501A",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -808,7 +808,7 @@
     ],
     "format": "!!!!!!!!!!!!",
     "checksum": {
-      "input": "065895492872",
+      "input": "765895492870",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -824,7 +824,7 @@
     ],
     "format": "!!!!!!!!!!!!",
     "checksum": {
-      "input": "000140000003",
+      "input": "100140000000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -840,7 +840,7 @@
     ],
     "format": "!!!!!!!!!!!!",
     "checksum": {
-      "input": "000101300017",
+      "input": "900101300010",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -875,7 +875,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "000101-1234560",
+      "input": "800101-1234561",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -894,7 +894,7 @@
     ],
     "format": "!!!!!!!!!!!!",
     "checksum": {
-      "input": "080010100004",
+      "input": "280010100000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -913,7 +913,7 @@
     ],
     "format": "!!!!!!!!!!!!",
     "checksum": {
-      "input": "099001200001",
+      "input": "199001200000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -929,7 +929,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "000120001V",
+      "input": "900120000V",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -945,7 +945,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "09001010077",
+      "input": "39001010070",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -964,7 +964,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "0893120105732",
+      "input": "1893120105730",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -983,7 +983,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "061175-19997",
+      "input": "161175-19990",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -1002,7 +1002,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "061175-19997",
+      "input": "161175-19990",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1047,7 +1047,7 @@
     ],
     "format": "!!!!!!!!!!!!!!!!!!",
     "checksum": {
-      "input": "HEGG160427MVZRRL04",
+      "input": "HEGG560427MVZRRL00",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1066,7 +1066,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "1101990410004",
+      "input": "0101990410000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1085,7 +1085,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "1101990210005",
+      "input": "0101990210000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1133,7 +1133,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "023456782",
+      "input": "123456780",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1149,7 +1149,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "07054026641",
+      "input": "17054026640",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1194,7 +1194,7 @@
     ],
     "format": "!!!!!!!!",
     "checksum": {
-      "input": "09-091-850",
+      "input": "49-091-851",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1223,7 +1223,7 @@
     ],
     "format": "!!!!!!!",
     "checksum": {
-      "input": "ZZZ1016",
+      "input": "ZZZ0010",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1278,7 +1278,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "00010100000",
+      "input": "80010100001",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1297,7 +1297,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "223456789",
+      "input": "123456780",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1313,7 +1313,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "023456789",
+      "input": "123456780",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1329,7 +1329,7 @@
     ],
     "format": "!!!!!!!!!!!!",
     "checksum": {
-      "input": "023456789ZZ1",
+      "input": "123456789ZZ0",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1345,7 +1345,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "0800101226813",
+      "input": "1800101226810",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1364,7 +1364,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "S0234567D",
+      "input": "S1234567A",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1406,7 +1406,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "1101990700002",
+      "input": "0101990700000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1425,7 +1425,7 @@
     ],
     "format": "!!!!!!!!!",
     "checksum": {
-      "input": "100101/0009",
+      "input": "000101/0000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1457,7 +1457,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "1101990500003",
+      "input": "0101990500000",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1476,7 +1476,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "011218-9876",
+      "input": "811218-9870",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1495,7 +1495,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "011278-9873",
+      "input": "811278-9870",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1514,7 +1514,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "0-1010-12345-67-3",
+      "input": "3-1010-12345-67-0",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1530,7 +1530,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "21111111110",
+      "input": "11111111111",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -1546,7 +1546,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "A223456789",
+      "input": "A123456780",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1562,7 +1562,7 @@
     ],
     "format": "!!!!!!!!",
     "checksum": {
-      "input": "02000001",
+      "input": "32000000",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -1578,7 +1578,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "0245506789",
+      "input": "3245506780",
       "reason": "validation_failed"
     },
     "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
@@ -1620,7 +1620,7 @@
     ],
     "format": "!!!!!!!!!!",
     "checksum": {
-      "input": "J-02345678-4",
+      "input": "J-12345678-0",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1649,7 +1649,7 @@
     ],
     "format": "!!!!!!!!!!!!!",
     "checksum": {
-      "input": "0001015009087",
+      "input": "8001015009080",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
@@ -1668,7 +1668,7 @@
     ],
     "format": "!!!!!!!!!!!",
     "checksum": {
-      "input": "03123456B02",
+      "input": "63123456A02",
       "reason": "checksum_mismatch"
     },
     "checksum_note": "Definite mismatch.",
