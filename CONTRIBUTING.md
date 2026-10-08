@@ -6,6 +6,9 @@ and [the country checklist](docs/COUNTRY_TEMPLATE.md) for new implementations.
 
 ## Set up a checkout
 
+Use a Python 3.10+ interpreter for this first environment, which installs the pinned mypy.
+Package/runtime support remains Python 3.9+; test that version separately as described below.
+
 ```shell
 python3 -m venv .venv
 . .venv/bin/activate

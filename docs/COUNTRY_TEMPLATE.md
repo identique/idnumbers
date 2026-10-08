@@ -46,7 +46,7 @@ assert parsed is not None
 assert parsed['location'] == 'A'
 ```
 
-## 3. All 18 METADATA fields
+## 3. All 17 METADATA fields
 
 Use `IdMetadata` from `idnumbers/nationalid/metadata.py`. See [full definitions](nationalid/METADATA.md),
 [generated country examples](countries/README.md), and `tests/test_metadata.py` for constraints.
