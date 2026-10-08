@@ -52,7 +52,7 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   gets the `deprecated` key the other classes already had, and `tools.scan_ids` lists the classes through the country
   registry ([#320](https://github.com/identique/idnumbers/issues/320)).
 
-### Packaging and typing
+### Changed
 
 - Ship the PEP 561 `py.typed` marker, so type checkers use the package's annotations, and correct the annotations
   that disagreed with the runtime values: the `CHECK_DIGIT` alias, the untyped `normalize` and `checksum` helpers,
@@ -69,8 +69,6 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   checkers (mypy `--strict`, which disallows implicit re-exports) accept
   `from idnumbers.nationalid.AUS import MedicareNumber` and `AUS.MedicareNumber`; nothing changes at runtime
   ([#326](https://github.com/identique/idnumbers/issues/326)).
-
-### Changed
 
 - Prepare isolated, guarded PyPI publication and opt-in Trusted Publishing with attestations; retain the working
   default token route and existing secrets. External publisher setup and the first verified trusted release remain
