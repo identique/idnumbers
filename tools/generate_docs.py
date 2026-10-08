@@ -110,7 +110,7 @@ def input_guide() -> str:
              '`normalize_id()` and `format_id()` are optional, primary-only UI helpers, **not validation**.',
              'Normalization uppercases, removes whitespace (including zero-width controls) and `. - / ( )`',
              'when masks indicate separators. Without separator masks, allowed-length punctuation can remain:',
-             "Finland's century signs are significant. `+` is never removed. Formatting is length-only;", 
+             "Finland's century signs are significant. `+` is never removed. Formatting is length-only;",
              'it can produce invalid characters/checksums. Normalization does not reject unknown lengths.',
              'Always validate the chosen representation separately.',
              'Sweden preserves a significant plus before the last four digits in both 10- and 12-digit forms.',
