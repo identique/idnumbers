@@ -1,6 +1,6 @@
 # Migration notes
 
-## 1.14 → upcoming 1.15 (currently Unreleased)
+## 1.14.0 → 1.15.0
 
 Python **3.9+** and **zero runtime dependencies** remain supported. Existing country validators, parsers and
 checksums keep their behavior in this migration; the new helpers are optional wrappers, not new acceptance rules.
