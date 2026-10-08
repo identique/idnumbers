@@ -45,7 +45,7 @@ jobs:
         run: python -m tools.check_release
       - name: Build and check distributions
         run: |
-          uv build
+          uv build --no-create-gitignore
           uvx --from twine==7.0.0 twine check --strict dist/*
           python -m tools.check_release --dist dist
       - uses: actions/upload-artifact@v7
