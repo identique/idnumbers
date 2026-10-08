@@ -1,10 +1,10 @@
 # Changelog
 
-The current unreleased notes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
-## Unreleased
+## 1.15.0 (2026-10-08)
 
 ### Added
 
@@ -72,7 +72,7 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 - Prepare isolated, guarded PyPI publication and opt-in Trusted Publishing with attestations; retain the working
   default token route and existing secrets. External publisher setup and the first verified trusted release remain
-  pending maintainer action. Document release ordering and 1.14-to-upcoming-1.15 migration
+  pending maintainer action. Document release ordering and 1.14.0-to-1.15.0 migration
   ([#327](https://github.com/identique/idnumbers/issues/327)).
 
 - Add dev-only Hypothesis checks of arbitrary Unicode inputs for every registered ID type, metadata method
