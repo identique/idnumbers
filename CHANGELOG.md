@@ -7,7 +7,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 ### New features
 
 - Add generated country metadata, failure-reason and input-format guides, executed and strictly typed documentation
-  examples, and contributor/country workflow templates (#328).
+  examples, and contributor/country workflow templates
+  ([#328](https://github.com/identique/idnumbers/issues/328)).
 
 - Add primary-only `normalize_id()`, `format_id()` and `get_input_mask()` with frozen `InputMask` results.
   Metadata-driven formatting checks length, not validity; input patterns use ASCII uppercase letters/digits.

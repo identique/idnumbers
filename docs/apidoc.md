@@ -7,8 +7,8 @@ would like to use the simplest tool, [pydoctor](https://pydoctor.readthedocs.io/
 We could run the following script to install:
 
 ```shell
-python -m virtualenv doc_env
-doc_env/bin/activate
+python3 -m venv doc_env
+. doc_env/bin/activate
 
 pip install pydoctor==22.9.1
 ```
