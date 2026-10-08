@@ -2,6 +2,7 @@
 import contextlib
 import io
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -99,6 +100,41 @@ class TestGeneratedDocumentation(TestCase):
                     self.assertIsInstance(item['metadata']['regexp'], str)
                     self.assertIsInstance(item['metadata']['masks'], list)
         self.assertEqual(before, [dict(vars(cls.METADATA)) for cls in classes])
+
+    def test_installed_tree_without_tests_preserves_json_and_country_tools(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            # Copy only tracked package/tool sources, as a wheel excludes the tests package.
+            tracked = subprocess.run(['/usr/bin/git', 'ls-files', 'idnumbers', 'tools'], cwd=ROOT,
+                                     check=True, capture_output=True, text=True).stdout.splitlines()
+            for name in tracked:
+                if name.endswith(('.py', 'py.typed')):
+                    target = root / name
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes((ROOT / name).read_bytes())
+            blocker = """import importlib.abc, sys
+class NoTests(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname == 'tests' or fullname.startswith('tests.'):
+            raise ImportError('tests intentionally absent')
+sys.meta_path.insert(0, NoTests())
+"""
+            environment = dict(os.environ, PYTHONPATH=str(root))
+            direct = blocker + """from tools.scan_ids import collect_ids
+collect_ids('idnumbers.nationalid', 'direct.json')
+from tools.generate_docs import country_pages, input_guide
+assert len(country_pages()) == 79
+assert 'Input formats' in input_guide()
+"""
+            subprocess.run([sys.executable, '-c', direct], cwd=root, env=environment,
+                           check=True, capture_output=True)
+            cli = blocker + """import runpy
+sys.argv = ['tools.scan_ids', 'idnumbers.nationalid', 'cli.json']
+runpy.run_module('tools.scan_ids', run_name='__main__')
+"""
+            subprocess.run([sys.executable, '-c', cli], cwd=root, env=environment,
+                           check=True, capture_output=True)
+            self.assertEqual((root / 'direct.json').read_bytes(), (root / 'cli.json').read_bytes())
 
     def test_cli_generation_and_drift_exit(self) -> None:
         with TemporaryDirectory() as directory:
