@@ -3,12 +3,16 @@ changelog:
     - title: 🪲 Bugs
       labels:
         - bug
+    - title: 📚 Documentation
+      labels:
+        - documentation
     - title: 🏕 Features
       labels:
         - '*'
       exclude:
         labels:
           - dependencies
+          - documentation
     - title: 👒 Dependencies
       labels:
         - dependencies

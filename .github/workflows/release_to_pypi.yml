@@ -4,71 +4,115 @@ on:
     inputs:
       to-prod:
         default: "no"
-        description: "Please type yes to publish to pypi.org, otherwise go to test.pypi.org"
+        description: "Type yes for pypi.org; otherwise publish to test.pypi.org"
         required: true
+      trusted-publishing:
+        type: boolean
+        default: false
+        description: "Production only: enable AFTER maintainer configures the PyPI publisher"
+      expected-version:
+        type: string
+        default: ""
+        description: "Recommended: expected stable X.Y.Z version (must match VERSION)"
 
 permissions:
-  contents: write
-  pages: write
+  contents: read
+
+# Never cancel an upload, or allow concurrent publication of this project.
+concurrency:
+  group: idnumbers-publication
+  cancel-in-progress: false
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.guard.outputs.version }}
+      target: ${{ steps.guard.outputs.target }}
+    env:
+      TO_PROD: ${{ inputs.to-prod }}
+      TRUSTED_PUBLISHING: ${{ inputs.trusted-publishing }}
+      EXPECTED_VERSION: ${{ inputs.expected-version }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
-          python-version: 3.9
-      - name: install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r "scripts/publish/requirements.txt"
-      - name: read version
-        id: read-version
-        uses: juliangruber/read-file-action@v1
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
-          path: ./VERSION
-          trim: true
-      - name: build package
+          version: "0.12.1"
+      - name: Guard approved release inputs
+        id: guard
+        run: python -m tools.check_release
+      - name: Build and check distributions
         run: |
-          rm -rf dist
-          mkdir -p dist
-          python -m build
-      - name: release to prod
-        uses: pypa/gh-action-pypi-publish@release/v1
-        if: inputs.to-prod == 'yes'
+          uv build --no-create-gitignore
+          uvx --from twine==7.0.0 twine check --strict dist/*
+          python -m tools.check_release --dist dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ github.run_id }}-${{ github.sha }}
+          path: dist/*
+          if-no-files-found: error
+
+  # Route only from the guard: GitHub string comparisons ignore case.
+  # https://docs.github.com/en/actions/reference/workflows-and-actions/expressions
+  publish-token:
+    needs: build
+    if: needs.build.outputs.target == 'pypi' && !inputs.trusted-publishing
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-${{ github.run_id }}-${{ github.sha }}
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
-      - name: release to test
-        uses: pypa/gh-action-pypi-publish@release/v1
-        if: inputs.to-prod != 'yes'
+          attestations: false
+
+  publish-trusted:
+    needs: build
+    if: needs.build.outputs.target == 'pypi' && inputs.trusted-publishing
+    runs-on: ubuntu-24.04
+    environment:
+      name: pypi
+      url: https://pypi.org/p/idnumbers
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-${{ github.run_id }}-${{ github.sha }}
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          attestations: true
+
+  publish-test:
+    needs: build
+    if: needs.build.outputs.target == 'testpypi' && !inputs.trusted-publishing
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-${{ github.run_id }}-${{ github.sha }}
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-          repository_url: https://test.pypi.org/legacy/
-  publish-doc:
-    if: inputs.to-prod == 'yes'
-    needs: release
-    runs-on: ubuntu-latest
-    # only publish api doc when to-prod is yes and release success
-    # this workflow reads the version out and configure the apidoc
-    outputs:
-      version: ${{ steps.output-version.outputs.version }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: read version
-        id: read-version
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./VERSION
-          trim: true
-      - id: output-version
-        run: |
-          echo "Version: ${{ steps.read-version.outputs.content }}"
-          echo "version=${{ steps.read-version.outputs.content }}" >> $GITHUB_OUTPUT
+          repository-url: https://test.pypi.org/legacy/
+          attestations: false
+
   call-docs:
-    if: inputs.to-prod == 'yes'
-    needs: publish-doc
+    needs: [build, publish-token, publish-trusted]
+    if: >-
+      always() && !cancelled() && needs.build.result == 'success' &&
+      (needs.publish-token.result == 'success' || needs.publish-trusted.result == 'success')
+    permissions:
+      contents: write
+      pages: write
     uses: identique/idnumbers/.github/workflows/docs.yml@main
     with:
-      version: "${{ needs.publish-doc.outputs.version }}"
+      version: ${{ needs.build.outputs.version }}

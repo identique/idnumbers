@@ -1,10 +1,12 @@
 # Changelog
 
+The current unreleased notes follow [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
 ## Unreleased
 
-### New features
+### Added
 
 - Add generated country metadata, failure-reason and input-format guides, executed and strictly typed documentation
   examples, and contributor/country workflow templates
@@ -50,7 +52,7 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   gets the `deprecated` key the other classes already had, and `tools.scan_ids` lists the classes through the country
   registry ([#320](https://github.com/identique/idnumbers/issues/320)).
 
-### Packaging and typing
+### Changed
 
 - Ship the PEP 561 `py.typed` marker, so type checkers use the package's annotations, and correct the annotations
   that disagreed with the runtime values: the `CHECK_DIGIT` alias, the untyped `normalize` and `checksum` helpers,
@@ -68,7 +70,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `from idnumbers.nationalid.AUS import MedicareNumber` and `AUS.MedicareNumber`; nothing changes at runtime
   ([#326](https://github.com/identique/idnumbers/issues/326)).
 
-### Internal, docs and CI
+- Prepare isolated, guarded PyPI publication and opt-in Trusted Publishing with attestations; retain the working
+  default token route and existing secrets. External publisher setup and the first verified trusted release remain
+  pending maintainer action. Document release ordering and 1.14-to-upcoming-1.15 migration
+  ([#327](https://github.com/identique/idnumbers/issues/327)).
 
 - Add dev-only Hypothesis checks of arbitrary Unicode inputs for every registered ID type, metadata method
   contracts, out-of-range lengths and checksum mutations, with explicit synthetic witnesses for checksum limits

@@ -55,7 +55,7 @@ jobs:
     - name: Type-check with mypy (strict, Python 3.9 target; config in pyproject.toml)
       run: |
         python -m mypy
-        python -m mypy --strict tools/scan_ids.py tools/generate_docs.py tools/check_docs_examples.py
+        python -m mypy --strict tools/scan_ids.py tools/generate_docs.py tools/check_docs_examples.py tools/check_release.py
         python -m tools.check_docs_examples --typecheck
 
   lint:
