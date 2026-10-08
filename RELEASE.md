@@ -23,7 +23,8 @@ creating the GitHub release, and could upload the same version twice.
 
 `expected-version` is optional for backwards compatibility, but recommended to catch dispatch mistakes. A dispatch
 from a tag must use exactly `v<VERSION>`; normal manual publication from `main` does not require a pre-existing tag.
-Any `to-prod` value other than `yes` selects TestPyPI, using `TEST_PYPI_API_TOKEN` and no docs deployment.
+Only the exact lowercase `to-prod=yes` selects production; all other values (including `YES`, `Yes`, or
+surrounding whitespace) select TestPyPI, using `TEST_PYPI_API_TOKEN` and no docs deployment.
 Selecting trusted publishing with TestPyPI fails before building; TestPyPI trusted publishing is not prepared here.
 There is no automatic token fallback on OIDC failure, and no `skip-existing` bypass.
 

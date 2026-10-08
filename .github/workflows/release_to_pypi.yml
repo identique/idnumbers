@@ -28,6 +28,7 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.guard.outputs.version }}
+      target: ${{ steps.guard.outputs.target }}
     env:
       TO_PROD: ${{ inputs.to-prod }}
       TRUSTED_PUBLISHING: ${{ inputs.trusted-publishing }}
@@ -54,9 +55,11 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
+  # Route only from the guard: GitHub string comparisons ignore case.
+  # https://docs.github.com/en/actions/reference/workflows-and-actions/expressions
   publish-token:
     needs: build
-    if: inputs.to-prod == 'yes' && !inputs.trusted-publishing
+    if: needs.build.outputs.target == 'pypi' && !inputs.trusted-publishing
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/download-artifact@v8
@@ -70,7 +73,7 @@ jobs:
 
   publish-trusted:
     needs: build
-    if: inputs.to-prod == 'yes' && inputs.trusted-publishing
+    if: needs.build.outputs.target == 'pypi' && inputs.trusted-publishing
     runs-on: ubuntu-24.04
     environment:
       name: pypi
@@ -89,7 +92,7 @@ jobs:
 
   publish-test:
     needs: build
-    if: inputs.to-prod != 'yes' && !inputs.trusted-publishing
+    if: needs.build.outputs.target == 'testpypi' && !inputs.trusted-publishing
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/download-artifact@v8

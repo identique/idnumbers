@@ -92,13 +92,13 @@ class ReleaseGuardTest(unittest.TestCase):
             with patch.dict(os.environ, {'GITHUB_OUTPUT': str(output)}, clear=True):
                 with contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(main(['--version-file', str(version)]), 0)
-                self.assertEqual(output.read_text(), 'version=1.2.3\n')
+                self.assertEqual(output.read_text(), 'version=1.2.3\ntarget=testpypi\n')
                 for args in (['--expected-version', '1.2.4'], ['--trusted', 'true'],
                              ['--dist', str(Path(temp) / 'missing')]):
                     with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as error:
                         main(['--version-file', str(version)] + args)
                     self.assertEqual(error.exception.code, 1)
-                self.assertEqual(output.read_text(), 'version=1.2.3\n')
+                self.assertEqual(output.read_text(), 'version=1.2.3\ntarget=testpypi\n')
 
 
 class ReleaseWorkflowTest(unittest.TestCase):
@@ -131,19 +131,36 @@ class ReleaseWorkflowTest(unittest.TestCase):
 
     def test_publisher_route_matrix(self):
         workflow = (ROOT / '.github/workflows/release_to_pypi.yml').read_text()
+        self.assertIn('target: ${{ steps.guard.outputs.target }}', workflow)
         conditions = {}
         for job in ('publish-token', 'publish-trusted', 'publish-test'):
             condition = workflow.split(f'  {job}:', 1)[1].split('    if: ', 1)[1].split('\n', 1)[0]
-            condition = condition.replace('inputs.to-prod', 'target').replace('inputs.trusted-publishing', 'trusted')
+            self.assertNotIn('inputs.to-prod', condition)
+            condition = condition.replace('needs.build.outputs.target', 'target').replace('inputs.trusted-publishing', 'trusted')
             condition = condition.replace('!trusted', 'not trusted').replace('&&', 'and')
             conditions[job] = condition
-        for target, trusted, expected in (
-                ('yes', False, ['publish-token']), ('yes', True, ['publish-trusted']),
-                ('no', False, ['publish-test']), ('no', True, []),
-                ('YES', False, ['publish-test']), ('', False, ['publish-test'])):
-            actual = [job for job, expression in conditions.items()
-                      if eval(expression, {'__builtins__': {}}, dict(target=target, trusted=trusted))]
-            self.assertEqual(actual, expected)
+        for raw, trusted in itertools.product(('yes', 'YES', 'Yes', 'no', '', ' yes', 'yes ', 'yes\n'), (False, True)):
+            with self.subTest(raw=raw, trusted=trusted), tempfile.TemporaryDirectory() as temp:
+                version = Path(temp) / 'VERSION'
+                output = Path(temp) / 'output'
+                version.write_text('1.2.3\n')
+                with patch.dict(os.environ, {'GITHUB_OUTPUT': str(output), 'TO_PROD': raw,
+                                            'TRUSTED_PUBLISHING': str(trusted).lower()}, clear=True):
+                    with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                        if trusted and raw != 'yes':
+                            with self.assertRaises(SystemExit) as error:
+                                main(['--version-file', str(version)])
+                            self.assertEqual(error.exception.code, 1)
+                            self.assertFalse(output.exists())
+                            continue
+                        self.assertEqual(main(['--version-file', str(version)]), 0)
+                outputs = dict(line.split('=', 1) for line in output.read_text().splitlines())
+                self.assertEqual(outputs, {'version': '1.2.3', 'target': 'pypi' if raw == 'yes' else 'testpypi'})
+                # Targets are canonical lowercase: Python and GHA comparison semantics coincide.
+                actual = [job for job, expression in conditions.items()
+                          if eval(expression, {'__builtins__': {}}, dict(target=outputs['target'], trusted=trusted))]
+                expected = ['publish-trusted' if trusted else 'publish-token'] if raw == 'yes' else ['publish-test']
+                self.assertEqual(actual, expected)
 
     def test_docs_success_matrix(self):
         workflow = (ROOT / '.github/workflows/release_to_pypi.yml').read_text()

@@ -75,7 +75,9 @@ def main(argv: Optional[list[str]] = None) -> int:
         output = os.environ.get('GITHUB_OUTPUT')
         if output:
             with open(output, 'a', encoding='utf-8') as stream:
-                stream.write(f'version={version}\n')
+                # GitHub expressions compare strings case-insensitively; decide here instead.
+                target = 'pypi' if args.to_prod == 'yes' else 'testpypi'
+                stream.write(f'version={version}\ntarget={target}\n')
         print(f'Checked release version {version}')
     except (ValueError, OSError, tarfile.TarError, zipfile.BadZipFile) as error:
         parser.exit(1, f'Release guard failed: {error}\n')
