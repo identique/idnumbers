@@ -423,3 +423,51 @@ The idnumbers project is released in [MIT license](https://github.com/identique/
 The idnumbers project provides a python3 library for verifying and parsing national ID numbers. It supports multiple countries and provides a simple and well-documented API. The library is open-source, and contributions from the community are always welcome. Whether you're using the library and providing feedback, raising feature requests, implementing new ID number parsers or validators or reporting bugs, you're helping the project to be better.
 
 Thank you for considering using idnumbers in your project. We hope it will be useful for you and we are looking forward to your feedback and contributions
+
+## Primary-ID formatting and input masks
+
+`normalize_id()`, `format_id()` and `get_input_mask()` use the registry's primary `NationalID` only
+(Australia: driver licence; Greece: identity card). Alpha-2/alpha-3 codes and registered aliases work.
+
+```python
+from idnumbers import format_id, get_input_mask, normalize_id, validate
+
+compact = normalize_id('BR', '111.444.777-35')
+assert compact == '11144477735'
+assert format_id('BRA', compact) == '111.444.777-35'
+assert format_id('BRA', '123') is None
+mask = get_input_mask('TW')
+assert mask is not None
+assert mask.country_code == 'TWN' and mask.masks == ('L#########',)
+assert mask.pattern.fullmatch('A123456789') is not None
+assert validate('BR', format_id('BRA', compact)).is_valid
+assert normalize_id('se', '811218+9876') == '811218+9876'
+assert format_id('SWE', '811218+9876') == '811218+9876'
+assert format_id('se', '19811218+9876') == '19811218+9876'
+print(compact, mask.masks)
+```
+
+Normalization uppercases and removes whitespace (including U+200B–U+200D, U+2060 and U+FEFF) and `. - / ( )`.
+If no mask contains literal separators and the whitespace-free text already has an allowed slot count, those
+separators stay: Finland's century sign is significant. `+` is never removed. Sweden's minus is removed and
+reinserted by formatting. A single Swedish plus before the last four digits remains normalized and replaces the
+preferred minus literal when formatting either the 10-digit or 12-digit form.
+Normalization does **not** validate or reject unknown lengths. Formatting chooses the first mask with the right
+slot count, without checking characters or validity. Unsupported countries and non-string IDs return `None`;
+formatting also returns `None` if no layout fits. Custom countries without masks use metadata length bounds for
+formatting, and `get_input_mask()` returns `None`.
+
+`InputMask` is frozen, with `country_code`, tuple `masks`, and compiled `pattern`. Patterns match the whole input,
+case-sensitively: `#` means `[0-9]`, `L` means `[A-Z]`, `X` means `[A-Z0-9]`, and `*` means Unicode non-whitespace.
+Other mask characters are escaped literals. This is a **UI layout pattern, not the validator's regexp**.
+It describes literal preferred layouts, not every accepted input: Sweden's masks and pattern retain `-`, even
+though formatting preserves the significant `+` in plus forms.
+Its intentional ASCII letter restriction excludes Greek identity-card letters even though the country validator
+accepts them and formatting preserves them unchanged. The metadata example uses accepted Latin `AB-123456`.
+Length-only formatting can produce characters that do not match the pattern; call `validate()` separately.
+
+Measured over all 78 built-in primary metadata examples, normalized input validates in 74 countries;
+**CHE, CHL, KOR and USA** reject their normalized example. All 78 formatted examples validate. These are example
+measurements, not a promise for arbitrary inputs. Country validators, parsers and checksum methods are unchanged.
+See [metadata masks](docs/nationalid/METADATA.md) and the
+[formatting API documentation](https://identique.github.io/idnumbers/idnumbers.format.html).

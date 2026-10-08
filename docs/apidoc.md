@@ -32,3 +32,15 @@ leaving the country-specific classes and their typed `parse()` results unchanged
 
 The tracked `tests/typing/parse_api_consumer.py` fixture is included in the default strict mypy configuration, so the
 CI type-check job checks both discriminator and class-based consumer narrowing as well as package re-exports.
+
+## Primary-ID formatting
+
+`idnumbers.format` implements `normalize_id()`, `format_id()`, `get_input_mask()` and the frozen `InputMask`,
+re-exported by `idnumbers`. The helpers select only the registry primary, never validate, and leave the country
+classes unchanged. Formatting is length-only; patterns are case-sensitive whole-input layouts with ASCII letters
+and digits (not full validator regexps). In particular, Greek identity-card letters format unchanged but do not
+match the ASCII letter pattern. Swedish formatting preserves its significant `+` before the last four digits,
+while the metadata masks and pattern retain literal preferred `-` layouts.
+See the [README examples](../README.md#primary-id-formatting-and-input-masks) and
+[mask metadata](nationalid/METADATA.md). The strict external-consumer fixture
+`tests/typing/format_api_consumer.py` is included in the default mypy configuration.

@@ -6,6 +6,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### New features
 
+- Add primary-only `normalize_id()`, `format_id()` and `get_input_mask()` with frozen `InputMask` results.
+  Metadata-driven formatting checks length, not validity; input patterns use ASCII uppercase letters/digits.
+  Swedish formatting preserves a significant `+` in both 10-digit and 12-digit forms; preferred mask patterns
+  remain literal minus layouts. Greece's primary metadata example now uses already-accepted Latin letters;
+  Greek validation and formatting remain unchanged ([#321](https://github.com/identique/idnumbers/issues/321)).
+
 - Add `failure_reason(id_class, id_number)` for primary and secondary ID types. Unified validation and parsing now
   report best-effort length, format, checksum and embedded-calendar-date reasons; inconclusive checks and exceptions
   retain `VALIDATION_FAILED`. Date tracing is isolated between nested calls, threads and async tasks, and country
