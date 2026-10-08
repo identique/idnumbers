@@ -61,3 +61,34 @@ the class. The `country_name`, `id_type`, `official_name`, `display_format`, `ex
 properties are described in [METADATA.md](nationalid/METADATA.md).
 
 We could use the info/JSON to build a reference doc or generating the sample codes.
+
+## Deterministic Markdown guides
+
+From a source checkout, regenerate all country pages and the failure/input guides:
+
+```shell
+python -m tools.scan_ids --markdown-dir docs/countries \
+  --failure-reasons-file docs/FAILURE_REASONS.md --input-formats-file docs/INPUT_FORMATS.md
+```
+
+Append `--check` to compare without writing; missing, changed or stale generated country pages fail.
+Unmarked user pages are left alone; no files are deleted. Remove stale managed pages deliberately when
+a country is removed. The legacy positional JSON command above remains supported and does not require test helpers.
+Markdown generation uses the source checkout's frozen diagnostic matrix; it performs no network requests.
+
+The [country index](countries/README.md) covers every registered non-alias class and all current metadata fields.
+The [failure guide](FAILURE_REASONS.md) consumes frozen synthetic witnesses, not guessed diagnostic outputs.
+The [input guide](INPUT_FORMATS.md) measures limited primary-example variants, not exhaustive acceptance policies.
+
+Verify every README/documentation Python fence and standalone script independently:
+
+```shell
+python -m tools.check_docs_examples
+python -m tools.check_docs_examples --typecheck
+```
+
+The second command requires installed mypy 1.20.2 and targets Python 3.9 in strict mode; absence or errors fail.
+Temporary unique snippet modules avoid cross-document name collisions. Runtime tracebacks retain document
+paths and original line numbers; type checking prints a snippet-to-document line map. Unittest executes
+all examples and checks generated guides on every supported CI Python version. Build output under
+`docs/_build/` is excluded from snippet discovery.

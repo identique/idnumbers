@@ -58,9 +58,10 @@ parsable = InlandRevenueDepartmentNumber.METADATA.parsable
 getattr(InlandRevenueDepartmentNumber.METADATA, 'checksum', False)
 
 # the descriptive properties that the ID classes have since the typed IdMetadata
-InlandRevenueDepartmentNumber.METADATA.id_type  # 'Inland Revenue Department Number'
-InlandRevenueDepartmentNumber.METADATA.example  # '49-091-850'
-InlandRevenueDepartmentNumber.METADATA.masks    # ('##-###-###', '###-###-###', '########', '#########')
+assert metadata.id_type == 'Inland Revenue Department Number'
+assert metadata.example == '49-091-850'
+assert InlandRevenueDepartmentNumber.validate(metadata.example)
+assert metadata.masks == ('##-###-###', '###-###-###', '########', '#########')
 
 ```
 

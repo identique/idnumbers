@@ -7,10 +7,10 @@ would like to use the simplest tool, [pydoctor](https://pydoctor.readthedocs.io/
 We could run the following script to install:
 
 ```shell
-python -m virtualenv doc_env
-doc_env/bin/activate
+python3 -m venv doc_env
+. doc_env/bin/activate
 
-pip install pydoctor
+pip install pydoctor==22.9.1
 ```
 
 Use `--docformat=restructuredtext`: the default epytext parser cannot parse shared utility docstring continuations.
@@ -44,3 +44,9 @@ while the metadata masks and pattern retain literal preferred `-` layouts.
 See the [README examples](../README.md#primary-id-formatting-and-input-masks) and
 [mask metadata](nationalid/METADATA.md). The strict external-consumer fixture
 `tests/typing/format_api_consumer.py` is included in the default mypy configuration.
+
+## Source guides and example checks
+
+See the [country index](countries/README.md), [failure reasons](FAILURE_REASONS.md),
+[input formats](INPUT_FORMATS.md), and [generator/example commands](scan_ids.md).
+These source-checkout Markdown guides complement pydoctor API pages; they are not automatically deployed by pydoctor.

@@ -1,7 +1,9 @@
 import argparse
 import importlib
 import json
+from pathlib import Path
 from typing import Any, Dict, List
+
 
 from idnumbers.registry import list_supported_countries
 
@@ -51,7 +53,22 @@ def collect_ids(package_name: str, output_filename: str) -> None:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('pkg', help='the package to parse')
-    parser.add_argument('output_file', help='path to the output JSON file')
+    parser.add_argument('pkg', nargs='?', help='the package to parse')
+    parser.add_argument('output_file', nargs='?', help='path to the output JSON file')
+    parser.add_argument('--markdown-dir', type=Path)
+    parser.add_argument('--failure-reasons-file', type=Path)
+    parser.add_argument('--input-formats-file', type=Path)
+    parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    collect_ids(args.pkg, args.output_file)
+    if bool(args.pkg) != bool(args.output_file):
+        parser.error('package and JSON output must be supplied together')
+    if args.pkg is None and not any((args.markdown_dir, args.failure_reasons_file, args.input_formats_file)):
+        parser.error('supply a package/JSON output or a Markdown output option')
+    if args.check and args.output_file is not None:
+        parser.error('--check applies only to generated Markdown, not JSON output')
+    if args.pkg is not None:
+        collect_ids(args.pkg, args.output_file)
+    if any((args.markdown_dir, args.failure_reasons_file, args.input_formats_file)):
+        from tools.generate_docs import generate
+
+        generate(args.markdown_dir, args.failure_reasons_file, args.input_formats_file, args.check)
