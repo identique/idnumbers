@@ -11,7 +11,7 @@ various countries. It is an open source project, so feel free to use and contrib
 
 The idnumbers library offers the following features:
 
-* Verification of national ID numbers: This feature allows you to check if a given ID number is valid and has been
+* Verification of national ID numbers: This feature allows you to check whether a given ID number is
   consistent with the respective country's format and checksum (not proof of issuance).
 * Parsing of national ID numbers: This feature allows you to extract useful information from an ID number such as the
   date of birth, gender, and more.
@@ -276,8 +276,8 @@ The idnumbers library supports the parse function for certain national ID number
 detailed information from the ID number. The parse function is only available for national IDs for which the
 METADATA.parsable field is set to True.
 
-For example, the South African ID Number and Taiwanese National ID Number support the parse function. By using the parse method, you can extract information such as the date of birth, gender, and
-citizenship from these ID numbers.
+For example, the South African ID Number and Taiwanese National ID Number support the parse function.
+Depending on the ID type, parsing can extract information such as date of birth, gender and citizenship.
 
 Here is an example of how to use the parse function for a South African ID number:
 
