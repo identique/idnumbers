@@ -53,7 +53,10 @@ jobs:
     - name: Install mypy
       run: python -m pip install mypy==1.20.2
     - name: Type-check with mypy (strict, Python 3.9 target; config in pyproject.toml)
-      run: python -m mypy
+      run: |
+        python -m mypy
+        python -m mypy --strict tools/scan_ids.py tools/generate_docs.py tools/check_docs_examples.py
+        python -m tools.check_docs_examples --typecheck
 
   lint:
 

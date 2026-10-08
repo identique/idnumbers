@@ -12,7 +12,7 @@ various countries. It is an open source project, so feel free to use and contrib
 The idnumbers library offers the following features:
 
 * Verification of national ID numbers: This feature allows you to check if a given ID number is valid and has been
-  issued by the respective country.
+  consistent with the respective country's format and checksum (not proof of issuance).
 * Parsing of national ID numbers: This feature allows you to extract useful information from an ID number such as the
   date of birth, gender, and more.
 * Support for multiple countries: The library currently supports several countries, with more being added in the future.
@@ -49,7 +49,7 @@ Once you have activated your virtual environment, you can install idnumbers by r
 pip install idnumbers
 ```
 
-This will install the latest version of idnumbers and its dependencies.
+This installs the latest version of idnumbers; the library has no runtime dependencies.
 
 You can also install a specific version of idnumbers by specifying the version number in the command, like this:
 
@@ -140,6 +140,8 @@ and dependency:
 from idnumbers.nationalid import TWN
 
 id_number = "A123456789"
+assert TWN.NationalID.validate(id_number)
+assert TWN.NationalID.parse(id_number) is not None
 print(TWN.NationalID.validate(id_number))
 print(TWN.NationalID.parse(id_number))
 ```
@@ -197,7 +199,7 @@ if is_valid:
 else:
     print(f'{nga_nationalid} is an invalid Nigerian National ID Number')
 
-# Verify ZAF nation id number
+# Verify ZAF national ID number
 zaf_nationalid = '7605300675088'
 is_valid = ZAF.NationalID.validate(zaf_nationalid)
 if is_valid:
@@ -205,6 +207,11 @@ if is_valid:
 else:
     print(f'{zaf_nationalid} is an invalid South African ID Number')
 
+assert AUS.TaxFileNumber.validate(taxfile_number)
+assert AUS.DriverLicenseNumber.validate(driver_license)
+assert AUS.MedicareNumber.validate(medicare_number)
+assert NGA.NationalID.validate(nga_nationalid)
+assert ZAF.NationalID.validate(zaf_nationalid)
 ```
 
 These examples show how to use the idnumbers library to verify different types of national ID numbers for different
@@ -269,8 +276,7 @@ The idnumbers library supports the parse function for certain national ID number
 detailed information from the ID number. The parse function is only available for national IDs for which the
 METADATA.parsable field is set to True.
 
-For example, the South African ID Number, Nigerian National ID Number and Australian Medicare Number all support the
-parse function. By using the parse method, you can extract information such as the date of birth, gender, and
+For example, the South African ID Number and Taiwanese National ID Number support the parse function. By using the parse method, you can extract information such as the date of birth, gender, and
 citizenship from these ID numbers.
 
 Here is an example of how to use the parse function for a South African ID number:
@@ -281,6 +287,8 @@ from idnumbers.nationalid import ZAF
 # Parse the national ID number
 id_number = '7605300675088'
 id_data = ZAF.NationalID.parse(id_number)
+assert id_data is not None
+assert id_data['yyyymmdd'].isoformat() == '1976-05-30'
 
 # Access the date of birth
 print(f'Date of birth: {id_data["yyyymmdd"]}')
@@ -296,8 +304,8 @@ This example shows how to use the parse method of the ZAF.NationalID class to ex
 citizenship from a South African ID number. The parse method returns a dictionary with various fields,
 including `yyyymmdd` for date of birth, `gender` for gender and `citizenship` for citizenship.
 
-Similarly, you can parse the Nigerian National ID Number and Australian Medicare Number by using the
-NGA.NationalID.parse() and AUS.MedicareNumber.parse() respectively.
+Similarly, `TWN.NationalID.parse()` extracts information from a Taiwanese National ID.
+`NGA.NationalID` and `AUS.MedicareNumber` do not provide `parse()`; their metadata marks them non-parsable.
 
 Please note that the returned parsed data may vary depending on the country and id type you are using. Also, it is
 important to keep in mind that the library is only able to validate the format and the checksum of the ID number, not if
@@ -315,10 +323,13 @@ import idnumbers
 
 # Find the validator of a country by its alpha-2 or alpha-3 code, in any letter case
 validator = idnumbers.get_validator('tw')
+assert validator is not None
 print(validator.validate('A123456789'))
 
 # Describe a country
 australia = idnumbers.get_country('AUS')
+assert australia is not None
+assert australia.alpha2 == 'AU'
 print(australia.name, australia.alpha2)
 print([id_type.__name__ for id_type in australia.id_types])
 
@@ -349,13 +360,17 @@ from idnumbers import validate, validate_many
 
 # A valid ID number, with the data parsed from it
 result = validate('tw', 'A123456789')
+assert result.is_valid and result.extracted_info is not None
 print(result.is_valid, result.country_code, result.extracted_info['gender'])
 
 # An invalid result is falsy and says why
+assert not validate('tw', 'A123456780')
 print(bool(validate('tw', 'A123456780')))
 
 # An unsupported country is reported, not raised
-print(validate('XX', 'A123456789').reason.value)
+unsupported = validate('XX', 'A123456789')
+assert unsupported.reason is not None
+print(unsupported.reason.value)
 
 # Validate several ID numbers, each with its own country
 print([result.is_valid for result in validate_many([('tw', 'A123456789'), ('XX', '1')])])
@@ -376,8 +391,17 @@ assert validate('TW', 'A12345').reason == FailureReason.INVALID_LENGTH
 assert validate('TW', 'A123456788').reason == FailureReason.CHECKSUM_MISMATCH
 assert validate('ZA', '7602300675085').reason == FailureReason.INVALID_BIRTHDATE
 assert failure_reason(AUS.MedicareNumber, '2123 45670 1') is None
-print(validate('TW', 'A12345').reason.value)
+short = validate('TW', 'A12345')
+assert short.reason is not None
+print(short.reason.value)
 ```
+
+## Guides
+
+- [Country metadata and runnable examples](docs/countries/README.md)
+- [Failure reasons and frozen diagnostic witnesses](docs/FAILURE_REASONS.md)
+- [Input formats and UI helpers](docs/INPUT_FORMATS.md)
+- [Contributing](CONTRIBUTING.md) and [country implementation checklist](docs/COUNTRY_TEMPLATE.md)
 
 # Supported Countries
 
@@ -433,14 +457,16 @@ Thank you for considering using idnumbers in your project. We hope it will be us
 from idnumbers import format_id, get_input_mask, normalize_id, validate
 
 compact = normalize_id('BR', '111.444.777-35')
-assert compact == '11144477735'
+assert compact == '11144477735' and compact is not None
 assert format_id('BRA', compact) == '111.444.777-35'
 assert format_id('BRA', '123') is None
 mask = get_input_mask('TW')
 assert mask is not None
 assert mask.country_code == 'TWN' and mask.masks == ('L#########',)
 assert mask.pattern.fullmatch('A123456789') is not None
-assert validate('BR', format_id('BRA', compact)).is_valid
+formatted = format_id('BRA', compact)
+assert formatted is not None
+assert validate('BR', formatted).is_valid
 assert normalize_id('se', '811218+9876') == '811218+9876'
 assert format_id('SWE', '811218+9876') == '811218+9876'
 assert format_id('se', '19811218+9876') == '19811218+9876'
