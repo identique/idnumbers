@@ -76,6 +76,7 @@ not personal data or proof of issuance. Each snippet runs independently.
 | [Poland (POL)](POL.md) | PL | PESEL | 1 |
 | [Portugal (PRT)](PRT.md) | PT | CivilIDNumber | 3 |
 | [Romania (ROU)](ROU.md) | RO | PersonalNumericalCode | 1 |
+| [Russia (RUS)](RUS.md) | RU | NationalID | 1 |
 | [Singapore (SGP)](SGP.md) | SG | NationalID | 1 |
 | [San Marino (SMR)](SMR.md) | SM | SocialSecurityNumber | 2 |
 | [Serbia (SRB)](SRB.md) | RS | UniqueMasterCitizenNumber | 1 |

@@ -128,6 +128,7 @@ _BUILTIN: Dict[str, Tuple[str, str]] = {
     'POL': ('PL', 'Poland'),
     'PRT': ('PT', 'Portugal'),
     'ROU': ('RO', 'Romania'),
+    'RUS': ('RU', 'Russia'),
     'SGP': ('SG', 'Singapore'),
     'SMR': ('SM', 'San Marino'),
     'SRB': ('RS', 'Serbia'),

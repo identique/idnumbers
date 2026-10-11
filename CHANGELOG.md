@@ -31,6 +31,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   preserves the eight-digit correlative, unverified check digit, department and municipality as strings. No
   checksum or per-department municipality table is enforced; whitespace and separators are rejected.
 
+- **RUS** internal passport ([#334](https://github.com/identique/idnumbers/issues/334)): add structure-only
+  validation of a four-digit series and six-digit number, rejecting all-zero fields by maintainer policy.
+  Accept only compact ASCII digits, `SSSS NNNNNN` or printed `SS SS NNNNNN` with single ASCII spaces;
+  `parse()` preserves series and number as strings. No checksum or issuance/authenticity check is performed.
+
 ## 1.15.0 (2026-10-08)
 
 ### Added
