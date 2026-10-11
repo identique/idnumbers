@@ -27,12 +27,17 @@ class NationalID:
         'alias_of': None,
         'names': ['National ID Number',
                   'kart-e-meli',
-                  'کارت ملی'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of'],
+                  'کارت ملی',
+                  'شماره ملی',
+                  'کد ملی'],
+        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of',
+                  'https://www.ekhtebar.ir/%E2%80%8C%D9%82%D8%A7%D9%86%D9%88%D9%86-%D8%A7%D9%84%D8%B2%D8%A7%D9%85-'
+                  '%D8%A7%D8%AE%D8%AA%D8%B5%D8%A7%D8%B5-%D8%B4%D9%85%D8%A7%D8%B1%D9%87-%D9%85%D9%84%DB%8C-%D9%88-'
+                  '%DA%A9%D8%AF-%D9%BE%D8%B3%D8%AA/'],
         'deprecated': False,
         'country_name': 'Iran',
         'id_type': 'National ID Number',
-        'official_name': 'کارت ملی',
+        'official_name': 'شماره ملی',
         'display_format': '###-######-#',
         'example': '001-234567-9',
         'checksum_algorithm': 'Weighted sum mod 11 (weights 10-2; a remainder below 2 is the check digit, otherwise 11 '

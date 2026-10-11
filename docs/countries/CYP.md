@@ -22,12 +22,12 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | example | <code>01234567U</code> |
 | id_type | <code>Tax Number</code> |
 | iso3166_alpha2 | <code>CY</code> |
-| links | <code>[&#x27;https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698&#x27;, &#x27;https://en.wikipedia.org/wiki/VAT_identification_number&#x27;, &#x27;https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Cyprus-TIN.pdf&#x27;]</code> |
+| links | <code>[&#x27;https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698&#x27;, &#x27;https://en.wikipedia.org/wiki/VAT_identification_number&#x27;, &#x27;https://www.mof.gov.cy/mof/tax/taxdep.nsf/b04076eb2fadc080c22581ae003e8c2c/0C52630C3AF8E554C22589A50042395D/$file/%CE%9D%CE%AD%CE%B1%20%CE%9C%CE%BF%CF%81%CF%86%CE%AE%20%CE%91%CE%A6%CE%A4%2004052023.pdf&#x27;, &#x27;https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Cyprus-TIN.pdf&#x27;]</code> |
 | masks | <code>(&#x27;########L&#x27;,)</code> |
 | max_length | <code>9</code> |
 | min_length | <code>9</code> |
-| names | <code>[&#x27;tax number&#x27;, &#x27;Αριθμός Εγγραφής&#x27;, &#x27;ΦΠΑ&#x27;, &#x27;Φ.Π.Α.&#x27;, &#x27;phi. pi. a.&#x27;, &#x27;Arithmós Engraphḗs&#x27;, &#x27;φορολογικού κωδικού&#x27;, &#x27;φορολογική ταυτότητα&#x27;, &#x27;κωδικός φορολογικού μητρώου&#x27;, &#x27;αριθμός φορολογικού μητρώου&#x27;, &#x27;vergi kimlik numarası&#x27;, &#x27;vergi kimlik kodu&#x27;]</code> |
-| official_name | <code>αριθμός φορολογικού μητρώου</code> |
+| names | <code>[&#x27;tax number&#x27;, &#x27;Αριθμός Φορολογικής Ταυτότητας&#x27;, &#x27;ΑΦΤ&#x27;, &#x27;Αριθμός Εγγραφής&#x27;, &#x27;ΦΠΑ&#x27;, &#x27;Φ.Π.Α.&#x27;, &#x27;phi. pi. a.&#x27;, &#x27;Arithmós Engraphḗs&#x27;, &#x27;φορολογικού κωδικού&#x27;, &#x27;φορολογική ταυτότητα&#x27;, &#x27;κωδικός φορολογικού μητρώου&#x27;, &#x27;αριθμός φορολογικού μητρώου&#x27;, &#x27;vergi kimlik numarası&#x27;, &#x27;vergi kimlik kodu&#x27;]</code> |
+| official_name | <code>Αριθμός Φορολογικής Ταυτότητας</code> |
 | parsable | <code>False</code> |
 | regexp | <code>^\d{8}[A-Z]$</code> |
 
@@ -35,6 +35,7 @@ Reference links recorded by this implementation (source quality varies):
 
 - <https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698>
 - <https://en.wikipedia.org/wiki/VAT_identification_number>
+- <https://www.mof.gov.cy/mof/tax/taxdep.nsf/b04076eb2fadc080c22581ae003e8c2c/0C52630C3AF8E554C22589A50042395D/$file/%CE%9D%CE%AD%CE%B1%20%CE%9C%CE%BF%CF%81%CF%86%CE%AE%20%CE%91%CE%A6%CE%A4%2004052023.pdf>
 - <https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Cyprus-TIN.pdf>
 
 ```python
