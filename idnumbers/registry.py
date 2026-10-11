@@ -292,7 +292,11 @@ def _entry(alpha3: str) -> CountryEntry:
         return entry
     with _LOCK:
         # Another thread may have loaded it while this one waited for the lock.
-        return _ENTRIES.setdefault(alpha3, _ENTRIES.get(alpha3) or _load_builtin(alpha3))
+        entry = _ENTRIES.get(alpha3)
+        if entry is None:
+            entry = _load_builtin(alpha3)
+            _ENTRIES[alpha3] = entry
+        return entry
 
 
 def _load_builtin(alpha3: str) -> CountryEntry:

@@ -5,9 +5,11 @@ import importlib
 import os
 import subprocess
 import sys
+import threading
+import time
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, List, Optional, Type
+from typing import Any, Callable, List, Optional, Type
 from unittest import TestCase, main
 from unittest.mock import patch
 
@@ -215,6 +217,77 @@ class RegistryStateCase(TestCase):
 
     def snapshot(self) -> Any:
         return dict(registry._KEYS), dict(registry._ENTRIES), dict(registry._CUSTOM)
+
+
+class TestConcurrency(RegistryStateCase):
+    def run_threads(self, count: int, target: Callable[[int], Any]) -> List[Any]:
+        """Run ``target(index)`` in ``count`` threads that start together, and return the results by index."""
+        barrier = threading.Barrier(count)
+        results: List[Any] = [None] * count
+        errors: List[BaseException] = []
+
+        def work(index: int) -> None:
+            try:
+                barrier.wait(timeout=10)
+                results[index] = target(index)
+            except BaseException as error:  # reported by the test below
+                errors.append(error)
+
+        threads = [threading.Thread(target=work, args=(index,)) for index in range(count)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join(timeout=10)
+        self.assertFalse([thread for thread in threads if thread.is_alive()], 'a thread did not finish')
+        self.assertEqual(errors, [])
+        return results
+
+    def test_first_lookup_of_a_builtin_country_loads_it_once(self) -> None:
+        registry._ENTRIES.pop('TWN', None)
+        calls: List[str] = []
+        original = registry._load_builtin
+
+        def slow_load(alpha3: str) -> registry.CountryEntry:
+            calls.append(alpha3)
+            time.sleep(0.01)
+            return original(alpha3)
+
+        with patch.object(registry, '_load_builtin', slow_load):
+            entries = self.run_threads(32, lambda index: registry.get_country('tw'))
+        self.assertEqual(calls, ['TWN'])
+        self.assertIsNotNone(entries[0])
+        for entry in entries:
+            self.assertIs(entry, entries[0])
+        self.assertIs(registry._ENTRIES['TWN'], entries[0])
+
+    def test_identical_registrations_are_one_entry(self) -> None:
+        validator = make_validator()
+
+        def register(index: int) -> None:
+            registry.register('abc', validator, alpha2='ab', name='Abc', aliases=['one', 'two'])
+
+        self.run_threads(32, register)
+        self.assertEqual(sorted(registry._CUSTOM), ['ABC'])
+        self.assertEqual(registry._CUSTOM['ABC'], ('ONE', 'TWO'))
+        expected = registry.CountryEntry('ABC', 'AB', 'Abc', validator, (validator,))
+        self.assertEqual(registry.get_country('abc'), expected)
+        for code in ('ab', 'one', 'TWO'):
+            self.assertEqual(registry.resolve_country(code), 'ABC')
+
+    def test_distinct_registrations_all_succeed(self) -> None:
+        count = 16
+        letters = [chr(ord('A') + index) for index in range(count)]
+        validators = [make_validator('Q' + letter) for letter in letters]
+        before = len(registry.list_supported_countries())
+
+        def register(index: int) -> None:
+            registry.register('QX' + letters[index], validators[index], aliases=['legacy' + letters[index]])
+
+        self.run_threads(count, register)
+        self.assertEqual(len(registry.list_supported_countries()), before + count)
+        for letter, validator in zip(letters, validators):
+            for code in ('QX' + letter, 'Q' + letter, 'legacy' + letter):
+                self.assertIs(registry.get_validator(code), validator)
 
 
 class TestRegister(RegistryStateCase):
