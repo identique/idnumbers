@@ -12,6 +12,7 @@ import importlib.util
 import io
 import json
 import os
+import py_compile
 import re
 import shutil
 import subprocess
@@ -39,11 +40,17 @@ TRACKED_FILES = [
 COPIED_MESSAGE = "corpus: copied"
 
 
-def hermetic_git_environment(home: Path) -> Dict[str, str]:
-    """An environment in which git ignores the machine's and the user's configuration (signing, hooks, aliases)."""
+def hermetic_git_environment(home: Path, ceiling: Optional[Path] = None) -> Dict[str, str]:
+    """An environment in which git ignores the machine's and the user's configuration (signing, hooks, aliases).
+
+    With `ceiling`, git also never searches that directory or its parents for a repository, so a directory that is
+    not itself a repository stays "not a git repository" even when the temporary directory lies inside another one.
+    """
     home.mkdir(parents=True, exist_ok=True)
     environment = {name: value for name, value in os.environ.items() if not name.startswith("GIT_")}
     environment.update(GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull, HOME=str(home), USERPROFILE=str(home))
+    if ceiling is not None:
+        environment["GIT_CEILING_DIRECTORIES"] = str(ceiling.resolve())
     return environment
 
 
@@ -76,7 +83,7 @@ class CheckoutCase(TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(ROOT / relative, target)
         shutil.copytree(ROOT / "idnumbers", self.copy / "idnumbers", ignore=shutil.ignore_patterns("__pycache__"))
-        self.environment = hermetic_git_environment(self.parent / "home")
+        self.environment = hermetic_git_environment(self.parent / "home", ceiling=self.parent)
 
     def run_script(self, *arguments: str) -> Tuple[int, str, str]:
         run = subprocess.run(
@@ -276,6 +283,38 @@ class FromPortTest(CheckoutCase):
         self.assertNotIn("Traceback", stderr)
         self.assertNotIn(COPIED_MESSAGE, stdout)
         self.assertEqual(before, self.tracked_bytes())
+
+
+class DropBytecodeTest(TestCase):
+    """`drop_bytecode()` removes a module's cached `.pyc` and tolerates there being none."""
+
+    def setUp(self) -> None:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.module = Path(directory.name) / "m.py"
+        self.module.write_text("VALUE = 1\n", encoding="utf-8")
+        self.cache = Path(importlib.util.cache_from_source(str(self.module)))
+        self.script = load_script()
+
+    def test_cached_bytecode_is_removed(self) -> None:
+        py_compile.compile(str(self.module), cfile=str(self.cache), doraise=True)
+        self.assertTrue(self.cache.is_file())
+
+        self.script.drop_bytecode(self.module)
+
+        self.assertFalse(self.cache.exists())
+        self.assertTrue(self.module.is_file(), "the source must stay")
+
+    def test_missing_bytecode_is_not_an_error(self) -> None:
+        self.assertFalse(self.cache.exists())
+        self.script.drop_bytecode(self.module)
+        self.assertFalse(self.cache.exists())
+
+    def test_dropping_twice_is_not_an_error(self) -> None:
+        py_compile.compile(str(self.module), cfile=str(self.cache), doraise=True)
+        self.script.drop_bytecode(self.module)
+        self.script.drop_bytecode(self.module)
+        self.assertFalse(self.cache.exists())
 
 
 class RollbackReportTest(TestCase):
