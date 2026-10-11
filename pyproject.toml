@@ -32,16 +32,15 @@ Homepage = "https://github.com/Identique/idnumbers"
 Source = "https://github.com/Identique/idnumbers"
 Tracker = "https://github.com/Identique/idnumbers/issues"
 
-[tool.setuptools]
-data-files = {"version" = ["VERSION"]}
-
 [tool.setuptools.dynamic]
 version = {file = "VERSION"}
 
 [tool.setuptools.packages.find]
-# Same discovery as setuptools.find_packages(): only directories with __init__.py.
+# The wheel ships only the idnumbers package: the repository's top-level tools and tests packages, and the
+# VERSION file (read at build time by the dynamic version above), are not installed (#484).
+# namespaces = false keeps the discovery to directories with an __init__.py, as setuptools.find_packages() does.
+include = ["idnumbers*"]
 namespaces = false
-exclude = ["*tests*"]
 
 [tool.setuptools.package-data]
 idnumbers = ["py.typed"]

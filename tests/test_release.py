@@ -46,7 +46,8 @@ class ReleaseGuardTest(unittest.TestCase):
     @staticmethod
     def artifacts(directory, wheel_version='1.2.3', sdist_version='1.2.3', name='idnumbers'):
         with zipfile.ZipFile(directory / 'package.whl', 'w') as wheel:
-            wheel.writestr('idnumbers.dist-info/METADATA',
+            wheel.writestr('idnumbers/__init__.py', '')
+            wheel.writestr(f'idnumbers-{wheel_version}.dist-info/METADATA',
                           f'Name: {name}\nVersion: {wheel_version}\n')
         with tarfile.open(directory / 'package.tar.gz', 'w:gz') as sdist:
             data = f'Name: {name}\nVersion: {sdist_version}\n'.encode()
@@ -67,6 +68,44 @@ class ReleaseGuardTest(unittest.TestCase):
                 else:
                     with self.assertRaises(ReleaseError):
                         check_artifacts(directory, '1.2.3')
+
+    def test_wheel_layout(self):
+        for extra in ('tools/__init__.py', 'tools/check_release.py',
+                      'idnumbers-1.2.3.data/data/version/VERSION', 'other_module.py',
+                      'idnumbers.py', 'tests/test_release.py', 'idnumbers-1.2.3.dist-info2/x'):
+            with self.subTest(extra=extra), tempfile.TemporaryDirectory() as temp:
+                directory = Path(temp)
+                self.artifacts(directory)
+                with zipfile.ZipFile(directory / 'package.whl', 'a') as wheel:
+                    wheel.writestr(extra, '')
+                with self.assertRaisesRegex(ReleaseError, 'outside idnumbers/'):
+                    check_artifacts(directory, '1.2.3')
+
+    def test_wheel_layout_accepts_package_files_and_one_dist_info(self):
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            self.artifacts(directory)
+            with zipfile.ZipFile(directory / 'package.whl', 'a') as wheel:
+                wheel.writestr('idnumbers/py.typed', '')
+                wheel.writestr('idnumbers/nationalid/CHN.py', '')
+                wheel.writestr('idnumbers-1.2.3.dist-info/RECORD', '')
+            check_artifacts(directory, '1.2.3')
+
+    def test_wheel_layout_requires_package_and_one_dist_info(self):
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            self.artifacts(directory)
+            with zipfile.ZipFile(directory / 'package.whl', 'a') as wheel:
+                wheel.writestr('idnumbers-1.2.4.dist-info/RECORD', '')
+            with self.assertRaisesRegex(ReleaseError, 'exactly one idnumbers dist-info'):
+                check_artifacts(directory, '1.2.3')
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            self.artifacts(directory)
+            with zipfile.ZipFile(directory / 'package.whl', 'w') as wheel:
+                wheel.writestr('idnumbers-1.2.3.dist-info/METADATA', 'Name: idnumbers\nVersion: 1.2.3\n')
+            with self.assertRaisesRegex(ReleaseError, r'idnumbers/__init__\.py'):
+                check_artifacts(directory, '1.2.3')
 
     def test_artifact_inventory_and_missing_metadata(self):
         with tempfile.TemporaryDirectory() as temp:

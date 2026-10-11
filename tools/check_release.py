@@ -28,14 +28,37 @@ def check_version(raw: str, expected: str, ref: str, production: bool,
     return version
 
 
+def check_wheel_layout(names: list[str]) -> None:
+    """Allow only the idnumbers package and its one dist-info directory in a wheel (#484)."""
+    dist_infos = set()
+    for name in names:
+        top = name.split('/', 1)[0]
+        if top == 'idnumbers':
+            continue
+        if re.fullmatch(r'idnumbers-[^/]+\.dist-info', top) is not None:
+            dist_infos.add(top)
+            continue
+        raise ReleaseError(f'wheel entry outside idnumbers/ and its dist-info directory: {name}')
+    if len(dist_infos) > 1:
+        raise ReleaseError('wheel must have exactly one idnumbers dist-info directory')
+    if 'idnumbers/__init__.py' not in names:
+        raise ReleaseError('wheel must contain idnumbers/__init__.py')
+
+
 def check_artifacts(directory: Path, version: str) -> None:
-    """Require exactly one wheel and one sdist with matching package metadata."""
+    """Require exactly one wheel and one sdist with matching package metadata.
+
+    The wheel must contain only the ``idnumbers`` package and its single
+    ``idnumbers-<version>.dist-info`` directory: no top-level ``tools`` package,
+    no ``*.data/`` directory and no other top-level module.
+    """
     files = sorted(directory.iterdir())
     wheels = [p for p in files if p.name.endswith('.whl')]
     sdists = [p for p in files if p.name.endswith('.tar.gz')]
     if len(files) != 2 or len(wheels) != 1 or len(sdists) != 1:
         raise ReleaseError('release requires exactly one wheel and one sdist')
     with zipfile.ZipFile(wheels[0]) as wheel:
+        check_wheel_layout(wheel.namelist())
         names = [n for n in wheel.namelist() if n.endswith('.dist-info/METADATA')]
         if len(names) != 1:
             raise ReleaseError('wheel must have exactly one METADATA')
