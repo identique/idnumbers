@@ -17,7 +17,7 @@ class ParseResult(TypedDict):
 class NationalID:
     """
     Ecuador cédula de identidad (also called cédula de ciudadanía), issued by the Dirección General de Registro
-    Civil, Identificación y Cedulación. It is also the natural-person tax number (RUC prefix) in Ecuador.
+    Civil, Identificación y Cedulación.
 
     The number has 10 digits, ``PPTSSSSSSC``: a 2-digit province code ``PP``, a third digit ``T``, a 6-digit
     sequence number ``SSSSSS`` and a check digit ``C``. ``validate()`` checks the following:
@@ -26,12 +26,12 @@ class NationalID:
       140 (Registro Oficial No. 681, 12 April 2012) for Ecuadorians born abroad and registered by consulates; the
       Secretaría Nacional de la Administración Pública states that it is as valid as the series ``01`` to ``24``.
       The province names are not decoded.
-    - **Third digit:** ``0`` to ``6`` for the provinces ``01`` to ``24``. The Gob.EC / MINTEL issue tracker reports
-      real cédulas with the third digit 6 that government forms wrongly rejected, so 6 is accepted. For a consular
+    - **Third digit:** ``0`` to ``6`` for the provinces ``01`` to ``24``. The Gob.EC / MINTEL issue tracker lists
+      reported cédulas with the third digit 6 that the forms failed to validate, so 6 is accepted. For a consular
       cédula (province ``30``) the third digit can only be ``4`` or ``5``.
     - **Check digit:** mod 10 with weights 2,1,2,1,2,1,2,1,2 over the first nine digits, a product above 9 minus 9
       (the Luhn rule), so the check digit is ``(10 - sum % 10) % 10``.
-    - **Separator:** one optional hyphen right before the check digit, ``171000000-9``, as printed in
+    - **Separator:** one optional hyphen right before the check digit, ``171430710-3``, as printed in
       python-stdnum's examples. No other separator is accepted.
 
     Deliberately different from other libraries:

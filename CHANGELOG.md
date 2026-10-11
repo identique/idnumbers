@@ -14,6 +14,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **DOM** cédula de identidad y electoral ([#519](https://github.com/identique/idnumbers/issues/519)): state the
   exact size of python-stdnum's list of issued numbers that fail Luhn (578 entries: 576 with 11 digits, 2 with 10
   digits) and quote its own description of them; validity is unchanged.
+- **ECU** cédula de identidad ([#521](https://github.com/identique/idnumbers/issues/521)): drop the unsourced RUC
+  remark, describe the Gob.EC issue on the third digit 6 as reported validation failures, and cite python-stdnum's
+  actual hyphenated example `171430710-3`; validity is unchanged.
 
 ## 1.16.0 (2026-10-11)
 
