@@ -49,6 +49,14 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `idnumbers` package. The source distribution is unchanged, and the library API is unaffected. The release check
   rejects a wheel with any other top-level entry.
 
+### Other fixes
+
+- **Registry** ([#496](https://github.com/identique/idnumbers/issues/496)): `register()` no longer drops aliases
+  passed as a one-shot iterable such as a generator, and `aliases` is now typed `Iterable[str]`; `resolve_country()`,
+  and so `get_country()` and `get_validator()`, no longer raises for a `str` subclass that overrides `isascii()` or
+  `upper()` or for an object that fakes its `__class__`; `register()` rejects a blank name and gives a missing
+  alpha-2 code its own error message.
+
 ### Documentation
 
 - Document the explicit re-export form for country modules and the pinned coverage version in AGENTS.md
