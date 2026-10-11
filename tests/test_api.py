@@ -292,6 +292,24 @@ class TestValidationResult(TestCase):
         with self.assertRaises(dataclasses.FrozenInstanceError):
             result.is_valid = False  # type: ignore[misc]
 
+    def test_hashing(self) -> None:
+        invalid = api.validate('tw', TWN_INVALID)
+        non_parsable = api.validate('us', USA_VALID)
+        self.assertTrue(non_parsable.is_valid)
+        self.assertIsNone(non_parsable.extracted_info)
+        for result in (invalid, non_parsable):
+            with self.subTest(result=result):
+                self.assertEqual(hash(result), hash(dataclasses.replace(result)))
+        self.assertEqual(len({invalid, api.validate('tw', TWN_INVALID), non_parsable}), 2)
+        parsed = api.validate('tw', TWN_VALID)
+        self.assertIsNotNone(parsed.extracted_info)
+        with self.assertRaises(TypeError):
+            hash(parsed)
+        with self.assertRaises(TypeError):
+            hash(api.parse_id_info('tw', TWN_VALID))
+        failure = api.parse_id_info('tw', TWN_INVALID)
+        self.assertEqual(hash(failure), hash(dataclasses.replace(failure)))
+
     def test_defaults(self) -> None:
         result = api.ValidationResult(is_valid=False, country_code=None, id_number='x')
         self.assertIsNone(result.extracted_info)

@@ -75,7 +75,12 @@ class FailureReason(str, Enum):
 
 @dataclass(frozen=True)
 class ValidationResult:
-    """The outcome of validating one ID number. Instances are immutable, and a result is truthy when it is valid."""
+    """
+    The outcome of validating one ID number. Instances are immutable, and a result is truthy when it is valid.
+
+    Hashing a result hashes its fields, so a result with ``extracted_info`` (a dictionary) isn't hashable and raises
+    :class:`TypeError`; invalid results and valid results without parsed data are hashable.
+    """
 
     is_valid: bool
     """``True`` when the ID number is valid."""
@@ -101,7 +106,11 @@ class ValidationResult:
 
 @dataclass(frozen=True)
 class ParseSuccess:
-    """Parsed information from a valid primary ID. Fields are frozen; ``info`` is a fresh, shallow dictionary."""
+    """
+    Parsed information from a valid primary ID. Fields are frozen; ``info`` is a fresh, shallow dictionary.
+
+    Because ``info`` is a dictionary, hashing an instance raises :class:`TypeError`; :class:`ParseFailure` is hashable.
+    """
 
     country_code: str
     """The resolved ISO 3166-1 alpha-3 code."""

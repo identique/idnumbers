@@ -225,8 +225,9 @@ not if it is an actual issued ID number.
 
 ### Input handling
 
-- `validate()` returns a `bool` for any input and is not meant to raise. Anything that is not a `str` (`None`, numbers,
-  `bytes`, lists, ...) gives `False`, an integer is never converted to a string, so `validate(37605030299)` is `False`.
+- The `validate()` method of an ID class returns a `bool` for any input and is not meant to raise. Anything that is not
+  a `str` (`None`, numbers, `bytes`, lists, ...) gives `False`, an integer is never converted to a string, so
+  `NationalID.validate(37605030299)` is `False`.
 - The whole string must match the ID format. Nothing is stripped, so surrounding whitespace or a trailing newline gives
   `False` (the Irish PPS number is the one exception: its own format allows one trailing space).
 - Only ASCII digits `0-9` are accepted, other Unicode digits such as `١٢٣` or `１２３` give `False`.
@@ -346,10 +347,12 @@ nothing.
 
 ## Validate by country
 
-`validate()` checks an ID number of any supported country in one call. It takes the code of the country and the ID
-number, and returns a `ValidationResult` with `is_valid`, the alpha-3 `country_code`, the `id_number` as you passed it,
-the `extracted_info` of a valid ID number whose type can be parsed, and a `reason` for a failure. A result is truthy
-when it is valid, and `validate()` never raises: an unknown country or a malformed ID number gives an invalid result.
+`idnumbers.validate()` checks an ID number of any supported country in one call. It takes the code of the country and
+the ID number, and returns a `ValidationResult` with `is_valid`, the alpha-3 `country_code`, the `id_number` as you
+passed it, the `extracted_info` of a valid ID number whose type can be parsed, and a `reason` for a failure. A result
+is truthy when it is valid, and `idnumbers.validate()` never raises: an unknown country or a malformed ID number gives
+an invalid result, and so does an unexpected country object or a validator or parser that raises (the result then has
+an `error_message`). The `error_message` of an unsupported country shows a shortened `repr()` of the value.
 Reasons are best effort: `invalid_length`, `invalid_format`, `checksum_mismatch` and `invalid_birthdate` are derived
 from metadata, definite checksum mismatches and traced calendar checks, in that order. Inconclusive checks and
 validator/parser exceptions retain `validation_failed`. The country classes and their validity rules are unchanged.
