@@ -1,5 +1,6 @@
 """Tests of the country registry (idnumbers.registry)."""
 
+import enum
 import importlib
 import os
 import subprocess
@@ -115,6 +116,45 @@ class TestLookup(TestCase):
                 self.assertIsNone(registry.resolve_country(value))
                 self.assertIsNone(registry.get_country(value))
                 self.assertIsNone(registry.get_validator(value))
+
+    def test_str_subclass_is_matched_by_its_string_value(self) -> None:
+        class Hostile(str):
+            def isascii(self) -> bool:
+                raise RuntimeError('isascii')
+
+            def upper(self) -> str:
+                raise RuntimeError('upper')
+
+            def __hash__(self) -> int:
+                raise RuntimeError('hash')
+
+        self.assertEqual(registry.resolve_country(Hostile('tw')), 'TWN')
+        self.assertIs(registry.get_validator(Hostile('tw')), TWN.NationalID)
+        self.assertIsNone(registry.resolve_country(Hostile('xx')))
+
+    def test_str_enum_member_resolves(self) -> None:
+        class Code(str, enum.Enum):
+            TW = 'tw'
+
+        self.assertEqual(registry.resolve_country(Code.TW), 'TWN')
+        self.assertIs(registry.get_validator(Code.TW), TWN.NationalID)
+
+    def test_fake_str_objects_give_none_and_never_raise(self) -> None:
+        class RaisingClass:
+            @property  # type: ignore[misc]
+            def __class__(self) -> Any:
+                raise RuntimeError('__class__')
+
+        class FakeStr:
+            __class__ = str  # type: ignore[assignment]
+
+        for value in (RaisingClass(), FakeStr()):
+            with self.subTest(value=type(value).__name__):
+                self.assertIsNone(registry.resolve_country(value))
+                self.assertIsNone(registry.get_country(value))
+                self.assertIsNone(registry.get_validator(value))
+                result = idnumbers.validate(value, 'A123456789')
+                self.assertFalse(result.is_valid)
 
     def test_validator_validates(self) -> None:
         validator = registry.get_validator('TW')

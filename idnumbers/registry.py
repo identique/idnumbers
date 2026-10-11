@@ -171,14 +171,16 @@ def resolve_country(country: str) -> Optional[str]:
     Resolve an alpha-2 code, an alpha-3 code or a registered alias to the alpha-3 code.
 
     The match ignores the letter case but nothing else: surrounding whitespace, non-ASCII look-alikes and anything
-    that isn't a ``str`` give ``None``. This function never raises and imports no country module.
+    that isn't a ``str`` give ``None``. A ``str`` subclass is matched by its string value. This function never raises
+    and imports no country module.
 
     :param country: an ISO 3166-1 alpha-2 or alpha-3 code, or a registered alias, such as ``'tw'`` or ``'TWN'``.
     :return: the upper-case alpha-3 code, such as ``'TWN'``, or ``None`` when the country is unknown.
     """
-    if not isinstance(country, str) or not country.isascii():
+    # type() and the unbound str methods keep a str subclass, or an object that fakes its __class__, from running code.
+    if not issubclass(type(country), str) or not str.isascii(country):
         return None
-    return _KEYS.get(country.upper())
+    return _KEYS.get(str.upper(country))
 
 
 def get_country(country: str) -> Optional[CountryEntry]:
