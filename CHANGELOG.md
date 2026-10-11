@@ -20,6 +20,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   identity card number: province 01-24 or 30 (registered abroad), a third digit 0-6 (4 or 5 for province 30) and a
   mod-10 check digit, with an optional hyphen before the check digit; `parse()` returns the province, the sequence
   number and the check digit.
+- **EGY** national ID number ([#332](https://github.com/identique/idnumbers/issues/332)): add the 14-digit Egypt
+  national number `CYYMMDDGGSSSSV` (Executive Regulations of the Civil Status Law, Art. 3): century 2 or 3 and a real
+  birth date are validated; the governorate code, the serial and the final digit are not (no official code table or
+  check-digit algorithm is published). `parse()` returns the birth date, the governorate code, the serial and the
+  final digit.
 
 ## 1.15.0 (2026-10-08)
 

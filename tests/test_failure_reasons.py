@@ -31,7 +31,7 @@ def rejecting(pattern=r'(?P<checksum>\d)', checksum=None, validator=None):
 class TestReasonMatrix(TestCase):
     def test_all_classes(self):
         rows = list(iter_reason_matrix())
-        self.assertEqual(len(rows), 107)
+        self.assertEqual(len(rows), 108)
         for row in rows:
             self.assertTrue(row.checksum_note)
             self.assertTrue(row.birthdate_note)
@@ -67,12 +67,12 @@ class TestReasonMatrix(TestCase):
 
     def test_all_date_migrations_have_witnesses(self):
         rows = list(iter_reason_matrix())
-        expected_countries = {'ALB', 'BEL', 'BGR', 'BIH', 'CHN', 'CZE', 'DNK', 'EST', 'FIN', 'HUN', 'IDN',
+        expected_countries = {'ALB', 'BEL', 'BGR', 'BIH', 'CHN', 'CZE', 'DNK', 'EGY', 'EST', 'FIN', 'HUN', 'IDN',
                               'ISL', 'ITA', 'KAZ', 'KOR', 'KWT', 'LTU', 'LUX', 'LVA', 'MEX', 'MKD', 'MNE',
                               'MYS', 'NOR', 'POL', 'ROU', 'SRB', 'SVK', 'SVN', 'SWE', 'ZAF'}
         dated = [row for row in rows if row.birthdate is not None]
         self.assertEqual({row.country for row in dated}, expected_countries)
-        self.assertEqual(len(dated), 34)
+        self.assertEqual(len(dated), 35)
         self.assertTrue(all(row.birthdate.expected == R.INVALID_BIRTHDATE for row in dated))
 
     def test_legacy_date_policies(self):

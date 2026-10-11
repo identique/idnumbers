@@ -524,6 +524,22 @@
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
+  "idnumbers.nationalid.egy.national_id.NationalID": {
+    "valid": "29001010100017",
+    "length": [
+      "2900101010001",
+      "290010101000171",
+      "290010101000171"
+    ],
+    "format": "!!!!!!!!!!!!!!",
+    "checksum": null,
+    "checksum_note": "No checksum method.",
+    "birthdate": {
+      "input": "29002300100017",
+      "reason": "invalid_birthdate"
+    },
+    "birthdate_note": "Synthetic 30 February; no checksum to repair."
+  },
   "idnumbers.nationalid.esp.dni.DNI": {
     "valid": "12345678Z",
     "length": [
