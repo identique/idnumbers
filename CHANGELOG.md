@@ -44,6 +44,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - Say in the `register()` docstring that a non-iterable `aliases` raises `TypeError`, and make the registry
   concurrency tests fail when the registration lock is missing
   ([#535](https://github.com/identique/idnumbers/issues/535)).
+- **Unified API** ([#543](https://github.com/identique/idnumbers/issues/543)): render builtin `TypeError` names as
+  literals in result-class hash documentation, avoiding unresolved API documentation links; behaviour is unchanged.
 
 ## 1.16.0 (2026-10-11)
 

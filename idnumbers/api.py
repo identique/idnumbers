@@ -79,7 +79,7 @@ class ValidationResult:
     The outcome of validating one ID number. Instances are immutable, and a result is truthy when it is valid.
 
     Hashing a result hashes its fields, so a result with ``extracted_info`` (a dictionary) isn't hashable and raises
-    :class:`TypeError`; invalid results and valid results without parsed data are hashable.
+    ``TypeError``; invalid results and valid results without parsed data are hashable.
     """
 
     is_valid: bool
@@ -109,7 +109,7 @@ class ParseSuccess:
     """
     Parsed information from a valid primary ID. Fields are frozen; ``info`` is a fresh, shallow dictionary.
 
-    Because ``info`` is a dictionary, hashing an instance raises :class:`TypeError`; :class:`ParseFailure` is hashable.
+    Because ``info`` is a dictionary, hashing an instance raises ``TypeError``; :class:`ParseFailure` is hashable.
     """
 
     country_code: str
