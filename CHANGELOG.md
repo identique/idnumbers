@@ -14,6 +14,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **Parity sync script** ([#533](https://github.com/identique/idnumbers/issues/533)): when `--from-port` fails and
   restoring the tracked files also fails, both errors are reported and the possibly half-updated files are named;
   tests now cover `drop_bytecode()` and keep the non-git port case from finding an enclosing repository.
+- **Unified API** ([#538](https://github.com/identique/idnumbers/issues/538)): `validate()`, `validate_many()` and
+  `parse_id_info()` no longer raise when a country's `repr()` returns a `str` subclass whose length or slicing raises;
+  the README describes the `error_message` fallbacks.
 
 ### Documentation
 
@@ -105,8 +108,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   package defines none. The default `idnumbers.nationalid` output is unchanged.
 - **Unified API** ([#499](https://github.com/identique/idnumbers/issues/499)): `validate()` and `parse_id_info()` no
   longer raise when the country's `repr()` raises or when the exception of a validator or parser can't be turned into
-  text, and the unsupported-country message shortens a long country value to 80 characters. The `ValidationResult`
-  and `ParseSuccess` docs say that a result with parsed data isn't hashable.
+  text, and the unsupported-country message shortens a long country value to 80 characters plus `...`. The
+  `ValidationResult` and `ParseSuccess` docs say that a result with parsed data isn't hashable.
 
 ### Documentation
 

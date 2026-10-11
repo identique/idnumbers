@@ -196,20 +196,25 @@ def validate(country: str, id_number: str) -> ValidationResult:
 
 
 def _short_repr(value: object) -> str:
-    """Return ``repr(value)`` without raising, cut to ``_REPR_LIMIT`` characters plus ``'...'`` when longer."""
+    """Return ``repr(value)`` without raising, cut to ``_REPR_LIMIT`` characters plus ``'...'`` when longer.
+
+    For a ``str`` the message shows the repr of its first ``_REPR_LIMIT + 1`` characters, so the quote style or a
+    trailing escape may differ from the repr of the whole value.
+    """
     try:
         if issubclass(type(value), str):
             # Slice with the base-class method: an exact str keeps user code and a huge repr out of the message.
             value = str.__getitem__(cast(str, value), slice(0, _REPR_LIMIT + 1))
-        text = repr(value)
+        # A repr may be a str subclass: copy it to an exact str before len() and slicing can run user code.
+        text = str.__getitem__(repr(value), slice(None))
+        if len(text) > _REPR_LIMIT:
+            text = text[:_REPR_LIMIT] + '...'
+        return text
     except Exception:
         try:
             return '<%s object, repr() failed>' % type(value).__name__
         except Exception:
             return '<object, repr() failed>'
-    if len(text) > _REPR_LIMIT:
-        return text[:_REPR_LIMIT] + '...'
-    return text
 
 
 def validate_many(items: Iterable[Tuple[str, str]]) -> List[ValidationResult]:
