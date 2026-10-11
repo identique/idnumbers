@@ -508,6 +508,22 @@
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
+  "idnumbers.nationalid.ecu.national_id.NationalID": {
+    "valid": "1710000009",
+    "length": [
+      "171000000",
+      "17100000099",
+      "171000000-91"
+    ],
+    "format": "!!!!!!!!!!",
+    "checksum": {
+      "input": "1710000000",
+      "reason": "checksum_mismatch"
+    },
+    "checksum_note": "Definite mismatch.",
+    "birthdate": null,
+    "birthdate_note": "No full calendar date encoded or validated."
+  },
   "idnumbers.nationalid.esp.dni.DNI": {
     "valid": "12345678Z",
     "length": [
