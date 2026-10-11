@@ -212,6 +212,14 @@ def restore(snapshot: Dict[Path, Optional[bytes]]) -> None:
             path.write_bytes(content)
 
 
+def display_path(path: Path) -> str:
+    """The path relative to the repository root when it is inside it, otherwise as given."""
+    try:
+        return str(path.relative_to(REPOSITORY_ROOT))
+    except ValueError:
+        return str(path)
+
+
 def run(arguments: argparse.Namespace) -> int:
     corpus = import_corpus_module()
     if arguments.from_port is None:
@@ -221,9 +229,20 @@ def run(arguments: argparse.Namespace) -> int:
     try:
         corpus, message = copy_from_port(arguments.from_port.resolve(), corpus)
         status = regenerate(arguments, corpus)
-    except BaseException:
+    except BaseException as error:
         # A failure at any point after the first write must not leave a half-updated tree.
-        restore(snapshot)
+        try:
+            restore(snapshot)
+        except Exception as restore_error:
+            # Report the failure that started it all too, and name the files to check; otherwise the user would see
+            # only the rollback error and not know the tree may be half-updated.
+            drop_bytecode(module_path)
+            raise SetupError(
+                "%s: %s\nrestoring the previous files failed as well (%s: %s); these files may be partly updated, "
+                "check them with `git status` and `git diff`: %s"
+                % (type(error).__name__, error, type(restore_error).__name__, restore_error,
+                   ", ".join(display_path(path) for path in snapshot))
+            ) from error
         drop_bytecode(module_path)
         raise
     print(message)
