@@ -14,7 +14,7 @@ class TestCRIValidation(TestCase):
 
     def test_normal_case(self):
         for id_number in (
-            '1-0913-0259',  # Hacienda help-page example
+            '1-0913-0259',  # example used by the Node port
             '109130259',
             '3-0455-0175',  # python-stdnum documentation example
             '701610395',  # python-stdnum documentation example
@@ -24,6 +24,20 @@ class TestCRIValidation(TestCase):
         ):
             with self.subTest(id_number=id_number):
                 self.assertTrue(CRI.NationalID.validate(id_number))
+
+    def test_optional_hyphen_layouts(self):
+        expected = {'province': 1, 'province_name': 'San José', 'tomo': '0234', 'asiento': '0567'}
+        for id_number in ('102340567', '1-0234-0567', '1-02340567', '10234-0567'):
+            with self.subTest(id_number=id_number):
+                self.assertTrue(CRI.NationalID.validate(id_number))
+                self.assertEqual(expected, CRI.NationalID.parse(id_number))
+
+    def test_malformed_hyphens(self):
+        for id_number in ('1--0234-0567', '1-0234--0567', '-102340567', '102340567-',
+                          '10-234-0567', '1-023-40567', '1-02340-567'):
+            with self.subTest(id_number=id_number):
+                self.assertFalse(CRI.NationalID.validate(id_number))
+                self.assertIsNone(CRI.NationalID.parse(id_number))
 
     def test_error_case(self):
         for id_number in (

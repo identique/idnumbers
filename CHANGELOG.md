@@ -4,6 +4,14 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Documentation
+
+- **CRI** cédula de identidad ([#515](https://github.com/identique/idnumbers/issues/515)): correct the example's
+  provenance to the Node port and add tests for compact, fully hyphenated, mixed and malformed hyphen layouts;
+  validity and parsed results are unchanged.
+
 ## 1.16.0 (2026-10-11)
 
 ### Added
