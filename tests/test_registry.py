@@ -216,6 +216,26 @@ class TestRegister(RegistryStateCase):
         self.assertEqual(len(registry.list_supported_countries()), COUNTRY_COUNT)
         self.assertEqual(registry._CUSTOM, before[2])
 
+    def test_aliases_may_be_a_one_shot_iterable(self) -> None:
+        generator_validator = make_validator()
+        registry.register('abc', generator_validator, alpha2='ab', aliases=(alias for alias in ['one', 'two']))
+        iterator_validator = make_validator()
+        registry.register('xyz', iterator_validator, alpha2='xy', aliases=iter(['three']))
+        for code, alpha3 in (('one', 'ABC'), ('TWO', 'ABC'), ('three', 'XYZ')):
+            with self.subTest(code=code):
+                self.assertEqual(registry.resolve_country(code), alpha3)
+        self.assertEqual(registry._CUSTOM['ABC'], ('ONE', 'TWO'))
+        self.assertEqual(registry._CUSTOM['XYZ'], ('THREE',))
+
+    def test_idempotent_with_a_generator_of_aliases(self) -> None:
+        validator = make_validator()
+        registry.register('abc', validator, alpha2='ab', name='Abc', aliases=(alias for alias in ('one', 'two')))
+        before = self.snapshot()
+        registry.register('abc', validator, alpha2='ab', name='Abc', aliases=(alias for alias in ('two', 'one')))
+        self.assertEqual(self.snapshot(), before)
+        self.assertEqual(registry.resolve_country('one'), 'ABC')
+        self.assertEqual(registry.resolve_country('two'), 'ABC')
+
     def test_type_errors(self) -> None:
         validator = make_validator()
         no_metadata = type('NoMetadata', (), {'validate': staticmethod(lambda value: True)})
