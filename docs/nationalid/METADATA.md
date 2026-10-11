@@ -29,10 +29,11 @@ The `METADATA` structure are the same among all classes. If you find any inconsi
 ### Display format
 
 `display_format` is written for people, with the placeholder letters of the ID (`#` for a digit, `L` for a letter, and
-so on). Two bracket forms mark a part that is not a fixed character: `[...]` is an optional part, and `{...}` is exactly
-one of the listed characters. Every other character, including `(` and `)`, is printed as shown. For example, Hong
-Kong's `L[L]######(C)` is one or two letters, six digits and the check character in printed parentheses, and Finland's
-`DDMMYY{+-A}SSSC` has one century sign out of `+`, `-` and `A`.
+so on). Two bracket forms mark a part that is not a fixed character: `[...]` is an optional part, and `{...}` is
+exactly one character, out of the ones listed. Every other character, including `(` and `)`, is printed as shown. For
+example, Hong Kong's `L[L]######(C)` is one or two letters, six digits and the check character in printed parentheses.
+Finland's `DDMMYY{+-A}SSSC` has one century sign; it lists the traditional signs `+` (1800s), `-` (1900s) and `A`
+(2000s), and the class also accepts the letters `B`-`F` (2000s) and `U`-`Y` (1900s) introduced in 2023.
 
 ### Mask vocabulary
 
