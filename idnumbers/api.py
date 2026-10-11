@@ -28,7 +28,7 @@ Example::
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Iterable, List, Literal, Mapping, Optional, Tuple, Type, Union
+from typing import Any, Iterable, List, Literal, Mapping, Optional, Tuple, Type, Union, cast
 
 from . import registry
 
@@ -191,7 +191,7 @@ def _short_repr(value: object) -> str:
     try:
         if issubclass(type(value), str):
             # Slice with the base-class method: an exact str keeps user code and a huge repr out of the message.
-            value = str.__getitem__(value, slice(0, _REPR_LIMIT + 1))  # type: ignore[call-overload]
+            value = str.__getitem__(cast(str, value), slice(0, _REPR_LIMIT + 1))
         text = repr(value)
     except Exception:
         try:
