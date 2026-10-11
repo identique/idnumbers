@@ -29,6 +29,7 @@ not personal data or proof of issuance. Each snippet runs independently.
 | [Czechia (CZE)](CZE.md) | CZ | BirthNumber | 2 |
 | [Germany (DEU)](DEU.md) | DE | TaxID | 1 |
 | [Denmark (DNK)](DNK.md) | DK | PersonalIdentityNumber | 2 |
+| [Dominican Republic (DOM)](DOM.md) | DO | NationalID | 1 |
 | [Spain (ESP)](ESP.md) | ES | DNI | 1 |
 | [Estonia (EST)](EST.md) | EE | PersonalID | 1 |
 | [Finland (FIN)](FIN.md) | FI | PersonalIdentityCode | 1 |

@@ -492,6 +492,22 @@
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
+  "idnumbers.nationalid.dom.national_id.NationalID": {
+    "valid": "402-1234567-8",
+    "length": [
+      "4021234567",
+      "402123456781",
+      "402-1234567-81"
+    ],
+    "format": "!!!!!!!!!!!",
+    "checksum": {
+      "input": "402-1234567-0",
+      "reason": "checksum_mismatch"
+    },
+    "checksum_note": "Definite mismatch.",
+    "birthdate": null,
+    "birthdate_note": "No full calendar date encoded or validated."
+  },
   "idnumbers.nationalid.esp.dni.DNI": {
     "valid": "12345678Z",
     "length": [

@@ -34,7 +34,7 @@ assert mask.pattern.fullmatch('811218+9876') is None
 
 Empirical only: one synthetic current METADATA example per country, plus its lowercase, surrounding
 space, normalized and formatted variants. This is **not** a complete country input policy.
-CHE, CHL, KOR and USA reject their normalized example; all 79 formatted examples validate.
+CHE, CHL, KOR and USA reject their normalized example; all 80 formatted examples validate.
 
 | Country | Example | Lowercase | Surrounding spaces | Normalized | Formatted |
 | --- | --- | --- | --- | --- | --- |
@@ -59,6 +59,7 @@ CHE, CHL, KOR and USA reject their normalized example; all 79 formatted examples
 | [CZE](countries/CZE.md) | <code>000101/0009</code> | yes | no | yes | yes |
 | [DEU](countries/DEU.md) | <code>12 345 678 911</code> | yes | no | yes | yes |
 | [DNK](countries/DNK.md) | <code>010100-1234</code> | yes | no | yes | yes |
+| [DOM](countries/DOM.md) | <code>402-1234567-8</code> | yes | no | yes | yes |
 | [ESP](countries/ESP.md) | <code>12345678Z</code> | yes | yes | yes | yes |
 | [EST](countries/EST.md) | <code>37605030299</code> | yes | no | yes | yes |
 | [FIN](countries/FIN.md) | <code>131052-308T</code> | no | no | yes | yes |
