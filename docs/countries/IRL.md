@@ -18,7 +18,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | checksum_algorithm | <code>Weighted sum mod 23 (weights 8-2, an A, B or H suffix added with weight 9) mapped to the check letter A-W</code> |
 | country_name | <code>Ireland</code> |
 | deprecated | <code>False</code> |
-| display_format | <code>#######L(L)</code> |
+| display_format | <code>#######L[L]</code> |
 | example | <code>1234567T</code> |
 | id_type | <code>Personal Public Service Number</code> |
 | iso3166_alpha2 | <code>IE</code> |

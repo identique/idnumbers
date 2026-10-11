@@ -13,7 +13,10 @@ def collect_ids(package_name: str, output_filename: str) -> None:
     Dump the METADATA of every non-alias ID class into a JSON file.
 
     The classes come from the country registry (``idnumbers.registry.list_supported_countries``), one entry for each
-    module that defines them, so the shared Yugoslav base class and the alias names are not listed.
+    module that defines them, so the shared Yugoslav base class and the alias names are not listed. Only the classes
+    defined in ``package_name`` (the package itself or a module or package below it) are listed.
+
+    :raises ValueError: when no ID class is defined in ``package_name``.
     """
     # Import the package first so a wrong package name fails with a clear error
     importlib.import_module(package_name)
@@ -22,6 +25,8 @@ def collect_ids(package_name: str, output_filename: str) -> None:
     classes_count = 0
     for entry in list_supported_countries():
         for cls in entry.id_types:
+            if cls.__module__ != package_name and not cls.__module__.startswith(package_name + '.'):
+                continue
             # Work on a copy: the live METADATA, shared with the library, must stay unchanged
             cls_metadata = dict(vars(cls.METADATA))
             cls_metadata['regexp'] = cls_metadata['regexp'].pattern
@@ -39,6 +44,8 @@ def collect_ids(package_name: str, output_filename: str) -> None:
             })
             classes_count += 1
 
+    if not classes_count:
+        raise ValueError(f'no ID class is defined in {package_name}')
     metadata: List[Dict[str, Any]] = list(modules.values())
     country_codes = {module['country_code'] for module in metadata}
     print('----------------------------------------------------------------------------')

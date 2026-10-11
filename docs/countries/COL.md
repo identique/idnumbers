@@ -22,17 +22,18 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | example | <code>12.345.678-8</code> |
 | id_type | <code>Unique Personal ID</code> |
 | iso3166_alpha2 | <code>CO</code> |
-| links | <code>[&#x27;https://en.wikipedia.org/wiki/Colombian_identity_card&#x27;, &#x27;https://en.wikipedia.org/wiki/National_identification_number#Colombia&#x27;, &#x27;https://validatetin.com/colombia/#&#x27;]</code> |
+| links | <code>[&#x27;https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/pdf/resolucion_registraduria_3571_2003.pdf&#x27;, &#x27;https://en.wikipedia.org/wiki/Colombian_identity_card&#x27;, &#x27;https://en.wikipedia.org/wiki/National_identification_number#Colombia&#x27;, &#x27;https://validatetin.com/colombia/#&#x27;]</code> |
 | masks | <code>(&#x27;##.###.###-#&#x27;, &#x27;###.###.###-#&#x27;)</code> |
 | max_length | <code>10</code> |
 | min_length | <code>9</code> |
-| names | <code>[&#x27;Unique Personal ID&#x27;, &#x27;NUIP&#x27;, &#x27;Número único de identidad personal&#x27;]</code> |
-| official_name | <code>Número único de identidad personal</code> |
+| names | <code>[&#x27;Unique Personal ID&#x27;, &#x27;NUIP&#x27;, &#x27;Número Único de Identificación Personal&#x27;]</code> |
+| official_name | <code>Número Único de Identificación Personal</code> |
 | parsable | <code>False</code> |
 | regexp | <code>^(\d{2,3}\.?\d{3}\.?\d{3}-?\d)$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 
+- <https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/pdf/resolucion_registraduria_3571_2003.pdf>
 - <https://en.wikipedia.org/wiki/Colombian_identity_card>
 - <https://en.wikipedia.org/wiki/National_identification_number#Colombia>
 - <https://validatetin.com/colombia/#>

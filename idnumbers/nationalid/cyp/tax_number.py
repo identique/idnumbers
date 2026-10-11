@@ -25,6 +25,8 @@ class TaxNumber:
         'regexp': re.compile(r'^\d{8}[A-Z]$'),
         'alias_of': None,
         'names': ['tax number',
+                  'Αριθμός Φορολογικής Ταυτότητας',
+                  'ΑΦΤ',
                   'Αριθμός Εγγραφής',
                   'ΦΠΑ',
                   'Φ.Π.Α.',
@@ -38,12 +40,15 @@ class TaxNumber:
                   'vergi kimlik kodu'],
         'links': ['https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698',
                   'https://en.wikipedia.org/wiki/VAT_identification_number',
+                  'https://www.mof.gov.cy/mof/tax/taxdep.nsf/b04076eb2fadc080c22581ae003e8c2c/'
+                  '0C52630C3AF8E554C22589A50042395D/$file/'
+                  '%CE%9D%CE%AD%CE%B1%20%CE%9C%CE%BF%CF%81%CF%86%CE%AE%20%CE%91%CE%A6%CE%A4%2004052023.pdf',
                   'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
                   'tax-identification-numbers/Cyprus-TIN.pdf'],
         'deprecated': False,
         'country_name': 'Cyprus',
         'id_type': 'Tax Number',
-        'official_name': 'αριθμός φορολογικού μητρώου',
+        'official_name': 'Αριθμός Φορολογικής Ταυτότητας',
         'display_format': '########L',
         'example': '01234567U',
         'checksum_algorithm': 'Mod 26 check letter (the 2nd, 4th, 6th and 8th digits are added to a table value of '

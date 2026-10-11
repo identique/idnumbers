@@ -27,7 +27,9 @@ def colombia_checksum(id_number: str) -> CHECK_DIGIT:
 
 class UniquePersonalID:
     """
-    UniquePersonalID, NUIP, Número único de identidad personal
+    UniquePersonalID, NUIP, Número Único de Identificación Personal
+    Registraduría Nacional del Estado Civil, Resolución 3571 de 2003, art. 1 (10 numeric digits):
+    https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/pdf/resolucion_registraduria_3571_2003.pdf
     https://en.wikipedia.org/wiki/Colombian_identity_card
     https://validatetin.com/colombia/#
     """
@@ -45,14 +47,16 @@ class UniquePersonalID:
         'alias_of': None,
         'names': ['Unique Personal ID',
                   'NUIP',
-                  'Número único de identidad personal'],
-        'links': ['https://en.wikipedia.org/wiki/Colombian_identity_card',
+                  'Número Único de Identificación Personal'],
+        'links': ['https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/pdf/'
+                  'resolucion_registraduria_3571_2003.pdf',
+                  'https://en.wikipedia.org/wiki/Colombian_identity_card',
                   'https://en.wikipedia.org/wiki/National_identification_number#Colombia',
                   'https://validatetin.com/colombia/#'],
         'deprecated': False,
         'country_name': 'Colombia',
         'id_type': 'Unique Personal ID',
-        'official_name': 'Número único de identidad personal',
+        'official_name': 'Número Único de Identificación Personal',
         'display_format': '##.###.###-#',
         'example': '12.345.678-8',
         'checksum_algorithm': 'Weighted sum mod 11 (prime weights 3, 7, 13, 17, 19, ... from the right; check = 11 - '

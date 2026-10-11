@@ -18,7 +18,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | checksum_algorithm | <code>Mod 31 check character (the nine digits DDMMYYSSS as a number mod 31, mapped to 0-9 and A-Y without G, I, O, Q)</code> |
 | country_name | <code>Finland</code> |
 | deprecated | <code>False</code> |
-| display_format | <code>DDMMYY[+-A]SSSC</code> |
+| display_format | <code>DDMMYY{+-A}SSSC</code> |
 | example | <code>131052-308T</code> |
 | id_type | <code>Personal Identity Code</code> |
 | iso3166_alpha2 | <code>FI</code> |

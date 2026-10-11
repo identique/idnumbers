@@ -22,18 +22,19 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | example | <code>001-234567-9</code> |
 | id_type | <code>National ID Number</code> |
 | iso3166_alpha2 | <code>IR</code> |
-| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of&#x27;]</code> |
+| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of&#x27;, &#x27;https://www.ekhtebar.ir/%E2%80%8C%D9%82%D8%A7%D9%86%D9%88%D9%86-%D8%A7%D9%84%D8%B2%D8%A7%D9%85-%D8%A7%D8%AE%D8%AA%D8%B5%D8%A7%D8%B5-%D8%B4%D9%85%D8%A7%D8%B1%D9%87-%D9%85%D9%84%DB%8C-%D9%88-%DA%A9%D8%AF-%D9%BE%D8%B3%D8%AA/&#x27;]</code> |
 | masks | <code>(&#x27;###-######-#&#x27;, &#x27;##########&#x27;)</code> |
 | max_length | <code>10</code> |
 | min_length | <code>10</code> |
-| names | <code>[&#x27;National ID Number&#x27;, &#x27;kart-e-meli&#x27;, &#x27;کارت ملی&#x27;]</code> |
-| official_name | <code>کارت ملی</code> |
+| names | <code>[&#x27;National ID Number&#x27;, &#x27;kart-e-meli&#x27;, &#x27;کارت ملی&#x27;, &#x27;شماره ملی&#x27;, &#x27;کد ملی&#x27;]</code> |
+| official_name | <code>شماره ملی</code> |
 | parsable | <code>False</code> |
 | regexp | <code>^\d{3}-?\d{6}-?\d$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 
 - <https://en.wikipedia.org/wiki/National_identification_number#Iran,_Islamic_Republic_of>
+- <https://www.ekhtebar.ir/%E2%80%8C%D9%82%D8%A7%D9%86%D9%88%D9%86-%D8%A7%D9%84%D8%B2%D8%A7%D9%85-%D8%A7%D8%AE%D8%AA%D8%B5%D8%A7%D8%B5-%D8%B4%D9%85%D8%A7%D8%B1%D9%87-%D9%85%D9%84%DB%8C-%D9%88-%DA%A9%D8%AF-%D9%BE%D8%B3%D8%AA/>
 
 ```python
 from idnumbers.nationalid.irn.national_id import NationalID

@@ -18,7 +18,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | checksum_algorithm | <code>Weighted sum mod 11 in two passes (weights 1-8, then 3-10; a remainder of 10 in both passes becomes 0); the 13th digit of a 13-digit code uses weights 2, 7, 3, 5 then 4, 9, 5, 7</code> |
 | country_name | <code>Bulgaria</code> |
 | deprecated | <code>False</code> |
-| display_format | <code>#########(####)</code> |
+| display_format | <code>#########[####]</code> |
 | example | <code>123456786</code> |
 | id_type | <code>Unified Identification Code</code> |
 | iso3166_alpha2 | <code>BG</code> |

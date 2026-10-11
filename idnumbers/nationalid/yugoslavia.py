@@ -1,10 +1,11 @@
 import re
-from .util import birth_date as _calendar_date
 from datetime import date
-from .metadata import IdMetadata
 from typing import Optional, TypedDict, Tuple, cast
-from .util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
+
 from .constant import Citizenship, Gender
+from .metadata import IdMetadata
+from .util import birth_date as _calendar_date
+from .util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):

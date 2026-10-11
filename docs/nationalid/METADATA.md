@@ -21,10 +21,19 @@ The `METADATA` structure are the same among all classes. If you find any inconsi
 | country_name   | string                                                                          | The English name of the issuing country, the same as in the [country registry](../../idnumbers/registry.py), such as `Taiwan`. |
 | id_type        | string                                                                          | The English name of the kind of ID in Title Case, such as `Medicare Number`.                                  |
 | official_name  | string or None                                                                  | The official name of the ID in the local language, such as `Henkilötunnus` or `國民身分證統一編號`. It is `None` when the ID has no local-language name, as with an ID that is named in English (the UK NINO, the US SSN, the Australian Medicare number). It is never the same as `id_type`. |
-| display_format | string                                                                          | A human-readable layout of the ID, such as `###-##-####` or `YYMMDD-SSSC`.                                     |
+| display_format | string                                                                          | A human-readable layout of the ID, such as `###-##-####` or `YYMMDD-SSSC`. See [the display format](#display-format).                         |
 | example        | string                                                                          | A synthetic ID that the class validates: constructed with a valid check digit, or a number documented as a sample by the issuing authority. It is not the number of a real person. It is written in the first (preferred) layout of `masks`. |
 | checksum_algorithm | string or None                                                              | A short description of the algorithm that the `checksum` function computes, such as `Luhn (mod 10)`. It is `None` when `checksum` is false. |
 | masks          | Tuple of string                                                                 | The layouts the class accepts, the preferred display layout first. See [the mask vocabulary](#mask-vocabulary). |
+
+### Display format
+
+`display_format` is written for people, with the placeholder letters of the ID (`#` for a digit, `L` for a letter, and
+so on). Two bracket forms mark a part that is not a fixed character: `[...]` is an optional part, and `{...}` is
+exactly one character, out of the ones listed. Every other character, including `(` and `)`, is printed as shown. For
+example, Hong Kong's `L[L]######(C)` is one or two letters, six digits and the check character in printed parentheses.
+Finland's `DDMMYY{+-A}SSSC` has one century sign; it lists the traditional signs `+` (1800s), `-` (1900s) and `A`
+(2000s), and the class also accepts the letters `B`-`F` (2000s) and `U`-`Y` (1900s) introduced in 2023.
 
 ### Mask vocabulary
 
@@ -38,6 +47,8 @@ A mask describes one accepted layout of the ID, one character per character of t
 | `*`       | any character except white space          |
 
 Every other character of a mask is a separator, and it is one of space, `-`, `.`, `/`, `(` and `)`. A separator is part of the layout, so a validator that rejects separators has masks without them: the masks are layouts the class accepts, not the way an authority prints the ID. A mask has one slot for each character that the ID has without its separators, so the number of slots of a mask is a length between `min_length` and `max_length`. A slot that stands for a fixed character of the ID, such as the `U` of an Austrian UID, is written as the kind of character (`L`), not as the character.
+
+The masks are the preferred layouts that the class accepts, not necessarily every layout it accepts: for example ARG, COL, CZE, SVK, DNK, ISL and SWE also accept a compact form that has no mask. `format_id()` lays the ID into the first mask that fits, and `get_input_mask()` builds its pattern from all the masks.
 
 The tests in `tests/test_metadata.py` check every ID class: the example is valid and written in the first mask, it is accepted when it is laid into every mask it fits, and every other mask has a test sample that the class accepts.
 
