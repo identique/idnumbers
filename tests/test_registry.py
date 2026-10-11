@@ -157,6 +157,9 @@ class TestLookup(TestCase):
                 self.assertIsNone(registry.get_validator(value))
                 result = idnumbers.validate(value, 'A123456789')
                 self.assertFalse(result.is_valid)
+                self.assertIs(result.reason, idnumbers.FailureReason.UNSUPPORTED_COUNTRY)
+                assert result.error_message is not None
+                self.assertTrue(result.error_message.startswith('unsupported country: '))
 
     def test_validator_validates(self) -> None:
         validator = registry.get_validator('TW')
