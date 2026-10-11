@@ -101,6 +101,24 @@ class TestGeneratedDocumentation(TestCase):
                     self.assertIsInstance(item['metadata']['masks'], list)
         self.assertEqual(before, [dict(vars(cls.METADATA)) for cls in classes])
 
+    def test_collect_ids_honours_the_package_argument(self) -> None:
+        with TemporaryDirectory() as directory:
+            output = Path(directory) / 'twn.json'
+            with contextlib.redirect_stdout(io.StringIO()):
+                collect_ids('idnumbers.nationalid.twn', str(output))
+            rows = json.loads(output.read_text())
+            self.assertTrue(rows)
+            self.assertEqual({row['country_code'] for row in rows}, {'twn'})
+            self.assertTrue(all(row['package_name'].startswith('idnumbers.nationalid.twn.') for row in rows))
+            expected = sum(len(entry.id_types) for entry in list_supported_countries() if entry.alpha3 == 'TWN')
+            self.assertEqual(sum(len(row['ids']) for row in rows), expected)
+            # Modules that define no ID class list nothing
+            for package in ('idnumbers.nationalid.constant', 'idnumbers.nationalid.util'):
+                missing = Path(directory) / 'missing.json'
+                with contextlib.redirect_stdout(io.StringIO()), self.assertRaisesRegex(ValueError, package):
+                    collect_ids(package, str(missing))
+                self.assertFalse(missing.exists())
+
     def test_installed_tree_without_tests_preserves_json_and_country_tools(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)
