@@ -7,7 +7,17 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+from idnumbers.api import ParseSuccess, ValidationResult
 from tools.check_api_links import EXPECTED_LINKS, DocstringLinks, check_links
+
+
+class TestApiDocstrings(unittest.TestCase):
+    def test_builtin_exception_names_use_literal_markup(self):
+        for result_type in (ValidationResult, ParseSuccess):
+            with self.subTest(result_type=result_type.__name__):
+                docstring = result_type.__doc__ or ''
+                self.assertIn('``TypeError``', docstring)
+                self.assertNotIn(':class:`TypeError`', docstring)
 
 
 class TestApiLinks(unittest.TestCase):
