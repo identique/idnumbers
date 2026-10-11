@@ -50,6 +50,26 @@ class RaisingParser:
         raise ValueError('cannot parse')
 
 
+class RaisingRepr:
+    def __repr__(self) -> str:
+        raise RuntimeError('no repr')
+
+
+class RaisingReprStr(str):
+    def __repr__(self) -> str:
+        raise RuntimeError('no repr')
+
+
+def unsupported_country_cases() -> Dict[str, Any]:
+    """Countries whose message must stay short and must not raise, with the expected message prefix."""
+    return {
+        'raising repr': RaisingRepr(),
+        'huge str': 'x' * 10_000_000,
+        'long list': list(range(1000)),
+        'str subclass with a raising repr': RaisingReprStr('y' * 1000),
+    }
+
+
 class NoneParser:
     METADATA = SimpleNamespace(iso3166_alpha2='QQ')
 
@@ -113,6 +133,41 @@ class TestValidate(TestCase):
                 self.assertIn(repr(country), result.error_message)
                 self.assertIsNone(result.extracted_info)
                 self.assertEqual(result.id_number, TWN_VALID)
+
+    def test_unsupported_country_message_never_raises_or_grows(self) -> None:
+        prefix = 'unsupported country: '
+        limit = len(prefix) + api._REPR_LIMIT + len('...')
+        for name, country in unsupported_country_cases().items():
+            with self.subTest(case=name):
+                result = api.validate(country, TWN_VALID)
+                self.assertEqual(result.reason, api.FailureReason.UNSUPPORTED_COUNTRY)
+                self.assertIsNone(result.country_code)
+                assert result.error_message is not None
+                self.assertTrue(result.error_message.startswith(prefix))
+                if name != 'raising repr':
+                    self.assertLessEqual(len(result.error_message), limit)
+                    self.assertTrue(result.error_message.endswith('...'))
+
+    def test_unsupported_country_message_texts(self) -> None:
+        cases = unsupported_country_cases()
+        expected = {
+            'raising repr': 'unsupported country: <RaisingRepr object, repr() failed>',
+            'huge str': "unsupported country: 'xxx",
+            'long list': 'unsupported country: [0, 1, 2, 3',
+            'str subclass with a raising repr': "unsupported country: 'yyy",
+        }
+        for name, country in cases.items():
+            with self.subTest(case=name):
+                message = api.validate(country, '').error_message
+                assert message is not None
+                if name == 'raising repr':
+                    self.assertEqual(message, expected[name])
+                else:
+                    self.assertTrue(message.startswith(expected[name]), message)
+
+    def test_unsupported_country_message_keeps_a_repr_that_fits(self) -> None:
+        fits = 'x' * (api._REPR_LIMIT - 2)
+        self.assertEqual(api.validate(fits, '').error_message, 'unsupported country: %r' % (fits,))
 
     def test_id_number_that_is_not_a_string(self) -> None:
         for id_number in (None, 123, b'A123456789'):

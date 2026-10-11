@@ -32,6 +32,9 @@ from typing import Any, Iterable, List, Literal, Mapping, Optional, Tuple, Type,
 
 from . import registry
 
+_REPR_LIMIT = 80
+"""The longest ``repr()`` of an unsupported country that an error message keeps whole."""
+
 __all__ = [
     'FailureReason', 'ValidationResult', 'ParseSuccess', 'ParseFailure', 'ParseIdInfoResult',
     'validate', 'validate_many', 'parse_id_info', 'failure_reason',
@@ -178,9 +181,26 @@ def validate(country: str, id_number: str) -> ValidationResult:
             country_code=None,
             id_number=id_number,
             reason=FailureReason.UNSUPPORTED_COUNTRY,
-            error_message='unsupported country: %r' % (country,),
+            error_message='unsupported country: ' + _short_repr(country),
         )
     return _check(alpha3, validator, id_number)
+
+
+def _short_repr(value: object) -> str:
+    """Return ``repr(value)`` without raising, cut to ``_REPR_LIMIT`` characters plus ``'...'`` when longer."""
+    try:
+        if issubclass(type(value), str):
+            # Slice with the base-class method: an exact str keeps user code and a huge repr out of the message.
+            value = str.__getitem__(value, slice(0, _REPR_LIMIT + 1))  # type: ignore[call-overload]
+        text = repr(value)
+    except Exception:
+        try:
+            return '<%s object, repr() failed>' % type(value).__name__
+        except Exception:
+            return '<object, repr() failed>'
+    if len(text) > _REPR_LIMIT:
+        return text[:_REPR_LIMIT] + '...'
+    return text
 
 
 def validate_many(items: Iterable[Tuple[str, str]]) -> List[ValidationResult]:

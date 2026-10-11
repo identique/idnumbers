@@ -83,6 +83,13 @@ class TestParseIdInfo(TestCase):
                 self.assertEqual(result, api.ParseFailure(None, '', api.FailureReason.UNSUPPORTED_COUNTRY,
                                                          'unsupported country: %r' % (country,)))
 
+    def test_unsupported_country_message_never_raises(self) -> None:
+        for name, country in test_api.unsupported_country_cases().items():
+            with self.subTest(case=name):
+                result = api.parse_id_info(country, '')
+                self.assertEqual(result, api.ParseFailure(None, '', api.FailureReason.UNSUPPORTED_COUNTRY,
+                                                         api.validate(country, '').error_message))
+
     def test_valid_nonparsable_primary(self) -> None:
         self.assertTrue(api.validate('us', USA_VALID).is_valid)
         self.assertEqual(api.parse_id_info('us', USA_VALID),
