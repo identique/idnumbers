@@ -13,9 +13,9 @@ permissions:
 jobs:
   bump-version:
     name: Bump VERSION file
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Update version
         run: |
           echo "==== before update ========================="
@@ -29,7 +29,7 @@ jobs:
           git add VERSION
       - name: Create Pull Request
         id: cpr
-        uses: peter-evans/create-pull-request@v4.2.3
+        uses: peter-evans/create-pull-request@v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Bump version to ${{ inputs.version }}

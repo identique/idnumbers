@@ -54,6 +54,35 @@ See the [official PyPI setup instructions](https://docs.pypi.org/trusted-publish
 [PyPA publishing action documentation](https://github.com/pypa/gh-action-pypi-publish) for setup and verification.
 The issue remains open until external configuration and the first verified trusted release are complete.
 
+## Release workflow runtime maintenance
+
+The [#468](https://github.com/identique/idnumbers/issues/468) audit updates bump/docs checkout to v7,
+docs setup-python to v7 and create-pull-request to v8.1.1. Their release manifests use Node.js 24:
+[checkout v7.0.1][checkout-runtime], [setup-python v7.0.0][python-runtime] and
+[create-pull-request v8.1.1][pr-runtime]. The release workflow already uses checkout/setup-python v7,
+upload-artifact v7 and download-artifact v8; its build, publication and authentication routes remain unchanged.
+
+All three workflows pin `ubuntu-24.04` rather than following `ubuntu-latest`:
+[GitHub's announced Ubuntu 26.04 migration][ubuntu-migration] runs from October 19 to November 19, 2026.
+Docs retain Python 3.10 and pydoctor 22.9.1; release builds retain Python 3.12. Checkout's default credential
+persistence remains enabled for the docs workflow's authenticated `gh-pages` branch switch and push; see the
+[checkout credential behavior][checkout-credentials]. The bump action retains its token, committer, PR inputs
+and outputs. Its `GITHUB_TOKEN` PRs still do not trigger CI ([action documentation][pr-token]).
+
+These are local regression checks and a source audit, not proof of a successful updated workflow run.
+Verify the bot PR, publication and docs deployment during the next approved release. The default token route
+still disables attestations; external Trusted Publisher setup in #327 remains incomplete and requires separate
+maintainer approval. An upstream download-artifact v8 `Buffer()` deprecation warning may persist; it is not
+suppressed or claimed fixed by these runtime updates ([upstream action][download-runtime]).
+
+[checkout-runtime]: https://github.com/actions/checkout/blob/v7.0.1/action.yml
+[python-runtime]: https://github.com/actions/setup-python/blob/v7.0.0/action.yml
+[pr-runtime]: https://github.com/peter-evans/create-pull-request/blob/v8.1.1/action.yml
+[ubuntu-migration]: https://github.blog/changelog/2026-09-17-ubuntu-26-generally-available-and-latest-migration/
+[checkout-credentials]: https://github.com/actions/checkout/blob/v7.0.1/README.md
+[pr-token]: https://github.com/peter-evans/create-pull-request/blob/v8.1.1/README.md#token
+[download-runtime]: https://github.com/actions/download-artifact/blob/v8.0.2/action.yml
+
 ## Emergency local fallback
 
 Only if GitHub Actions cannot run, obtain explicit maintainer approval for the target version and repository first.
