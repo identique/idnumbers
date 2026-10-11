@@ -34,6 +34,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `#` (and, in a few classes, `L`) name per-class fields; formats are unchanged.
 - Narrow the AGENTS.md re-export rule to the single-dot relative imports that `tests/test_explicit_reexports.py`
   checks, and unit-test the checker ([#531](https://github.com/identique/idnumbers/issues/531)).
+- Say in the `register()` docstring that a non-iterable `aliases` raises `TypeError`, and make the registry
+  concurrency tests fail when the registration lock is missing
+  ([#535](https://github.com/identique/idnumbers/issues/535)).
 
 ## 1.16.0 (2026-10-11)
 

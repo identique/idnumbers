@@ -421,6 +421,8 @@ class TestRegister(RegistryStateCase):
             ('abc', validator, {'alpha2': 12}),
             ('abc', validator, {'name': 12}),
             ('abc', validator, {'aliases': 'TW'}),
+            ('abc', validator, {'aliases': 5}),
+            ('abc', validator, {'aliases': None}),
             ('abc', validator, {'aliases': ['ok', 1]}),
             ('abc', validator, {'aliases': [None]}),
         ]
