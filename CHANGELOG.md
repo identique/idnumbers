@@ -12,6 +12,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   identity card number `P-TTTT-AAAA` (province 1-9, tomo, asiento), with optional hyphens and no check digit;
   `parse()` returns the province, its name, the tomo and the asiento. python-stdnum's 10-digit `0P-TTTT-AAAA` form is
   not accepted.
+- **DOM** cédula de identidad y electoral ([#330](https://github.com/identique/idnumbers/issues/330)): add the
+  11-digit Dominican Republic identity and electoral card number `NNN-NNNNNNN-C` with optional hyphens and a Luhn
+  check digit; `parse()` returns the series, the sequence and the check digit. python-stdnum's list of issued numbers
+  that fail Luhn is not accepted ([#517](https://github.com/identique/idnumbers/issues/517)).
 
 ## 1.15.0 (2026-10-08)
 
