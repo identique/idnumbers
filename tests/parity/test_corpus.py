@@ -2,12 +2,14 @@
 Python's validity on the Node port's parity corpus must not change silently.
 
 `tests/parity/expected_python.json` records which expanded corpus vectors this library accepts. A change that alters
-validity on a vector the port shares fails (d) below, so the change gets a note on identique/idnumbers-npm.
+validity on a vector the port shares fails `test_python_validity_matches_the_golden_record`, so the change gets a
+note on identique/idnumbers-npm.
 See `tests/parity/corpus.py` for the provenance and `python3 scripts/sync_parity_corpus.py` for the refresh.
 """
 import json
 from typing import Any, Dict, List
 from unittest import TestCase, main
+from unittest.mock import patch
 
 from tests.parity import corpus
 
@@ -110,6 +112,48 @@ class ParityCorpusTest(TestCase):
         self.assertEqual(set(), recorded - set(self.seeds), "recorded but not in the corpus")
         self.assertEqual(set(), set(self.seeds) - recorded, "in the corpus but not recorded")
         self.assertEqual(set(self.expected["classes"]), recorded)
+
+
+class ContractViolationTest(TestCase):
+    """A validate() that raises or returns a non-bool is an error that names the country and the compared class."""
+
+    def test_raising_validate_names_the_country_and_the_spec(self) -> None:
+        from idnumbers.nationalid import CHN
+
+        def explode(value: str) -> bool:
+            raise RuntimeError("boom")
+
+        with patch.object(CHN.NationalID, "validate", staticmethod(explode)):
+            with self.assertRaises(corpus.ContractViolation) as caught:
+                corpus.python_valid("CHN", ["110101199003078515"])
+        message = str(caught.exception)
+        self.assertIn("CHN (CHN:NationalID)", message)
+        self.assertIn("RuntimeError: boom", message)
+        self.assertNotIn("AliasType", message)
+
+    def test_non_bool_validate_names_the_overridden_class_spec(self) -> None:
+        from idnumbers.nationalid.aus.medicare import MedicareNumber
+
+        def not_a_bool(value: str) -> Any:
+            return 1
+
+        with patch.object(MedicareNumber, "validate", staticmethod(not_a_bool)):
+            with self.assertRaises(corpus.ContractViolation) as caught:
+                corpus.python_valid("AUS", ["2123456701"])
+        message = str(caught.exception)
+        self.assertIn("AUS (aus.medicare:MedicareNumber)", message)
+        self.assertIn("returned 1, not a bool", message)
+
+    def test_every_class_of_a_country_sees_every_vector(self) -> None:
+        from idnumbers.nationalid import SMR
+
+        def explode(value: str) -> bool:
+            raise RuntimeError("boom")
+
+        with patch.object(SMR.TaxRegistrationNumber, "validate", staticmethod(explode)):
+            with self.assertRaises(corpus.ContractViolation) as caught:
+                corpus.python_valid("SMR", ["12345"])
+        self.assertIn("SMR (SMR:TaxRegistrationNumber)", str(caught.exception))
 
 
 if __name__ == "__main__":

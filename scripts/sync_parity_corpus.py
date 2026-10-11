@@ -183,7 +183,8 @@ def describe_changes(changes: Dict[str, List[str]], limit: int = 20) -> List[str
     for code, vectors in changes.items():
         shown = ", ".join(repr(vector) for vector in vectors[:limit])
         more = len(vectors) - limit
-        lines.append("  %s: %d changed: %s%s" % (code, len(vectors), shown, " ... and %d more" % more if more > 0 else ""))
+        extra = " ... and %d more" % more if more > 0 else ""
+        lines.append("  %s: %d changed: %s%s" % (code, len(vectors), shown, extra))
     return lines
 
 

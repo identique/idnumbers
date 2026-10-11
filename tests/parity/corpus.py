@@ -9,11 +9,18 @@ validity on any shared vector fails `tests/parity/test_corpus.py` and prompts a 
 an issue", step 4).
 
 The corpus is pinned to port commit `PORT_COMMIT`. The vector expansion and the country-to-class mapping mirror the
-port's helpers at that commit and must stay equal to them:
+port's helpers at that commit and must stay equal to them. Each file below lives under
+`https://github.com/identique/idnumbers-npm/blob/<PORT_COMMIT>/` (substitute the pinned commit; it is not repeated
+here, so that `scripts/sync_parity_corpus.py --from-port` only has to move the one `PORT_COMMIT` line):
 
-- expansion: https://github.com/identique/idnumbers-npm/blob/694a9cc56615813603e554e5b19071b750b2362d/scripts/parity/check-parity.mjs
-- class mapping: https://github.com/identique/idnumbers-npm/blob/694a9cc56615813603e554e5b19071b750b2362d/scripts/parity/python_validity.py
-- documentation: https://github.com/identique/idnumbers-npm/blob/694a9cc56615813603e554e5b19071b750b2362d/docs/PARITY.md
+- expansion: `scripts/parity/check-parity.mjs`
+- class mapping: `scripts/parity/python_validity.py`
+- documentation: `docs/PARITY.md`
+
+GEO has no Python-valid vector (`expected_python.json` records `"GEO": []`): the port's seeds for it have 8 or 9
+digits (10 at most once expanded), and Python's `GEO.NationalID` accepts only 11, so no expanded vector validates.
+That is a known difference in what the two libraries accept, not a gap in the record; GEO is the only country with
+an empty list.
 
 The port's own check compares validity with an allowlist pinned to an older Python commit, so it is not run here.
 Refresh the vendored corpus and the golden results with `python3 scripts/sync_parity_corpus.py`.
@@ -26,7 +33,7 @@ import importlib
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 PORT_REPOSITORY = "identique/idnumbers-npm"
 PORT_COMMIT = "694a9cc56615813603e554e5b19071b750b2362d"
@@ -117,29 +124,33 @@ def class_specs(code: str) -> List[str]:
     return list(CLASS_OVERRIDES.get(code, ["%s:NationalID" % code]))
 
 
-def load_classes(code: str) -> List[type]:
-    """Import the compared classes of a country; a missing module or class raises."""
-    classes: List[type] = []
+def _load_specs(code: str) -> List[Tuple[str, type]]:
+    """The compared classes of a country, each with the spec it was loaded from; a missing module or class raises."""
+    loaded: List[Tuple[str, type]] = []
     for spec in class_specs(code):
         module_name, class_name = spec.split(":")
         module = importlib.import_module("idnumbers.nationalid.%s" % module_name)
-        cls = getattr(module, class_name)
-        classes.append(cls)
-    return classes
+        loaded.append((spec, getattr(module, class_name)))
+    return loaded
 
 
-def _accepts(cls: Any, code: str, vector: str) -> bool:
-    name = "%s.%s" % (cls.__module__, cls.__name__)
+def load_classes(code: str) -> List[type]:
+    """Import the compared classes of a country; a missing module or class raises."""
+    return [cls for _, cls in _load_specs(code)]
+
+
+def _accepts(spec: str, cls: Any, code: str, vector: str) -> bool:
+    """Whether the class accepts the vector; `spec` names the class in errors, as an alias reads like its target."""
     try:
         result = cls.validate(vector)
     except Exception as error:
         raise ContractViolation(
             "%s (%s): validate(%r) raised %s: %s; validate() must never raise"
-            % (code, name, vector, type(error).__name__, error)
+            % (code, spec, vector, type(error).__name__, error)
         ) from error
     if not isinstance(result, bool):
         raise ContractViolation(
-            "%s (%s): validate(%r) returned %r, not a bool" % (code, name, vector, result)
+            "%s (%s): validate(%r) returned %r, not a bool" % (code, spec, vector, result)
         )
     return result
 
@@ -149,10 +160,10 @@ def python_valid(code: str, vectors: List[str]) -> List[str]:
 
     Every class sees every vector, so a contract violation of any of them is reported.
     """
-    classes = load_classes(code)
+    loaded = _load_specs(code)
     accepted: List[str] = []
     for vector in vectors:
-        results = [_accepts(cls, code, vector) for cls in classes]
+        results = [_accepts(spec, cls, code, vector) for spec, cls in loaded]
         if any(results):
             accepted.append(vector)
     return accepted
