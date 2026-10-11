@@ -38,7 +38,7 @@ class MedicareNumber:
         'country_name': 'Australia',
         'id_type': 'Medicare Number',
         'official_name': None,
-        'display_format': '#### ##### #(/#)',
+        'display_format': '#### ##### #[/#]',
         'example': '2123 45670 1',
         'checksum_algorithm': 'Weighted sum mod 10 (weights 1, 3, 7, 9, 1, 3, 7, 9 over the first 8 digits)',
         'masks': ('#### ##### #', '#### ##### #/#', '##########', '###########')

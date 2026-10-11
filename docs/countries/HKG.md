@@ -18,7 +18,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | checksum_algorithm | <code>Weighted sum mod 11 (weights 9-2; letters A-Z count as 10-35 and a single-letter prefix is padded; check = 11 - remainder, a remainder of 1 gives A)</code> |
 | country_name | <code>Hong Kong</code> |
 | deprecated | <code>False</code> |
-| display_format | <code>L(L)######C</code> |
+| display_format | <code>L[L]######(C)</code> |
 | example | <code>A1234563</code> |
 | id_type | <code>Hong Kong Identity Card Number</code> |
 | iso3166_alpha2 | <code>HK</code> |

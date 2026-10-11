@@ -191,6 +191,26 @@ class TestNewKeys(TestCase):
             with self.subTest(alpha3=entry.alpha3, cls=cls.__qualname__):
                 self.check_class(entry, cls)
 
+    def test_the_display_format_groups_are_well_formed(self) -> None:
+        """``[...]`` marks an optional part and ``{...}`` one of the listed characters; they are never nested."""
+        closing = {'[': ']', '{': '}'}
+        for entry, cls in id_classes():
+            with self.subTest(alpha3=entry.alpha3, cls=cls.__qualname__):
+                display_format = cls.METADATA.display_format
+                opened = ''
+                content = ''
+                for char in display_format:
+                    if char in closing:
+                        self.assertEqual(opened, '', f'{display_format} nests or mixes groups')
+                        opened, content = char, ''
+                    elif char in closing.values():
+                        self.assertTrue(opened and closing[opened] == char, f'{display_format} closes a group wrongly')
+                        self.assertTrue(content, f'{display_format} has an empty group')
+                        opened = ''
+                    else:
+                        content += char
+                self.assertEqual(opened, '', f'{display_format} has an unclosed group')
+
     def check_class(self, entry: CountryEntry, cls: Type[Any]) -> None:
         metadata = cls.METADATA
         for key in ('country_name', 'id_type', 'display_format', 'example'):

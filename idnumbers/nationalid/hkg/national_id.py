@@ -32,7 +32,7 @@ class NationalID:
         'country_name': 'Hong Kong',
         'id_type': 'Hong Kong Identity Card Number',
         'official_name': '香港身份證',
-        'display_format': 'L(L)######C',
+        'display_format': 'L[L]######(C)',
         'example': 'A1234563',
         'checksum_algorithm': 'Weighted sum mod 11 (weights 9-2; letters A-Z count as 10-35 and a single-letter prefix '
                               'is padded; check = 11 - remainder, a remainder of 1 gives A)',

@@ -41,7 +41,7 @@ class PersonalPublicServiceNumber:
         'country_name': 'Ireland',
         'id_type': 'Personal Public Service Number',
         'official_name': 'Uimhir Phearsanta Seirbhíse Poiblí',
-        'display_format': '#######L(L)',
+        'display_format': '#######L[L]',
         'example': '1234567T',
         'checksum_algorithm': 'Weighted sum mod 23 (weights 8-2, an A, B or H suffix added with weight 9) mapped to '
                               'the check letter A-W',

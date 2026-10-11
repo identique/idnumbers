@@ -54,7 +54,7 @@ assert DriverLicenseNumber.validate(number)
 | checksum_algorithm | <code>Weighted sum mod 10 (weights 1, 3, 7, 9, 1, 3, 7, 9 over the first 8 digits)</code> |
 | country_name | <code>Australia</code> |
 | deprecated | <code>False</code> |
-| display_format | <code>#### ##### #(/#)</code> |
+| display_format | <code>#### ##### #[/#]</code> |
 | example | <code>2123 45670 1</code> |
 | id_type | <code>Medicare Number</code> |
 | iso3166_alpha2 | <code>AU</code> |

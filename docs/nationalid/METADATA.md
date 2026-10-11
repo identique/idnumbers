@@ -21,10 +21,18 @@ The `METADATA` structure are the same among all classes. If you find any inconsi
 | country_name   | string                                                                          | The English name of the issuing country, the same as in the [country registry](../../idnumbers/registry.py), such as `Taiwan`. |
 | id_type        | string                                                                          | The English name of the kind of ID in Title Case, such as `Medicare Number`.                                  |
 | official_name  | string or None                                                                  | The official name of the ID in the local language, such as `Henkilötunnus` or `國民身分證統一編號`. It is `None` when the ID has no local-language name, as with an ID that is named in English (the UK NINO, the US SSN, the Australian Medicare number). It is never the same as `id_type`. |
-| display_format | string                                                                          | A human-readable layout of the ID, such as `###-##-####` or `YYMMDD-SSSC`.                                     |
+| display_format | string                                                                          | A human-readable layout of the ID, such as `###-##-####` or `YYMMDD-SSSC`. See [the display format](#display-format).                         |
 | example        | string                                                                          | A synthetic ID that the class validates: constructed with a valid check digit, or a number documented as a sample by the issuing authority. It is not the number of a real person. It is written in the first (preferred) layout of `masks`. |
 | checksum_algorithm | string or None                                                              | A short description of the algorithm that the `checksum` function computes, such as `Luhn (mod 10)`. It is `None` when `checksum` is false. |
 | masks          | Tuple of string                                                                 | The layouts the class accepts, the preferred display layout first. See [the mask vocabulary](#mask-vocabulary). |
+
+### Display format
+
+`display_format` is written for people, with the placeholder letters of the ID (`#` for a digit, `L` for a letter, and
+so on). Two bracket forms mark a part that is not a fixed character: `[...]` is an optional part, and `{...}` is exactly
+one of the listed characters. Every other character, including `(` and `)`, is printed as shown. For example, Hong
+Kong's `L[L]######(C)` is one or two letters, six digits and the check character in printed parentheses, and Finland's
+`DDMMYY{+-A}SSSC` has one century sign out of `+`, `-` and `A`.
 
 ### Mask vocabulary
 

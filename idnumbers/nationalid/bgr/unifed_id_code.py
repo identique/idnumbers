@@ -41,7 +41,7 @@ class UnifiedIdCode:
         'country_name': 'Bulgaria',
         'id_type': 'Unified Identification Code',
         'official_name': 'Единен идентификационен код',
-        'display_format': '#########(####)',
+        'display_format': '#########[####]',
         'example': '123456786',
         'checksum_algorithm': 'Weighted sum mod 11 in two passes (weights 1-8, then 3-10; a remainder of 10 in both '
                               'passes becomes 0); the 13th digit of a 13-digit code uses weights 2, 7, 3, 5 then 4, 9, '
