@@ -50,7 +50,9 @@ MASK_SAMPLES: Dict[str, Tuple[str, ...]] = {
     'idnumbers.nationalid.nzl.passport.PassportNumber': ('N980072',),
     'idnumbers.nationalid.nzl.health_index.NationalHealthIndexNumber': ('UJY38PB',),
     'idnumbers.nationalid.svk.birth_number.BirthNumber': ('080710/464',),
-    'idnumbers.nationalid.swe.personal_id.PersonalIdentityNumber': ('19820908-8882',),
+    # An official Skatteverket test personal number (open data set "Testpersonnummer").
+    'idnumbers.nationalid.swe.personal_id.PersonalIdentityNumber': ('19820901-2395',),
+    # The year 1000 makes this number obviously artificial, so it cannot be the number of a real person.
     'idnumbers.nationalid.swe.coordination_number.CoordinationNumber': ('10001090-2047',),
     'idnumbers.nationalid.zwe.national_id.NationalID': ('456022115L34',),
 }
@@ -131,7 +133,10 @@ def all_aliases() -> List[Type[Any]]:
 
 class TestMetadataType(TestCase):
     def test_the_id_classes_are_found(self) -> None:
-        self.assertEqual(len(list(id_classes())), 111)
+        classes = [cls for _, cls in id_classes()]
+        expected = sum(len(entry.id_types) for entry in list_supported_countries())
+        self.assertEqual(len(classes), expected)
+        self.assertEqual(len(set(classes)), expected, 'id_classes() lists a class twice')
 
     def test_every_metadata_is_an_id_metadata(self) -> None:
         for entry, cls in id_classes():
