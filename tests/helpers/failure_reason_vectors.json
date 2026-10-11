@@ -1429,6 +1429,19 @@
     },
     "birthdate_note": "Synthetic 31 February; checksum repaired where required."
   },
+  "idnumbers.nationalid.rus.national_id.NationalID": {
+    "valid": "1234 567890",
+    "length": [
+      "123456789",
+      "12345678901",
+      "1234 5678901"
+    ],
+    "format": "!!!!!!!!!!",
+    "checksum": null,
+    "checksum_note": "No checksum method.",
+    "birthdate": null,
+    "birthdate_note": "No full calendar date encoded or validated."
+  },
   "idnumbers.nationalid.sgp.national_id.NationalID": {
     "valid": "S1234567D",
     "length": [
