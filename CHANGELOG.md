@@ -16,6 +16,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   11-digit Dominican Republic identity and electoral card number `NNN-NNNNNNN-C` with optional hyphens and a Luhn
   check digit; `parse()` returns the series, the sequence and the check digit. python-stdnum's list of issued numbers
   that fail Luhn is not accepted ([#517](https://github.com/identique/idnumbers/issues/517)).
+- **ECU** cédula de identidad ([#331](https://github.com/identique/idnumbers/issues/331)): add the 10-digit Ecuador
+  identity card number: province 01-24 or 30 (registered abroad), a third digit 0-6 (4 or 5 for province 30) and a
+  mod-10 check digit, with an optional hyphen before the check digit; `parse()` returns the province, the sequence
+  number and the check digit.
 
 ## 1.15.0 (2026-10-08)
 
