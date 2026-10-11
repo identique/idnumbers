@@ -11,6 +11,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **CRI** cédula de identidad ([#515](https://github.com/identique/idnumbers/issues/515)): correct the example's
   provenance to the Node port and add tests for compact, fully hyphenated, mixed and malformed hyphen layouts;
   validity and parsed results are unchanged.
+- **DOM** cédula de identidad y electoral ([#519](https://github.com/identique/idnumbers/issues/519)): state the
+  exact size of python-stdnum's list of issued numbers that fail Luhn (578 entries: 576 with 11 digits, 2 with 10
+  digits) and quote its own description of them; validity is unchanged.
 
 ## 1.16.0 (2026-10-11)
 

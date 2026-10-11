@@ -37,6 +37,9 @@ class TestDOMValidation(TestCase):
             '402000000122',  # 12 digits
             # in python-stdnum's list of issued cédulas that fail Luhn; deliberately not accepted, see issue #517
             '00000021249',
+            # the two 10-digit entries of python-stdnum's list; rejected by the 11-digit layout
+            '0094662667',
+            '0710208838',
             '000-0002124-9',
             '402 0000001 2',  # spaces
             '402--0000001-2',
