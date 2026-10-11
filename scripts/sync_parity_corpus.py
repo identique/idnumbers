@@ -25,7 +25,7 @@ Usage, from anywhere (standard library only, Python 3.9 or newer):
 Exit codes: 0 success, 1 `--check` found differences, 2 the script could not run (bad checkout, wrong `idnumbers`
 import, a corpus that is corrupt, has non-string seeds or names a country without a class, or a validate() that
 raised, which the library contract forbids). A failed run never leaves a half-updated tree: `--from-port` validates
-the port's corpus before writing and restores the previous files if regeneration fails.
+the port's corpus before writing and restores the previous files if copying or regeneration fails.
 """
 import argparse
 import importlib
@@ -49,6 +49,8 @@ def import_corpus_module() -> Any:
     """Import tests.parity.corpus and idnumbers from this checkout, never from site-packages."""
     sys.path.insert(0, str(REPOSITORY_ROOT))
     idnumbers = importlib.import_module("idnumbers")
+    # Defence in depth: from the command line the checkout is always `sys.path[0]`, so this cannot fire. It guards an
+    # in-process caller that already imported `idnumbers` from elsewhere, which the line above would not displace.
     loaded_from = Path(str(idnumbers.__file__)).resolve()
     if REPOSITORY_ROOT not in loaded_from.parents:
         raise SetupError("imported idnumbers from %s, not from this checkout (%s)" % (loaded_from, REPOSITORY_ROOT))
@@ -113,10 +115,11 @@ def check_corpus_data(corpus: Any, parsed: Any, source: str) -> None:
                 raise SetupError("%s: cannot load the Python class for %r (%s): %s" % (source, code, spec, error))
 
 
-def copy_from_port(port: Path, corpus: Any) -> Any:
-    """Vendor the port's corpus and commit pin, then reload the corpus module so it sees both.
+def copy_from_port(port: Path, corpus: Any) -> Tuple[Any, str]:
+    """Vendor the port's corpus and commit pin; return the reloaded corpus module and the message to report.
 
-    Everything is validated before the first write, so a bad port corpus leaves the tree untouched.
+    Everything is validated before the first write, so a bad port corpus leaves the tree untouched. The caller prints
+    the message only once regeneration has succeeded, because it rolls the writes back otherwise.
     """
     data, commit = read_port(port)
     source = "%s/parity/corpus.json" % port
@@ -129,8 +132,8 @@ def copy_from_port(port: Path, corpus: Any) -> Any:
     pinned = pin_commit(module_path, commit)
     corpus.CORPUS_PATH.write_bytes(data)
     module_path.write_bytes(pinned.encode("utf-8"))
-    print("corpus: copied parity/corpus.json from %s at %s" % (port, commit))
-    return importlib.reload(corpus)
+    message = "corpus: copied parity/corpus.json from %s at %s" % (port, commit)
+    return importlib.reload(corpus), message
 
 
 def read_previous(path: Path) -> Optional[Dict[str, Any]]:
@@ -180,23 +183,34 @@ def parse_arguments(argv: Optional[List[str]]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def restore(snapshot: Dict[Path, bytes]) -> None:
+def take_snapshot(paths: List[Path]) -> Dict[Path, Optional[bytes]]:
+    """The content of each path, or None for a file that does not exist yet."""
+    return {path: path.read_bytes() if path.is_file() else None for path in paths}
+
+
+def restore(snapshot: Dict[Path, Optional[bytes]]) -> None:
+    """Put every snapshotted file back; a file that did not exist is removed again. Unchanged files are not touched."""
     for path, content in snapshot.items():
-        path.write_bytes(content)
+        if content is None:
+            path.unlink(missing_ok=True)
+        elif not path.is_file() or path.read_bytes() != content:
+            path.write_bytes(content)
 
 
 def run(arguments: argparse.Namespace) -> int:
     corpus = import_corpus_module()
-    snapshot: Dict[Path, bytes] = {}
-    if arguments.from_port is not None:
-        snapshot = {path: path.read_bytes() for path in (corpus.CORPUS_PATH, Path(corpus.__file__))}
-        corpus = copy_from_port(arguments.from_port.resolve(), corpus)
-    try:
+    if arguments.from_port is None:
         return regenerate(arguments, corpus)
+    snapshot = take_snapshot([corpus.CORPUS_PATH, Path(corpus.__file__), corpus.EXPECTED_PATH])
+    try:
+        corpus, message = copy_from_port(arguments.from_port.resolve(), corpus)
+        status = regenerate(arguments, corpus)
     except BaseException:
-        # A failure after --from-port wrote the corpus must not leave a half-updated tree.
+        # A failure at any point after the first write must not leave a half-updated tree.
         restore(snapshot)
         raise
+    print(message)
+    return status
 
 
 def regenerate(arguments: argparse.Namespace, corpus: Any) -> int:
