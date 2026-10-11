@@ -44,6 +44,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Changed
 
+- **Metadata** ([#501](https://github.com/identique/idnumbers/issues/501)): the official names of COL (NUIP), CYP
+  (ΑΦΤ) and IRN (شماره ملی) are corrected against official sources. `display_format` now uses `[...]` for an optional
+  part and `{...}` for exactly one of the listed characters, and keeps parentheses as printed characters (BGR, HKG,
+  IRL, AUS Medicare and FIN). `docs/nationalid/METADATA.md` documents both, and that `masks` are the preferred layouts
+  the class accepts, not necessarily every layout it accepts.
 - **Packaging** ([#484](https://github.com/identique/idnumbers/issues/484)): the wheel no longer installs the
   repository's top-level `tools` package or the `<prefix>/version/VERSION` data file; it now ships only the
   `idnumbers` package. The source distribution is unchanged, and the library API is unaffected. The release check
@@ -56,6 +61,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   and so `get_country()` and `get_validator()`, no longer raises for a `str` subclass that overrides `isascii()` or
   `upper()` or for an object that fakes its `__class__`; `register()` rejects a blank name and gives a missing
   alpha-2 code its own error message.
+- **Scan tool** ([#501](https://github.com/identique/idnumbers/issues/501)): `tools.scan_ids.collect_ids()` lists only
+  the ID classes defined in its `package_name` argument, which it used to ignore, and raises `ValueError` when the
+  package defines none. The default `idnumbers.nationalid` output is unchanged.
 - **Unified API** ([#499](https://github.com/identique/idnumbers/issues/499)): `validate()` and `parse_id_info()` no
   longer raise when the country's `repr()` raises or when the exception of a validator or parser can't be turned into
   text, and the unsupported-country message shortens a long country value to 80 characters. The `ValidationResult`
