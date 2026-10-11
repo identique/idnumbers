@@ -244,7 +244,7 @@ def register(
     :param aliases: extra lookup keys of the country, such as a legacy code, as any iterable of ``str`` such as a
         list, a tuple or a generator. It is read once, and each alias is stored in upper case.
     :raises TypeError: when ``validator`` isn't a class with ``METADATA`` and a callable ``validate``, when a code, the
-        name or an alias isn't a ``str``, or when ``aliases`` is a single ``str``.
+        name or an alias isn't a ``str``, when ``aliases`` is a single ``str``, or when ``aliases`` isn't iterable.
     :raises ValueError: when a code or an alias is malformed, when the name is empty or blank, when no alpha-2 code is
         given and the validator's ``METADATA`` has none, when a key is repeated, or when a key is already taken by
         another country or the registration conflicts with an earlier one.
