@@ -33,8 +33,8 @@ national ID numbers for many countries, has no runtime dependencies, and support
 - **PR title:** `Fix #<issue> - <description>`, for example `Fix #244 - link Croatia TIN with OIB for both entity and
   individual`. The squash merge turns it into the commit subject, `Fix #244 - ... (#259)`.
 - **Link the issue:** the PR description must contain `Closes #<issue>`. That links the PR to the issue on GitHub and
-  closes the issue when the PR merges. A PR that only partly addresses an issue says `Part of #<issue>` instead: the PR then shows in the
-  issue's timeline, and the issue stays open.
+  closes the issue when the PR merges. A PR that only partly addresses an issue says `Part of #<issue>` instead: the PR
+  then shows in the issue's timeline, and the issue stays open.
 - **Work in progress:** a PR that isn't ready yet is titled `WIP #<issue> - <description>`.
 - **Version bumps:** the bump workflow's bot PR is titled `Bump version to <X.Y.Z>`; see the release procedure.
 
@@ -47,18 +47,20 @@ Never publish to PyPI without the maintainer's approval.
 Before running the full test suite, install its dev-only dependencies in your environment:
 `python3 -m pip install -r requirements-dev.txt`. The library itself remains dependency-free.
 
-| Task          | Command                                                                                         |
-| ------------- | ----------------------------------------------------------------------------------------------- |
-| All tests     | `python3 -m unittest` (CI runs it on every supported Python version)                            |
-| One country   | `python3 -m unittest tests.nationalid.test_CHN`                                                 |
-| Type check    | `python3 -m mypy` with mypy 1.20.2 on Python >= 3.10 (config in `pyproject.toml`)               |
-| Lint          | `ruff check .` with ruff 0.16.10 (rules in `pyproject.toml`)                                    |
-| Coverage      | `python3 -m coverage run -m unittest && python3 -m coverage report` (floor in `pyproject.toml`) |
-| Benchmarks    | `python3 bench/run.py` (informational)                                                          |
-| Parity golden | `python3 scripts/sync_parity_corpus.py` (`--check`, `--from-port <port checkout>`)              |
-| Quick check   | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."`                        |
-| Regexp dump   | `python3 -m tools.collect_regexp`                                                               |
-| Docs          | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`                              |
+| Task          | Command                                                                                  |
+| ------------- | ---------------------------------------------------------------------------------------- |
+| All tests     | `python3 -m unittest` (CI runs it on every supported Python version)                     |
+| One country   | `python3 -m unittest tests.nationalid.test_CHN`                                          |
+| Type check    | `python3 -m mypy` with mypy 1.20.2 on Python >= 3.10 (config in `pyproject.toml`)        |
+| Lint          | `ruff check .` with ruff 0.16.10 (rules in `pyproject.toml`)                             |
+| Coverage      | `python3 -m coverage run -m unittest && python3 -m coverage report` with coverage 7.16.2 |
+| Benchmarks    | `python3 bench/run.py` (informational)                                                   |
+| Parity golden | `python3 scripts/sync_parity_corpus.py` (`--check`, `--from-port <port checkout>`)       |
+| Quick check   | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."`                 |
+| Regexp dump   | `python3 -m tools.collect_regexp`                                                        |
+| Docs          | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`                       |
+
+The coverage floor is set in `pyproject.toml`.
 
 ### Optional contributor quickstart with uv
 
@@ -98,8 +100,14 @@ working directories.
     `display_format`, `example`, `checksum_algorithm` and `masks`. `tests/test_metadata.py` requires all of them for
     every ID class, so a new ID class needs a valid synthetic `example`, `masks` that its `validate()` accepts, and
     the values described in `docs/nationalid/METADATA.md`.
-- **Public country modules:** `idnumbers/nationalid/<ISO3>.py` (uppercase) re-exports the classes and defines
-  `NationalID = alias_of(<PrimaryClass>)`.
+- **Public country modules:** `idnumbers/nationalid/<ISO3>.py` (uppercase) re-exports the country's classes and
+  exposes the primary one as `NationalID`.
+  - **Re-export form:** write every re-export in the redundant-alias form, `from .<iso3>.<module> import Name as Name`.
+    The package ships `py.typed`, and `mypy --strict` consumers reject implicit re-exports.
+    `tests/test_explicit_reexports.py` fails on any relative import in these modules that isn't written that way
+    (the `.util` import is exempt).
+  - **`NationalID`:** when the primary class isn't itself named `NationalID`, the module defines
+    `NationalID = alias_of(<PrimaryClass>)`. When it is, the module re-exports it directly and needs no `alias_of`.
 - **Shared helpers:** check these before reimplementing anything.
   - `util.py`: `validate_regexp`, `luhn_digit`, `verhoeff_check`, `weighted_modulus_digit`, `mn_modulus_digit`,
     `modulus_overflow_mod10`, `letter_to_number`, `ean13_digit` and `alias_of`.

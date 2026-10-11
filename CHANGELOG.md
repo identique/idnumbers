@@ -49,6 +49,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   `idnumbers` package. The source distribution is unchanged, and the library API is unaffected. The release check
   rejects a wheel with any other top-level entry.
 
+### Documentation
+
+- Document the explicit re-export form for country modules and the pinned coverage version in AGENTS.md
+  ([#487](https://github.com/identique/idnumbers/issues/487)).
+
 ## 1.15.0 (2026-10-08)
 
 ### Added
