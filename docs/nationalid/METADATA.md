@@ -39,6 +39,8 @@ A mask describes one accepted layout of the ID, one character per character of t
 
 Every other character of a mask is a separator, and it is one of space, `-`, `.`, `/`, `(` and `)`. A separator is part of the layout, so a validator that rejects separators has masks without them: the masks are layouts the class accepts, not the way an authority prints the ID. A mask has one slot for each character that the ID has without its separators, so the number of slots of a mask is a length between `min_length` and `max_length`. A slot that stands for a fixed character of the ID, such as the `U` of an Austrian UID, is written as the kind of character (`L`), not as the character.
 
+The masks are the preferred layouts that the class accepts, not necessarily every layout it accepts: for example ARG, COL, CZE, SVK, DNK, ISL and SWE also accept a compact form that has no mask. `format_id()` lays the ID into the first mask that fits, and `get_input_mask()` builds its pattern from all the masks.
+
 The tests in `tests/test_metadata.py` check every ID class: the example is valid and written in the first mask, it is accepted when it is laid into every mask it fits, and every other mask has a test sample that the class accepts.
 
 ## Use properties
