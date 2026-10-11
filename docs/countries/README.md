@@ -77,6 +77,7 @@ not personal data or proof of issuance. Each snippet runs independently.
 | [Portugal (PRT)](PRT.md) | PT | CivilIDNumber | 3 |
 | [Romania (ROU)](ROU.md) | RO | PersonalNumericalCode | 1 |
 | [Russia (RUS)](RUS.md) | RU | NationalID | 1 |
+| [Saudi Arabia (SAU)](SAU.md) | SA | NationalID | 1 |
 | [Singapore (SGP)](SGP.md) | SG | NationalID | 1 |
 | [San Marino (SMR)](SMR.md) | SM | SocialSecurityNumber | 2 |
 | [Serbia (SRB)](SRB.md) | RS | UniqueMasterCitizenNumber | 1 |

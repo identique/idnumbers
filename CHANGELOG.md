@@ -36,6 +36,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   Accept only compact ASCII digits, `SSSS NNNNNN` or printed `SS SS NNNNNN` with single ASCII spaces;
   `parse()` preserves series and number as strings. No checksum or issuance/authenticity check is performed.
 
+- **SAU** national ID / Iqama ([#335](https://github.com/identique/idnumbers/issues/335)): add structure-only
+  validation of the 10-digit Saudi Arabia national ID and resident identity (Iqama) number: the first digit is 1
+  (citizen) or 2 (resident), per the NPHIES Patient profile. `parse()` returns the citizenship. No check digit is
+  verified, because the Luhn rule is unconfirmed by any authoritative source; only compact ASCII digits are
+  accepted.
+
 ## 1.15.0 (2026-10-08)
 
 ### Added
