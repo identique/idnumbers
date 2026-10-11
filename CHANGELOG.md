@@ -8,6 +8,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Other fixes
 
+- **Metadata follow-up** ([#540](https://github.com/identique/idnumbers/issues/540)): independently pin metadata
+  discovery counts, approved display formats and official names in tests; report JSON scans of modules without ID
+  classes as clean CLI usage errors. Clarify length-only formatting, refresh Cyprus government/OECD source links
+  and use an official Swedish test personal number in formatting tests. Country validation behaviour is unchanged.
 - **Packaging** ([#529](https://github.com/identique/idnumbers/issues/529)): the release check now also rejects a
   wheel entry that is a bare file named `idnumbers` or `idnumbers-<version>.dist-info` rather than a path inside that
   directory; the published wheel is unchanged.

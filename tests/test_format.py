@@ -78,11 +78,15 @@ class TestNormalization(TestCase):
             self.assertEqual(format_id('FI', sample), sample.upper())
         self.assertEqual(normalize_id('FI', '131052-308'), '131052308')
         self.assertEqual(normalize_id('FI', '13.1052-308T'), '131052308T')
-        for sample in ['820908-8882', '19820908-8882']:
+        # Official Skatteverket Testpersonnummer dataset (198209012395):
+        # https://skatteverket.entryscape.net/rowstore/dataset/
+        # b4de7df7-63c0-4e7e-bb59-1f156a591763?testpersonnummer=198209012395
+        for sample in ['820901-2395', '19820901-2395']:
             self.assertEqual(normalize_id('SE', sample), sample.replace('-', ''))
             self.assertEqual(format_id('SE', sample), sample)
-        self.assertEqual(normalize_id('SE', '820908+8882'), '820908+8882')
-        self.assertEqual(format_id('SE', '820908+8882'), '820908+8882')
+        # The + variant is synthetic and tests layout only, not an officially issued variant.
+        self.assertEqual(normalize_id('SE', '820901+2395'), '820901+2395')
+        self.assertEqual(format_id('SE', '820901+2395'), '820901+2395')
         self.assertEqual(normalize_id('BR', '111+44477735'), '111+44477735')
 
     def test_sweden_valid_century_sign_roundtrip(self):

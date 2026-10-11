@@ -74,7 +74,10 @@ if __name__ == '__main__':
     if args.check and args.output_file is not None:
         parser.error('--check applies only to generated Markdown, not JSON output')
     if args.pkg is not None:
-        collect_ids(args.pkg, args.output_file)
+        try:
+            collect_ids(args.pkg, args.output_file)
+        except ValueError as error:
+            parser.error(str(error))
     if any((args.markdown_dir, args.failure_reasons_file, args.input_formats_file)):
         from tools.generate_docs import generate
 

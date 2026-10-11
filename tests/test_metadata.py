@@ -16,6 +16,7 @@ from unittest import TestCase, main
 
 import idnumbers.nationalid as nationalid_package
 from idnumbers import list_supported_countries
+from idnumbers.nationalid import AUS, BGR, COL, CYP, FIN, HKG, IRL, IRN
 from idnumbers.nationalid.metadata import IdMetadata
 from idnumbers.registry import CountryEntry
 
@@ -134,7 +135,9 @@ def all_aliases() -> List[Type[Any]]:
 class TestMetadataType(TestCase):
     def test_the_id_classes_are_found(self) -> None:
         classes = [cls for _, cls in id_classes()]
-        expected = sum(len(entry.id_types) for entry in list_supported_countries())
+        # Independent pin: tests/test_registry.py has ID_TYPE_COUNT = 111;
+        # tests/test_validate_regexp.py pins 112 classes including the shared Yugoslav base.
+        expected = 111
         self.assertEqual(len(classes), expected)
         self.assertEqual(len(set(classes)), expected, 'id_classes() lists a class twice')
 
@@ -190,6 +193,35 @@ class TestNewKeys(TestCase):
         for entry, cls in id_classes():
             with self.subTest(alpha3=entry.alpha3, cls=cls.__qualname__):
                 self.check_class(entry, cls)
+
+    def test_approved_display_formats_are_preserved(self) -> None:
+        # Pin the #501-approved notation independently of masks and format syntax checks.
+        expected = (
+            (BGR.UnifiedIdCode, '#########[####]'),
+            (IRL.PersonalPublicServiceNumber, '#######L[L]'),
+            (IRL.NationalID, '#######L[L]'),
+            (AUS.MedicareNumber, '#### ##### #[/#]'),
+            (HKG.NationalID, 'L[L]######(C)'),
+            (FIN.PersonalIdentityCode, 'DDMMYY{+-A}SSSC'),
+            (FIN.NationalID, 'DDMMYY{+-A}SSSC'),
+            (FIN.HETU, 'DDMMYY{+-A}SSSC'),
+        )
+        for cls, display_format in expected:
+            with self.subTest(cls=class_key(cls)):
+                self.assertEqual(cls.METADATA.display_format, display_format)
+
+    def test_approved_official_names_are_preserved(self) -> None:
+        expected = (
+            (COL.UniquePersonalID, 'Número Único de Identificación Personal'),
+            (COL.NationalID, 'Número Único de Identificación Personal'),
+            (COL.NUIP, 'Número Único de Identificación Personal'),
+            (CYP.TaxNumber, 'Αριθμός Φορολογικής Ταυτότητας'),
+            (CYP.NationalID, 'Αριθμός Φορολογικής Ταυτότητας'),
+            (IRN.NationalID, 'شماره ملی'),
+        )
+        for cls, official_name in expected:
+            with self.subTest(cls=class_key(cls)):
+                self.assertEqual(cls.METADATA.official_name, official_name)
 
     def test_the_display_format_groups_are_well_formed(self) -> None:
         """``[...]`` marks an optional part and ``{...}`` one of the listed characters; they are never nested."""
