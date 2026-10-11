@@ -47,18 +47,20 @@ Never publish to PyPI without the maintainer's approval.
 Before running the full test suite, install its dev-only dependencies in your environment:
 `python3 -m pip install -r requirements-dev.txt`. The library itself remains dependency-free.
 
-| Task          | Command                                                                                                              |
-| ------------- | -------------------------------------------------------------------------------------------------------------------- |
-| All tests     | `python3 -m unittest` (CI runs it on every supported Python version)                                                 |
-| One country   | `python3 -m unittest tests.nationalid.test_CHN`                                                                      |
-| Type check    | `python3 -m mypy` with mypy 1.20.2 on Python >= 3.10 (config in `pyproject.toml`)                                    |
-| Lint          | `ruff check .` with ruff 0.16.10 (rules in `pyproject.toml`)                                                         |
-| Coverage      | `python3 -m coverage run -m unittest && python3 -m coverage report` with coverage 7.16.2 (floor in `pyproject.toml`) |
-| Benchmarks    | `python3 bench/run.py` (informational)                                                                               |
-| Parity golden | `python3 scripts/sync_parity_corpus.py` (`--check`, `--from-port <port checkout>`)                                   |
-| Quick check   | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."`                                             |
-| Regexp dump   | `python3 -m tools.collect_regexp`                                                                                    |
-| Docs          | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`                                                   |
+| Task          | Command                                                                                  |
+| ------------- | ---------------------------------------------------------------------------------------- |
+| All tests     | `python3 -m unittest` (CI runs it on every supported Python version)                     |
+| One country   | `python3 -m unittest tests.nationalid.test_CHN`                                          |
+| Type check    | `python3 -m mypy` with mypy 1.20.2 on Python >= 3.10 (config in `pyproject.toml`)        |
+| Lint          | `ruff check .` with ruff 0.16.10 (rules in `pyproject.toml`)                             |
+| Coverage      | `python3 -m coverage run -m unittest && python3 -m coverage report` with coverage 7.16.2 |
+| Benchmarks    | `python3 bench/run.py` (informational)                                                   |
+| Parity golden | `python3 scripts/sync_parity_corpus.py` (`--check`, `--from-port <port checkout>`)       |
+| Quick check   | `PYTHONPATH=$PWD python3 -c "from idnumbers.nationalid import CHN; ..."`                 |
+| Regexp dump   | `python3 -m tools.collect_regexp`                                                        |
+| Docs          | pydoctor with `--docformat=restructuredtext`; see `docs/apidoc.md`                       |
+
+The coverage floor is set in `pyproject.toml`.
 
 ### Optional contributor quickstart with uv
 
