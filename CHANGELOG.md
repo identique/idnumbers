@@ -56,6 +56,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Other fixes
 
+- **Tests** ([#503](https://github.com/identique/idnumbers/issues/503)): treat an empty Hypothesis storage override
+  as unset, keeping ancillary caches in temporary storage while preserving the original environment value.
 - **Registry** ([#496](https://github.com/identique/idnumbers/issues/496)): `register()` no longer drops aliases
   passed as a one-shot iterable such as a generator, and `aliases` is now typed `Iterable[str]`; `resolve_country()`,
   and so `get_country()` and `get_validator()`, no longer raises for a `str` subclass that overrides `isascii()` or
