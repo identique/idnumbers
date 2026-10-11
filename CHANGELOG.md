@@ -29,6 +29,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **GTM**, **SAU** ([#527](https://github.com/identique/idnumbers/issues/527)): define the `display_format`
   placeholder letters in the class docstrings, and explain in `docs/nationalid/METADATA.md` that letters other than
   `#` (and, in a few classes, `L`) name per-class fields; formats are unchanged.
+- Narrow the AGENTS.md re-export rule to the single-dot relative imports that `tests/test_explicit_reexports.py`
+  checks, and unit-test the checker ([#531](https://github.com/identique/idnumbers/issues/531)).
 
 ## 1.16.0 (2026-10-11)
 
