@@ -28,9 +28,10 @@ class NationalID:
     Deliberately not accepted:
 
     - spaces as separators (python-stdnum and the Node port strip them);
-    - python-stdnum's list of about 576 issued cédulas that fail the Luhn check, for example ``00000021249``. It
-      has no official source and it is made of real personal numbers, so it is not copied here; the question is
-      tracked in https://github.com/identique/idnumbers/issues/517;
+    - python-stdnum's list of 578 cédulas that "do not match the checksum but are nonetheless valid" (python-stdnum
+      2.2): 576 of them have 11 digits and all fail the Luhn check, for example ``00000021249``, and the other 2
+      have 10 digits, which the layout already rejects. The list has no official source, so it is not copied here;
+      the question is tracked in https://github.com/identique/idnumbers/issues/517;
     - the 9-digit RNC (*Registro Nacional del Contribuyente*) of companies and other lengths.
 
     Sources:
