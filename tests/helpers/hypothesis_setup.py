@@ -1,7 +1,7 @@
 """Keep ancillary Hypothesis caches out of the checkout.
 
 ``database=None`` disables the example database, not Unicode/constant caches.
-Respect an explicit contributor storage override; otherwise use temporary storage
+Respect a nonempty contributor storage override; otherwise use temporary storage
 cleaned at process exit. Restore the environment immediately after initialization.
 """
 import atexit
@@ -12,7 +12,8 @@ from types import ModuleType
 
 
 def load_hypothesis() -> ModuleType:
-    if 'HYPOTHESIS_STORAGE_DIRECTORY' in os.environ:
+    original_storage = os.environ.get('HYPOTHESIS_STORAGE_DIRECTORY')
+    if original_storage:
         return importlib.import_module('hypothesis')
     storage = TemporaryDirectory(prefix='idnumbers-hypothesis-')
     atexit.register(storage.cleanup)
@@ -23,7 +24,10 @@ def load_hypothesis() -> ModuleType:
         configuration.set_hypothesis_home_dir(storage.name)
         return module
     finally:
-        del os.environ['HYPOTHESIS_STORAGE_DIRECTORY']
+        if original_storage is None:
+            del os.environ['HYPOTHESIS_STORAGE_DIRECTORY']
+        else:
+            os.environ['HYPOTHESIS_STORAGE_DIRECTORY'] = original_storage
 
 
 _hypothesis = load_hypothesis()
