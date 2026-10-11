@@ -319,6 +319,26 @@
             </div>
         
 
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_exception_text" class="internal-link" title="idnumbers.api._exception_text">_exception<wbr></wbr>_text</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_short_repr" class="internal-link" title="idnumbers.api._short_repr">_short<wbr></wbr>_repr</a></code>
+            </div>
+        
+
     </li>
 </ul> 
 
@@ -335,6 +355,16 @@
 
         
             <div class="itemName"><code><a href="#ParseIdInfoResult" class="internal-link" title="idnumbers.api.ParseIdInfoResult"><wbr></wbr>Parse<wbr></wbr>Id<wbr></wbr>Info<wbr></wbr>Result</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_REPR_LIMIT" class="internal-link" title="idnumbers.api._REPR_LIMIT">_REPR<wbr></wbr>_LIMIT</a></code>
             </div>
         
 
@@ -540,6 +570,21 @@ result.reason               # &lt;FailureReason.CHECKSUM_MISMATCH: 'checksum_mis
     <td>Function</td>
     <td><code><a href="#_derive_failure_reason" class="internal-link" title="idnumbers.api._derive_failure_reason">_derive<wbr></wbr>_failure<wbr></wbr>_reason</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_exception_text" class="internal-link" title="idnumbers.api._exception_text">_exception<wbr></wbr>_text</a></code></td>
+    <td>Return <tt class="rst-docutils literal">'&lt;TypeName&gt;: &lt;message&gt;'</tt> for an exception, or just its type name when its text can't be built.</td>
+  </tr><tr class="function private">
+    
+    <td>Function</td>
+    <td><code><a href="#_short_repr" class="internal-link" title="idnumbers.api._short_repr">_short<wbr></wbr>_repr</a></code></td>
+    <td>Return <tt class="rst-docutils literal">repr(value)</tt> without raising, cut to <tt class="rst-docutils literal">_REPR_LIMIT</tt> characters plus <tt class="rst-docutils literal"><span class="pre">'...'</span></tt> when longer.</td>
+  </tr><tr class="constant private">
+    
+    <td>Constant</td>
+    <td><code><a href="#_REPR_LIMIT" class="internal-link" title="idnumbers.api._REPR_LIMIT">_REPR<wbr></wbr>_LIMIT</a></code></td>
+    <td>The longest <tt class="rst-docutils literal">repr()</tt> of an unsupported country that an error message keeps whole.</td>
   </tr>
 </table>
           
@@ -746,6 +791,79 @@ Country-specific <tt class="rst-docutils literal">parse()</tt> methods are uncha
     
     <div><p class="undocumented">Undocumented</p><table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_class:</span><code>Type[<wbr></wbr>Any]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code><a href="idnumbers.api.FailureReason.html" class="internal-link" title="idnumbers.api.FailureReason">FailureReason</a></code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.api._exception_text">
+    
+  </a>
+  <a name="_exception_text">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_exception_text</span>(exc):
+    
+    <a class="headerLink" href="#_exception_text" title="idnumbers.api._exception_text">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Return <tt class="rst-docutils literal">'&lt;TypeName&gt;: &lt;message&gt;'</tt> for an exception, or just its type name when its text can't be built.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">exc:</span><code>BaseException</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="basefunction private">
+  
+  
+  <a name="idnumbers.api._short_repr">
+    
+  </a>
+  <a name="_short_repr">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-keyword">def</span> <span class="py-defname">_short_repr</span>(value):
+    
+    <a class="headerLink" href="#_short_repr" title="idnumbers.api._short_repr">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Return <tt class="rst-docutils literal">repr(value)</tt> without raising, cut to <tt class="rst-docutils literal">_REPR_LIMIT</tt> characters plus <tt class="rst-docutils literal"><span class="pre">'...'</span></tt> when longer.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">value:</span><code>object</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
+</div><div class="baseconstant private">
+  
+  
+  <a name="idnumbers.api._REPR_LIMIT">
+    
+  </a>
+  <a name="_REPR_LIMIT">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_REPR_LIMIT</span>: <code>int</code> =
+    
+    <a class="headerLink" href="#_REPR_LIMIT" title="idnumbers.api._REPR_LIMIT">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>The longest <tt class="rst-docutils literal">repr()</tt> of an unsupported country that an error message keeps whole.</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>80</code></pre></td></tr></table>
+  </div>
 </div>
         </div>
       
@@ -758,7 +876,7 @@ Country-specific <tt class="rst-docutils literal">parse()</tt> methods are uncha
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-11 11:27:26.
+    22.9.1 at 2026-10-11 14:17:20.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
