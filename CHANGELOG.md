@@ -11,6 +11,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **Packaging** ([#529](https://github.com/identique/idnumbers/issues/529)): the release check now also rejects a
   wheel entry that is a bare file named `idnumbers` or `idnumbers-<version>.dist-info` rather than a path inside that
   directory; the published wheel is unchanged.
+- **Parity sync script** ([#533](https://github.com/identique/idnumbers/issues/533)): when `--from-port` fails and
+  restoring the tracked files also fails, both errors are reported and the possibly half-updated files are named;
+  tests now cover `drop_bytecode()` and keep the non-git port case from finding an enclosing repository.
 
 ### Documentation
 
