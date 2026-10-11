@@ -26,6 +26,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   check-digit algorithm is published). `parse()` returns the birth date, the governorate code, the serial and the
   final digit.
 
+- **GTM** Código Único de Identificación / DPI ([#333](https://github.com/identique/idnumbers/issues/333)): add
+  structure-only validation of compact 13-digit CUI numbers (department 01-22, municipality 01-99). `parse()`
+  preserves the eight-digit correlative, unverified check digit, department and municipality as strings. No
+  checksum or per-department municipality table is enforced; whitespace and separators are rejected.
+
 ## 1.15.0 (2026-10-08)
 
 ### Added

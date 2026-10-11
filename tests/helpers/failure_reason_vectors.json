@@ -694,6 +694,19 @@
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
+  "idnumbers.nationalid.gtm.dpi.DPI": {
+    "valid": "1912345670101",
+    "length": [
+      "191234567010",
+      "19123456701011",
+      "19123456701011"
+    ],
+    "format": "!!!!!!!!!!!!!",
+    "checksum": null,
+    "checksum_note": "RENAP bulletin 163 (8 April 2021) defines the verification digit, not its algorithm; no checksum method.",
+    "birthdate": null,
+    "birthdate_note": "RENAP bulletin 163 defines department and municipality of birth, not a calendar date. Synthetic structure-only vectors; issue #333 ranges."
+  },
   "idnumbers.nationalid.hrv.personal_id.PersonalID": {
     "valid": "12345678903",
     "length": [
