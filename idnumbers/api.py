@@ -246,9 +246,20 @@ def _check_validator(alpha3: str, validator: Any, id_number: str) -> ValidationR
             country_code=alpha3,
             id_number=id_number,
             reason=FailureReason.VALIDATION_FAILED,
-            error_message='%s: %s' % (type(exc).__name__, exc),
+            error_message=_exception_text(exc),
         )
     return ValidationResult(is_valid=True, country_code=alpha3, id_number=id_number, extracted_info=extracted_info)
+
+
+def _exception_text(exc: BaseException) -> str:
+    """Return ``'<TypeName>: <message>'`` for an exception, or just its type name when its text can't be built."""
+    try:
+        return '%s: %s' % (type(exc).__name__, exc)
+    except Exception:
+        try:
+            return type(exc).__name__
+        except Exception:
+            return 'Exception'
 
 
 def failure_reason(id_class: Type[Any], id_number: str) -> Optional[FailureReason]:

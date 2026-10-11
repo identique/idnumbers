@@ -70,6 +70,31 @@ def unsupported_country_cases() -> Dict[str, Any]:
     }
 
 
+class UntextableError(Exception):
+    def __str__(self) -> str:
+        raise RuntimeError('no text')
+
+
+class UntextableValidator:
+    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+
+    @staticmethod
+    def validate(id_number: str) -> bool:
+        raise UntextableError()
+
+
+class UntextableParser:
+    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+
+    @staticmethod
+    def validate(id_number: str) -> bool:
+        return True
+
+    @staticmethod
+    def parse(id_number: str) -> Dict[str, Any]:
+        raise UntextableError()
+
+
 class NoneParser:
     METADATA = SimpleNamespace(iso3166_alpha2='QQ')
 
@@ -205,6 +230,20 @@ class TestValidate(TestCase):
         self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
         self.assertEqual(result.error_message, 'ValueError: cannot parse')
         self.assertIsNone(result.extracted_info)
+
+    def test_exception_whose_text_raises(self) -> None:
+        for validator in (UntextableValidator, UntextableParser):
+            with self.subTest(validator=validator.__name__), isolated_registry():
+                registry.register('QQQ', validator, alpha2='QQ')
+                result = api.validate('qq', 'x1')
+                self.assertFalse(result.is_valid)
+                self.assertEqual(result.country_code, 'QQQ')
+                self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
+                self.assertEqual(result.error_message, 'UntextableError')
+                self.assertIsNone(result.extracted_info)
+                self.assertEqual(api.parse_id_info('qq', 'x1'),
+                                 api.ParseFailure('QQQ', 'x1', api.FailureReason.VALIDATION_FAILED,
+                                                  'UntextableError'))
 
     def test_parser_that_returns_none(self) -> None:
         with isolated_registry():
