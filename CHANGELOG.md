@@ -73,6 +73,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Documentation
 
+- Add a local rendered API href checker and hermetic regressions for complete parenthesized URLs, fragments and
+  explicit-target continuations ([#463](https://github.com/identique/idnumbers/issues/463)).
+
 - Document the explicit re-export form for country modules and the pinned coverage version in AGENTS.md
   ([#487](https://github.com/identique/idnumbers/issues/487)).
 

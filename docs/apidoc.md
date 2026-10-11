@@ -22,6 +22,22 @@ pydoctor --docformat=restructuredtext --make-html --html-output=docs/$(cat ./VER
 
 It outputs the API docs to a folder named `docs/version`. Have fun with it!
 
+## Check rendered reference links locally
+
+After the build above with the pinned `pydoctor==22.9.1`, run from the repository root:
+
+```shell
+python3 tools/check_api_links.py "docs/$(cat ./VERSION)"
+```
+
+The checker uses only the standard library and exits nonzero with the page and expected href if a regression is
+found. It checks 12 exact anchor targets inside rendered class and method docstring containers, including complete
+parenthesized paths, fragments, the NRIC explicit-target continuation and the Norwegian prose URL without its
+surrounding punctuation. Navigation, summary-table links and plain URL text do not count. It does not fetch external
+URLs or validate all documentation links. This is a local rendered-output check, not a CI build/check step;
+`tests/test_docstring_links.py` continues to check source spelling without a renderer dependency, and
+`tests/test_api_links.py` tests the checker using synthetic HTML.
+
 ## Unified API
 
 `idnumbers.api` implements validation and primary-ID parsing, re-exported by `idnumbers`. `parse_id_info()` calls
