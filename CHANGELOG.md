@@ -42,6 +42,13 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   verified, because the Luhn rule is unconfirmed by any authoritative source; only compact ASCII digits are
   accepted.
 
+### Changed
+
+- **Packaging** ([#484](https://github.com/identique/idnumbers/issues/484)): the wheel no longer installs the
+  repository's top-level `tools` package or the `<prefix>/version/VERSION` data file; it now ships only the
+  `idnumbers` package. The source distribution is unchanged, and the library API is unaffected. The release check
+  rejects a wheel with any other top-level entry.
+
 ## 1.15.0 (2026-10-08)
 
 ### Added
