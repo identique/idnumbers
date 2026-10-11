@@ -86,7 +86,7 @@ def failure_guide() -> str:
                   'assert not parsed.ok and parsed.reason == FailureReason.NOT_PARSABLE', '```', '',
                   '## Frozen per-class witnesses', '',
                   'Source: [frozen vectors](../tests/helpers/failure_reason_vectors.json), not inferred from diagnostic output.',
-                  'All 104 registered non-alias classes: 628 vectors, 74 flipped-checksum witnesses',
+                  'All 105 registered non-alias classes: 633 vectors, 74 flipped-checksum witnesses',
                   '(60 specific, 14 generic), and 34 checksum-repaired impossible dates across 31 countries.',
                   'These are finite observations, not exhaustive coverage of every input or checksum class.',
                   'Deferred refinements: [#506 (v1.16.0)](https://github.com/identique/idnumbers/issues/506).', '',
@@ -127,7 +127,7 @@ def input_guide() -> str:
              '## Primary-example observations', '',
              'Empirical only: one synthetic current METADATA example per country, plus its lowercase, surrounding',
              'space, normalized and formatted variants. This is **not** a complete country input policy.',
-             'CHE, CHL, KOR and USA reject their normalized example; all 78 formatted examples validate.', '',
+             'CHE, CHL, KOR and USA reject their normalized example; all 79 formatted examples validate.', '',
              '| Country | Example | Lowercase | Surrounding spaces | Normalized | Formatted |',
              '| --- | --- | --- | --- | --- | --- |']
     for entry in sorted(list_supported_countries(), key=lambda entry: entry.alpha3):

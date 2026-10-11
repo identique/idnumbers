@@ -19,7 +19,7 @@ from tests.test_metadata import MASK_SAMPLES, class_key, compact, fits, layout
 class TestPrimaryFormats(TestCase):
     def test_all_primary_examples_and_accepted_mask_variants(self):
         entries = list_supported_countries()
-        self.assertEqual(len(entries), 78)
+        self.assertEqual(len(entries), 79)
         for entry in entries:
             cls = entry.national_id
             metadata = cls.METADATA

@@ -24,6 +24,7 @@ not personal data or proof of issuance. Each snippet runs independently.
 | [Chile (CHL)](CHL.md) | CL | NationalID | 1 |
 | [China (CHN)](CHN.md) | CN | ResidentID | 1 |
 | [Colombia (COL)](COL.md) | CO | UniquePersonalID | 1 |
+| [Costa Rica (CRI)](CRI.md) | CR | NationalID | 1 |
 | [Cyprus (CYP)](CYP.md) | CY | TaxNumber | 1 |
 | [Czechia (CZE)](CZE.md) | CZ | BirthNumber | 2 |
 | [Germany (DEU)](DEU.md) | DE | TaxID | 1 |
