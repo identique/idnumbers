@@ -1442,6 +1442,18 @@
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
+  "idnumbers.nationalid.sau.national_id.NationalID": {
+    "valid": "1000000008",
+    "length": [
+      "100000000",
+      "10000000081"
+    ],
+    "format": "3000000008",
+    "checksum": null,
+    "checksum_note": "No checksum method.",
+    "birthdate": null,
+    "birthdate_note": "No full calendar date encoded or validated."
+  },
   "idnumbers.nationalid.sgp.national_id.NationalID": {
     "valid": "S1234567D",
     "length": [
