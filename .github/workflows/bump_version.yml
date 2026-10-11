@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   bump-version:
-    name: Bump setup.py version
+    name: Bump VERSION file
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
