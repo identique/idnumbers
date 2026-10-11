@@ -60,6 +60,45 @@ class RaisingReprStr(str):
         raise RuntimeError('no repr')
 
 
+class HostileText(str):
+    """A str whose length and slicing run user code that raises."""
+
+    def __len__(self) -> int:
+        raise RuntimeError('no len')
+
+    def __getitem__(self, key: Any) -> str:
+        raise RuntimeError('no slice')
+
+
+class HostileRepr:
+    def __repr__(self) -> str:
+        return HostileText('hostile')
+
+
+class NamelessMeta(type):
+    @property
+    def __name__(cls) -> str:  # type: ignore[override]
+        raise RuntimeError('no name')
+
+
+class NamelessRepr(metaclass=NamelessMeta):
+    def __repr__(self) -> str:
+        raise RuntimeError('no repr')
+
+
+class NamelessError(Exception, metaclass=NamelessMeta):
+    def __str__(self) -> str:
+        raise RuntimeError('no text')
+
+
+class NamelessValidator:
+    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+
+    @staticmethod
+    def validate(id_number: str) -> bool:
+        raise NamelessError()
+
+
 def unsupported_country_cases() -> Dict[str, Any]:
     """Countries whose message must stay short and must not raise, with the expected message prefix."""
     return {
@@ -193,6 +232,38 @@ class TestValidate(TestCase):
     def test_unsupported_country_message_keeps_a_repr_that_fits(self) -> None:
         fits = 'x' * (api._REPR_LIMIT - 2)
         self.assertEqual(api.validate(fits, '').error_message, 'unsupported country: %r' % (fits,))
+
+    def test_unsupported_country_message_cuts_at_the_boundary(self) -> None:
+        # A 79-character str has an 81-character repr: one over the limit.
+        over = 'x' * (api._REPR_LIMIT - 1)
+        self.assertEqual(len(repr(over)), api._REPR_LIMIT + 1)
+        self.assertEqual(api.validate(over, '').error_message,
+                         'unsupported country: ' + repr(over)[:api._REPR_LIMIT] + '...')
+
+    def test_unsupported_country_message_with_a_repr_that_is_a_hostile_str(self) -> None:
+        country = HostileRepr()
+        expected = 'unsupported country: hostile'
+        self.assertEqual(api.validate(country, TWN_VALID).error_message, expected)
+        self.assertEqual(api.validate(country, TWN_VALID).reason, api.FailureReason.UNSUPPORTED_COUNTRY)
+        parsed = api.parse_id_info(country, TWN_VALID)  # type: ignore[arg-type]
+        self.assertEqual(parsed, api.ParseFailure(None, TWN_VALID, api.FailureReason.UNSUPPORTED_COUNTRY, expected))
+        results = api.validate_many([(country, TWN_VALID), ('tw', TWN_VALID)])  # type: ignore[list-item]
+        self.assertEqual([r.is_valid for r in results], [False, True])
+        self.assertEqual(results[0].error_message, expected)
+
+    def test_unsupported_country_message_when_the_type_name_raises(self) -> None:
+        result = api.validate(NamelessRepr(), TWN_VALID)  # type: ignore[arg-type]
+        self.assertEqual(result.reason, api.FailureReason.UNSUPPORTED_COUNTRY)
+        self.assertEqual(result.error_message, 'unsupported country: <object, repr() failed>')
+
+    def test_exception_whose_text_and_type_name_raise(self) -> None:
+        with isolated_registry():
+            registry.register('QQQ', NamelessValidator, alpha2='QQ')
+            result = api.validate('qq', 'x1')
+        self.assertFalse(result.is_valid)
+        self.assertEqual(result.country_code, 'QQQ')
+        self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
+        self.assertEqual(result.error_message, 'Exception')
 
     def test_id_number_that_is_not_a_string(self) -> None:
         for id_number in (None, 123, b'A123456789'):
