@@ -19,7 +19,6 @@ from idnumbers import list_supported_countries
 from idnumbers.nationalid import AUS, BGR, COL, CYP, FIN, HKG, IRL, IRN
 from idnumbers.nationalid.metadata import IdMetadata
 from idnumbers.registry import CountryEntry
-from tests.test_registry import ID_TYPE_COUNT
 
 OLD_KEYS = ('iso3166_alpha2', 'min_length', 'max_length', 'parsable', 'checksum', 'regexp', 'alias_of', 'names',
             'links', 'deprecated')
@@ -136,7 +135,9 @@ def all_aliases() -> List[Type[Any]]:
 class TestMetadataType(TestCase):
     def test_the_id_classes_are_found(self) -> None:
         classes = [cls for _, cls in id_classes()]
-        expected = ID_TYPE_COUNT
+        # Independent pin: tests/test_registry.py has ID_TYPE_COUNT = 111;
+        # tests/test_validate_regexp.py pins 112 classes including the shared Yugoslav base.
+        expected = 111
         self.assertEqual(len(classes), expected)
         self.assertEqual(len(set(classes)), expected, 'id_classes() lists a class twice')
 
