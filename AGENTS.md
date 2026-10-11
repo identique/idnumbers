@@ -104,8 +104,9 @@ working directories.
   exposes the primary one as `NationalID`.
   - **Re-export form:** write every re-export in the redundant-alias form, `from .<iso3>.<module> import Name as Name`.
     The package ships `py.typed`, and `mypy --strict` consumers reject implicit re-exports.
-    `tests/test_explicit_reexports.py` fails on any relative import in these modules that isn't written that way
-    (the `.util` import is exempt).
+    `tests/test_explicit_reexports.py` fails on any single-dot relative import in these modules
+    (`from .<module> import Name` or `from . import name`) that isn't written that way; the `.util` import is exempt,
+    and `..` or absolute imports are not checked.
   - **`NationalID`:** when the primary class isn't itself named `NationalID`, the module defines
     `NationalID = alias_of(<PrimaryClass>)`. When it is, the module re-exports it directly and needs no `alias_of`.
 - **Shared helpers:** check these before reimplementing anything.
