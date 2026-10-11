@@ -9,7 +9,7 @@ import threading
 import time
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, Callable, List, Optional, Type
+from typing import Any, Callable, Dict, List, Optional, Type
 from unittest import TestCase, main
 from unittest.mock import patch
 
@@ -219,7 +219,31 @@ class RegistryStateCase(TestCase):
         return dict(registry._KEYS), dict(registry._ENTRIES), dict(registry._CUSTOM)
 
 
+class SlowKeys(Dict[str, str]):
+    """A key table whose lookups yield the processor, so that an unprotected registration visibly interleaves."""
+
+    def get(self, key: str, default: Any = None) -> Any:  # type: ignore[override]
+        time.sleep(0.001)
+        return super().get(key, default)
+
+
+class RecordingEntries(Dict[str, registry.CountryEntry]):
+    """An entry table that records the key of every assignment."""
+
+    def __init__(self, entries: Dict[str, registry.CountryEntry]) -> None:
+        super().__init__(entries)
+        self.assigned: List[str] = []
+
+    def __setitem__(self, key: str, value: registry.CountryEntry) -> None:
+        self.assigned.append(key)
+        super().__setitem__(key, value)
+
+
 class TestConcurrency(RegistryStateCase):
+    def slow_keys(self) -> Any:
+        """Widen the race window inside ``register()``, so the tests below fail when ``_LOCK`` is missing."""
+        return patch.object(registry, '_KEYS', SlowKeys(registry._KEYS))
+
     def run_threads(self, count: int, target: Callable[[int], Any]) -> List[Any]:
         """Run ``target(index)`` in ``count`` threads that start together, and return the results by index."""
         barrier = threading.Barrier(count)
@@ -263,18 +287,50 @@ class TestConcurrency(RegistryStateCase):
     def test_identical_registrations_are_one_entry(self) -> None:
         validator = make_validator()
 
-        def register(index: int) -> None:
+        def register(index: int) -> Any:
             registry.register('abc', validator, alpha2='ab', name='Abc', aliases=['one', 'two'])
+            return registry.get_country('abc')
 
-        self.run_threads(32, register)
-        self.assertEqual(sorted(registry._CUSTOM), ['ABC'])
-        self.assertEqual(registry._CUSTOM['ABC'], ('ONE', 'TWO'))
-        expected = registry.CountryEntry('ABC', 'AB', 'Abc', validator, (validator,))
-        self.assertEqual(registry.get_country('abc'), expected)
-        for code in ('ab', 'one', 'TWO'):
-            self.assertEqual(registry.resolve_country(code), 'ABC')
+        recording = RecordingEntries(registry._ENTRIES)
+        with self.slow_keys(), patch.object(registry, '_ENTRIES', recording):
+            entries = self.run_threads(32, register)
+            # Under the lock the first call stores the entry and every later call is a no-op.
+            self.assertEqual(recording.assigned, ['ABC'])
+            self.assertEqual(sorted(registry._CUSTOM), ['ABC'])
+            self.assertEqual(registry._CUSTOM['ABC'], ('ONE', 'TWO'))
+            expected = registry.CountryEntry('ABC', 'AB', 'Abc', validator, (validator,))
+            self.assertEqual(registry.get_country('abc'), expected)
+            for entry in entries:
+                self.assertIs(entry, entries[0])
+            self.assertIs(recording['ABC'], entries[0])
+            for code in ('ab', 'one', 'TWO'):
+                self.assertEqual(registry.resolve_country(code), 'ABC')
+
+    def test_conflicting_registrations_have_one_winner(self) -> None:
+        count = 16
+        validators = [make_validator('QA') for _ in range(count)]
+
+        def register(index: int) -> Any:
+            try:
+                registry.register('qxa', validators[index])
+            except ValueError as error:
+                return error
+            return validators[index]
+
+        with self.slow_keys():
+            results = self.run_threads(count, register)
+            errors = [result for result in results if isinstance(result, ValueError)]
+            winners = [result for result in results if not isinstance(result, ValueError)]
+            self.assertEqual(len(winners), 1)
+            self.assertEqual(len(errors), count - 1)
+            self.assertIs(registry.get_validator('qxa'), winners[0])
+            self.assertIs(registry.get_validator('qa'), winners[0])
 
     def test_distinct_registrations_all_succeed(self) -> None:
+        """Smoke test: the keys are disjoint, so it checks that every registration lands and nothing deadlocks.
+
+        The two tests above, not this one, fail when the registration lock is missing.
+        """
         count = 16
         letters = [chr(ord('A') + index) for index in range(count)]
         validators = [make_validator('Q' + letter) for letter in letters]
