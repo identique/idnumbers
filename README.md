@@ -265,11 +265,12 @@ country class's `parse()` output, including its date and enum values. Result fie
 itself is not immutable. The supplied `id_number` is preserved without normalization.
 
 An unknown or non-string country gives `UNSUPPORTED_COUNTRY` with `country_code=None`. Invalid IDs have the same
-reason as `validate()` (best-effort granular reasons). A valid ID with no parser, or a parser returning `None`, gives
-`NOT_PARSABLE`. Validator/parser exceptions give `VALIDATION_FAILED` with `error_message` formatted as
-`ExceptionType: message`; this entry point does not raise. Failure results have `reason` and `error_message`, not
-`info`. The existing country-specific `Cls.parse()` methods and their return types are unchanged; use those classes
-when you need a secondary ID type.
+reason as `idnumbers.validate()` (best-effort granular reasons). A valid ID with no parser, or a parser returning
+`None`, gives `NOT_PARSABLE`. Validator/parser exceptions give `VALIDATION_FAILED` with `error_message` set to
+`ExceptionType: message`, or to only the type name (`Exception` as a last resort) when the message can't be built;
+this entry point does not raise. Failure results have `reason` and `error_message`, not `info`. The existing
+country-specific `Cls.parse()` methods and their return types are unchanged; use those classes when you need a
+secondary ID type.
 
 ## Parse National IDs
 
@@ -493,7 +494,7 @@ It describes literal preferred layouts, not every accepted input: Sweden's masks
 though formatting preserves the significant `+` in plus forms.
 Its intentional ASCII letter restriction excludes Greek identity-card letters even though the country validator
 accepts them and formatting preserves them unchanged. The metadata example uses accepted Latin `AB-123456`.
-Length-only formatting can produce characters that do not match the pattern; call `validate()` separately.
+Length-only formatting can produce characters that do not match the pattern; call `idnumbers.validate()` separately.
 
 Measured over all 85 built-in primary metadata examples, normalized input validates in 81 countries;
 **CHE, CHL, KOR and USA** reject their normalized example. All 85 formatted examples validate. These are example
