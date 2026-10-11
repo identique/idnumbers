@@ -119,6 +119,22 @@ class TestGeneratedDocumentation(TestCase):
                     collect_ids(package, str(missing))
                 self.assertFalse(missing.exists())
 
+    def test_cli_rejects_modules_without_id_classes_cleanly(self) -> None:
+        with TemporaryDirectory() as directory:
+            output = Path(directory) / 'missing.json'
+            for package in ('idnumbers.nationalid.constant', 'idnumbers.nationalid.util'):
+                with self.subTest(package=package):
+                    result = subprocess.run(
+                        [sys.executable, '-m', 'tools.scan_ids', package, str(output)],
+                        cwd=ROOT, env=dict(os.environ, PYTHONPATH=str(ROOT)),
+                        capture_output=True, text=True,
+                    )
+                    self.assertEqual(result.returncode, 2)
+                    self.assertIn(f'error: no ID class is defined in {package}', result.stderr)
+                    self.assertNotIn('Traceback', result.stderr)
+                    self.assertEqual(result.stdout, '')
+                    self.assertFalse(output.exists())
+
     def test_installed_tree_without_tests_preserves_json_and_country_tools(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)
