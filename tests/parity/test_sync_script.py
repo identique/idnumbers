@@ -7,7 +7,9 @@ temporary copy of the files it needs, so the checkout is never touched.
 `--from-port` is exercised against a scratch git repository built in the temporary directory, never against a real
 port checkout.
 """
+import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -136,10 +138,89 @@ class FromPortTest(CheckoutCase):
         """Commit `parity/corpus.json` with this text to the scratch port and return the new HEAD."""
         corpus = self.port / "parity" / "corpus.json"
         corpus.parent.mkdir(exist_ok=True)
-        corpus.write_text(text, encoding="utf-8")
+        corpus.write_bytes(text.encode("utf-8"))
         self.git("add", "parity/corpus.json")
         self.git("commit", "--quiet", "-m", "corpus")
         return self.git("rev-parse", "HEAD")
+
+    def pinned_commit(self) -> str:
+        text = (self.copy / "tests" / "parity" / "corpus.py").read_text(encoding="utf-8")
+        match = re.search(r'^PORT_COMMIT = "([0-9a-f]{40})"$', text, re.MULTILINE)
+        self.assertIsNotNone(match)
+        assert match is not None
+        return match.group(1)
+
+    def assert_refused(self, expected_message: str) -> None:
+        before = self.tracked_bytes()
+        stderr = self.assert_exit_2_without_traceback(["--from-port", str(self.port)])
+        self.assertIn(expected_message, stderr)
+        self.assertEqual(before, self.tracked_bytes())
+
+    def test_dirty_port_with_an_untracked_file_is_refused(self) -> None:
+        self.commit_port_corpus(self.PORT_CORPUS)
+        (self.port / "scratch.txt").write_text("untracked\n", encoding="utf-8")
+        self.assert_refused("uncommitted changes")
+
+    def test_dirty_port_with_a_modified_corpus_is_refused(self) -> None:
+        self.commit_port_corpus(self.PORT_CORPUS)
+        (self.port / "parity" / "corpus.json").write_text('{"ALB": ["J50101001A", "J50101031R"]}\n', encoding="utf-8")
+        self.assert_refused("uncommitted changes")
+
+    def test_port_without_a_corpus_is_refused(self) -> None:
+        self.assert_refused("does not exist")
+
+    def test_port_that_is_not_a_git_checkout_is_refused(self) -> None:
+        shutil.rmtree(str(self.port / ".git"))
+        (self.port / "parity").mkdir()
+        (self.port / "parity" / "corpus.json").write_text(self.PORT_CORPUS, encoding="utf-8")
+        self.assert_refused("git rev-parse HEAD failed")
+
+    def test_invalid_json_in_the_port_corpus_is_refused(self) -> None:
+        self.commit_port_corpus("{bad")
+        self.assert_refused("is not valid JSON")
+
+    def test_non_list_seeds_in_the_port_corpus_are_refused(self) -> None:
+        self.commit_port_corpus('{"ALB": "J50101001A"}')
+        self.assert_refused("ALB must be a list of strings")
+
+    def test_unknown_country_in_the_port_corpus_is_refused(self) -> None:
+        self.commit_port_corpus('{"XXX": ["1"]}')
+        self.assert_refused("XXX")
+
+    def test_new_commit_with_the_same_corpus_is_pinned(self) -> None:
+        corpus = (self.copy / "tests" / "parity" / "corpus.json").read_bytes()
+        record_path = self.copy / "tests" / "parity" / "expected_python.json"
+        old_record = json.loads(record_path.read_text(encoding="utf-8"))
+        commit = self.commit_port_corpus(corpus.decode("utf-8"))
+        self.assertNotEqual(self.pinned_commit(), commit)
+
+        code, stdout, stderr = self.run_script("--from-port", str(self.port))
+
+        self.assertEqual(0, code, stdout + stderr)
+        self.assertEqual(commit, self.pinned_commit())
+        self.assertEqual(corpus, (self.copy / "tests" / "parity" / "corpus.json").read_bytes())
+        new_record = json.loads(record_path.read_text(encoding="utf-8"))
+        self.assertEqual(commit, new_record["corpus"]["commit"])
+        old_record["corpus"]["commit"] = commit
+        self.assertEqual(old_record, new_record, "only the pinned commit should differ")
+        self.assertIn("corpus: copied parity/corpus.json from", stdout)
+        self.assertIn(commit, stdout)
+        self.assertIn("wrote tests/parity/expected_python.json", stdout)
+        self.assertEqual(0, self.run_script("--check")[0], "the regenerated record must be current")
+
+    def test_new_commit_with_a_different_corpus_is_vendored(self) -> None:
+        commit = self.commit_port_corpus(self.PORT_CORPUS)
+
+        code, stdout, stderr = self.run_script("--from-port", str(self.port))
+
+        self.assertEqual(0, code, stdout + stderr)
+        self.assertEqual(commit, self.pinned_commit())
+        self.assertEqual(self.PORT_CORPUS, (self.copy / "tests" / "parity" / "corpus.json").read_text(encoding="utf-8"))
+        record = json.loads((self.copy / "tests" / "parity" / "expected_python.json").read_text(encoding="utf-8"))
+        self.assertEqual(commit, record["corpus"]["commit"])
+        self.assertEqual(["ALB"], sorted(record["valid"]))
+        self.assertIn("corpus: copied parity/corpus.json from", stdout)
+        self.assertIn("Note these changes on identique/idnumbers-npm", stdout)
 
     def test_failed_regeneration_restores_the_tree_and_reports_nothing_copied(self) -> None:
         # The class loads, so the port's corpus passes validation and is copied; the regeneration then fails
