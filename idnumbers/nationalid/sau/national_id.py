@@ -25,8 +25,10 @@ class NationalID:
 
     Validation is deliberately structure-only, as decided by the maintainer in issue #335: exactly 10 ASCII
     digits whose first digit is ``1`` (Saudi citizen) or ``2`` (resident). ``parse()`` returns the matching
-    ``Citizenship``. The last digit is not verified, because no authoritative source for a check digit was
-    found: the Luhn rule proposed in the issue is unconfirmed, so Luhn-failing numbers are accepted.
+    ``Citizenship``. ``display_format`` is ``TNNNNNNNNN``: ``T`` is the type digit (``1`` citizen, ``2`` resident)
+    and each ``N`` is one of the other nine digits. The last digit is not verified, because no authoritative
+    source for a check digit was found: the Luhn rule proposed in the issue is unconfirmed, so Luhn-failing
+    numbers are accepted.
     ``METADATA.checksum`` is ``False`` and there is no ``checksum()`` method.
     Acceptance does not establish issuance or authenticity.
 
