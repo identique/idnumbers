@@ -31,6 +31,7 @@ not personal data or proof of issuance. Each snippet runs independently.
 | [Denmark (DNK)](DNK.md) | DK | PersonalIdentityNumber | 2 |
 | [Dominican Republic (DOM)](DOM.md) | DO | NationalID | 1 |
 | [Ecuador (ECU)](ECU.md) | EC | NationalID | 1 |
+| [Egypt (EGY)](EGY.md) | EG | NationalID | 1 |
 | [Spain (ESP)](ESP.md) | ES | DNI | 1 |
 | [Estonia (EST)](EST.md) | EE | PersonalID | 1 |
 | [Finland (FIN)](FIN.md) | FI | PersonalIdentityCode | 1 |
