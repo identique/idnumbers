@@ -17,6 +17,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **ECU** cédula de identidad ([#521](https://github.com/identique/idnumbers/issues/521)): drop the unsourced RUC
   remark, describe the Gob.EC issue on the third digit 6 as reported validation failures, and cite python-stdnum's
   actual hyphenated example `171430710-3`; validity is unchanged.
+- **EGY** national ID number ([#523](https://github.com/identique/idnumbers/issues/523)): attribute the Luhn and
+  mod-11 check-digit claims to third-party sources and cite the Node port's research note; the failure-reason guide
+  now calls its date witnesses impossible-date witnesses, since not every one has a checksum; validity is unchanged.
 
 ## 1.16.0 (2026-10-11)
 

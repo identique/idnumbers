@@ -47,8 +47,10 @@ class NationalID:
     - the gender, commonly read from the parity of the serial number (odd for male, even for female): the same
       limitation, so ``parse()`` returns no gender;
     - the final digit: the regulation says it is optional and does not define it, and no check-digit algorithm is
-      published. The Luhn algorithm does not fit real numbers and a mod-11 rule is unproven, so ``METADATA.checksum``
-      is ``False`` and there is no ``checksum()`` method. ``parse()`` returns the digit unverified.
+      published. Third-party sources assert a Luhn or a weighted mod-11 check digit, but none cites an official
+      source and neither could be confirmed (see the Node.js sister project's research note below), so
+      ``METADATA.checksum`` is ``False`` and there is no ``checksum()`` method. ``parse()`` returns the digit
+      unverified.
 
     Sources:
 
@@ -56,6 +58,8 @@ class NationalID:
       https://lawyeregypt.net/ (the full link is in ``METADATA.links``)
     - https://en.wikipedia.org/wiki/Egyptian_National_Identity_Card (century digit and governorate table; not
       official)
+    - identique/idnumbers-npm research note on the Egyptian national ID (checksum investigation; not official):
+      https://github.com/identique/idnumbers-npm/blob/main/docs/research/egypt-national-id.md
     """
     METADATA = IdMetadata(**{
         'iso3166_alpha2': 'EG',
