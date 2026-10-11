@@ -7,16 +7,21 @@ temporary copy of the files it needs, so the checkout is never touched.
 `--from-port` is exercised against a scratch git repository built in the temporary directory, never against a real
 port checkout.
 """
+import contextlib
+import importlib.util
+import io
 import json
 import os
+import py_compile
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import types
 from pathlib import Path
-from typing import Dict, List, Tuple
-from unittest import TestCase, main, skipIf
+from typing import Any, Callable, Dict, List, Optional, Tuple
+from unittest import TestCase, main, mock, skipIf
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 COPIED_FILES = [
@@ -35,12 +40,32 @@ TRACKED_FILES = [
 COPIED_MESSAGE = "corpus: copied"
 
 
-def hermetic_git_environment(home: Path) -> Dict[str, str]:
-    """An environment in which git ignores the machine's and the user's configuration (signing, hooks, aliases)."""
+def hermetic_git_environment(home: Path, ceiling: Optional[Path] = None) -> Dict[str, str]:
+    """An environment in which git ignores the machine's and the user's configuration (signing, hooks, aliases).
+
+    With `ceiling`, git also never searches that directory or its parents for a repository, so a directory that is
+    not itself a repository stays "not a git repository" even when the temporary directory lies inside another one.
+    """
     home.mkdir(parents=True, exist_ok=True)
     environment = {name: value for name, value in os.environ.items() if not name.startswith("GIT_")}
     environment.update(GIT_CONFIG_NOSYSTEM="1", GIT_CONFIG_GLOBAL=os.devnull, HOME=str(home), USERPROFILE=str(home))
+    if ceiling is not None:
+        environment["GIT_CEILING_DIRECTORIES"] = str(ceiling.resolve())
     return environment
+
+
+def load_script() -> Any:
+    """Import `scripts/sync_parity_corpus.py` as a private module, for in-process tests of its functions.
+
+    Importing it only defines names. It changes `sys.path` solely inside `import_corpus_module()`, which these tests
+    always replace, so loading it is harmless.
+    """
+    spec = importlib.util.spec_from_file_location(
+        "sync_parity_corpus_under_test", str(ROOT / "scripts" / "sync_parity_corpus.py"))
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class CheckoutCase(TestCase):
@@ -58,7 +83,7 @@ class CheckoutCase(TestCase):
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy(ROOT / relative, target)
         shutil.copytree(ROOT / "idnumbers", self.copy / "idnumbers", ignore=shutil.ignore_patterns("__pycache__"))
-        self.environment = hermetic_git_environment(self.parent / "home")
+        self.environment = hermetic_git_environment(self.parent / "home", ceiling=self.parent)
 
     def run_script(self, *arguments: str) -> Tuple[int, str, str]:
         run = subprocess.run(
@@ -258,6 +283,129 @@ class FromPortTest(CheckoutCase):
         self.assertNotIn("Traceback", stderr)
         self.assertNotIn(COPIED_MESSAGE, stdout)
         self.assertEqual(before, self.tracked_bytes())
+
+
+class DropBytecodeTest(TestCase):
+    """`drop_bytecode()` removes a module's cached `.pyc` and tolerates there being none."""
+
+    def setUp(self) -> None:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.module = Path(directory.name) / "m.py"
+        self.module.write_text("VALUE = 1\n", encoding="utf-8")
+        self.cache = Path(importlib.util.cache_from_source(str(self.module)))
+        self.script = load_script()
+
+    def test_cached_bytecode_is_removed(self) -> None:
+        py_compile.compile(str(self.module), cfile=str(self.cache), doraise=True)
+        self.assertTrue(self.cache.is_file())
+
+        self.script.drop_bytecode(self.module)
+
+        self.assertFalse(self.cache.exists())
+        self.assertTrue(self.module.is_file(), "the source must stay")
+
+    def test_missing_bytecode_is_not_an_error(self) -> None:
+        self.assertFalse(self.cache.exists())
+        self.script.drop_bytecode(self.module)
+        self.assertFalse(self.cache.exists())
+
+    def test_dropping_twice_is_not_an_error(self) -> None:
+        py_compile.compile(str(self.module), cfile=str(self.cache), doraise=True)
+        self.script.drop_bytecode(self.module)
+        self.script.drop_bytecode(self.module)
+        self.assertFalse(self.cache.exists())
+
+
+class RollbackReportTest(TestCase):
+    """`main(["--from-port", ...])` reports a failed rollback together with the failure that caused it.
+
+    The script runs in-process against a fake corpus module in a temporary directory, so no tracked file of this
+    checkout can be written.
+    """
+
+    def setUp(self) -> None:
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        self.directory = Path(directory.name)
+        self.original = {"corpus.json": b"{}\n", "corpus.py": b"# corpus\n", "expected_python.json": b"{}\n"}
+        for name, content in self.original.items():
+            (self.directory / name).write_bytes(content)
+        self.corpus = types.SimpleNamespace(
+            CORPUS_PATH=self.directory / "corpus.json",
+            EXPECTED_PATH=self.directory / "expected_python.json",
+            __file__=str(self.directory / "corpus.py"),
+        )
+        self.script = load_script()
+
+    def current(self) -> Dict[str, bytes]:
+        return {name: (self.directory / name).read_bytes() for name in self.original}
+
+    def half_update_then_raise(self, error: BaseException) -> Callable[[Any, Any], Any]:
+        """A stand-in for `copy_from_port` that overwrites the corpus, then fails with `error`."""
+        def copy(port: Path, corpus: Any) -> Any:
+            corpus.CORPUS_PATH.write_bytes(b"half-updated")
+            raise error
+        return copy
+
+    def run_main(self, copy: Callable[[Any, Any], Any], restore: Optional[Callable[[Any], None]] = None
+                 ) -> Tuple[int, str]:
+        """Run `main()` with the fakes in place; return the exit code and standard error."""
+        errors = io.StringIO()
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(mock.patch.object(self.script, "import_corpus_module", lambda: self.corpus))
+            stack.enter_context(mock.patch.object(self.script, "copy_from_port", copy))
+            if restore is not None:
+                stack.enter_context(mock.patch.object(self.script, "restore", restore))
+            stack.enter_context(contextlib.redirect_stderr(errors))
+            stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+            code = self.script.main(["--from-port", str(self.directory)])
+        return code, errors.getvalue()
+
+    def test_failed_rollback_reports_both_failures_and_the_files_to_check(self) -> None:
+        calls: List[Dict[Path, Optional[bytes]]] = []
+
+        def failing_restore(snapshot: Dict[Path, Optional[bytes]]) -> None:
+            calls.append(snapshot)
+            raise PermissionError("restore failure")
+
+        code, stderr = self.run_main(self.half_update_then_raise(RuntimeError("original failure")), failing_restore)
+
+        self.assertEqual(2, code, stderr)
+        self.assertEqual(1, len(calls))
+        self.assertNotIn("Traceback", stderr)
+        self.assertTrue(stderr.startswith("sync_parity_corpus.py: "), stderr)
+        self.assertIn("RuntimeError: original failure", stderr)
+        self.assertIn("PermissionError: restore failure", stderr)
+        self.assertIn("partly updated", stderr)
+        for name in self.original:
+            self.assertIn(name, stderr)
+
+    def test_failed_rollback_drops_the_cached_bytecode(self) -> None:
+        dropped: List[Path] = []
+
+        def failing_restore(snapshot: Dict[Path, Optional[bytes]]) -> None:
+            raise PermissionError("restore failure")
+
+        with mock.patch.object(self.script, "drop_bytecode", dropped.append):
+            code, stderr = self.run_main(self.half_update_then_raise(RuntimeError("original failure")),
+                                         failing_restore)
+
+        self.assertEqual(2, code, stderr)
+        self.assertEqual([self.directory / "corpus.py"], dropped)
+
+    def test_successful_rollback_prints_the_original_error_unchanged(self) -> None:
+        for error in (self.script.SetupError("cannot read the port"), OSError("disk full")):
+            with self.subTest(error=type(error).__name__):
+                code, stderr = self.run_main(self.half_update_then_raise(error))
+                self.assertEqual(2, code, stderr)
+                self.assertEqual("sync_parity_corpus.py: %s\n" % error, stderr)
+                self.assertEqual(self.original, self.current())
+
+    def test_successful_rollback_lets_an_unexpected_error_propagate(self) -> None:
+        with self.assertRaisesRegex(RuntimeError, "original failure"):
+            self.run_main(self.half_update_then_raise(RuntimeError("original failure")))
+        self.assertEqual(self.original, self.current())
 
 
 if __name__ == "__main__":
