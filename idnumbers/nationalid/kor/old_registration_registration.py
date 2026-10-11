@@ -72,7 +72,9 @@ class OldResidentRegistration(ResidentRegistration):
     @staticmethod
     def parse(id_number: str) -> Optional[OldIDParseResult]:
         """prase the result"""
-        # a truthy new_result and checksum both come from this same 14-character layout, so it matched
+        # match_obj may be None here. The cast is safe only because every later use of it comes after the checks
+        # below: OldResidentRegistration.checksum() returns True only when validate_regexp() accepted the same
+        # regexp, so a passing checksum implies this match succeeded. Otherwise parse() returns None first.
         match_obj = cast(re.Match[str], match_regexp(id_number, OldResidentRegistration.METADATA.regexp))
         new_result = ResidentRegistration.parse(id_number)
         if not new_result:
