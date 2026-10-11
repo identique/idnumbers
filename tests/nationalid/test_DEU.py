@@ -57,6 +57,8 @@ class TestDEUNationalIDValidation(TestCase):
         # '12993456781' holds a double 9 in its first ten digits; '12993456790' is the triple 9 with one adjacent pair
         self.assertEqual('1299345678'.count('9'), 2)
         self.assertEqual('1299345679'.count('9'), 3)
+        self.assertIn('99', '1299345679')
+        self.assertNotIn('999', '1299345679')
         self.assertEqual(DEU.TaxID.get_checkdigit([int(c) for c in '1299345679']), 0)
         self.assertTrue(DEU.TaxID.checksum('12993456790'))
 
