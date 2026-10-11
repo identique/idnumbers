@@ -56,6 +56,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   and so `get_country()` and `get_validator()`, no longer raises for a `str` subclass that overrides `isascii()` or
   `upper()` or for an object that fakes its `__class__`; `register()` rejects a blank name and gives a missing
   alpha-2 code its own error message.
+- **Unified API** ([#499](https://github.com/identique/idnumbers/issues/499)): `validate()` and `parse_id_info()` no
+  longer raise when the country's `repr()` raises or when the exception of a validator or parser can't be turned into
+  text, and the unsupported-country message shortens a long country value to 80 characters. The `ValidationResult`
+  and `ParseSuccess` docs say that a result with parsed data isn't hashable.
 
 ### Documentation
 

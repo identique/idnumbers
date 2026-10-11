@@ -28,9 +28,12 @@ Example::
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Iterable, List, Literal, Mapping, Optional, Tuple, Type, Union
+from typing import Any, Iterable, List, Literal, Mapping, Optional, Tuple, Type, Union, cast
 
 from . import registry
+
+_REPR_LIMIT = 80
+"""The longest ``repr()`` of an unsupported country that an error message keeps whole."""
 
 __all__ = [
     'FailureReason', 'ValidationResult', 'ParseSuccess', 'ParseFailure', 'ParseIdInfoResult',
@@ -72,7 +75,12 @@ class FailureReason(str, Enum):
 
 @dataclass(frozen=True)
 class ValidationResult:
-    """The outcome of validating one ID number. Instances are immutable, and a result is truthy when it is valid."""
+    """
+    The outcome of validating one ID number. Instances are immutable, and a result is truthy when it is valid.
+
+    Hashing a result hashes its fields, so a result with ``extracted_info`` (a dictionary) isn't hashable and raises
+    :class:`TypeError`; invalid results and valid results without parsed data are hashable.
+    """
 
     is_valid: bool
     """``True`` when the ID number is valid."""
@@ -98,7 +106,11 @@ class ValidationResult:
 
 @dataclass(frozen=True)
 class ParseSuccess:
-    """Parsed information from a valid primary ID. Fields are frozen; ``info`` is a fresh, shallow dictionary."""
+    """
+    Parsed information from a valid primary ID. Fields are frozen; ``info`` is a fresh, shallow dictionary.
+
+    Because ``info`` is a dictionary, hashing an instance raises :class:`TypeError`; :class:`ParseFailure` is hashable.
+    """
 
     country_code: str
     """The resolved ISO 3166-1 alpha-3 code."""
@@ -178,9 +190,26 @@ def validate(country: str, id_number: str) -> ValidationResult:
             country_code=None,
             id_number=id_number,
             reason=FailureReason.UNSUPPORTED_COUNTRY,
-            error_message='unsupported country: %r' % (country,),
+            error_message='unsupported country: ' + _short_repr(country),
         )
     return _check(alpha3, validator, id_number)
+
+
+def _short_repr(value: object) -> str:
+    """Return ``repr(value)`` without raising, cut to ``_REPR_LIMIT`` characters plus ``'...'`` when longer."""
+    try:
+        if issubclass(type(value), str):
+            # Slice with the base-class method: an exact str keeps user code and a huge repr out of the message.
+            value = str.__getitem__(cast(str, value), slice(0, _REPR_LIMIT + 1))
+        text = repr(value)
+    except Exception:
+        try:
+            return '<%s object, repr() failed>' % type(value).__name__
+        except Exception:
+            return '<object, repr() failed>'
+    if len(text) > _REPR_LIMIT:
+        return text[:_REPR_LIMIT] + '...'
+    return text
 
 
 def validate_many(items: Iterable[Tuple[str, str]]) -> List[ValidationResult]:
@@ -226,9 +255,20 @@ def _check_validator(alpha3: str, validator: Any, id_number: str) -> ValidationR
             country_code=alpha3,
             id_number=id_number,
             reason=FailureReason.VALIDATION_FAILED,
-            error_message='%s: %s' % (type(exc).__name__, exc),
+            error_message=_exception_text(exc),
         )
     return ValidationResult(is_valid=True, country_code=alpha3, id_number=id_number, extracted_info=extracted_info)
+
+
+def _exception_text(exc: BaseException) -> str:
+    """Return ``'<TypeName>: <message>'`` for an exception, or just its type name when its text can't be built."""
+    try:
+        return '%s: %s' % (type(exc).__name__, exc)
+    except Exception:
+        try:
+            return type(exc).__name__
+        except Exception:
+            return 'Exception'
 
 
 def failure_reason(id_class: Type[Any], id_number: str) -> Optional[FailureReason]:

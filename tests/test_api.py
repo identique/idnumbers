@@ -50,6 +50,51 @@ class RaisingParser:
         raise ValueError('cannot parse')
 
 
+class RaisingRepr:
+    def __repr__(self) -> str:
+        raise RuntimeError('no repr')
+
+
+class RaisingReprStr(str):
+    def __repr__(self) -> str:
+        raise RuntimeError('no repr')
+
+
+def unsupported_country_cases() -> Dict[str, Any]:
+    """Countries whose message must stay short and must not raise, with the expected message prefix."""
+    return {
+        'raising repr': RaisingRepr(),
+        'huge str': 'x' * 10_000_000,
+        'long list': list(range(1000)),
+        'str subclass with a raising repr': RaisingReprStr('y' * 1000),
+    }
+
+
+class UntextableError(Exception):
+    def __str__(self) -> str:
+        raise RuntimeError('no text')
+
+
+class UntextableValidator:
+    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+
+    @staticmethod
+    def validate(id_number: str) -> bool:
+        raise UntextableError()
+
+
+class UntextableParser:
+    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+
+    @staticmethod
+    def validate(id_number: str) -> bool:
+        return True
+
+    @staticmethod
+    def parse(id_number: str) -> Dict[str, Any]:
+        raise UntextableError()
+
+
 class NoneParser:
     METADATA = SimpleNamespace(iso3166_alpha2='QQ')
 
@@ -114,6 +159,41 @@ class TestValidate(TestCase):
                 self.assertIsNone(result.extracted_info)
                 self.assertEqual(result.id_number, TWN_VALID)
 
+    def test_unsupported_country_message_never_raises_or_grows(self) -> None:
+        prefix = 'unsupported country: '
+        limit = len(prefix) + api._REPR_LIMIT + len('...')
+        for name, country in unsupported_country_cases().items():
+            with self.subTest(case=name):
+                result = api.validate(country, TWN_VALID)
+                self.assertEqual(result.reason, api.FailureReason.UNSUPPORTED_COUNTRY)
+                self.assertIsNone(result.country_code)
+                assert result.error_message is not None
+                self.assertTrue(result.error_message.startswith(prefix))
+                if name != 'raising repr':
+                    self.assertLessEqual(len(result.error_message), limit)
+                    self.assertTrue(result.error_message.endswith('...'))
+
+    def test_unsupported_country_message_texts(self) -> None:
+        cases = unsupported_country_cases()
+        expected = {
+            'raising repr': 'unsupported country: <RaisingRepr object, repr() failed>',
+            'huge str': "unsupported country: 'xxx",
+            'long list': 'unsupported country: [0, 1, 2, 3',
+            'str subclass with a raising repr': "unsupported country: 'yyy",
+        }
+        for name, country in cases.items():
+            with self.subTest(case=name):
+                message = api.validate(country, '').error_message
+                assert message is not None
+                if name == 'raising repr':
+                    self.assertEqual(message, expected[name])
+                else:
+                    self.assertTrue(message.startswith(expected[name]), message)
+
+    def test_unsupported_country_message_keeps_a_repr_that_fits(self) -> None:
+        fits = 'x' * (api._REPR_LIMIT - 2)
+        self.assertEqual(api.validate(fits, '').error_message, 'unsupported country: %r' % (fits,))
+
     def test_id_number_that_is_not_a_string(self) -> None:
         for id_number in (None, 123, b'A123456789'):
             with self.subTest(id_number=repr(id_number)):
@@ -150,6 +230,20 @@ class TestValidate(TestCase):
         self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
         self.assertEqual(result.error_message, 'ValueError: cannot parse')
         self.assertIsNone(result.extracted_info)
+
+    def test_exception_whose_text_raises(self) -> None:
+        for validator in (UntextableValidator, UntextableParser):
+            with self.subTest(validator=validator.__name__), isolated_registry():
+                registry.register('QQQ', validator, alpha2='QQ')
+                result = api.validate('qq', 'x1')
+                self.assertFalse(result.is_valid)
+                self.assertEqual(result.country_code, 'QQQ')
+                self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
+                self.assertEqual(result.error_message, 'UntextableError')
+                self.assertIsNone(result.extracted_info)
+                self.assertEqual(api.parse_id_info('qq', 'x1'),
+                                 api.ParseFailure('QQQ', 'x1', api.FailureReason.VALIDATION_FAILED,
+                                                  'UntextableError'))
 
     def test_parser_that_returns_none(self) -> None:
         with isolated_registry():
@@ -197,6 +291,24 @@ class TestValidationResult(TestCase):
         result = api.validate('tw', TWN_VALID)
         with self.assertRaises(dataclasses.FrozenInstanceError):
             result.is_valid = False  # type: ignore[misc]
+
+    def test_hashing(self) -> None:
+        invalid = api.validate('tw', TWN_INVALID)
+        non_parsable = api.validate('us', USA_VALID)
+        self.assertTrue(non_parsable.is_valid)
+        self.assertIsNone(non_parsable.extracted_info)
+        for result in (invalid, non_parsable):
+            with self.subTest(result=result):
+                self.assertEqual(hash(result), hash(dataclasses.replace(result)))
+        self.assertEqual(len({invalid, api.validate('tw', TWN_INVALID), non_parsable}), 2)
+        parsed = api.validate('tw', TWN_VALID)
+        self.assertIsNotNone(parsed.extracted_info)
+        with self.assertRaises(TypeError):
+            hash(parsed)
+        with self.assertRaises(TypeError):
+            hash(api.parse_id_info('tw', TWN_VALID))
+        failure = api.parse_id_info('tw', TWN_INVALID)
+        self.assertEqual(hash(failure), hash(dataclasses.replace(failure)))
 
     def test_defaults(self) -> None:
         result = api.ValidationResult(is_valid=False, country_code=None, id_number='x')
