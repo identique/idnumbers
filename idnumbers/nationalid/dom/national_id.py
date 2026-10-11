@@ -21,9 +21,9 @@ class NationalID:
 
     The number has 11 digits and is printed as ``NNN-NNNNNNN-C``: a 3-digit series, a 7-digit sequence number and
     a check digit. The check digit is the Luhn (mod 10) digit of the first ten digits, so the Luhn sum of all
-    eleven digits is a multiple of 10. The DGII checks the same digit in its own tools and reports an alert for an
-    incorrect check digit. ``validate()`` checks the layout and the check digit; hyphens are optional, so
-    ``402-0000001-2`` and ``40200000012`` are both accepted.
+    eleven digits is a multiple of 10. The DGII's 607 format check requires 11 digits for a cédula; it does not
+    publish the check-digit algorithm, so the Luhn rule follows python-stdnum. ``validate()`` checks the layout and
+    the check digit; hyphens are optional, so ``402-0000001-2`` and ``40200000012`` are both accepted.
 
     Deliberately not accepted:
 
@@ -37,8 +37,8 @@ class NationalID:
 
     - python-stdnum, ``stdnum/do/cedula.py``:
       https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/do/cedula.py
-    - Dirección General de Impuestos Internos, help article on the 607 format check ("11 dígitos para cédulas"
-      and the incorrect check digit alert):
+    - Dirección General de Impuestos Internos, help article on the 607 format check ("11 dígitos para las
+      cédulas"):
       https://ayuda.dgii.gov.do/conversations/formatos-de-envo-de-datos/ca3904-cules-son-las-principales-alertas-que-se-pueden-presentar-al-validar-el-formato-607-en-la-herramienta-de-excel/5f3c17998cd858ce87a20d04
     - https://en.wikipedia.org/wiki/Luhn_algorithm
     """
