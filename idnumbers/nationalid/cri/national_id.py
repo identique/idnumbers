@@ -46,7 +46,9 @@ class NationalID:
     than four digits, and the card prints the tomo and asiento zero-padded to four digits each.
 
     There is no check digit; the TSE confirms a number by looking it up in the Registro Civil. ``validate()``
-    therefore checks the layout only. Hyphens are optional, so ``1-0913-0259`` and ``109130259`` are both accepted.
+    therefore checks the layout only. Each hyphen is optional, so compact, fully hyphenated and mixed layouts
+    are accepted. ``1-0913-0259`` is an example used by the Node port, not an authoritative validation vector;
+    ``109130259`` is its compact equivalent.
 
     Deliberately not accepted:
 
