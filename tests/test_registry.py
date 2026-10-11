@@ -1,12 +1,15 @@
 """Tests of the country registry (idnumbers.registry)."""
 
+import enum
 import importlib
 import os
 import subprocess
 import sys
+import threading
+import time
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Any, List, Optional, Type
+from typing import Any, Callable, List, Optional, Type
 from unittest import TestCase, main
 from unittest.mock import patch
 
@@ -116,6 +119,45 @@ class TestLookup(TestCase):
                 self.assertIsNone(registry.get_country(value))
                 self.assertIsNone(registry.get_validator(value))
 
+    def test_str_subclass_is_matched_by_its_string_value(self) -> None:
+        class Hostile(str):
+            def isascii(self) -> bool:
+                raise RuntimeError('isascii')
+
+            def upper(self) -> str:
+                raise RuntimeError('upper')
+
+            def __hash__(self) -> int:
+                raise RuntimeError('hash')
+
+        self.assertEqual(registry.resolve_country(Hostile('tw')), 'TWN')
+        self.assertIs(registry.get_validator(Hostile('tw')), TWN.NationalID)
+        self.assertIsNone(registry.resolve_country(Hostile('xx')))
+
+    def test_str_enum_member_resolves(self) -> None:
+        class Code(str, enum.Enum):
+            TW = 'tw'
+
+        self.assertEqual(registry.resolve_country(Code.TW), 'TWN')
+        self.assertIs(registry.get_validator(Code.TW), TWN.NationalID)
+
+    def test_fake_str_objects_give_none_and_never_raise(self) -> None:
+        class RaisingClass:
+            @property  # type: ignore[misc]
+            def __class__(self) -> Any:
+                raise RuntimeError('__class__')
+
+        class FakeStr:
+            __class__ = str  # type: ignore[assignment]
+
+        for value in (RaisingClass(), FakeStr()):
+            with self.subTest(value=type(value).__name__):
+                self.assertIsNone(registry.resolve_country(value))
+                self.assertIsNone(registry.get_country(value))
+                self.assertIsNone(registry.get_validator(value))
+                result = idnumbers.validate(value, 'A123456789')
+                self.assertFalse(result.is_valid)
+
     def test_validator_validates(self) -> None:
         validator = registry.get_validator('TW')
         assert validator is not None
@@ -177,6 +219,77 @@ class RegistryStateCase(TestCase):
         return dict(registry._KEYS), dict(registry._ENTRIES), dict(registry._CUSTOM)
 
 
+class TestConcurrency(RegistryStateCase):
+    def run_threads(self, count: int, target: Callable[[int], Any]) -> List[Any]:
+        """Run ``target(index)`` in ``count`` threads that start together, and return the results by index."""
+        barrier = threading.Barrier(count)
+        results: List[Any] = [None] * count
+        errors: List[BaseException] = []
+
+        def work(index: int) -> None:
+            try:
+                barrier.wait(timeout=10)
+                results[index] = target(index)
+            except BaseException as error:  # reported by the test below
+                errors.append(error)
+
+        threads = [threading.Thread(target=work, args=(index,)) for index in range(count)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join(timeout=10)
+        self.assertFalse([thread for thread in threads if thread.is_alive()], 'a thread did not finish')
+        self.assertEqual(errors, [])
+        return results
+
+    def test_first_lookup_of_a_builtin_country_loads_it_once(self) -> None:
+        registry._ENTRIES.pop('TWN', None)
+        calls: List[str] = []
+        original = registry._load_builtin
+
+        def slow_load(alpha3: str) -> registry.CountryEntry:
+            calls.append(alpha3)
+            time.sleep(0.01)
+            return original(alpha3)
+
+        with patch.object(registry, '_load_builtin', slow_load):
+            entries = self.run_threads(32, lambda index: registry.get_country('tw'))
+        self.assertEqual(calls, ['TWN'])
+        self.assertIsNotNone(entries[0])
+        for entry in entries:
+            self.assertIs(entry, entries[0])
+        self.assertIs(registry._ENTRIES['TWN'], entries[0])
+
+    def test_identical_registrations_are_one_entry(self) -> None:
+        validator = make_validator()
+
+        def register(index: int) -> None:
+            registry.register('abc', validator, alpha2='ab', name='Abc', aliases=['one', 'two'])
+
+        self.run_threads(32, register)
+        self.assertEqual(sorted(registry._CUSTOM), ['ABC'])
+        self.assertEqual(registry._CUSTOM['ABC'], ('ONE', 'TWO'))
+        expected = registry.CountryEntry('ABC', 'AB', 'Abc', validator, (validator,))
+        self.assertEqual(registry.get_country('abc'), expected)
+        for code in ('ab', 'one', 'TWO'):
+            self.assertEqual(registry.resolve_country(code), 'ABC')
+
+    def test_distinct_registrations_all_succeed(self) -> None:
+        count = 16
+        letters = [chr(ord('A') + index) for index in range(count)]
+        validators = [make_validator('Q' + letter) for letter in letters]
+        before = len(registry.list_supported_countries())
+
+        def register(index: int) -> None:
+            registry.register('QX' + letters[index], validators[index], aliases=['legacy' + letters[index]])
+
+        self.run_threads(count, register)
+        self.assertEqual(len(registry.list_supported_countries()), before + count)
+        for letter, validator in zip(letters, validators):
+            for code in ('QX' + letter, 'Q' + letter, 'legacy' + letter):
+                self.assertIs(registry.get_validator(code), validator)
+
+
 class TestRegister(RegistryStateCase):
     def test_success_with_all_arguments(self) -> None:
         validator = make_validator('XA')
@@ -215,6 +328,26 @@ class TestRegister(RegistryStateCase):
         self.assertEqual(registry.list_supported_countries()[0].alpha3, 'ALB')
         self.assertEqual(len(registry.list_supported_countries()), COUNTRY_COUNT)
         self.assertEqual(registry._CUSTOM, before[2])
+
+    def test_aliases_may_be_a_one_shot_iterable(self) -> None:
+        generator_validator = make_validator()
+        registry.register('abc', generator_validator, alpha2='ab', aliases=(alias for alias in ['one', 'two']))
+        iterator_validator = make_validator()
+        registry.register('xyz', iterator_validator, alpha2='xy', aliases=iter(['three']))
+        for code, alpha3 in (('one', 'ABC'), ('TWO', 'ABC'), ('three', 'XYZ')):
+            with self.subTest(code=code):
+                self.assertEqual(registry.resolve_country(code), alpha3)
+        self.assertEqual(registry._CUSTOM['ABC'], ('ONE', 'TWO'))
+        self.assertEqual(registry._CUSTOM['XYZ'], ('THREE',))
+
+    def test_idempotent_with_a_generator_of_aliases(self) -> None:
+        validator = make_validator()
+        registry.register('abc', validator, alpha2='ab', name='Abc', aliases=(alias for alias in ('one', 'two')))
+        before = self.snapshot()
+        registry.register('abc', validator, alpha2='ab', name='Abc', aliases=(alias for alias in ('two', 'one')))
+        self.assertEqual(self.snapshot(), before)
+        self.assertEqual(registry.resolve_country('one'), 'ABC')
+        self.assertEqual(registry.resolve_country('two'), 'ABC')
 
     def test_type_errors(self) -> None:
         validator = make_validator()
@@ -261,6 +394,8 @@ class TestRegister(RegistryStateCase):
             ('abc', validator, {'alpha2': ''}),
             ('abc', validator, {'alpha2': 'q1'}),
             ('abc', validator, {'name': ''}),
+            ('abc', validator, {'name': ' '}),
+            ('abc', validator, {'name': '\t\n'}),
             ('abc', validator, {'aliases': ['']}),
             ('abc', validator, {'aliases': ['ünï']}),
             ('abc', validator, {'aliases': ['a b']}),
@@ -276,6 +411,27 @@ class TestRegister(RegistryStateCase):
                 with self.assertRaises(ValueError):
                     registry.register(alpha3, bad_validator, **kwargs)
         self.assertEqual(self.snapshot(), before)
+
+    def test_missing_alpha2_has_its_own_message(self) -> None:
+        no_attribute = type('NoAlpha2', (), {'METADATA': SimpleNamespace(), 'validate': staticmethod(bool)})
+        before = self.snapshot()
+        for validator in (make_validator(None), no_attribute):
+            with self.subTest(validator=validator.__name__):
+                with self.assertRaisesRegex(ValueError, 'ABC has no alpha2: pass alpha2 or set METADATA'):
+                    registry.register('abc', validator)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_malformed_alpha2_keeps_the_ascii_letters_message(self) -> None:
+        with self.assertRaisesRegex(ValueError, "alpha2 must be exactly 2 ASCII letters, got 'Q1' for ABC"):
+            registry.register('abc', make_validator('Q1'))
+        with self.assertRaisesRegex(ValueError, "alpha2 must be exactly 2 ASCII letters, got '' for ABC"):
+            registry.register('abc', make_validator(), alpha2='')
+
+    def test_blank_name_has_its_own_message(self) -> None:
+        for name in ('', ' ', '\t\n'):
+            with self.subTest(name=name):
+                with self.assertRaisesRegex(ValueError, 'the name of ABC must not be empty or blank'):
+                    registry.register('abc', make_validator(), name=name)
 
     def test_non_ascii_codes_that_uppercase_to_ascii_are_rejected(self) -> None:
         # 'ß'.upper() == 'SS' and 'ﬀ'.upper() == 'FF', so only the original string shows the code isn't ASCII.

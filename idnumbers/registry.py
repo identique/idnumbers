@@ -28,7 +28,7 @@ Example::
 
 import importlib
 import threading
-from typing import Any, Dict, List, NamedTuple, Optional, Sequence, Set, Tuple, Type
+from typing import Any, Dict, Iterable, List, NamedTuple, Optional, Set, Tuple, Type
 
 __all__ = [
     'CountryEntry',
@@ -171,14 +171,16 @@ def resolve_country(country: str) -> Optional[str]:
     Resolve an alpha-2 code, an alpha-3 code or a registered alias to the alpha-3 code.
 
     The match ignores the letter case but nothing else: surrounding whitespace, non-ASCII look-alikes and anything
-    that isn't a ``str`` give ``None``. This function never raises and imports no country module.
+    that isn't a ``str`` give ``None``. A ``str`` subclass is matched by its string value. This function never raises
+    and imports no country module.
 
     :param country: an ISO 3166-1 alpha-2 or alpha-3 code, or a registered alias, such as ``'tw'`` or ``'TWN'``.
     :return: the upper-case alpha-3 code, such as ``'TWN'``, or ``None`` when the country is unknown.
     """
-    if not isinstance(country, str) or not country.isascii():
+    # type() and the unbound str methods keep a str subclass, or an object that fakes its __class__, from running code.
+    if not issubclass(type(country), str) or not str.isascii(country):
         return None
-    return _KEYS.get(country.upper())
+    return _KEYS.get(str.upper(country))
 
 
 def get_country(country: str) -> Optional[CountryEntry]:
@@ -226,7 +228,7 @@ def register(
     *,
     alpha2: Optional[str] = None,
     name: Optional[str] = None,
-    aliases: Sequence[str] = (),
+    aliases: Iterable[str] = (),
 ) -> None:
     """
     Add a country to the process-wide registry.
@@ -239,23 +241,27 @@ def register(
     :param validator: a class with a ``METADATA`` attribute and a static ``validate()`` method.
     :param alpha2: the 2-letter code of the country. It defaults to ``validator.METADATA.iso3166_alpha2``.
     :param name: the English name of the country. It defaults to the upper-case ``alpha3``.
-    :param aliases: extra lookup keys of the country, such as a legacy code. Each one is stored in upper case.
+    :param aliases: extra lookup keys of the country, such as a legacy code, as any iterable of ``str`` such as a
+        list, a tuple or a generator. It is read once, and each alias is stored in upper case.
     :raises TypeError: when ``validator`` isn't a class with ``METADATA`` and a callable ``validate``, when a code, the
         name or an alias isn't a ``str``, or when ``aliases`` is a single ``str``.
-    :raises ValueError: when a code, the name or an alias is malformed, when a key is repeated, or when a key is
-        already taken by another country or the registration conflicts with an earlier one.
+    :raises ValueError: when a code or an alias is malformed, when the name is empty or blank, when no alpha-2 code is
+        given and the validator's ``METADATA`` has none, when a key is repeated, or when a key is already taken by
+        another country or the registration conflicts with an earlier one.
     """
-    _check_types(alpha3, validator, alpha2, name, aliases)
+    alias_list = _check_types(alpha3, validator, alpha2, name, aliases)
     if not _is_code(alpha3, 3):
         raise ValueError(f'alpha3 must be exactly 3 ASCII letters, got {alpha3!r}')
     key3 = alpha3.upper()
     code2 = alpha2 if alpha2 is not None else getattr(validator.METADATA, 'iso3166_alpha2', None)
+    if code2 is None:
+        raise ValueError(f'{key3} has no alpha2: pass alpha2 or set METADATA.iso3166_alpha2 on the validator')
     if not isinstance(code2, str) or not _is_code(code2, 2):
         raise ValueError(f'alpha2 must be exactly 2 ASCII letters, got {code2!r} for {key3}')
     key2 = code2.upper()
-    if name is not None and not name:
-        raise ValueError(f'the name of {key3} must not be empty')
-    keys_of_aliases = tuple(_alias_key(key3, alias) for alias in aliases)
+    if name is not None and not name.strip():
+        raise ValueError(f'the name of {key3} must not be empty or blank')
+    keys_of_aliases = tuple(_alias_key(key3, alias) for alias in alias_list)
     all_keys = (key3, key2) + keys_of_aliases
     for key in all_keys:
         if all_keys.count(key) > 1:
@@ -286,7 +292,11 @@ def _entry(alpha3: str) -> CountryEntry:
         return entry
     with _LOCK:
         # Another thread may have loaded it while this one waited for the lock.
-        return _ENTRIES.setdefault(alpha3, _ENTRIES.get(alpha3) or _load_builtin(alpha3))
+        entry = _ENTRIES.get(alpha3)
+        if entry is None:
+            entry = _load_builtin(alpha3)
+            _ENTRIES[alpha3] = entry
+        return entry
 
 
 def _load_builtin(alpha3: str) -> CountryEntry:
@@ -308,8 +318,14 @@ def _is_code(code: str, length: int) -> bool:
     return len(code) == length and code.isascii() and code.isalpha()
 
 
-def _check_types(alpha3: object, validator: object, alpha2: object, name: object, aliases: Any) -> None:
-    """Raise ``TypeError`` for an argument of :func:`register` that has the wrong type."""
+def _check_types(
+    alpha3: object, validator: object, alpha2: object, name: object, aliases: Iterable[Any]
+) -> Tuple[str, ...]:
+    """
+    Raise ``TypeError`` for an argument of :func:`register` that has the wrong type.
+
+    :return: the aliases as a tuple, so that a one-shot iterable is read only once.
+    """
     if not isinstance(alpha3, str):
         raise TypeError(f'alpha3 must be a str, got {type(alpha3).__name__}')
     if not isinstance(validator, type) or not hasattr(validator, 'METADATA'):
@@ -321,10 +337,12 @@ def _check_types(alpha3: object, validator: object, alpha2: object, name: object
     if name is not None and not isinstance(name, str):
         raise TypeError(f'the name of {alpha3} must be a str, got {type(name).__name__}')
     if isinstance(aliases, str):
-        raise TypeError(f'aliases of {alpha3} must be a sequence of str, not the single str {aliases!r}')
-    for alias in aliases:
+        raise TypeError(f'aliases of {alpha3} must be an iterable of str, not the single str {aliases!r}')
+    materialized = tuple(aliases)
+    for alias in materialized:
         if not isinstance(alias, str):
             raise TypeError(f'an alias of {alpha3} must be a str, got {type(alias).__name__}')
+    return materialized
 
 
 def _alias_key(alpha3: str, alias: str) -> str:
