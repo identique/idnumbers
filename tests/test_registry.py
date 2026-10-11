@@ -321,6 +321,8 @@ class TestRegister(RegistryStateCase):
             ('abc', validator, {'alpha2': ''}),
             ('abc', validator, {'alpha2': 'q1'}),
             ('abc', validator, {'name': ''}),
+            ('abc', validator, {'name': ' '}),
+            ('abc', validator, {'name': '\t\n'}),
             ('abc', validator, {'aliases': ['']}),
             ('abc', validator, {'aliases': ['ünï']}),
             ('abc', validator, {'aliases': ['a b']}),
@@ -336,6 +338,27 @@ class TestRegister(RegistryStateCase):
                 with self.assertRaises(ValueError):
                     registry.register(alpha3, bad_validator, **kwargs)
         self.assertEqual(self.snapshot(), before)
+
+    def test_missing_alpha2_has_its_own_message(self) -> None:
+        no_attribute = type('NoAlpha2', (), {'METADATA': SimpleNamespace(), 'validate': staticmethod(bool)})
+        before = self.snapshot()
+        for validator in (make_validator(None), no_attribute):
+            with self.subTest(validator=validator.__name__):
+                with self.assertRaisesRegex(ValueError, 'ABC has no alpha2: pass alpha2 or set METADATA'):
+                    registry.register('abc', validator)
+        self.assertEqual(self.snapshot(), before)
+
+    def test_malformed_alpha2_keeps_the_ascii_letters_message(self) -> None:
+        with self.assertRaisesRegex(ValueError, "alpha2 must be exactly 2 ASCII letters, got 'Q1' for ABC"):
+            registry.register('abc', make_validator('Q1'))
+        with self.assertRaisesRegex(ValueError, "alpha2 must be exactly 2 ASCII letters, got '' for ABC"):
+            registry.register('abc', make_validator(), alpha2='')
+
+    def test_blank_name_has_its_own_message(self) -> None:
+        for name in ('', ' ', '\t\n'):
+            with self.subTest(name=name):
+                with self.assertRaisesRegex(ValueError, 'the name of ABC must not be empty or blank'):
+                    registry.register('abc', make_validator(), name=name)
 
     def test_non_ascii_codes_that_uppercase_to_ascii_are_rejected(self) -> None:
         # 'ß'.upper() == 'SS' and 'ﬀ'.upper() == 'FF', so only the original string shows the code isn't ASCII.

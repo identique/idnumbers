@@ -245,19 +245,22 @@ def register(
         list, a tuple or a generator. It is read once, and each alias is stored in upper case.
     :raises TypeError: when ``validator`` isn't a class with ``METADATA`` and a callable ``validate``, when a code, the
         name or an alias isn't a ``str``, or when ``aliases`` is a single ``str``.
-    :raises ValueError: when a code, the name or an alias is malformed, when a key is repeated, or when a key is
-        already taken by another country or the registration conflicts with an earlier one.
+    :raises ValueError: when a code or an alias is malformed, when the name is empty or blank, when no alpha-2 code is
+        given and the validator's ``METADATA`` has none, when a key is repeated, or when a key is already taken by
+        another country or the registration conflicts with an earlier one.
     """
     alias_list = _check_types(alpha3, validator, alpha2, name, aliases)
     if not _is_code(alpha3, 3):
         raise ValueError(f'alpha3 must be exactly 3 ASCII letters, got {alpha3!r}')
     key3 = alpha3.upper()
     code2 = alpha2 if alpha2 is not None else getattr(validator.METADATA, 'iso3166_alpha2', None)
+    if code2 is None:
+        raise ValueError(f'{key3} has no alpha2: pass alpha2 or set METADATA.iso3166_alpha2 on the validator')
     if not isinstance(code2, str) or not _is_code(code2, 2):
         raise ValueError(f'alpha2 must be exactly 2 ASCII letters, got {code2!r} for {key3}')
     key2 = code2.upper()
-    if name is not None and not name:
-        raise ValueError(f'the name of {key3} must not be empty')
+    if name is not None and not name.strip():
+        raise ValueError(f'the name of {key3} must not be empty or blank')
     keys_of_aliases = tuple(_alias_key(key3, alias) for alias in alias_list)
     all_keys = (key3, key2) + keys_of_aliases
     for key in all_keys:
