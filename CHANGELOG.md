@@ -4,6 +4,15 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Added
+
+- **CRI** cédula de identidad ([#329](https://github.com/identique/idnumbers/issues/329)): add the 9-digit Costa Rica
+  identity card number `P-TTTT-AAAA` (province 1-9, tomo, asiento), with optional hyphens and no check digit;
+  `parse()` returns the province, its name, the tomo and the asiento. python-stdnum's 10-digit `0P-TTTT-AAAA` form is
+  not accepted.
+
 ## 1.15.0 (2026-10-08)
 
 ### Added

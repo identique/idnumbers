@@ -31,7 +31,7 @@ def rejecting(pattern=r'(?P<checksum>\d)', checksum=None, validator=None):
 class TestReasonMatrix(TestCase):
     def test_all_classes(self):
         rows = list(iter_reason_matrix())
-        self.assertEqual(len(rows), 104)
+        self.assertEqual(len(rows), 105)
         for row in rows:
             self.assertTrue(row.checksum_note)
             self.assertTrue(row.birthdate_note)

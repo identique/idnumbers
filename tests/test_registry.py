@@ -16,8 +16,8 @@ from idnumbers.nationalid import AUS, GRC, TWN
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 NATIONALID_DIR = REPO_ROOT / 'idnumbers' / 'nationalid'
-COUNTRY_COUNT = 78
-ID_TYPE_COUNT = 104
+COUNTRY_COUNT = 79
+ID_TYPE_COUNT = 105
 
 
 def make_validator(alpha2: Optional[str] = 'QQ') -> Type[Any]:

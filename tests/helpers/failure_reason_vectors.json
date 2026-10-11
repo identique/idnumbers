@@ -380,6 +380,19 @@
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
+  "idnumbers.nationalid.cri.national_id.NationalID": {
+    "valid": "1-0234-0567",
+    "length": [
+      "10234056",
+      "1023405671",
+      "1-0234-05671"
+    ],
+    "format": "!!!!!!!!!",
+    "checksum": null,
+    "checksum_note": "No checksum method.",
+    "birthdate": null,
+    "birthdate_note": "No full calendar date encoded or validated."
+  },
   "idnumbers.nationalid.cyp.tax_number.TaxNumber": {
     "valid": "01234567U",
     "length": [

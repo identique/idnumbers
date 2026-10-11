@@ -76,6 +76,7 @@ _BUILTIN: Dict[str, Tuple[str, str]] = {
     'CHL': ('CL', 'Chile'),
     'CHN': ('CN', 'China'),
     'COL': ('CO', 'Colombia'),
+    'CRI': ('CR', 'Costa Rica'),
     'CYP': ('CY', 'Cyprus'),
     'CZE': ('CZ', 'Czechia'),
     'DEU': ('DE', 'Germany'),

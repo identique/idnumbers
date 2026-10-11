@@ -52,7 +52,7 @@ class TestParseIdInfo(TestCase):
                 self.assertEqual(result.info, expected)
                 self.assertEqual(result.country_code, entry.alpha3)
                 self.assertEqual(result.id_number, example)
-        self.assertEqual(count, 42)
+        self.assertEqual(count, 43)
 
     def test_registered_aliases_and_single_parser_call(self) -> None:
         with isolated_registry():

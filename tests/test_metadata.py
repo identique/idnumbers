@@ -131,7 +131,7 @@ def all_aliases() -> List[Type[Any]]:
 
 class TestMetadataType(TestCase):
     def test_the_id_classes_are_found(self) -> None:
-        self.assertEqual(len(list(id_classes())), 104)
+        self.assertEqual(len(list(id_classes())), 105)
 
     def test_every_metadata_is_an_id_metadata(self) -> None:
         for entry, cls in id_classes():
