@@ -6,6 +6,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ## Unreleased
 
+### Other fixes
+
+- **Packaging** ([#529](https://github.com/identique/idnumbers/issues/529)): the release check now also rejects a
+  wheel entry that is a bare file named `idnumbers` or `idnumbers-<version>.dist-info` rather than a path inside that
+  directory; the published wheel is unchanged.
+
 ### Documentation
 
 - **CRI** cédula de identidad ([#515](https://github.com/identique/idnumbers/issues/515)): correct the example's

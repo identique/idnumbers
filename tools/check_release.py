@@ -32,10 +32,10 @@ def check_wheel_layout(names: list[str]) -> None:
     """Allow only the idnumbers package and its one dist-info directory in a wheel (#484)."""
     dist_infos = set()
     for name in names:
-        top = name.split('/', 1)[0]
-        if top == 'idnumbers':
+        top, sep, _ = name.partition('/')
+        if sep and top == 'idnumbers':
             continue
-        if re.fullmatch(r'idnumbers-[^/]+\.dist-info', top) is not None:
+        if sep and re.fullmatch(r'idnumbers-[^/]+\.dist-info', top) is not None:
             dist_infos.add(top)
             continue
         raise ReleaseError(f'wheel entry outside idnumbers/ and its dist-info directory: {name}')

@@ -72,7 +72,8 @@ class ReleaseGuardTest(unittest.TestCase):
     def test_wheel_layout(self):
         for extra in ('tools/__init__.py', 'tools/check_release.py',
                       'idnumbers-1.2.3.data/data/version/VERSION', 'other_module.py',
-                      'idnumbers.py', 'tests/test_release.py', 'idnumbers-1.2.3.dist-info2/x'):
+                      'idnumbers.py', 'tests/test_release.py', 'idnumbers-1.2.3.dist-info2/x',
+                      'idnumbers', 'idnumbers-1.2.3.dist-info'):
             with self.subTest(extra=extra), tempfile.TemporaryDirectory() as temp:
                 directory = Path(temp)
                 self.artifacts(directory)
@@ -86,8 +87,10 @@ class ReleaseGuardTest(unittest.TestCase):
             directory = Path(temp)
             self.artifacts(directory)
             with zipfile.ZipFile(directory / 'package.whl', 'a') as wheel:
+                wheel.writestr('idnumbers/', '')
                 wheel.writestr('idnumbers/py.typed', '')
                 wheel.writestr('idnumbers/nationalid/CHN.py', '')
+                wheel.writestr('idnumbers-1.2.3.dist-info/', '')
                 wheel.writestr('idnumbers-1.2.3.dist-info/RECORD', '')
             check_artifacts(directory, '1.2.3')
 
