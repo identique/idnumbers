@@ -35,13 +35,15 @@ example, Hong Kong's `L[L]######(C)` is one or two letters, six digits and the c
 Finland's `DDMMYY{+-A}SSSC` has one century sign; it lists the traditional signs `+` (1800s), `-` (1900s) and `A`
 (2000s), and the class also accepts the letters `B`-`F` (2000s) and `U`-`Y` (1900s) introduced in 2023.
 
-`#` is any digit and `L` is any letter, in every class. Any other capital letter names a field of the ID, and a run of
-the same letter is that field's width. The class sets what the field is, and its docstring is where to look. Common ones are
-`YY` or `YYYY` (the year), `MM` (the month), `DD` (the day), `S` (a serial or sequence number) and `C` (often the check
-character, as in Poland's `YYMMDDSSSSC`, Czechia's `YYMMDD/SSSC` and Sweden's `YYMMDD-SSSC`). The same letter can mean
-different things in different classes: `C` is the century digit in Egypt's `CYYMMDDGGSSSSV`, and `DD` and `MM` are the
-department and the municipality, not a day and a month, in Guatemala's `NNNNNNNNVDDMM`. Read `display_format` together
-with the class docstring, and use `masks` for the kinds of character that a class accepts.
+`#` is a digit in every class, and `L` is usually a letter. Any other capital letter names a field of the ID, and so
+does `L` in a few classes, such as `LL`, the month, in Romania's `SAALLZZJJNNNC` and `LLLL`, a location code, in Korea's
+old `YYMMDD-GLLLLSC`. A run of the same letter is that field's width. The class sets what the field is, and its
+docstring is where to look. Common ones are `YY` or `YYYY` (the year), `MM` (the month), `DD` (the day), `S` (a serial
+or sequence number) and `C` (often the check character, as in Poland's `YYMMDDSSSSC`, Czechia's `YYMMDD/SSSC` and
+Sweden's `YYMMDD-SSSC`). The same letter can mean different things in different classes: `C` is the century digit in
+Egypt's `CYYMMDDGGSSSSV`, and `DD` and `MM` are the department and the municipality, not a day and a month, in
+Guatemala's `NNNNNNNNVDDMM`. Read `display_format` together with the class docstring, and use `masks` for the kinds of
+character that a class accepts.
 
 ### Mask vocabulary
 

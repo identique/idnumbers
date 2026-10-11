@@ -22,7 +22,7 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   now calls its date witnesses impossible-date witnesses, since not every one has a checksum; validity is unchanged.
 - **GTM**, **SAU** ([#527](https://github.com/identique/idnumbers/issues/527)): define the `display_format`
   placeholder letters in the class docstrings, and explain in `docs/nationalid/METADATA.md` that letters other than
-  `#` and `L` name per-class fields; formats are unchanged.
+  `#` (and, in a few classes, `L`) name per-class fields; formats are unchanged.
 
 ## 1.16.0 (2026-10-11)
 
