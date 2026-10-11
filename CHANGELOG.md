@@ -44,6 +44,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Changed
 
+- **Release workflows** ([#468](https://github.com/identique/idnumbers/issues/468)): update the version-bump and
+  documentation actions to Node.js 24 runtimes and pin Ubuntu 24.04, preserving the bot PR and docs deployment
+  contracts and the existing release authentication routes.
 - **Metadata** ([#501](https://github.com/identique/idnumbers/issues/501)): the official names of COL (NUIP), CYP
   (ΑΦΤ) and IRN (شماره ملی) are corrected against official sources. `display_format` now uses `[...]` for an optional
   part and `{...}` for exactly one of the listed characters, and keeps parentheses as printed characters (BGR, HKG,
