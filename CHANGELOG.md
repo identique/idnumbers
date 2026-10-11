@@ -20,6 +20,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **EGY** national ID number ([#523](https://github.com/identique/idnumbers/issues/523)): attribute the Luhn and
   mod-11 check-digit claims to third-party sources and cite the Node port's research note; the failure-reason guide
   now calls its date witnesses impossible-date witnesses, since not every one has a checksum; validity is unchanged.
+- **GTM**, **SAU** ([#527](https://github.com/identique/idnumbers/issues/527)): define the `display_format`
+  placeholder letters in the class docstrings, and explain in `docs/nationalid/METADATA.md` that letters other than
+  `#` (and, in a few classes, `L`) name per-class fields; formats are unchanged.
 
 ## 1.16.0 (2026-10-11)
 

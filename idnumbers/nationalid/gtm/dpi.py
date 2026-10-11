@@ -26,6 +26,8 @@ class DPI:
 
     RENAP bulletin 163 (8 April 2021) defines the 13-digit layout: eight system-assigned digits, one verification
     digit, two department-of-birth digits and two municipality-of-birth digits. The source is in ``METADATA.links``.
+    ``display_format`` is ``NNNNNNNNVDDMM``: eight correlative digits ``N``, the verification digit ``V``, the
+    department ``DD`` and the municipality ``MM`` (not a day or a month).
 
     Validation is deliberately structure-only: exactly 13 ASCII digits, department 01-22 and municipality 01-99.
     The ranges are the maintainer-approved policy in issue #333, not rules established by that RENAP bulletin.
