@@ -29,6 +29,7 @@ the port's corpus before writing and restores the previous files if copying or r
 """
 import argparse
 import importlib
+import importlib.util
 import json
 import re
 import subprocess
@@ -115,6 +116,18 @@ def check_corpus_data(corpus: Any, parsed: Any, source: str) -> None:
                 raise SetupError("%s: cannot load the Python class for %r (%s): %s" % (source, code, spec, error))
 
 
+def drop_bytecode(module_path: Path) -> None:
+    """Delete the module's cached bytecode.
+
+    Python validates a cached `.pyc` by the source's size and whole-second mtime. A pin rewrite keeps the size (40 hex
+    digits for 40), so a rewrite within the second of the previous compile would be loaded from the stale cache.
+    """
+    try:
+        Path(importlib.util.cache_from_source(str(module_path))).unlink()
+    except (OSError, NotImplementedError, ValueError):
+        pass
+
+
 def copy_from_port(port: Path, corpus: Any) -> Tuple[Any, str]:
     """Vendor the port's corpus and commit pin; return the reloaded corpus module and the message to report.
 
@@ -132,6 +145,7 @@ def copy_from_port(port: Path, corpus: Any) -> Tuple[Any, str]:
     pinned = pin_commit(module_path, commit)
     corpus.CORPUS_PATH.write_bytes(data)
     module_path.write_bytes(pinned.encode("utf-8"))
+    drop_bytecode(module_path)
     message = "corpus: copied parity/corpus.json from %s at %s" % (port, commit)
     return importlib.reload(corpus), message
 
@@ -201,13 +215,15 @@ def run(arguments: argparse.Namespace) -> int:
     corpus = import_corpus_module()
     if arguments.from_port is None:
         return regenerate(arguments, corpus)
-    snapshot = take_snapshot([corpus.CORPUS_PATH, Path(corpus.__file__), corpus.EXPECTED_PATH])
+    module_path = Path(corpus.__file__)
+    snapshot = take_snapshot([corpus.CORPUS_PATH, module_path, corpus.EXPECTED_PATH])
     try:
         corpus, message = copy_from_port(arguments.from_port.resolve(), corpus)
         status = regenerate(arguments, corpus)
     except BaseException:
         # A failure at any point after the first write must not leave a half-updated tree.
         restore(snapshot)
+        drop_bytecode(module_path)
         raise
     print(message)
     return status
