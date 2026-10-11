@@ -82,6 +82,7 @@ _BUILTIN: Dict[str, Tuple[str, str]] = {
     'DEU': ('DE', 'Germany'),
     'DNK': ('DK', 'Denmark'),
     'DOM': ('DO', 'Dominican Republic'),
+    'ECU': ('EC', 'Ecuador'),
     'ESP': ('ES', 'Spain'),
     'EST': ('EE', 'Estonia'),
     'FIN': ('FI', 'Finland'),
