@@ -91,6 +91,7 @@ _BUILTIN: Dict[str, Tuple[str, str]] = {
     'GBR': ('GB', 'United Kingdom'),
     'GEO': ('GE', 'Georgia'),
     'GRC': ('GR', 'Greece'),
+    'GTM': ('GT', 'Guatemala'),
     'HKG': ('HK', 'Hong Kong'),
     'HRV': ('HR', 'Croatia'),
     'HUN': ('HU', 'Hungary'),

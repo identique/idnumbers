@@ -22,11 +22,11 @@ class TestGeneratedDocumentation(TestCase):
         classes = [cls for entry in entries for cls in entry.id_types]
         before = [dict(vars(cls.METADATA)) for cls in classes]
         pages = country_pages()
-        self.assertEqual(len(entries), 82)
-        self.assertEqual(len(classes), 108)
-        self.assertEqual(len(pages), 83)
+        self.assertEqual(len(entries), 83)
+        self.assertEqual(len(classes), 109)
+        self.assertEqual(len(pages), 84)
         self.assertEqual(pages, country_pages())
-        self.assertEqual(sum(len(python_blocks(source)) for source in pages.values()), 108)
+        self.assertEqual(sum(len(python_blocks(source)) for source in pages.values()), 109)
         self.assertEqual(before, [dict(vars(cls.METADATA)) for cls in classes])
         for entry in entries:
             for cls in entry.id_types:
@@ -43,7 +43,7 @@ class TestGeneratedDocumentation(TestCase):
     def test_frozen_guide_coverage(self) -> None:
         guide = failure_guide()
         vectors = json.loads((ROOT / 'tests/helpers/failure_reason_vectors.json').read_text())
-        self.assertEqual(len(vectors), 108)
+        self.assertEqual(len(vectors), 109)
         for key, row in vectors.items():
             self.assertIn(key, guide)
             self.assertIn(cell(row['valid']), guide)
@@ -94,7 +94,7 @@ class TestGeneratedDocumentation(TestCase):
                            cwd=ROOT, check=True, capture_output=True)
             self.assertEqual(direct.read_bytes(), cli.read_bytes())
             rows = json.loads(direct.read_text())
-            self.assertEqual(sum(len(row['ids']) for row in rows), 108)
+            self.assertEqual(sum(len(row['ids']) for row in rows), 109)
             for row in rows:
                 for item in row['ids']:
                     self.assertIsInstance(item['metadata']['regexp'], str)
@@ -123,7 +123,7 @@ sys.meta_path.insert(0, NoTests())
             direct = blocker + """from tools.scan_ids import collect_ids
 collect_ids('idnumbers.nationalid', 'direct.json')
 from tools.generate_docs import country_pages, input_guide
-assert len(country_pages()) == 83
+assert len(country_pages()) == 84
 assert 'Input formats' in input_guide()
 """
             subprocess.run([sys.executable, '-c', direct], cwd=root, env=environment,

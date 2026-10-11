@@ -39,6 +39,7 @@ not personal data or proof of issuance. Each snippet runs independently.
 | [United Kingdom (GBR)](GBR.md) | GB | NationalInsuranceNumber | 1 |
 | [Georgia (GEO)](GEO.md) | GE | PersonalNumber | 1 |
 | [Greece (GRC)](GRC.md) | GR | IdentityCard | 3 |
+| [Guatemala (GTM)](GTM.md) | GT | DPI | 1 |
 | [Hong Kong (HKG)](HKG.md) | HK | NationalID | 1 |
 | [Croatia (HRV)](HRV.md) | HR | PersonalID | 1 |
 | [Hungary (HUN)](HUN.md) | HU | PersonalID | 1 |

@@ -492,8 +492,8 @@ Its intentional ASCII letter restriction excludes Greek identity-card letters ev
 accepts them and formatting preserves them unchanged. The metadata example uses accepted Latin `AB-123456`.
 Length-only formatting can produce characters that do not match the pattern; call `validate()` separately.
 
-Measured over all 82 built-in primary metadata examples, normalized input validates in 78 countries;
-**CHE, CHL, KOR and USA** reject their normalized example. All 82 formatted examples validate. These are example
+Measured over all 83 built-in primary metadata examples, normalized input validates in 79 countries;
+**CHE, CHL, KOR and USA** reject their normalized example. All 83 formatted examples validate. These are example
 measurements, not a promise for arbitrary inputs. Country validators, parsers and checksum methods are unchanged.
 See [metadata masks](docs/nationalid/METADATA.md) and the
 [formatting API documentation](https://identique.github.io/idnumbers/idnumbers.format.html).
