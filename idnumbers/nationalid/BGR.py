@@ -5,7 +5,4 @@ from .util import alias_of
 
 NationalID = alias_of(UniformCivilNumber)
 """alias of UniformCivilNumber"""
-TIN = SimpleNamespace(**{
-    'individual': UniformCivilNumber,
-    'entity': UnifiedIdCode
-})
+TIN = SimpleNamespace(**{"individual": UniformCivilNumber, "entity": UnifiedIdCode})

@@ -8,11 +8,12 @@ from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, match_r
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[ -]', '', id_number)
+    return re.sub(r"[ -]", "", id_number)
 
 
 class ParseResult(TypedDict):
     """The parse result of Iceland ID"""
+
     yyyymmdd: date
     """dob"""
     sn: str
@@ -26,31 +27,34 @@ class IcelandicID:
     Iceland Icelandic identification number, kennitala
     https://en.wikipedia.org/wiki/Icelandic_identification_number
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'IS',
-        'min_length': 10,
-        'max_length': 10,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})-?'
-                             r'(?P<sn>\d{2})'
-                             r'(?P<checksum>\d)'
-                             r'(?P<century>\d)$'),
-        'alias_of': None,
-        'names': ['Icelandic identification number',
-                  'kennitala',
-                  'kt.'],
-        'links': ['https://en.wikipedia.org/wiki/Icelandic_identification_number'],
-        'deprecated': False,
-        'country_name': 'Iceland',
-        'id_type': 'Icelandic Identification Number',
-        'official_name': 'kennitala',
-        'display_format': 'DDMMYY-SSKC',
-        'example': '120174-3399',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 3, 2, 7, 6, 5, 4, 3, 2 over the first eight digits; check '
-                              '= 11 - remainder)',
-        'masks': ('######-####',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "IS",
+            "min_length": 10,
+            "max_length": 10,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})-?"
+                r"(?P<sn>\d{2})"
+                r"(?P<checksum>\d)"
+                r"(?P<century>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Icelandic identification number", "kennitala", "kt."],
+            "links": ["https://en.wikipedia.org/wiki/Icelandic_identification_number"],
+            "deprecated": False,
+            "country_name": "Iceland",
+            "id_type": "Icelandic Identification Number",
+            "official_name": "kennitala",
+            "display_format": "DDMMYY-SSKC",
+            "example": "120174-3399",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 3, 2, 7, 6, 5, 4, 3, 2 over the first eight digits; check "
+            "= 11 - remainder)",
+            "masks": ("######-####",),
+        }
+    )
 
     WEIGHTS = [3, 2, 7, 6, 5, 4, 3, 2]
 
@@ -70,23 +74,23 @@ class IcelandicID:
         checksum = IcelandicID.checksum(id_number)
         if not checksum:
             return None
-        if match_obj.group('century') == '9':
+        if match_obj.group("century") == "9":
             year_base = 1900
-        elif match_obj.group('century') == '0':
+        elif match_obj.group("century") == "0":
             year_base = 2000
         else:
             return None
-        yy = int(match_obj.group('yy'))
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
+        yy = int(match_obj.group("yy"))
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
         try:
             calendar_date = _calendar_date(yy + year_base, mm, dd)
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
-                'sn': match_obj.group('sn'),
-                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum'))),
+                "yyyymmdd": calendar_date,
+                "sn": match_obj.group("sn"),
+                "checksum": cast(CHECK_DIGIT, int(match_obj.group("checksum"))),
             }
         except ValueError:
             # catch the date error

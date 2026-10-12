@@ -6,6 +6,7 @@ validity on a vector the port shares fails `test_python_validity_matches_the_gol
 note on identique/idnumbers-npm.
 See `tests/parity/corpus.py` for the provenance and `python3 scripts/sync_parity_corpus.py` for the refresh.
 """
+
 import json
 from typing import Any, Dict, List
 from unittest import TestCase, main
@@ -59,7 +60,8 @@ class ParityCorpusTest(TestCase):
         self.assertEqual(corpus.PORT_COMMIT, provenance["commit"])
         self.assertEqual(corpus.CORPUS_RELATIVE_PATH, provenance["path"])
         self.assertEqual(
-            provenance["sha256"], corpus.corpus_sha256(),
+            provenance["sha256"],
+            corpus.corpus_sha256(),
             "tests/parity/corpus.json changed without regenerating tests/parity/expected_python.json; "
             "run `python3 scripts/sync_parity_corpus.py`",
         )
@@ -103,8 +105,15 @@ class ParityCorpusTest(TestCase):
                 if newly_valid or newly_invalid:
                     self.fail(
                         "%s\n%s: %d newly valid: %s\n%s: %d newly invalid: %s"
-                        % (CHANGED_MESSAGE, code, len(newly_valid), _listed(newly_valid),
-                           code, len(newly_invalid), _listed(newly_invalid))
+                        % (
+                            CHANGED_MESSAGE,
+                            code,
+                            len(newly_valid),
+                            _listed(newly_valid),
+                            code,
+                            len(newly_invalid),
+                            _listed(newly_invalid),
+                        )
                     )
 
     def test_record_and_corpus_cover_the_same_countries(self) -> None:

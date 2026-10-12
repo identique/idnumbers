@@ -27,6 +27,7 @@ import, a corpus that is corrupt, has non-string seeds or names a country withou
 raised, which the library contract forbids). A failed run never leaves a half-updated tree: `--from-port` validates
 the port's corpus before writing and restores the previous files if copying or regeneration fails.
 """
+
 import argparse
 import importlib
 import importlib.util
@@ -65,7 +66,9 @@ def git_output(port: Path, *arguments: str) -> str:
     try:
         run = subprocess.run(
             ["git", "-C", str(port)] + list(arguments),
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
         )
     except OSError as error:
         raise SetupError("cannot run git: %s" % error)
@@ -84,8 +87,10 @@ def read_port(port: Path) -> Tuple[bytes, str]:
         raise SetupError("unexpected HEAD %r in %s" % (commit, port))
     dirty = git_output(port, "status", "--porcelain")
     if dirty.strip():
-        raise SetupError("%s has uncommitted changes; refusing to pin a corpus that is not at %s:\n%s"
-                         % (port, commit, dirty.rstrip()))
+        raise SetupError(
+            "%s has uncommitted changes; refusing to pin a corpus that is not at %s:\n%s"
+            % (port, commit, dirty.rstrip())
+        )
     return source.read_bytes(), commit
 
 
@@ -94,8 +99,10 @@ def pin_commit(corpus_module: Path, commit: str) -> str:
     lines = corpus_module.read_text(encoding="utf-8").splitlines(keepends=True)
     indexes = [index for index, line in enumerate(lines) if PORT_COMMIT_LINE.match(line.rstrip("\r\n"))]
     if len(indexes) != 1:
-        raise SetupError('expected exactly one `PORT_COMMIT = "<40 hex digits>"` line in %s, found %d'
-                         % (corpus_module, len(indexes)))
+        raise SetupError(
+            'expected exactly one `PORT_COMMIT = "<40 hex digits>"` line in %s, found %d'
+            % (corpus_module, len(indexes))
+        )
     lines[indexes[0]] = 'PORT_COMMIT = "%s"\n' % commit
     return "".join(lines)
 
@@ -175,7 +182,11 @@ def summary(current: Dict[str, Any], changes: Dict[str, List[str]]) -> str:
     valid = sum(len(vectors) for vectors in current["valid"].values())
     changed = sum(len(vectors) for vectors in changes.values())
     return "%d countries, %d vectors, %d Python-valid, %d changed validity vs the previous record" % (
-        len(current["valid"]), current["vectors"], valid, changed)
+        len(current["valid"]),
+        current["vectors"],
+        valid,
+        changed,
+    )
 
 
 def describe_changes(changes: Dict[str, List[str]], limit: int = 20) -> List[str]:
@@ -191,10 +202,15 @@ def describe_changes(changes: Dict[str, List[str]], limit: int = 20) -> List[str
 def parse_arguments(argv: Optional[List[str]]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Refresh tests/parity/ (see the module docstring).")
     mode = parser.add_mutually_exclusive_group()
-    mode.add_argument("--check", action="store_true",
-                      help="write nothing; exit 1 if tests/parity/expected_python.json is out of date")
-    mode.add_argument("--from-port", metavar="PATH", type=Path,
-                      help="first vendor PATH/parity/corpus.json and pin PATH's HEAD commit (PATH must be clean)")
+    mode.add_argument(
+        "--check", action="store_true", help="write nothing; exit 1 if tests/parity/expected_python.json is out of date"
+    )
+    mode.add_argument(
+        "--from-port",
+        metavar="PATH",
+        type=Path,
+        help="first vendor PATH/parity/corpus.json and pin PATH's HEAD commit (PATH must be clean)",
+    )
     return parser.parse_args(argv)
 
 
@@ -240,8 +256,13 @@ def run(arguments: argparse.Namespace) -> int:
             rollback_report = SetupError(
                 "%s: %s\nrestoring the previous files failed as well (%s: %s); these files may be partly updated, "
                 "check them with `git status` and `git diff`: %s"
-                % (type(error).__name__, error, type(restore_error).__name__, restore_error,
-                   ", ".join(display_path(path) for path in snapshot))
+                % (
+                    type(error).__name__,
+                    error,
+                    type(restore_error).__name__,
+                    restore_error,
+                    ", ".join(display_path(path) for path in snapshot),
+                )
             )
             drop_bytecode(module_path)
             raise rollback_report from error
@@ -258,8 +279,9 @@ def regenerate(arguments: argparse.Namespace, corpus: Any) -> int:
     except corpus.ContractViolation as error:
         raise SetupError(str(error))
     except (OSError, ValueError, ImportError, AttributeError) as error:
-        raise SetupError("cannot build the record from tests/parity/corpus.json: %s: %s"
-                         % (type(error).__name__, error))
+        raise SetupError(
+            "cannot build the record from tests/parity/corpus.json: %s: %s" % (type(error).__name__, error)
+        )
     text = corpus.render_expected(current)
     changes = changed_vectors(previous, current)
     print(summary(current, changes))
@@ -270,8 +292,10 @@ def regenerate(arguments: argparse.Namespace, corpus: Any) -> int:
         if existing == text.encode("utf-8"):
             print("%s is up to date" % expected_path.relative_to(REPOSITORY_ROOT))
             return 0
-        print("%s is out of date; run `python3 scripts/sync_parity_corpus.py`"
-              % expected_path.relative_to(REPOSITORY_ROOT))
+        print(
+            "%s is out of date; run `python3 scripts/sync_parity_corpus.py`"
+            % expected_path.relative_to(REPOSITORY_ROOT)
+        )
         print("\n".join(describe_changes(changes)))
         return 1
 

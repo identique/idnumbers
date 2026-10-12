@@ -7,7 +7,7 @@ from ..util import CHECK_DIGIT, mn_modulus_digit, modulus_overflow_mod10, valida
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r' ', '', id_number)
+    return re.sub(r" ", "", id_number)
 
 
 class TaxID:
@@ -26,32 +26,39 @@ class TaxID:
     - A digit that occurs three times in the first 10 digits never fills three directly consecutive positions.
     - The 11th digit is the check digit.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'DE',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^[1-9]\d ?\d{3} ?\d{3} ?\d{3}$'),
-        'alias_of': None,
-        'names': ['Tax ID',
-                  'Steuerliche Identifikationsnummer',
-                  'Persönliche Identificationsnummer',
-                  'Identifikationsnummer',
-                  'Steuer-IdNr.',
-                  'IdNr',
-                  'Steuer-ID'],
-        'links': ['https://allaboutberlin.com/guides/german-tax-id-steuernummer',
-                  'https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf'],
-        'deprecated': False,
-        'country_name': 'Germany',
-        'id_type': 'Tax Identification Number',
-        'official_name': 'Steuerliche Identifikationsnummer',
-        'display_format': '## ### ### ###',
-        'example': '12 345 678 911',
-        'checksum_algorithm': 'ISO 7064 MOD 11,10 (iterative product mod 11 and 10)',
-        'masks': ('## ### ### ###', '###########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "DE",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^[1-9]\d ?\d{3} ?\d{3} ?\d{3}$"),
+            "alias_of": None,
+            "names": [
+                "Tax ID",
+                "Steuerliche Identifikationsnummer",
+                "Persönliche Identificationsnummer",
+                "Identifikationsnummer",
+                "Steuer-IdNr.",
+                "IdNr",
+                "Steuer-ID",
+            ],
+            "links": [
+                "https://allaboutberlin.com/guides/german-tax-id-steuernummer",
+                "https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Germany",
+            "id_type": "Tax Identification Number",
+            "official_name": "Steuerliche Identifikationsnummer",
+            "display_format": "## ### ### ###",
+            "example": "12 345 678 911",
+            "checksum_algorithm": "ISO 7064 MOD 11,10 (iterative product mod 11 and 10)",
+            "masks": ("## ### ### ###", "###########"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

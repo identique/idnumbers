@@ -8,6 +8,7 @@ from ..util import match_regexp
 
 class OldIDParseResult(ParseResult):
     """old format contains more info"""
+
     citizenship: Citizenship
 
 
@@ -17,31 +18,38 @@ class OldNationalID:
     # https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka
     # https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'LK',
-        'min_length': 10,
-        'max_length': 10,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<year>\d{2})'
-                             r'(?P<days>\d{3})'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)'
-                             r'(?P<citizenship>[XxVv])$'),
-        'alias_of': None,
-        'names': ['National ID Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka',
-                  'https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html'],
-        'deprecated': True,
-        'country_name': 'Sri Lanka',
-        'id_type': 'National Identity Card Number (Old)',
-        'official_name': None,
-        'display_format': 'YYDDDSSSCV',
-        'example': '900120001V',
-        'checksum_algorithm': 'The check digit of the new 12-digit number that the old number converts to (weights 8, '
-                              '4, 3, 2, 7, 6, 5, 7, 4, 3, 2 mod 11)',
-        'masks': ('#########L',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "LK",
+            "min_length": 10,
+            "max_length": 10,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<year>\d{2})"
+                r"(?P<days>\d{3})"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum>\d)"
+                r"(?P<citizenship>[XxVv])$"
+            ),
+            "alias_of": None,
+            "names": ["National ID Number"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka",
+                "https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html",
+            ],
+            "deprecated": True,
+            "country_name": "Sri Lanka",
+            "id_type": "National Identity Card Number (Old)",
+            "official_name": None,
+            "display_format": "YYDDDSSSCV",
+            "example": "900120001V",
+            "checksum_algorithm": "The check digit of the new 12-digit number that the old number converts to (weights 8, "
+            "4, 3, 2, 7, 6, 5, 7, 4, 3, 2 mod 11)",
+            "masks": ("#########L",),
+        }
+    )
 
     @staticmethod
     def to_new(id_number: str) -> Optional[str]:
@@ -49,11 +57,11 @@ class OldNationalID:
         match_obj = match_regexp(id_number, OldNationalID.METADATA.regexp)
         if not match_obj:
             return None
-        year = match_obj.group('year')
-        days = match_obj.group('days')
-        sn = match_obj.group('sn')
-        checksum = match_obj.group('checksum')
-        return f'19{year}{days}0{sn}{checksum}'
+        year = match_obj.group("year")
+        days = match_obj.group("days")
+        sn = match_obj.group("sn")
+        checksum = match_obj.group("checksum")
+        return f"19{year}{days}0{sn}{checksum}"
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -73,11 +81,8 @@ class OldNationalID:
         result = NationalID.parse(new_id_num)
         if not result:
             return None
-        citizenship = Citizenship.CITIZEN if id_number[-1].upper() == 'V' else Citizenship.RESIDENT
-        return {
-            **result,
-            'citizenship': citizenship
-        }
+        citizenship = Citizenship.CITIZEN if id_number[-1].upper() == "V" else Citizenship.RESIDENT
+        return {**result, "citizenship": citizenship}
 
     @staticmethod
     def checksum(id_number: str) -> bool:

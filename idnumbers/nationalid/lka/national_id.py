@@ -9,6 +9,7 @@ from ..util import CHECK_DIGIT, weighted_modulus_digit, modulus_overflow_mod10, 
 
 class ParseResult(TypedDict):
     """parse result for the national id"""
+
     yyyymmdd: date
     """birthday"""
     gender: Gender
@@ -35,30 +36,37 @@ class NationalID:
     These sources establish the ranges, not leap-year-specific date decoding;
     the existing within-range decoding is retained.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'LK',
-        'min_length': 12,
-        'max_length': 12,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<year>\d{4})'
-                             r'(?P<days>\d{3})'
-                             r'(?P<sn>\d{4})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['National ID Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka',
-                  'https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html'],
-        'deprecated': False,
-        'country_name': 'Sri Lanka',
-        'id_type': 'National Identity Card Number',
-        'official_name': None,
-        'display_format': 'YYYYDDDSSSSC',
-        'example': '199001200001',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2 over the first eleven '
-                              'digits; check = 11 - remainder, reduced to its last digit)',
-        'masks': ('############',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "LK",
+            "min_length": 12,
+            "max_length": 12,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<year>\d{4})"
+                r"(?P<days>\d{3})"
+                r"(?P<sn>\d{4})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["National ID Number"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka",
+                "https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html",
+            ],
+            "deprecated": False,
+            "country_name": "Sri Lanka",
+            "id_type": "National Identity Card Number",
+            "official_name": None,
+            "display_format": "YYYYDDDSSSSC",
+            "example": "199001200001",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2 over the first eleven "
+            "digits; check = 11 - remainder, reduced to its last digit)",
+            "masks": ("############",),
+        }
+    )
 
     MAGIC_MULTIPLIER = [8, 4, 3, 2, 7, 6, 5, 7, 4, 3, 2]
     """multiplier for the checksum"""
@@ -78,9 +86,9 @@ class NationalID:
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
-        year = int(match_obj.group('year'))
-        days = int(match_obj.group('days'))
-        sn = match_obj.group('sn')
+        year = int(match_obj.group("year"))
+        days = int(match_obj.group("days"))
+        sn = match_obj.group("sn")
         checksum = NationalID.checksum(id_number)
         if not checksum:
             return None
@@ -92,10 +100,10 @@ class NationalID:
                 return None
             yyyymmdd = calendar_date + timedelta(days - 501 if days > 500 else days - 1)
             return {
-                'yyyymmdd': yyyymmdd,
-                'gender': Gender.MALE if days < 500 else Gender.FEMALE,
-                'sn': sn,
-                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
+                "yyyymmdd": yyyymmdd,
+                "gender": Gender.MALE if days < 500 else Gender.FEMALE,
+                "sn": sn,
+                "checksum": cast(CHECK_DIGIT, int(match_obj.group("checksum"))),
             }
         except (ValueError, OverflowError):
             # an out of range date raises ValueError, a year near 0001 or 9999 whose day offset

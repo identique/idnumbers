@@ -27,33 +27,42 @@ class PESEL:
     https://en.wikipedia.org/wiki/PESEL
     https://en.wikipedia.org/wiki/National_identification_number#Poland
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'PL',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<yy>\d{2})'
-                             r'(?P<mm>\d{2})'
-                             r'(?P<dd>\d{2})'
-                             r'(?P<sn>\d{4})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['PESEL',
-                  'Powszechny Elektroniczny System Ewidencji Ludności',
-                  'Universal Electronic System for Registration of the Population'],
-        'links': ['https://en.wikipedia.org/wiki/PESEL',
-                  'https://en.wikipedia.org/wiki/National_identification_number#Poland'],
-        'deprecated': False,
-        'country_name': 'Poland',
-        'id_type': 'PESEL Number',
-        'official_name': 'Powszechny Elektroniczny System Ewidencji Ludności',
-        'display_format': 'YYMMDDSSSSC',
-        'example': '80010100000',
-        'checksum_algorithm': 'Weighted sum mod 10 (weights 1, 3, 7, 9 repeating; check = 10 - remainder, 10 becomes '
-                              '0)',
-        'masks': ('###########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "PL",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<yy>\d{2})"
+                r"(?P<mm>\d{2})"
+                r"(?P<dd>\d{2})"
+                r"(?P<sn>\d{4})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": [
+                "PESEL",
+                "Powszechny Elektroniczny System Ewidencji Ludności",
+                "Universal Electronic System for Registration of the Population",
+            ],
+            "links": [
+                "https://en.wikipedia.org/wiki/PESEL",
+                "https://en.wikipedia.org/wiki/National_identification_number#Poland",
+            ],
+            "deprecated": False,
+            "country_name": "Poland",
+            "id_type": "PESEL Number",
+            "official_name": "Powszechny Elektroniczny System Ewidencji Ludności",
+            "display_format": "YYMMDDSSSSC",
+            "example": "80010100000",
+            "checksum_algorithm": "Weighted sum mod 10 (weights 1, 3, 7, 9 repeating; check = 10 - remainder, 10 becomes "
+            "0)",
+            "masks": ("###########",),
+        }
+    )
 
     MAGIC_NUMBERS = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3]
 
@@ -76,30 +85,30 @@ class PESEL:
             return None
 
         checksum = PESEL.checksum(id_number)
-        if checksum is None or str(checksum) != match_obj.group('checksum'):
+        if checksum is None or str(checksum) != match_obj.group("checksum"):
             return None
 
-        yy = int(match_obj.group('yy'))
-        mm_coded = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
+        yy = int(match_obj.group("yy"))
+        mm_coded = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
         year_base, mm = PESEL.get_year_base_month(mm_coded)
-        sn = match_obj.group('sn')
+        sn = match_obj.group("sn")
         try:
             calendar_date = _calendar_date(year_base + yy, mm, dd)
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
-                'gender': Gender.MALE if int(sn[-1]) % 2 == 1 else Gender.FEMALE,
-                'sn': sn,
-                'checksum': checksum
+                "yyyymmdd": calendar_date,
+                "gender": Gender.MALE if int(sn[-1]) % 2 == 1 else Gender.FEMALE,
+                "sn": sn,
+                "checksum": checksum,
             }
         except ValueError:
             return None
 
     @staticmethod
     def get_year_base_month(month: int) -> YEAR_MONTH_TYPE:
-        """ from https://en.wikipedia.org/wiki/PESEL#Birthdates """
+        """from https://en.wikipedia.org/wiki/PESEL#Birthdates"""
         if month > 80:
             return 1800, month - 80
         elif month > 60:

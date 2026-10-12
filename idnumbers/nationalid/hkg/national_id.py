@@ -11,33 +11,36 @@ class NationalID:
     https://pinkylam.me/playground/hkid/
     https://github.com/hsyuen720/hkid-tools/blob/main/app/utils/validate.ts
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'HK',
-        # length without insignificant chars
-        'min_length': 8,
-        'max_length': 9,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r"^[A-Z]{1,2}[0-9]{6}(?P<checksum>[0-9A])$"),
-        'alias_of': None,
-        'names': ['National ID Number',
-                  '香港身份證'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Hong_Kong',
-                  'https://pinkylam.me/playground/hkid/'],
-        'deprecated': False
-,
-        'country_name': 'Hong Kong',
-        'id_type': 'Hong Kong Identity Card Number',
-        'official_name': '香港身份證',
-        'display_format': 'L[L]######(C)',
-        'example': 'A1234563',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 9-2; letters A-Z count as 10-35 and a single-letter prefix '
-                              'is padded; check = 11 - remainder, a remainder of 1 gives A)',
-        'masks': ('L######X', 'LL######X')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "HK",
+            # length without insignificant chars
+            "min_length": 8,
+            "max_length": 9,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^[A-Z]{1,2}[0-9]{6}(?P<checksum>[0-9A])$"),
+            "alias_of": None,
+            "names": ["National ID Number", "香港身份證"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Hong_Kong",
+                "https://pinkylam.me/playground/hkid/",
+            ],
+            "deprecated": False,
+            "country_name": "Hong Kong",
+            "id_type": "Hong Kong Identity Card Number",
+            "official_name": "香港身份證",
+            "display_format": "L[L]######(C)",
+            "example": "A1234563",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 9-2; letters A-Z count as 10-35 and a single-letter prefix "
+            "is padded; check = 11 - remainder, a remainder of 1 gives A)",
+            "masks": ("L######X", "LL######X"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -58,12 +61,12 @@ class NationalID:
         total = 0 if len(arr) % 2 == 0 else 36 * 9
         total += sum([NationalID.get_number(arr[idx]) * mul for (idx, mul) in enumerate(multiplier)])
         rem = total % 11
-        return "A" if rem == 1 else '0' if rem == 0 else str(11 - rem)
+        return "A" if rem == 1 else "0" if rem == 0 else str(11 - rem)
 
     @staticmethod
     def get_number(digit: str) -> int:
         """Convert letter to number"""
-        if re.match('[A-Z]', digit):
+        if re.match("[A-Z]", digit):
             return int(ord(digit)) - 55
         else:
             return int(digit)

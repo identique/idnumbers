@@ -4,12 +4,14 @@ from typing import Optional, TypedDict
 from ..metadata import IdMetadata
 from ..util import match_regexp
 
-_RENAP = ('https://www.renap.gob.gt/sites/default/files/boletines-publicaciones/'
-          'inforenap_163_-_08042021_-_que_es_el_cui.pdf')
+_RENAP = (
+    "https://www.renap.gob.gt/sites/default/files/boletines-publicaciones/inforenap_163_-_08042021_-_que_es_el_cui.pdf"
+)
 
 
 class ParseResult(TypedDict):
     """The CUI fields as printed, preserving leading zeroes."""
+
     correlative: str
     """the eight system-assigned digits, not checked for issuance"""
     check_digit: str
@@ -40,26 +42,31 @@ class DPI:
     Node.js sister project's whitespace normalization, this follows Python's strict malformed-input contract.
     Optional UI formatting/normalization helpers do not change the validator's policy.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'GT',
-        'min_length': 13,
-        'max_length': 13,
-        'parsable': True,
-        'checksum': False,
-        'regexp': re.compile(r'^(?P<correlative>[0-9]{8})(?P<check_digit>[0-9])'
-                             r'(?P<department>0[1-9]|1[0-9]|2[0-2])(?P<municipality>0[1-9]|[1-9][0-9])$'),
-        'alias_of': None,
-        'names': ['Código Único de Identificación', 'Documento Personal de Identificación', 'CUI', 'DPI'],
-        'links': [_RENAP, 'https://github.com/identique/idnumbers/issues/333#issuecomment-6105364701'],
-        'deprecated': False,
-        'country_name': 'Guatemala',
-        'id_type': 'National ID Number',
-        'official_name': 'Código Único de Identificación',
-        'display_format': 'NNNNNNNNVDDMM',
-        'example': '1912345670101',
-        'checksum_algorithm': None,
-        'masks': ('#############',),
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "GT",
+            "min_length": 13,
+            "max_length": 13,
+            "parsable": True,
+            "checksum": False,
+            "regexp": re.compile(
+                r"^(?P<correlative>[0-9]{8})(?P<check_digit>[0-9])"
+                r"(?P<department>0[1-9]|1[0-9]|2[0-2])(?P<municipality>0[1-9]|[1-9][0-9])$"
+            ),
+            "alias_of": None,
+            "names": ["Código Único de Identificación", "Documento Personal de Identificación", "CUI", "DPI"],
+            "links": [_RENAP, "https://github.com/identique/idnumbers/issues/333#issuecomment-6105364701"],
+            "deprecated": False,
+            "country_name": "Guatemala",
+            "id_type": "National ID Number",
+            "official_name": "Código Único de Identificación",
+            "display_format": "NNNNNNNNVDDMM",
+            "example": "1912345670101",
+            "checksum_algorithm": None,
+            "masks": ("#############",),
+        }
+    )
     """metadata of this id; the example is synthetic"""
 
     @staticmethod
@@ -74,8 +81,8 @@ class DPI:
         if match_obj is None:
             return None
         return {
-            'correlative': match_obj.group('correlative'),
-            'check_digit': match_obj.group('check_digit'),
-            'department': match_obj.group('department'),
-            'municipality': match_obj.group('municipality'),
+            "correlative": match_obj.group("correlative"),
+            "check_digit": match_obj.group("check_digit"),
+            "department": match_obj.group("department"),
+            "municipality": match_obj.group("municipality"),
         }

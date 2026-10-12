@@ -9,32 +9,33 @@ class TaxIDNumber:
     Número de identificação fiscal or NIF
     https://en.wikipedia.org/wiki/National_identification_number#Portugal
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'PT',
-        # length without insignificant chars
-        'min_length': 9,
-        'max_length': 9,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^([12356][0-9]|45|7[01245789]|9[0189])\d{7}$'),
-        'alias_of': None,
-        'names': ['Tax ID Number',
-                  'Número de identificação fiscal',
-                  'NIF'],
-        'links': [
-            'https://en.wikipedia.org/wiki/National_identification_number#Portugal',
-            'https://www.esma.europa.eu/sites/default/files/library/esma70-1861941480-56_qas_mifir_data_reporting.pdf'
-        ],
-        'deprecated': False,
-        'country_name': 'Portugal',
-        'id_type': 'Tax Identification Number',
-        'official_name': 'Número de identificação fiscal',
-        'display_format': '#########',
-        'example': '123456789',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 9-2; a remainder of 0 or 1 gives 0, otherwise 11 - '
-                              'remainder)',
-        'masks': ('#########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "PT",
+            # length without insignificant chars
+            "min_length": 9,
+            "max_length": 9,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^([12356][0-9]|45|7[01245789]|9[0189])\d{7}$"),
+            "alias_of": None,
+            "names": ["Tax ID Number", "Número de identificação fiscal", "NIF"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Portugal",
+                "https://www.esma.europa.eu/sites/default/files/library/esma70-1861941480-56_qas_mifir_data_reporting.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Portugal",
+            "id_type": "Tax Identification Number",
+            "official_name": "Número de identificação fiscal",
+            "display_format": "#########",
+            "example": "123456789",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 9-2; a remainder of 0 or 1 gives 0, otherwise 11 - "
+            "remainder)",
+            "masks": ("#########",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

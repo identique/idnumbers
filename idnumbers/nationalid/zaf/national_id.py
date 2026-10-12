@@ -9,6 +9,7 @@ from ..util import CHECK_DIGIT, luhn_digit, match_regexp
 
 class ParseResult(TypedDict):
     """parse result of national id"""
+
     yyyymmdd: date
     """birthday"""
     sn: str
@@ -27,34 +28,41 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#South_Africa
     https://www.westerncape.gov.za/general-publication/decoding-your-south-african-id-number-0
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'ZA',
-        # length without insignificant chars
-        'min_length': 13,
-        'max_length': 13,
-        # has parse function
-        'parsable': True,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>0[1-9]|1[012])'
-                             r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
-                             r'(?P<sn>\d{4})'
-                             r'(?P<citizenship>[01])([89])'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['National ID Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#South_Africa',
-                  'https://www.westerncape.gov.za/general-publication/decoding-your-south-african-id-number-0'],
-        'deprecated': False,
-        'country_name': 'South Africa',
-        'id_type': 'National ID Number',
-        'official_name': None,
-        'display_format': 'YYMMDDSSSSCAZ',
-        'example': '8001015009087',
-        'checksum_algorithm': 'Luhn (mod 10)',
-        'masks': ('#############',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "ZA",
+            # length without insignificant chars
+            "min_length": 13,
+            "max_length": 13,
+            # has parse function
+            "parsable": True,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(
+                r"^(?P<yy>\d{2})(?P<mm>0[1-9]|1[012])"
+                r"(?P<dd>0[1-9]|[12][0-9]|3[01])"
+                r"(?P<sn>\d{4})"
+                r"(?P<citizenship>[01])([89])"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["National ID Number"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#South_Africa",
+                "https://www.westerncape.gov.za/general-publication/decoding-your-south-african-id-number-0",
+            ],
+            "deprecated": False,
+            "country_name": "South Africa",
+            "id_type": "National ID Number",
+            "official_name": None,
+            "display_format": "YYMMDDSSSSCAZ",
+            "example": "8001015009087",
+            "checksum_algorithm": "Luhn (mod 10)",
+            "masks": ("#############",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -76,18 +84,18 @@ class NationalID:
         if check_digit != int(id_number[-1]):
             return None
 
-        year = int(match_obj.group('yy'))
+        year = int(match_obj.group("yy"))
         year += 2000 if year < 50 else 1900
         try:
-            calendar_date = _calendar_date(year, int(match_obj.group('mm')), int(match_obj.group('dd')))
+            calendar_date = _calendar_date(year, int(match_obj.group("mm")), int(match_obj.group("dd")))
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
-                'sn': match_obj.group('sn'),
-                'gender': Gender.MALE if int(match_obj.group('sn')[0]) > 4 else Gender.FEMALE,
-                'citizenship': Citizenship.CITIZEN if match_obj.group('citizenship') == '0' else Citizenship.RESIDENT,
-                'checksum': check_digit
+                "yyyymmdd": calendar_date,
+                "sn": match_obj.group("sn"),
+                "gender": Gender.MALE if int(match_obj.group("sn")[0]) > 4 else Gender.FEMALE,
+                "citizenship": Citizenship.CITIZEN if match_obj.group("citizenship") == "0" else Citizenship.RESIDENT,
+                "checksum": check_digit,
             }
         except ValueError:
             return None

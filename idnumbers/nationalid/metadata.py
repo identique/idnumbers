@@ -11,7 +11,7 @@ from re import Pattern
 from types import SimpleNamespace
 from typing import Any, List, Optional, Tuple, Type
 
-__all__ = ['IdMetadata']
+__all__ = ["IdMetadata"]
 
 
 class IdMetadata(SimpleNamespace):

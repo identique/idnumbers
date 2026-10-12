@@ -11,6 +11,7 @@ from .util import calc_check_digits, normalize
 
 class ParseResult(TypedDict):
     """The parse result of Belgium NationalID"""
+
     yyyymmdd: date
     """birthday"""
     gender: Gender
@@ -51,9 +52,9 @@ def _is_valid_birth_date(century: int, match_obj: re.Match[str]) -> bool:
     with any day. A valid month with the day 00 is valid too. Otherwise the day must exist in that month
     of the inferred century (IT000; python-stdnum stdnum/be/nn.py).
     """
-    year = century + int(match_obj.group('yy'))
-    month = int(match_obj.group('mm'))
-    day = int(match_obj.group('dd'))
+    year = century + int(match_obj.group("yy"))
+    month = int(match_obj.group("mm"))
+    day = int(match_obj.group("dd"))
     if month == 0:
         return True
     if month > 12 or day > calendar.monthrange(year, month)[1]:
@@ -104,36 +105,45 @@ class NationalRegistrationNumber:
     Sources: the official Rijksregister instruction IT000 "Het identificatienummer" (15.05.2016)
     and python-stdnum ``stdnum/be/nn.py``.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'BE',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<yy>\d{2})\.?(?P<mm>\d{2})\.?(?P<dd>\d{2})-?'
-                             r'(?P<sn>\d{3})\.?'
-                             r'(?P<checksum>\d{2})$'),
-        'alias_of': None,
-        'names': ['National registration number',
-                  'NN',
-                  'Belgian identity card',
-                  'Identiteitskaart',
-                  'Carte d’identité',
-                  'Personalausweis'],
-        'links': ['https://en.wikipedia.org/wiki/Belgian_identity_card',
-                  'https://www.checkdoc.be/CheckDoc/homepage.do',
-                  'https://www.ibz.rrn.fgov.be/sites/default/files/documents/nl/rijksregister/onderrichtingen/'
-                  'IT-lijst/IT000_Rijksregisternummer.pdf'],
-        'deprecated': False,
-        'country_name': 'Belgium',
-        'id_type': 'National Registration Number',
-        'official_name': 'Rijksregisternummer',
-        'display_format': 'YY.MM.DD-SSS.CC',
-        'example': '85.07.30-033.28',
-        'checksum_algorithm': 'Mod 97 (97 - (first nine digits mod 97); the digit 2 is put in front for births from '
-                              '2000)',
-        'masks': ('##.##.##-###.##', '###########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "BE",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<yy>\d{2})\.?(?P<mm>\d{2})\.?(?P<dd>\d{2})-?"
+                r"(?P<sn>\d{3})\.?"
+                r"(?P<checksum>\d{2})$"
+            ),
+            "alias_of": None,
+            "names": [
+                "National registration number",
+                "NN",
+                "Belgian identity card",
+                "Identiteitskaart",
+                "Carte d’identité",
+                "Personalausweis",
+            ],
+            "links": [
+                "https://en.wikipedia.org/wiki/Belgian_identity_card",
+                "https://www.checkdoc.be/CheckDoc/homepage.do",
+                "https://www.ibz.rrn.fgov.be/sites/default/files/documents/nl/rijksregister/onderrichtingen/"
+                "IT-lijst/IT000_Rijksregisternummer.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Belgium",
+            "id_type": "National Registration Number",
+            "official_name": "Rijksregisternummer",
+            "display_format": "YY.MM.DD-SSS.CC",
+            "example": "85.07.30-033.28",
+            "checksum_algorithm": "Mod 97 (97 - (first nine digits mod 97); the digit 2 is put in front for births from "
+            "2000)",
+            "masks": ("##.##.##-###.##", "###########"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -147,21 +157,21 @@ class NationalRegistrationNumber:
         if matched is None:
             return None
         century, match_obj = matched
-        yy = int(match_obj.group('yy'))
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
+        yy = int(match_obj.group("yy"))
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
         if mm == 0 or dd == 0:
             # incomplete birth date: the number is valid, but there is no date to return
             return None
-        sn = match_obj.group('sn')
+        sn = match_obj.group("sn")
         calendar_date = _calendar_date(century + yy, mm, dd)
         if calendar_date is None:
             return None
         return {
-            'yyyymmdd': calendar_date,
-            'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
-            'sn': sn,
-            'checksum': int(match_obj.group('checksum'))
+            "yyyymmdd": calendar_date,
+            "gender": Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
+            "sn": sn,
+            "checksum": int(match_obj.group("checksum")),
         }
 
     @staticmethod

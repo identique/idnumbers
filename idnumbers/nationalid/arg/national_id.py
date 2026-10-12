@@ -13,30 +13,33 @@ class NationalID:
     ``##.###.###``, see python-stdnum ``stdnum/ar/dni.py``
     https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ar/dni.py
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'AR',
-        # length without insignificant chars
-        'min_length': 7,
-        'max_length': 8,
-        'parsable': False,
-        'checksum': False,
-        'regexp': re.compile(r'^(\d{1,2}\.?\d{3}\.?\d{3})$'),
-        'alias_of': None,
-        'names': ['Documento Nacional de Identidad',
-                  'DNI'],
-        'links': ['https://www.protecto.ai/argentina-national-identity-number-download-sample-data-for-testing/',
-                  'https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Argentina)',
-                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ar/dni.py'],
-        'deprecated': False
-,
-        'country_name': 'Argentina',
-        'id_type': 'National Identity Document',
-        'official_name': 'Documento Nacional de Identidad',
-        'display_format': '##.###.###',
-        'example': '12.345.678',
-        'checksum_algorithm': None,
-        'masks': ('##.###.###', '#.###.###')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "AR",
+            # length without insignificant chars
+            "min_length": 7,
+            "max_length": 8,
+            "parsable": False,
+            "checksum": False,
+            "regexp": re.compile(r"^(\d{1,2}\.?\d{3}\.?\d{3})$"),
+            "alias_of": None,
+            "names": ["Documento Nacional de Identidad", "DNI"],
+            "links": [
+                "https://www.protecto.ai/argentina-national-identity-number-download-sample-data-for-testing/",
+                "https://en.wikipedia.org/wiki/Documento_Nacional_de_Identidad_(Argentina)",
+                "https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ar/dni.py",
+            ],
+            "deprecated": False,
+            "country_name": "Argentina",
+            "id_type": "National Identity Document",
+            "official_name": "Documento Nacional de Identidad",
+            "display_format": "##.###.###",
+            "example": "12.345.678",
+            "checksum_algorithm": None,
+            "masks": ("##.###.###", "#.###.###"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

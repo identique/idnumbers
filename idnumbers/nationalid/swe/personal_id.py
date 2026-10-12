@@ -9,11 +9,12 @@ from ..util import validate_regexp, luhn_digit, match_regexp
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[+-]', '', id_number)
+    return re.sub(r"[+-]", "", id_number)
 
 
 class ParseResult(TypedDict):
     """parse result of PersonalIdentityNumber"""
+
     gender: Gender
     """gender, possible value: male, female"""
     yyyymmdd: date
@@ -39,36 +40,41 @@ class PersonalIdentityNumber:
     https://swedish.identityinfo.net/
     https://personnummer.dev/
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'SE',
-        # length without insignificant chars
-        'min_length': 10,
-        'max_length': 12,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<century>[0-9]{2})?(?P<yy>[0-9]{2})(?P<mm>[0-9]{2})(?P<dd>[0-9]{2})'
-                             r'(?P<sep>[+-])?'
-                             r'(?!000)(?P<birth_number>[0-9]{3})'
-                             r'(?P<checksum>[0-9])$'),
-        'alias_of': None,
-        'names': ['Personal Identity Number',
-                  'personnummer'],
-        'links': ['https://www.skatteverket.se/privat/folkbokforing/personnummer.4.3810a01c150939e893f18c29.html',
-                  'https://www4.skatteverket.se/rattsligvagledning/edition/2026.12/330242.html',
-                  'https://en.wikipedia.org/wiki/National_identification_number#Sweden',
-                  'https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)',
-                  'https://swedish.identityinfo.net/',
-                  'https://personnummer.dev/'],
-        'deprecated': False
-,
-        'country_name': 'Sweden',
-        'id_type': 'Personal Identity Number',
-        'official_name': 'personnummer',
-        'display_format': 'YYMMDD-SSSC',
-        'example': '811218-9876',
-        'checksum_algorithm': 'Luhn (mod 10) over the last ten digits',
-        'masks': ('######-####', '########-####')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "SE",
+            # length without insignificant chars
+            "min_length": 10,
+            "max_length": 12,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<century>[0-9]{2})?(?P<yy>[0-9]{2})(?P<mm>[0-9]{2})(?P<dd>[0-9]{2})"
+                r"(?P<sep>[+-])?"
+                r"(?!000)(?P<birth_number>[0-9]{3})"
+                r"(?P<checksum>[0-9])$"
+            ),
+            "alias_of": None,
+            "names": ["Personal Identity Number", "personnummer"],
+            "links": [
+                "https://www.skatteverket.se/privat/folkbokforing/personnummer.4.3810a01c150939e893f18c29.html",
+                "https://www4.skatteverket.se/rattsligvagledning/edition/2026.12/330242.html",
+                "https://en.wikipedia.org/wiki/National_identification_number#Sweden",
+                "https://en.wikipedia.org/wiki/Personal_identity_number_(Sweden)",
+                "https://swedish.identityinfo.net/",
+                "https://personnummer.dev/",
+            ],
+            "deprecated": False,
+            "country_name": "Sweden",
+            "id_type": "Personal Identity Number",
+            "official_name": "personnummer",
+            "display_format": "YYMMDD-SSSC",
+            "example": "811218-9876",
+            "checksum_algorithm": "Luhn (mod 10) over the last ten digits",
+            "masks": ("######-####", "########-####"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -105,25 +111,25 @@ def _parse(id_number: str, regexp: Pattern[str], day_offset: int = 0) -> Optiona
     match_obj = match_regexp(id_number, regexp)
     if not match_obj:
         return None
-    checksum = match_obj.group('checksum')
+    checksum = match_obj.group("checksum")
     if _checksum(id_number, regexp) != int(checksum):
         return None
-    yy = int(match_obj.group('yy'))
-    century = match_obj.group('century')
+    yy = int(match_obj.group("yy"))
+    century = match_obj.group("century")
     if century is not None:
         yyyy = int(century) * 100 + yy
     else:
         # Keep the legacy two-digit +/- century calculation; compact input means '-'.
-        base_year = date.today().year - (100 if match_obj.group('sep') == '+' else 0)
+        base_year = date.today().year - (100 if match_obj.group("sep") == "+" else 0)
         yyyy = int((base_year - ((base_year - yy) % 100)) / 100) * 100 + yy
     try:
-        calendar_date = _calendar_date(yyyy, int(match_obj.group('mm')), int(match_obj.group('dd')) - day_offset)
+        calendar_date = _calendar_date(yyyy, int(match_obj.group("mm")), int(match_obj.group("dd")) - day_offset)
         if calendar_date is None:
             return None
         return {
-            'gender': Gender.FEMALE if int(match_obj.group('birth_number')) % 2 == 0 else Gender.MALE,
-            'yyyymmdd': calendar_date,
-            'checksum': checksum
+            "gender": Gender.FEMALE if int(match_obj.group("birth_number")) % 2 == 0 else Gender.MALE,
+            "yyyymmdd": calendar_date,
+            "checksum": checksum,
         }
     except ValueError:
         return None

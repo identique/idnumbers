@@ -20,42 +20,56 @@ from idnumbers.nationalid import AUS, BGR, COL, CYP, FIN, HKG, IRL, IRN
 from idnumbers.nationalid.metadata import IdMetadata
 from idnumbers.registry import CountryEntry
 
-OLD_KEYS = ('iso3166_alpha2', 'min_length', 'max_length', 'parsable', 'checksum', 'regexp', 'alias_of', 'names',
-            'links', 'deprecated')
-NEW_KEYS = ('country_name', 'id_type', 'official_name', 'display_format', 'example', 'checksum_algorithm', 'masks')
+OLD_KEYS = (
+    "iso3166_alpha2",
+    "min_length",
+    "max_length",
+    "parsable",
+    "checksum",
+    "regexp",
+    "alias_of",
+    "names",
+    "links",
+    "deprecated",
+)
+NEW_KEYS = ("country_name", "id_type", "official_name", "display_format", "example", "checksum_algorithm", "masks")
 
-SLOT_CHARS = '#LX*'
-SEPARATORS = ' -./()'
-STRIPPED = '.-/()'
+SLOT_CHARS = "#LX*"
+SEPARATORS = " -./()"
+STRIPPED = ".-/()"
 
 # The masks that the example of a class does not fit (a mask of another length, or a layout with other slot types) get
 # a synthetic sample written in their layout, so that every mask of every class is checked against the validator. The
 # samples are not real numbers: they are random strings in the layout that the validator of the class accepts, found
 # with the checksum logic of the class. The key is the module and the name of the class, as in ``class_key``.
 MASK_SAMPLES: Dict[str, Tuple[str, ...]] = {
-    'idnumbers.nationalid.arg.national_id.NationalID': ('7.817.851',),
-    'idnumbers.nationalid.aus.driver_license.DriverLicenseNumber': (
-        '64 185 993', '87277373', 'A72348', '570-226-1977', '6873952606',
+    "idnumbers.nationalid.arg.national_id.NationalID": ("7.817.851",),
+    "idnumbers.nationalid.aus.driver_license.DriverLicenseNumber": (
+        "64 185 993",
+        "87277373",
+        "A72348",
+        "570-226-1977",
+        "6873952606",
     ),
-    'idnumbers.nationalid.aus.medicare.MedicareNumber': ('2918 79473 4/3', '40192664015'),
-    'idnumbers.nationalid.aus.tax_file.TaxFileNumber': ('20451246',),
-    'idnumbers.nationalid.bel.entity_vat.EntityVAT': ('838053670',),
-    'idnumbers.nationalid.bgr.unifed_id_code.UnifiedIdCode': ('8239907086629',),
-    'idnumbers.nationalid.chl.national_id.NationalID': ('0.286.250-6',),
-    'idnumbers.nationalid.col.unique_persional_id.UniquePersonalID': ('784.303.900-1',),
-    'idnumbers.nationalid.cze.birth_number.BirthNumber': ('446218/122',),
-    'idnumbers.nationalid.cze.dic.TaxNumber': ('181231711', '2673099660'),
-    'idnumbers.nationalid.hkg.national_id.NationalID': ('XA0867842',),
-    'idnumbers.nationalid.irl.pps.PersonalPublicServiceNumber': ('6663583BB',),
-    'idnumbers.nationalid.nzl.inland_revenue_department.InlandRevenueDepartmentNumber': ('139-082-329', '084099503'),
-    'idnumbers.nationalid.nzl.passport.PassportNumber': ('N980072',),
-    'idnumbers.nationalid.nzl.health_index.NationalHealthIndexNumber': ('UJY38PB',),
-    'idnumbers.nationalid.svk.birth_number.BirthNumber': ('080710/464',),
+    "idnumbers.nationalid.aus.medicare.MedicareNumber": ("2918 79473 4/3", "40192664015"),
+    "idnumbers.nationalid.aus.tax_file.TaxFileNumber": ("20451246",),
+    "idnumbers.nationalid.bel.entity_vat.EntityVAT": ("838053670",),
+    "idnumbers.nationalid.bgr.unifed_id_code.UnifiedIdCode": ("8239907086629",),
+    "idnumbers.nationalid.chl.national_id.NationalID": ("0.286.250-6",),
+    "idnumbers.nationalid.col.unique_persional_id.UniquePersonalID": ("784.303.900-1",),
+    "idnumbers.nationalid.cze.birth_number.BirthNumber": ("446218/122",),
+    "idnumbers.nationalid.cze.dic.TaxNumber": ("181231711", "2673099660"),
+    "idnumbers.nationalid.hkg.national_id.NationalID": ("XA0867842",),
+    "idnumbers.nationalid.irl.pps.PersonalPublicServiceNumber": ("6663583BB",),
+    "idnumbers.nationalid.nzl.inland_revenue_department.InlandRevenueDepartmentNumber": ("139-082-329", "084099503"),
+    "idnumbers.nationalid.nzl.passport.PassportNumber": ("N980072",),
+    "idnumbers.nationalid.nzl.health_index.NationalHealthIndexNumber": ("UJY38PB",),
+    "idnumbers.nationalid.svk.birth_number.BirthNumber": ("080710/464",),
     # An official Skatteverket test personal number (open data set "Testpersonnummer").
-    'idnumbers.nationalid.swe.personal_id.PersonalIdentityNumber': ('19820901-2395',),
+    "idnumbers.nationalid.swe.personal_id.PersonalIdentityNumber": ("19820901-2395",),
     # The year 1000 makes this number obviously artificial, so it cannot be the number of a real person.
-    'idnumbers.nationalid.swe.coordination_number.CoordinationNumber': ('10001090-2047',),
-    'idnumbers.nationalid.zwe.national_id.NationalID': ('456022115L34',),
+    "idnumbers.nationalid.swe.coordination_number.CoordinationNumber": ("10001090-2047",),
+    "idnumbers.nationalid.zwe.national_id.NationalID": ("456022115L34",),
 }
 
 
@@ -73,18 +87,18 @@ def compact(id_number: str, masks: Tuple[str, ...]) -> str:
     Remove the separators from an example: white space always, and ``.-/()`` when one of the masks has a separator.
     An ID without separators in its masks, such as the Finnish one with its century sign, keeps them.
     """
-    result = re.sub(r'\s+', '', id_number)
+    result = re.sub(r"\s+", "", id_number)
     if any(has_separator(mask) for mask in masks):
-        result = ''.join(char for char in result if char not in STRIPPED)
+        result = "".join(char for char in result if char not in STRIPPED)
     return result
 
 
 def slot_accepts(slot: str, char: str) -> bool:
-    if slot == '#':
-        return char in '0123456789'
-    if slot == 'L':
+    if slot == "#":
+        return char in "0123456789"
+    if slot == "L":
         return char.isalpha()
-    if slot == 'X':
+    if slot == "X":
         return char.isalnum()
     return not char.isspace()
 
@@ -104,14 +118,14 @@ def written_in(text: str, mask: str) -> bool:
 
 
 def class_key(cls: Type[Any]) -> str:
-    return f'{cls.__module__}.{cls.__qualname__}'
+    return f"{cls.__module__}.{cls.__qualname__}"
 
 
 def layout(compact_id: str, mask: str) -> str:
     """Lay the characters of a compact ID into the slots of a mask."""
     assert slots(mask) == len(compact_id)
     chars = iter(compact_id)
-    return ''.join(next(chars) if char in SLOT_CHARS else char for char in mask)
+    return "".join(next(chars) if char in SLOT_CHARS else char for char in mask)
 
 
 def id_classes() -> Iterator[Tuple[CountryEntry, Type[Any]]]:
@@ -123,10 +137,10 @@ def id_classes() -> Iterator[Tuple[CountryEntry, Type[Any]]]:
 def all_aliases() -> List[Type[Any]]:
     """Every class created by ``alias_of`` that the country modules and their submodules hold."""
     found: List[Type[Any]] = []
-    for info in pkgutil.walk_packages(nationalid_package.__path__, nationalid_package.__name__ + '.'):
+    for info in pkgutil.walk_packages(nationalid_package.__path__, nationalid_package.__name__ + "."):
         module = importlib.import_module(info.name)
         for obj in vars(module).values():
-            metadata = getattr(obj, 'METADATA', None)
+            metadata = getattr(obj, "METADATA", None)
             if isinstance(obj, type) and metadata is not None and metadata.alias_of is not None and obj not in found:
                 found.append(obj)
     return found
@@ -139,7 +153,7 @@ class TestMetadataType(TestCase):
         # tests/test_validate_regexp.py pins 112 classes including the shared Yugoslav base.
         expected = 111
         self.assertEqual(len(classes), expected)
-        self.assertEqual(len(set(classes)), expected, 'id_classes() lists a class twice')
+        self.assertEqual(len(set(classes)), expected, "id_classes() lists a class twice")
 
     def test_every_metadata_is_an_id_metadata(self) -> None:
         for entry, cls in id_classes():
@@ -174,12 +188,12 @@ class TestMetadataType(TestCase):
                 self.assertEqual(vars(duplicate), vars(cls.METADATA))
 
     def test_the_namespace_access_keeps_working(self) -> None:
-        metadata = IdMetadata(**{'iso3166_alpha2': 'QQ', 'checksum': True})
-        self.assertEqual(metadata.iso3166_alpha2, 'QQ')
-        self.assertEqual(vars(metadata), {'iso3166_alpha2': 'QQ', 'checksum': True})
-        self.assertTrue(getattr(metadata, 'checksum', False))
-        self.assertEqual(getattr(metadata, 'masks', ()), ())
-        self.assertEqual(metadata, SimpleNamespace(iso3166_alpha2='QQ', checksum=True))
+        metadata = IdMetadata(**{"iso3166_alpha2": "QQ", "checksum": True})
+        self.assertEqual(metadata.iso3166_alpha2, "QQ")
+        self.assertEqual(vars(metadata), {"iso3166_alpha2": "QQ", "checksum": True})
+        self.assertTrue(getattr(metadata, "checksum", False))
+        self.assertEqual(getattr(metadata, "masks", ()), ())
+        self.assertEqual(metadata, SimpleNamespace(iso3166_alpha2="QQ", checksum=True))
 
 
 class TestNewKeys(TestCase):
@@ -197,14 +211,14 @@ class TestNewKeys(TestCase):
     def test_approved_display_formats_are_preserved(self) -> None:
         # Pin the #501-approved notation independently of masks and format syntax checks.
         expected = (
-            (BGR.UnifiedIdCode, '#########[####]'),
-            (IRL.PersonalPublicServiceNumber, '#######L[L]'),
-            (IRL.NationalID, '#######L[L]'),
-            (AUS.MedicareNumber, '#### ##### #[/#]'),
-            (HKG.NationalID, 'L[L]######(C)'),
-            (FIN.PersonalIdentityCode, 'DDMMYY{+-A}SSSC'),
-            (FIN.NationalID, 'DDMMYY{+-A}SSSC'),
-            (FIN.HETU, 'DDMMYY{+-A}SSSC'),
+            (BGR.UnifiedIdCode, "#########[####]"),
+            (IRL.PersonalPublicServiceNumber, "#######L[L]"),
+            (IRL.NationalID, "#######L[L]"),
+            (AUS.MedicareNumber, "#### ##### #[/#]"),
+            (HKG.NationalID, "L[L]######(C)"),
+            (FIN.PersonalIdentityCode, "DDMMYY{+-A}SSSC"),
+            (FIN.NationalID, "DDMMYY{+-A}SSSC"),
+            (FIN.HETU, "DDMMYY{+-A}SSSC"),
         )
         for cls, display_format in expected:
             with self.subTest(cls=class_key(cls)):
@@ -212,12 +226,12 @@ class TestNewKeys(TestCase):
 
     def test_approved_official_names_are_preserved(self) -> None:
         expected = (
-            (COL.UniquePersonalID, 'Número Único de Identificación Personal'),
-            (COL.NationalID, 'Número Único de Identificación Personal'),
-            (COL.NUIP, 'Número Único de Identificación Personal'),
-            (CYP.TaxNumber, 'Αριθμός Φορολογικής Ταυτότητας'),
-            (CYP.NationalID, 'Αριθμός Φορολογικής Ταυτότητας'),
-            (IRN.NationalID, 'شماره ملی'),
+            (COL.UniquePersonalID, "Número Único de Identificación Personal"),
+            (COL.NationalID, "Número Único de Identificación Personal"),
+            (COL.NUIP, "Número Único de Identificación Personal"),
+            (CYP.TaxNumber, "Αριθμός Φορολογικής Ταυτότητας"),
+            (CYP.NationalID, "Αριθμός Φορολογικής Ταυτότητας"),
+            (IRN.NationalID, "شماره ملی"),
         )
         for cls, official_name in expected:
             with self.subTest(cls=class_key(cls)):
@@ -225,30 +239,30 @@ class TestNewKeys(TestCase):
 
     def test_the_display_format_groups_are_well_formed(self) -> None:
         """``[...]`` marks an optional part and ``{...}`` one of the listed characters; they are never nested."""
-        closing = {'[': ']', '{': '}'}
+        closing = {"[": "]", "{": "}"}
         for entry, cls in id_classes():
             with self.subTest(alpha3=entry.alpha3, cls=cls.__qualname__):
                 display_format = cls.METADATA.display_format
-                opened = ''
-                content = ''
+                opened = ""
+                content = ""
                 for char in display_format:
                     if char in closing:
-                        self.assertEqual(opened, '', f'{display_format} nests or mixes groups')
-                        opened, content = char, ''
+                        self.assertEqual(opened, "", f"{display_format} nests or mixes groups")
+                        opened, content = char, ""
                     elif char in closing.values():
-                        self.assertTrue(opened and closing[opened] == char, f'{display_format} closes a group wrongly')
-                        self.assertTrue(content, f'{display_format} has an empty group')
-                        opened = ''
+                        self.assertTrue(opened and closing[opened] == char, f"{display_format} closes a group wrongly")
+                        self.assertTrue(content, f"{display_format} has an empty group")
+                        opened = ""
                     else:
                         content += char
-                self.assertEqual(opened, '', f'{display_format} has an unclosed group')
+                self.assertEqual(opened, "", f"{display_format} has an unclosed group")
 
     def check_class(self, entry: CountryEntry, cls: Type[Any]) -> None:
         metadata = cls.METADATA
-        for key in ('country_name', 'id_type', 'display_format', 'example'):
+        for key in ("country_name", "id_type", "display_format", "example"):
             self.assertIs(type(getattr(metadata, key)), str, key)
             self.assertTrue(getattr(metadata, key).strip(), key)
-        for key in ('official_name', 'checksum_algorithm'):
+        for key in ("official_name", "checksum_algorithm"):
             value = getattr(metadata, key)
             self.assertTrue(value is None or (type(value) is str and value.strip()), key)
         self.assertEqual(metadata.country_name, entry.name)
@@ -277,26 +291,26 @@ class TestNewKeys(TestCase):
             self.assertIsNotNone(cls.parse(example), example)
         # The example is written in the first (preferred) layout of the masks, as docs/nationalid/METADATA.md states.
         first = metadata.masks[0]
-        self.assertTrue(written_in(example, first), f'{example} is not written in {first}')
+        self.assertTrue(written_in(example, first), f"{example} is not written in {first}")
         compact_id = compact(example, metadata.masks)
         self.assertLessEqual(metadata.min_length, len(compact_id), example)
         self.assertLessEqual(len(compact_id), metadata.max_length, example)
         # A mask of the same length can describe another layout of the same length (NZL NHI: LLL#### and LLL##LL),
         # so only the masks whose slot types fit the example are laid out; at least one must.
         fitting = [mask for mask in metadata.masks if fits(compact_id, mask)]
-        self.assertTrue(fitting, f'no mask for {example}')
+        self.assertTrue(fitting, f"no mask for {example}")
         for mask in fitting:
             laid = layout(compact_id, mask)
             with self.subTest(mask=mask):
-                self.assertIs(cls.validate(laid), True, f'{mask} -> {laid}')
+                self.assertIs(cls.validate(laid), True, f"{mask} -> {laid}")
         # Every other mask has a sample written in its layout, which the class accepts.
         for mask in metadata.masks:
             if mask not in fitting:
                 with self.subTest(mask=mask):
                     samples = [sample for sample in MASK_SAMPLES.get(class_key(cls), ()) if written_in(sample, mask)]
-                    self.assertTrue(samples, f'{mask} is not fitted by {example} and has no sample in MASK_SAMPLES')
+                    self.assertTrue(samples, f"{mask} is not fitted by {example} and has no sample in MASK_SAMPLES")
                     for sample in samples:
-                        self.assertIs(cls.validate(sample), True, f'{mask} -> {sample}')
+                        self.assertIs(cls.validate(sample), True, f"{mask} -> {sample}")
 
     def test_every_mask_sample_is_in_use(self) -> None:
         classes = {class_key(cls): cls for _, cls in id_classes()}
@@ -309,7 +323,7 @@ class TestNewKeys(TestCase):
                 self.assertEqual(len(samples), len(set(samples)))
                 for sample in samples:
                     self.assertIs(classes[key].validate(sample), True, sample)
-                    self.assertTrue(any(written_in(sample, mask) for mask in unfitted), f'{sample} fits no mask')
+                    self.assertTrue(any(written_in(sample, mask) for mask in unfitted), f"{sample} fits no mask")
 
 
 class TestAliases(TestCase):
@@ -327,7 +341,7 @@ class TestAliases(TestCase):
         aliases = all_aliases()
         self.assertGreaterEqual(len(aliases), 70)
         for alias in aliases:
-            with self.subTest(alias=f'{alias.__module__}.{alias.__qualname__}'):
+            with self.subTest(alias=f"{alias.__module__}.{alias.__qualname__}"):
                 self.check_alias(alias, alias.METADATA.alias_of)
 
     def check_alias(self, alias: Type[Any], target: Type[Any]) -> None:
@@ -339,16 +353,17 @@ class TestAliases(TestCase):
         self.assertEqual(alias.__module__, target.__module__)
         self.assertEqual(alias.__doc__, target.__doc__)
         self.assertIsInstance(alias.METADATA, IdMetadata)
-        alias_vars = {key: value for key, value in vars(alias.METADATA).items() if key != 'alias_of'}
-        target_vars = {key: value for key, value in vars(target.METADATA).items() if key != 'alias_of'}
+        alias_vars = {key: value for key, value in vars(alias.METADATA).items() if key != "alias_of"}
+        target_vars = {key: value for key, value in vars(target.METADATA).items() if key != "alias_of"}
         self.assertEqual(alias_vars, target_vars)
 
     def test_the_alias_of_the_australian_primary_is_the_driver_licence(self) -> None:
         from idnumbers.nationalid import AUS
-        self.assertEqual(AUS.NationalID.__name__, 'DriverLicenseNumber')
+
+        self.assertEqual(AUS.NationalID.__name__, "DriverLicenseNumber")
         self.assertIsNot(AUS.NationalID, AUS.DriverLicenseNumber)
-        self.assertNotIn('AliasType', repr(AUS.NationalID))
+        self.assertNotIn("AliasType", repr(AUS.NationalID))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

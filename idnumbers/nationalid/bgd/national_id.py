@@ -18,37 +18,40 @@ class NationalID(OldNationalID):
     http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html
     https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'BD',
-        # length without insignificant chars
-        'min_length': 17,
-        'max_length': 17,
-        'parsable': True,
-        'checksum': False,
-        'regexp': re.compile(r'^(?P<yyyy>\d{4})'
-                             r'(?P<distinct>\d{2})'
-                             r'(?P<rmo>\d)'
-                             r'(?P<police>\d{2})'
-                             r'(?P<union>\d{2})'
-                             r'(?P<sn>\d{6})$'),
-        'alias_of': None,
-        'names': ['Bangladesh national ID number',
-                  'জাতীয় পরিচয়পত্র',
-                  'NID',
-                  'BD'],
-        'links': [
-            'https://en.wikipedia.org/wiki/National_identity_card_(Bangladesh)',
-            'http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html',
-            'https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3'],
-        'deprecated': False,
-        'country_name': 'Bangladesh',
-        'id_type': 'National ID Number',
-        'official_name': 'জাতীয় পরিচয়পত্র',
-        'display_format': 'YYYYDDRPPUUSSSSSS',
-        'example': '19841592824588424',
-        'checksum_algorithm': None,
-        'masks': ('#################',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "BD",
+            # length without insignificant chars
+            "min_length": 17,
+            "max_length": 17,
+            "parsable": True,
+            "checksum": False,
+            "regexp": re.compile(
+                r"^(?P<yyyy>\d{4})"
+                r"(?P<distinct>\d{2})"
+                r"(?P<rmo>\d)"
+                r"(?P<police>\d{2})"
+                r"(?P<union>\d{2})"
+                r"(?P<sn>\d{6})$"
+            ),
+            "alias_of": None,
+            "names": ["Bangladesh national ID number", "জাতীয় পরিচয়পত্র", "NID", "BD"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identity_card_(Bangladesh)",
+                "http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html",
+                "https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3",
+            ],
+            "deprecated": False,
+            "country_name": "Bangladesh",
+            "id_type": "National ID Number",
+            "official_name": "জাতীয় পরিচয়পত্র",
+            "display_format": "YYYYDDRPPUUSSSSSS",
+            "example": "19841592824588424",
+            "checksum_algorithm": None,
+            "masks": ("#################",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -70,7 +73,4 @@ class NationalID(OldNationalID):
         old_result = OldNationalID.parse(id_number[4:])
         if not old_result:
             return None
-        return {
-            **old_result,
-            'yyyy': id_number[:4]
-        }
+        return {**old_result, "yyyy": id_number[:4]}

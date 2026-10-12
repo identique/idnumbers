@@ -6,7 +6,7 @@ from idnumbers.nationalid.util import CHECK_DIGIT, validate_regexp, weighted_mod
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[-. ]', '', id_number)
+    return re.sub(r"[-. ]", "", id_number)
 
 
 def colombia_checksum(id_number: str) -> CHECK_DIGIT:
@@ -16,7 +16,7 @@ def colombia_checksum(id_number: str) -> CHECK_DIGIT:
     """
     numbers = [int(char) for char in list(normalize(id_number[:-1]))]
     numbers.reverse()
-    modulus = weighted_modulus_digit(numbers, UniquePersonalID.WEIGHTS[0:len(numbers)], 11)
+    modulus = weighted_modulus_digit(numbers, UniquePersonalID.WEIGHTS[0 : len(numbers)], 11)
     if modulus == 11:
         return 0
     elif modulus == 10:
@@ -33,36 +33,39 @@ class UniquePersonalID:
     https://en.wikipedia.org/wiki/Colombian_identity_card
     https://validatetin.com/colombia/#
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'CO',
-        # length without insignificant chars
-        'min_length': 9,
-        'max_length': 10,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{2,3}\.?\d{3}\.?\d{3}-?(?P<checksum>\d))$'),
-        'alias_of': None,
-        'names': ['Unique Personal ID',
-                  'NUIP',
-                  'Número Único de Identificación Personal'],
-        'links': ['https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/pdf/'
-                  'resolucion_registraduria_3571_2003.pdf',
-                  'https://en.wikipedia.org/wiki/Colombian_identity_card',
-                  'https://en.wikipedia.org/wiki/National_identification_number#Colombia',
-                  'https://validatetin.com/colombia/#'],
-        'deprecated': False,
-        'country_name': 'Colombia',
-        'id_type': 'Unique Personal ID',
-        'official_name': 'Número Único de Identificación Personal',
-        'display_format': '##.###.###-#',
-        'example': '12.345.678-8',
-        'checksum_algorithm': 'Weighted sum mod 11 (prime weights 3, 7, 13, 17, 19, ... from the right; check = 11 - '
-                              'remainder, 11 becomes 0 and 10 becomes 1)',
-        'masks': ('##.###.###-#', '###.###.###-#')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "CO",
+            # length without insignificant chars
+            "min_length": 9,
+            "max_length": 10,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^(\d{2,3}\.?\d{3}\.?\d{3}-?(?P<checksum>\d))$"),
+            "alias_of": None,
+            "names": ["Unique Personal ID", "NUIP", "Número Único de Identificación Personal"],
+            "links": [
+                "https://www.cancilleria.gov.co/sites/default/files/Normograma/docs/pdf/"
+                "resolucion_registraduria_3571_2003.pdf",
+                "https://en.wikipedia.org/wiki/Colombian_identity_card",
+                "https://en.wikipedia.org/wiki/National_identification_number#Colombia",
+                "https://validatetin.com/colombia/#",
+            ],
+            "deprecated": False,
+            "country_name": "Colombia",
+            "id_type": "Unique Personal ID",
+            "official_name": "Número Único de Identificación Personal",
+            "display_format": "##.###.###-#",
+            "example": "12.345.678-8",
+            "checksum_algorithm": "Weighted sum mod 11 (prime weights 3, 7, 13, 17, 19, ... from the right; check = 11 - "
+            "remainder, 11 becomes 0 and 10 becomes 1)",
+            "masks": ("##.###.###-#", "###.###.###-#"),
+        }
+    )
 
     WEIGHTS = [3, 7, 13, 17, 19, 23, 29, 37, 41, 43, 47, 53, 59, 67, 71]
 

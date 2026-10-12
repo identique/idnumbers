@@ -7,6 +7,7 @@ temporary copy of the files it needs, so the checkout is never touched.
 `--from-port` is exercised against a scratch git repository built in the temporary directory, never against a real
 port checkout.
 """
+
 import contextlib
 import importlib.util
 import io
@@ -61,7 +62,8 @@ def load_script() -> Any:
     always replace, so loading it is harmless.
     """
     spec = importlib.util.spec_from_file_location(
-        "sync_parity_corpus_under_test", str(ROOT / "scripts" / "sync_parity_corpus.py"))
+        "sync_parity_corpus_under_test", str(ROOT / "scripts" / "sync_parity_corpus.py")
+    )
     assert spec is not None and spec.loader is not None
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -88,7 +90,10 @@ class CheckoutCase(TestCase):
     def run_script(self, *arguments: str) -> Tuple[int, str, str]:
         run = subprocess.run(
             [sys.executable, str(self.copy / "scripts" / "sync_parity_corpus.py")] + list(arguments),
-            cwd=str(self.parent), stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True,
+            cwd=str(self.parent),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
             env=self.environment,
         )
         return run.returncode, run.stdout, run.stderr
@@ -151,11 +156,23 @@ class FromPortTest(CheckoutCase):
     def git(self, *arguments: str) -> str:
         """Run git in the scratch port, ignoring every configuration file and hook of the machine."""
         command = [
-            "git", "-C", str(self.port), "-c", "user.name=Port Test", "-c", "user.email=port@example.invalid",
-            "-c", "commit.gpgsign=false", "-c", "core.hooksPath=%s" % os.devnull, "-c", "init.defaultBranch=main",
+            "git",
+            "-C",
+            str(self.port),
+            "-c",
+            "user.name=Port Test",
+            "-c",
+            "user.email=port@example.invalid",
+            "-c",
+            "commit.gpgsign=false",
+            "-c",
+            "core.hooksPath=%s" % os.devnull,
+            "-c",
+            "init.defaultBranch=main",
         ] + list(arguments)
-        run = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True,
-                             env=self.environment)
+        run = subprocess.run(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, env=self.environment
+        )
         self.assertEqual(0, run.returncode, "%s: %s" % (" ".join(arguments), run.stderr))
         return run.stdout.strip()
 
@@ -343,13 +360,16 @@ class RollbackReportTest(TestCase):
 
     def half_update_then_raise(self, error: BaseException) -> Callable[[Any, Any], Any]:
         """A stand-in for `copy_from_port` that overwrites the corpus, then fails with `error`."""
+
         def copy(port: Path, corpus: Any) -> Any:
             corpus.CORPUS_PATH.write_bytes(b"half-updated")
             raise error
+
         return copy
 
-    def run_main(self, copy: Callable[[Any, Any], Any], restore: Optional[Callable[[Any], None]] = None
-                 ) -> Tuple[int, str]:
+    def run_main(
+        self, copy: Callable[[Any, Any], Any], restore: Optional[Callable[[Any], None]] = None
+    ) -> Tuple[int, str]:
         """Run `main()` with the fakes in place; return the exit code and standard error."""
         errors = io.StringIO()
         with contextlib.ExitStack() as stack:
@@ -388,8 +408,7 @@ class RollbackReportTest(TestCase):
             raise PermissionError("restore failure")
 
         with mock.patch.object(self.script, "drop_bytecode", dropped.append):
-            code, stderr = self.run_main(self.half_update_then_raise(RuntimeError("original failure")),
-                                         failing_restore)
+            code, stderr = self.run_main(self.half_update_then_raise(RuntimeError("original failure")), failing_restore)
 
         self.assertEqual(2, code, stderr)
         self.assertEqual([self.directory / "corpus.py"], dropped)
@@ -412,8 +431,10 @@ class RollbackReportTest(TestCase):
             self.assertEqual(self.directory / "corpus.py", module_path)
             events.append("cleanup")
 
-        with mock.patch.object(self.script, "SetupError", RecordingSetupError), \
-                mock.patch.object(self.script, "drop_bytecode", drop):
+        with (
+            mock.patch.object(self.script, "SetupError", RecordingSetupError),
+            mock.patch.object(self.script, "drop_bytecode", drop),
+        ):
             code, stderr = self.run_main(self.half_update_then_raise(original), failing_restore)
 
         self.assertEqual(2, code, stderr)

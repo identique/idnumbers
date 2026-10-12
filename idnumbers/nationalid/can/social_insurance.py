@@ -9,30 +9,32 @@ class SocialInsuranceNumber:
     Canada social insurance number format
     https://en.wikipedia.org/wiki/National_identification_number#Canada
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'CA',
-        # length without insignificant chars
-        'min_length': 9,
-        'max_length': 9,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^\d{9}$'),
-        'alias_of': None,
-        'names': ['Social Insurance Number',
-                  'SIN'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Canada'],
-        'deprecated': False,
-        'country_name': 'Canada',
-        'id_type': 'Social Insurance Number',
-        'official_name': None,
-        'display_format': '#########',
-        'example': '123456782',
-        'checksum_algorithm': 'Luhn (mod 10)',
-        'masks': ('#########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "CA",
+            # length without insignificant chars
+            "min_length": 9,
+            "max_length": 9,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^\d{9}$"),
+            "alias_of": None,
+            "names": ["Social Insurance Number", "SIN"],
+            "links": ["https://en.wikipedia.org/wiki/National_identification_number#Canada"],
+            "deprecated": False,
+            "country_name": "Canada",
+            "id_type": "Social Insurance Number",
+            "official_name": None,
+            "display_format": "#########",
+            "example": "123456782",
+            "checksum_algorithm": "Luhn (mod 10)",
+            "masks": ("#########",),
+        }
+    )
 
     MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2, 1]
 

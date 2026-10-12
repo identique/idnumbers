@@ -9,6 +9,7 @@ from ..util import CHECK_ALPHA, validate_regexp, match_regexp
 
 class ParseResult(TypedDict):
     """parse result of FiscalCode"""
+
     surname_consonants: str
     """The 3 consonants chars of surname"""
     firstname_consonants: str
@@ -32,66 +33,136 @@ class FiscalCode:
     https://en.wikipedia.org/wiki/Italian_fiscal_code
     https://en.wikipedia.org/wiki/National_identification_number#Italy
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'IT',
-        'min_length': 16,
-        'max_length': 16,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<surname>[A-Z]{3})'
-                             r'(?P<firstname>[A-Z]{3})'
-                             r'(?P<yy>[0-9A-Z]{2})'
-                             r'(?P<m>[A-EHLMPR-T])'
-                             r'(?P<dd>[0-9A-Z]{2})'
-                             r'(?P<area_code>[A-Z][0-9A-Z]{3})'
-                             r'(?P<checksum>[A-Z])$'),
-        'alias_of': None,
-        'names': ['Fiscal Code',
-                  'Codice fiscale'],
-        'links': ['https://en.wikipedia.org/wiki/Italian_fiscal_code',
-                  'https://en.wikipedia.org/wiki/National_identification_number#Italy'],
-        'deprecated': False,
-        'country_name': 'Italy',
-        'id_type': 'Fiscal Code',
-        'official_name': 'Codice fiscale',
-        'display_format': 'LLLLLLYYMDDXXXXC',
-        'example': 'RSSMRA85M01H501Q',
-        'checksum_algorithm': 'Mod 26 check letter (the characters at odd and at even positions are mapped through two '
-                              'tables and added)',
-        'masks': ('LLLLLLXXLXXLXXXL',)
-    })
 
-    MONTH_MAP = {'A': 1, 'B': 2, 'C': 3, 'D': 4,
-                 'E': 5, 'H': 6, 'L': 7, 'M': 8,
-                 'P': 9, 'R': 10, 'S': 11, 'T': 12}
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "IT",
+            "min_length": 16,
+            "max_length": 16,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<surname>[A-Z]{3})"
+                r"(?P<firstname>[A-Z]{3})"
+                r"(?P<yy>[0-9A-Z]{2})"
+                r"(?P<m>[A-EHLMPR-T])"
+                r"(?P<dd>[0-9A-Z]{2})"
+                r"(?P<area_code>[A-Z][0-9A-Z]{3})"
+                r"(?P<checksum>[A-Z])$"
+            ),
+            "alias_of": None,
+            "names": ["Fiscal Code", "Codice fiscale"],
+            "links": [
+                "https://en.wikipedia.org/wiki/Italian_fiscal_code",
+                "https://en.wikipedia.org/wiki/National_identification_number#Italy",
+            ],
+            "deprecated": False,
+            "country_name": "Italy",
+            "id_type": "Fiscal Code",
+            "official_name": "Codice fiscale",
+            "display_format": "LLLLLLYYMDDXXXXC",
+            "example": "RSSMRA85M01H501Q",
+            "checksum_algorithm": "Mod 26 check letter (the characters at odd and at even positions are mapped through two "
+            "tables and added)",
+            "masks": ("LLLLLLXXLXXLXXXL",),
+        }
+    )
+
+    MONTH_MAP = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "H": 6, "L": 7, "M": 8, "P": 9, "R": 10, "S": 11, "T": 12}
     """char to month map"""
 
-    MAGIC_ODD_CHAR_MAP = {'0': 1, '9': 21, 'I': 19, 'R': 8,
-                          '1': 0, 'A': 1, 'J': 21, 'S': 12,
-                          '2': 5, 'B': 0, 'K': 2, 'T': 14,
-                          '3': 7, 'C': 5, 'L': 4, 'U': 16,
-                          '4': 9, 'D': 7, 'M': 18, 'V': 10,
-                          '5': 13, 'E': 9, 'N': 20, 'W': 22,
-                          '6': 15, 'F': 13, 'O': 11, 'X': 25,
-                          '7': 17, 'G': 15, 'P': 3, 'Y': 24,
-                          '8': 19, 'H': 17, 'Q': 6, 'Z': 23}
+    MAGIC_ODD_CHAR_MAP = {
+        "0": 1,
+        "9": 21,
+        "I": 19,
+        "R": 8,
+        "1": 0,
+        "A": 1,
+        "J": 21,
+        "S": 12,
+        "2": 5,
+        "B": 0,
+        "K": 2,
+        "T": 14,
+        "3": 7,
+        "C": 5,
+        "L": 4,
+        "U": 16,
+        "4": 9,
+        "D": 7,
+        "M": 18,
+        "V": 10,
+        "5": 13,
+        "E": 9,
+        "N": 20,
+        "W": 22,
+        "6": 15,
+        "F": 13,
+        "O": 11,
+        "X": 25,
+        "7": 17,
+        "G": 15,
+        "P": 3,
+        "Y": 24,
+        "8": 19,
+        "H": 17,
+        "Q": 6,
+        "Z": 23,
+    }
     """magic numbers for odd chars"""
 
-    MAGIC_EVEN_CHAR_MAP = {'0': 0, '9': 9, 'I': 8, 'R': 17,
-                           '1': 1, 'A': 0, 'J': 9, 'S': 18,
-                           '2': 2, 'B': 1, 'K': 10, 'T': 19,
-                           '3': 3, 'C': 2, 'L': 11, 'U': 20,
-                           '4': 4, 'D': 3, 'M': 12, 'V': 21,
-                           '5': 5, 'E': 4, 'N': 13, 'W': 22,
-                           '6': 6, 'F': 5, 'O': 14, 'X': 23,
-                           '7': 7, 'G': 6, 'P': 15, 'Y': 24,
-                           '8': 8, 'H': 7, 'Q': 16, 'Z': 25}
+    MAGIC_EVEN_CHAR_MAP = {
+        "0": 0,
+        "9": 9,
+        "I": 8,
+        "R": 17,
+        "1": 1,
+        "A": 0,
+        "J": 9,
+        "S": 18,
+        "2": 2,
+        "B": 1,
+        "K": 10,
+        "T": 19,
+        "3": 3,
+        "C": 2,
+        "L": 11,
+        "U": 20,
+        "4": 4,
+        "D": 3,
+        "M": 12,
+        "V": 21,
+        "5": 5,
+        "E": 4,
+        "N": 13,
+        "W": 22,
+        "6": 6,
+        "F": 5,
+        "O": 14,
+        "X": 23,
+        "7": 7,
+        "G": 6,
+        "P": 15,
+        "Y": 24,
+        "8": 8,
+        "H": 7,
+        "Q": 16,
+        "Z": 25,
+    }
     """magic numbers for even chars"""
 
-    NUMERIC_REPLACEMENT = {'L': '0', 'Q': '4', 'U': '8',
-                           'M': '1', 'R': '5', 'V': '9',
-                           'N': '2', 'S': '6',
-                           'P': '3', 'T': '7'}
+    NUMERIC_REPLACEMENT = {
+        "L": "0",
+        "Q": "4",
+        "U": "8",
+        "M": "1",
+        "R": "5",
+        "V": "9",
+        "N": "2",
+        "S": "6",
+        "P": "3",
+        "T": "7",
+    }
     """reverse numbers replacement for conflict IDs"""
 
     @staticmethod
@@ -113,29 +184,27 @@ class FiscalCode:
             return None
 
         # sterilization from right to left. we need to do the area_code first
-        area_code = match_obj.group('area_code')
+        area_code = match_obj.group("area_code")
         sterilized_ac_nums = FiscalCode.sterilize_numbers(area_code[1:])
         if not sterilized_ac_nums:
             return None
 
         # let the extract_birthday to sterilize others
-        dob_gender = FiscalCode.extract_birthday(match_obj.group('yy'),
-                                                 match_obj.group('m'),
-                                                 match_obj.group('dd'))
+        dob_gender = FiscalCode.extract_birthday(match_obj.group("yy"), match_obj.group("m"), match_obj.group("dd"))
         if dob_gender is None:
             return None
 
         checksum = FiscalCode.checksum(id_number)
-        if checksum is None or str(checksum) != match_obj.group('checksum'):
+        if checksum is None or str(checksum) != match_obj.group("checksum"):
             return None
 
         return {
-            'surname_consonants': match_obj.group('surname'),
-            'firstname_consonants': match_obj.group('firstname'),
-            'area_code': area_code[0] + sterilized_ac_nums,
-            'yyyymmdd': dob_gender[0],
-            'gender': dob_gender[1],
-            'checksum': checksum
+            "surname_consonants": match_obj.group("surname"),
+            "firstname_consonants": match_obj.group("firstname"),
+            "area_code": area_code[0] + sterilized_ac_nums,
+            "yyyymmdd": dob_gender[0],
+            "gender": dob_gender[1],
+            "checksum": checksum,
         }
 
     @staticmethod
@@ -191,7 +260,7 @@ class FiscalCode:
         """
         When the id is conflict with others, it replaces numbers to char. We need to reverse them.
         """
-        result = ''
+        result = ""
         for char in list(source[::-1]):
             if ord(char) > 64:
                 if char not in FiscalCode.NUMERIC_REPLACEMENT:

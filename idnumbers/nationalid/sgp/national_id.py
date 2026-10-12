@@ -13,45 +13,43 @@ class NationalID:
     https://www.ica.gov.sg/news-and-publications/media-releases/media-release/new-m-fin-series-to-be-introduced-from-1-january-2022
     https://github.com/opengovsg/FormSG/blob/develop/packages/shared/utils/nric-validation.ts
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'SG',
-        'min_length': 9,
-        'max_length': 9,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<type>[STFGM])'
-                             r'(?P<sn>\d{7})'
-                             r'(?P<checksum>[A-Z])$'),
-        'alias_of': None,
-        'names': ['National ID Number',
-                  'NRIC',
-                  'UIN',
-                  'FIN'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Singapore',
-                  'https://www.ngiam.net/NRIC/NRIC_numbers.pdf',
-                  'https://www.ica.gov.sg/news-and-publications/media-releases/media-release/'
-                  'new-m-fin-series-to-be-introduced-from-1-january-2022',
-                  'https://github.com/opengovsg/FormSG/blob/develop/packages/shared/utils/nric-validation.ts'],
-        'deprecated': False,
-        'country_name': 'Singapore',
-        'id_type': 'NRIC/FIN',
-        'official_name': None,
-        'display_format': 'L#######C',
-        'example': 'S1234567D',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 7, 6, 5, 4, 3, 2) mapped to a check letter by series '
-                              '(S, T, F, G, M); the M series adds 3 to the remainder',
-        'masks': ('L#######L',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "SG",
+            "min_length": 9,
+            "max_length": 9,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<type>[STFGM])"
+                r"(?P<sn>\d{7})"
+                r"(?P<checksum>[A-Z])$"
+            ),
+            "alias_of": None,
+            "names": ["National ID Number", "NRIC", "UIN", "FIN"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Singapore",
+                "https://www.ngiam.net/NRIC/NRIC_numbers.pdf",
+                "https://www.ica.gov.sg/news-and-publications/media-releases/media-release/"
+                "new-m-fin-series-to-be-introduced-from-1-january-2022",
+                "https://github.com/opengovsg/FormSG/blob/develop/packages/shared/utils/nric-validation.ts",
+            ],
+            "deprecated": False,
+            "country_name": "Singapore",
+            "id_type": "NRIC/FIN",
+            "official_name": None,
+            "display_format": "L#######C",
+            "example": "S1234567D",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 2, 7, 6, 5, 4, 3, 2) mapped to a check letter by series "
+            "(S, T, F, G, M); the M series adds 3 to the remainder",
+            "masks": ("L#######L",),
+        }
+    )
 
     MAGIC_MULTIPLIER = [2, 7, 6, 5, 4, 3, 2]
-    CHECKSUM_MAP = {
-        'S': 'JZIHGFEDCBA',
-        'T': 'GFEDCBAJZIH',
-        'F': 'XWUTRQPNMLK',
-        'G': 'RQPNMLKXWUT',
-        'M': 'XWUTRQPNJLK'
-    }
-    SERIES_OFFSET = {'M': 3}
+    CHECKSUM_MAP = {"S": "JZIHGFEDCBA", "T": "GFEDCBAJZIH", "F": "XWUTRQPNMLK", "G": "RQPNMLKXWUT", "M": "XWUTRQPNJLK"}
+    SERIES_OFFSET = {"M": 3}
     """
     The start constant added to the weighted sum before the modulus 11, by series. The M series adds 3
     (GovTech FormSG isMFinSeriesValid). The +4 of the T and G series is already folded into their rotated
@@ -81,6 +79,8 @@ class NationalID:
         checksum = id_number[-1]
         # it uses modulus 11 algorithm with magic numbers
         numbers = [int(char) for char in id_number[1:-1]]
-        modulus = (weighted_modulus_digit(numbers, NationalID.MAGIC_MULTIPLIER, 11, True)
-                   + NationalID.SERIES_OFFSET.get(series, 0)) % 11
+        modulus = (
+            weighted_modulus_digit(numbers, NationalID.MAGIC_MULTIPLIER, 11, True)
+            + NationalID.SERIES_OFFSET.get(series, 0)
+        ) % 11
         return checksum == NationalID.CHECKSUM_MAP[series][modulus]

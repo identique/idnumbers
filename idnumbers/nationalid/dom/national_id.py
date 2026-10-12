@@ -6,6 +6,7 @@ from ..util import CHECK_DIGIT, luhn_digit, match_regexp
 
 class ParseResult(TypedDict):
     """The parse result of Dominican Republic cédula de identidad y electoral"""
+
     series: str
     """the first 3 digits; historically the issuing municipality, no current meaning is decoded"""
     sequence: str
@@ -43,32 +44,38 @@ class NationalID:
       https://ayuda.dgii.gov.do/conversations/formatos-de-envo-de-datos/ca3904-cules-son-las-principales-alertas-que-se-pueden-presentar-al-validar-el-formato-607-en-la-herramienta-de-excel/5f3c17998cd858ce87a20d04
     - https://en.wikipedia.org/wiki/Luhn_algorithm
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'DO',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<series>\d{3})-?'
-                             r'(?P<sequence>\d{7})-?'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Cédula de Identidad y Electoral',
-                  'Cédula'],
-        'links': ['https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/do/cedula.py',
-                  'https://ayuda.dgii.gov.do/conversations/formatos-de-envo-de-datos/'
-                  'ca3904-cules-son-las-principales-alertas-que-se-pueden-presentar-al-validar-el-formato-607-'
-                  'en-la-herramienta-de-excel/5f3c17998cd858ce87a20d04',
-                  'https://en.wikipedia.org/wiki/Luhn_algorithm'],
-        'deprecated': False,
-        'country_name': 'Dominican Republic',
-        'id_type': 'Identity and Electoral Card Number',
-        'official_name': 'Cédula de Identidad y Electoral',
-        'display_format': '###-#######-#',
-        'example': '402-1234567-8',
-        'checksum_algorithm': 'Luhn (mod 10)',
-        'masks': ('###-#######-#', '###########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "DO",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<series>\d{3})-?"
+                r"(?P<sequence>\d{7})-?"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Cédula de Identidad y Electoral", "Cédula"],
+            "links": [
+                "https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/do/cedula.py",
+                "https://ayuda.dgii.gov.do/conversations/formatos-de-envo-de-datos/"
+                "ca3904-cules-son-las-principales-alertas-que-se-pueden-presentar-al-validar-el-formato-607-"
+                "en-la-herramienta-de-excel/5f3c17998cd858ce87a20d04",
+                "https://en.wikipedia.org/wiki/Luhn_algorithm",
+            ],
+            "deprecated": False,
+            "country_name": "Dominican Republic",
+            "id_type": "Identity and Electoral Card Number",
+            "official_name": "Cédula de Identidad y Electoral",
+            "display_format": "###-#######-#",
+            "example": "402-1234567-8",
+            "checksum_algorithm": "Luhn (mod 10)",
+            "masks": ("###-#######-#", "###########"),
+        }
+    )
     """metadata of this id"""
 
     @staticmethod
@@ -83,12 +90,12 @@ class NationalID:
         if not match_obj:
             return None
         checksum = NationalID.checksum(id_number)
-        if checksum is None or str(checksum) != match_obj.group('checksum'):
+        if checksum is None or str(checksum) != match_obj.group("checksum"):
             return None
         return {
-            'series': match_obj.group('series'),
-            'sequence': match_obj.group('sequence'),
-            'checksum': checksum,
+            "series": match_obj.group("series"),
+            "sequence": match_obj.group("sequence"),
+            "checksum": checksum,
         }
 
     @staticmethod
@@ -102,5 +109,5 @@ class NationalID:
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
-        digits = match_obj.group('series') + match_obj.group('sequence')
+        digits = match_obj.group("series") + match_obj.group("sequence")
         return luhn_digit([int(char) for char in digits])

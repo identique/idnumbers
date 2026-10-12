@@ -35,44 +35,47 @@ class OldNationalID:
     http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html
     https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'BD',
-        # length without insignificant chars
-        'min_length': 13,
-        'max_length': 13,
-        'parsable': True,
-        'checksum': False,
-        'regexp': re.compile(r'^(?P<distinct>\d{2})'
-                             r'(?P<rmo>\d)'
-                             r'(?P<police>\d{2})'
-                             r'(?P<union>\d{2})'
-                             r'(?P<sn>\d{6})$'),
-        'alias_of': None,
-        'names': ['Bangladesh national ID number',
-                  'জাতীয় পরিচয়পত্র',
-                  'NID',
-                  'BD'],
-        'links': [
-            'https://en.wikipedia.org/wiki/National_identity_card_(Bangladesh)',
-            'http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html',
-            'https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3'],
-        'deprecated': True,
-        'country_name': 'Bangladesh',
-        'id_type': 'National ID Number (Old)',
-        'official_name': 'জাতীয় পরিচয়পত্র',
-        'display_format': 'DDRPPUUSSSSSS',
-        'example': '1592824588424',
-        'checksum_algorithm': None,
-        'masks': ('#############',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "BD",
+            # length without insignificant chars
+            "min_length": 13,
+            "max_length": 13,
+            "parsable": True,
+            "checksum": False,
+            "regexp": re.compile(
+                r"^(?P<distinct>\d{2})"
+                r"(?P<rmo>\d)"
+                r"(?P<police>\d{2})"
+                r"(?P<union>\d{2})"
+                r"(?P<sn>\d{6})$"
+            ),
+            "alias_of": None,
+            "names": ["Bangladesh national ID number", "জাতীয় পরিচয়পত্র", "NID", "BD"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identity_card_(Bangladesh)",
+                "http://nationalidcardbangladesh.blogspot.com/2016/04/voter-id-national-id-card-number.html",
+                "https://www.facebook.com/428195627559147/photos/a.428251897553520/428251617553548/?type=3",
+            ],
+            "deprecated": True,
+            "country_name": "Bangladesh",
+            "id_type": "National ID Number (Old)",
+            "official_name": "জাতীয় পরিচয়পত্র",
+            "display_format": "DDRPPUUSSSSSS",
+            "example": "1592824588424",
+            "checksum_algorithm": None,
+            "masks": ("#############",),
+        }
+    )
 
     RMO_MAP = {
-        '1': ResidentialType.RURAL,
-        '2': ResidentialType.MUNICIPALITY,
-        '3': ResidentialType.CITY,
-        '4': ResidentialType.OTHERS,
-        '5': ResidentialType.CANTONMENT,
-        '9': ResidentialType.CITY_CORPORATION
+        "1": ResidentialType.RURAL,
+        "2": ResidentialType.MUNICIPALITY,
+        "3": ResidentialType.CITY,
+        "4": ResidentialType.OTHERS,
+        "5": ResidentialType.CANTONMENT,
+        "9": ResidentialType.CITY_CORPORATION,
     }
 
     @staticmethod
@@ -93,16 +96,16 @@ class OldNationalID:
         if not match_obj:
             return None
 
-        if match_obj.group('rmo') not in OldNationalID.RMO_MAP:
+        if match_obj.group("rmo") not in OldNationalID.RMO_MAP:
             return None
 
         try:
             return {
-                'distinct': match_obj.group('distinct'),
-                'residential_type': OldNationalID.RMO_MAP[match_obj.group('rmo')],
-                'policy_station_no': match_obj.group('police'),
-                'union_code': match_obj.group('union'),
-                'sn': match_obj.group('sn')
+                "distinct": match_obj.group("distinct"),
+                "residential_type": OldNationalID.RMO_MAP[match_obj.group("rmo")],
+                "policy_station_no": match_obj.group("police"),
+                "union_code": match_obj.group("union"),
+                "sn": match_obj.group("sn"),
             }
         except ValueError:
             return None

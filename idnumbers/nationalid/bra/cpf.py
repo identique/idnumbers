@@ -7,32 +7,36 @@ from .util import normalize
 
 class CPFNumber:
     """
-       Brazil CPF number
-       https://en.wikipedia.org/wiki/National_identification_number#Brazil
-       """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'BR',
-        # length without insignificant chars
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^(\d{3}\.?\d{3}\.?\d{3}-?\d{2})$'),
-        'alias_of': None,
-        'names': ['CPF number',
-                  'Cadastro de Pessoas Físicas'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Brazil',
-                  'https://www.sirc.gov.br/guias/guias-e-tutoriais-complementares-sirc/acompanhamentos-sirc/'
-                  'tutorial-para-a-analise-de-cpfs-irregulares/'],
-        'deprecated': False,
-        'country_name': 'Brazil',
-        'id_type': 'CPF Number',
-        'official_name': 'Cadastro de Pessoas Físicas',
-        'display_format': '###.###.###-##',
-        'example': '111.444.777-35',
-        'checksum_algorithm': 'Two weighted mod 11 check digits (weights 10-2, then 11-3)',
-        'masks': ('###.###.###-##', '###########')
-    })
+    Brazil CPF number
+    https://en.wikipedia.org/wiki/National_identification_number#Brazil
+    """
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "BR",
+            # length without insignificant chars
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^(\d{3}\.?\d{3}\.?\d{3}-?\d{2})$"),
+            "alias_of": None,
+            "names": ["CPF number", "Cadastro de Pessoas Físicas"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Brazil",
+                "https://www.sirc.gov.br/guias/guias-e-tutoriais-complementares-sirc/acompanhamentos-sirc/"
+                "tutorial-para-a-analise-de-cpfs-irregulares/",
+            ],
+            "deprecated": False,
+            "country_name": "Brazil",
+            "id_type": "CPF Number",
+            "official_name": "Cadastro de Pessoas Físicas",
+            "display_format": "###.###.###-##",
+            "example": "111.444.777-35",
+            "checksum_algorithm": "Two weighted mod 11 check digits (weights 10-2, then 11-3)",
+            "masks": ("###.###.###-##", "###########"),
+        }
+    )
 
     MULTIPLIER1 = [10, 9, 8, 7, 6, 5, 4, 3, 2]
     MULTIPLIER2 = [11, 10, 9, 8, 7, 6, 5, 4, 3]
@@ -63,7 +67,8 @@ class CPFNumber:
         normalized = normalize(id_number)
         number_list = [int(char) for char in list(normalized[:9])]
         return normalized[9] == CPFNumber.first_digit_checksum(number_list) and normalized[
-            10] == CPFNumber.second_digit_checksum(number_list)
+            10
+        ] == CPFNumber.second_digit_checksum(number_list)
 
     @staticmethod
     def first_digit_checksum(number_list: List[int]) -> str:

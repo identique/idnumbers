@@ -5,7 +5,7 @@ from ..util import validate_regexp
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[-/]', '', id_number)
+    return re.sub(r"[-/]", "", id_number)
 
 
 class TaxIDNumber:
@@ -13,43 +13,42 @@ class TaxIDNumber:
     Austria tax id number format
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Austria-TIN.pdf
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'AT',
-        # length without insignificant chars
-        'min_length': 9,
-        'max_length': 9,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{2}-?\d{3}/?\d{4})$'),
-        'alias_of': None,
-        'names': ['Tax ID number', 'ATIN', 'Abgabenkontonummer'],
-        'links': ['https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
-                  'tax-identification-numbers/Austria-TIN.pdf',
-                  'https://www.glasbenamatica.org/wp-content/uploads/2017/05/TIN_-_country_sheet_AT_en.pdf',
-                  'https://taxid.pro/docs/countries/austria'],
-        'deprecated': False,
-        'country_name': 'Austria',
-        'id_type': 'Tax Identification Number',
-        'official_name': 'Abgabenkontonummer',
-        'display_format': '##-###/####',
-        'example': '12-345/6782',
-        'checksum_algorithm': 'Luhn-style mod 10 (weights 1, 2 alternating; products of 10 or more are replaced by '
-                              'their digit sum)',
-        'masks': ('##-###/####', '#########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "AT",
+            # length without insignificant chars
+            "min_length": 9,
+            "max_length": 9,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^(\d{2}-?\d{3}/?\d{4})$"),
+            "alias_of": None,
+            "names": ["Tax ID number", "ATIN", "Abgabenkontonummer"],
+            "links": [
+                "https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/"
+                "tax-identification-numbers/Austria-TIN.pdf",
+                "https://www.glasbenamatica.org/wp-content/uploads/2017/05/TIN_-_country_sheet_AT_en.pdf",
+                "https://taxid.pro/docs/countries/austria",
+            ],
+            "deprecated": False,
+            "country_name": "Austria",
+            "id_type": "Tax Identification Number",
+            "official_name": "Abgabenkontonummer",
+            "display_format": "##-###/####",
+            "example": "12-345/6782",
+            "checksum_algorithm": "Luhn-style mod 10 (weights 1, 2 alternating; products of 10 or more are replaced by "
+            "their digit sum)",
+            "masks": ("##-###/####", "#########"),
+        }
+    )
 
     MULTIPLIER = [1, 2, 1, 2, 1, 2, 1, 2]
     """The multiplier for checksum"""
-    OVERFLOW_SUM = {
-        10: 1,
-        12: 3,
-        14: 5,
-        16: 7,
-        18: 9
-    }
+    OVERFLOW_SUM = {10: 1, 12: 3, 14: 5, 16: 7, 18: 9}
     """checksum algorithm shows we have to sum the two digits if the weighted value > 9"""
 
     @staticmethod
@@ -68,7 +67,7 @@ class TaxIDNumber:
         normalized = normalize(id_number)
         numbers = [int(char) for char in list(normalized)]
         total = 0
-        for (index, value) in enumerate(numbers[:-1]):
+        for index, value in enumerate(numbers[:-1]):
             weighted = value * TaxIDNumber.MULTIPLIER[index]
             if weighted in TaxIDNumber.OVERFLOW_SUM:
                 weighted = TaxIDNumber.OVERFLOW_SUM[weighted]

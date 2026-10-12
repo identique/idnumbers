@@ -4,12 +4,13 @@ A docstring must be the first statement of its function or class.
 A string expression that comes later in a function or class body is dead code: Python does not attach it
 to anything, so it is missing from `__doc__` and from the generated API documentation.
 """
+
 import ast
 import os
 from typing import Iterator, List, Tuple
 from unittest import TestCase, main
 
-PACKAGE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'idnumbers')
+PACKAGE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "idnumbers")
 REPO_DIR = os.path.dirname(PACKAGE_DIR)
 
 
@@ -21,7 +22,7 @@ def _source_files() -> Iterator[str]:
     for root, dirs, files in os.walk(PACKAGE_DIR):
         dirs.sort()
         for name in sorted(files):
-            if name.endswith('.py'):
+            if name.endswith(".py"):
                 yield os.path.join(root, name)
 
 
@@ -46,13 +47,14 @@ class TestDocstringPlacement(TestCase):
     def test_docstrings_are_first_statements(self) -> None:
         offenders = []
         for path in _source_files():
-            with open(path, encoding='utf-8') as source_file:
+            with open(path, encoding="utf-8") as source_file:
                 source = source_file.read()
             for line, name in find_misplaced_docstrings(source):
-                offenders.append(f'{os.path.relpath(path, REPO_DIR)}:{line} {name}')
-        self.assertEqual(offenders, [], 'string statements that are not the first statement of their body:\n'
-                         + '\n'.join(offenders))
+                offenders.append(f"{os.path.relpath(path, REPO_DIR)}:{line} {name}")
+        self.assertEqual(
+            offenders, [], "string statements that are not the first statement of their body:\n" + "\n".join(offenders)
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -12,30 +12,32 @@ class SocialSecurityNumber:
     https://en.wikipedia.org/wiki/National_identification_number#United_States
     https://www.geeksforgeeks.org/how-to-validate-ssn-social-security-number-using-regular-expression/
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'US',
-        # Significant digits only; the two required hyphens are excluded.
-        'min_length': 9,
-        'max_length': 9,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': False,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^(?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4}$'),
-        'alias_of': None,
-        'names': ['Social Security number',
-                  'SSN'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#United_States'],
-        'deprecated': False,
-        'country_name': 'United States',
-        'id_type': 'Social Security Number',
-        'official_name': None,
-        'display_format': '###-##-####',
-        'example': '123-45-6789',
-        'checksum_algorithm': None,
-        'masks': ('###-##-####',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "US",
+            # Significant digits only; the two required hyphens are excluded.
+            "min_length": 9,
+            "max_length": 9,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": False,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^(?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4}$"),
+            "alias_of": None,
+            "names": ["Social Security number", "SSN"],
+            "links": ["https://en.wikipedia.org/wiki/National_identification_number#United_States"],
+            "deprecated": False,
+            "country_name": "United States",
+            "id_type": "Social Security Number",
+            "official_name": None,
+            "display_format": "###-##-####",
+            "example": "123-45-6789",
+            "checksum_algorithm": None,
+            "masks": ("###-##-####",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

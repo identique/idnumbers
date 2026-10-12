@@ -52,6 +52,11 @@ files = ["idnumbers", "tests/typing/parse_api_consumer.py", "tests/typing/format
 
 [tool.ruff]
 target-version = "py39"
+line-length = 120
+
+[tool.ruff.format]
+# Python files only: ruff would also reformat Python code fences in Markdown, including the generated guides.
+exclude = ["*.md"]
 
 [tool.ruff.lint]
 # Pycodestyle E4/E7/E9 and pyflakes, ruff's long-standing defaults; pinned since newer releases select more.

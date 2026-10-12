@@ -6,11 +6,12 @@ from ..util import CHECK_DIGIT, luhn_digit, validate_regexp, match_regexp
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[ \-/]', '', id_number)
+    return re.sub(r"[ \-/]", "", id_number)
 
 
 class ParseResult(TypedDict):
     """Parse result of EmiratesID"""
+
     yyyy: int
     """year of birth"""
     sn: str
@@ -25,30 +26,33 @@ class EmiratesIDNumber:
     https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates
     This is the python version of https://gist.github.com/geordee/e51d111426de675c0c0f8503c2003047
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'AE',
-        'min_length': 15,
-        'max_length': 15,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^784[ -]?'
-                             r'(?P<yyyy>\d{4})[ -]?'
-                             r'(?P<sn>\d{7})[ -]?'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Emirates ID',
-                  'Resident ID',
-                  'رقم الهوية'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates'],
-        'deprecated': False,
-        'country_name': 'United Arab Emirates',
-        'id_type': 'Emirates ID',
-        'official_name': 'رقم الهوية',
-        'display_format': '784-YYYY-SSSSSSS-C',
-        'example': '784-1980-1234567-8',
-        'checksum_algorithm': 'Luhn (mod 10)',
-        'masks': ('###-####-#######-#', '###############')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "AE",
+            "min_length": 15,
+            "max_length": 15,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^784[ -]?"
+                r"(?P<yyyy>\d{4})[ -]?"
+                r"(?P<sn>\d{7})[ -]?"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Emirates ID", "Resident ID", "رقم الهوية"],
+            "links": ["https://en.wikipedia.org/wiki/National_identification_number#United_Arab_Emirates"],
+            "deprecated": False,
+            "country_name": "United Arab Emirates",
+            "id_type": "Emirates ID",
+            "official_name": "رقم الهوية",
+            "display_format": "784-YYYY-SSSSSSS-C",
+            "example": "784-1980-1234567-8",
+            "checksum_algorithm": "Luhn (mod 10)",
+            "masks": ("###-####-#######-#", "###############"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -65,18 +69,14 @@ class EmiratesIDNumber:
         match_obj = match_regexp(id_number, EmiratesIDNumber.METADATA.regexp)
         if not match_obj:
             return None
-        yyyy = match_obj.group('yyyy')
-        sn = match_obj.group('sn')
-        checksum_str = match_obj.group('checksum')
+        yyyy = match_obj.group("yyyy")
+        sn = match_obj.group("sn")
+        checksum_str = match_obj.group("checksum")
         checksum = EmiratesIDNumber.checksum(id_number)
         if checksum is None or str(checksum) != checksum_str:
             return None
         else:
-            return {
-                'yyyy': int(yyyy),
-                'sn': sn,
-                'checksum': checksum
-            }
+            return {"yyyy": int(yyyy), "sn": sn, "checksum": checksum}
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:

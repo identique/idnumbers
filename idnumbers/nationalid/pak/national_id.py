@@ -7,6 +7,7 @@ from ..util import alias_of, validate_regexp, match_regexp
 
 class ParseResult(TypedDict):
     """The parse result of Pakistan ID"""
+
     location: str
     """registration location"""
     sn: str
@@ -24,34 +25,38 @@ class NationalID:
     https://www.informationpk.com/interesting-information-about-or-meaning-of-nadra-cnic-13-digits-number/
     check website: https://cnic.com.pk/
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'PK',
-        'min_length': 13,
-        'max_length': 13,
-        'parsable': True,
-        'checksum': False,
-        'regexp': re.compile(r'^(?P<location>\d{5})-?'
-                             r'(?P<sn>\d{7})-?'
-                             r'(?P<gender>\d)$'),
-        'alias_of': None,
-        'names': ['National ID Card Number',
-                  'CNIC',
-                  'NIC',
-                  'قومی شناختی کارڈ'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Pakistan',
-                  'https://en.wikipedia.org/wiki/CNIC_(Pakistan)#Security_features',
-                  'https://www.geo.tv/latest/250118-mystery-behind-13-digit-cnic-number',
-                  'https://www.informationpk.com/'
-                  'interesting-information-about-or-meaning-of-nadra-cnic-13-digits-number/'],
-        'deprecated': False,
-        'country_name': 'Pakistan',
-        'id_type': 'National ID Card Number',
-        'official_name': 'قومی شناختی کارڈ',
-        'display_format': '#####-#######-#',
-        'example': '12345-6789012-3',
-        'checksum_algorithm': None,
-        'masks': ('#####-#######-#', '#############')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "PK",
+            "min_length": 13,
+            "max_length": 13,
+            "parsable": True,
+            "checksum": False,
+            "regexp": re.compile(
+                r"^(?P<location>\d{5})-?"
+                r"(?P<sn>\d{7})-?"
+                r"(?P<gender>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["National ID Card Number", "CNIC", "NIC", "قومی شناختی کارڈ"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Pakistan",
+                "https://en.wikipedia.org/wiki/CNIC_(Pakistan)#Security_features",
+                "https://www.geo.tv/latest/250118-mystery-behind-13-digit-cnic-number",
+                "https://www.informationpk.com/"
+                "interesting-information-about-or-meaning-of-nadra-cnic-13-digits-number/",
+            ],
+            "deprecated": False,
+            "country_name": "Pakistan",
+            "id_type": "National ID Card Number",
+            "official_name": "قومی شناختی کارڈ",
+            "display_format": "#####-#######-#",
+            "example": "12345-6789012-3",
+            "checksum_algorithm": None,
+            "masks": ("#####-#######-#", "#############"),
+        }
+    )
     """metadata of this id"""
 
     @staticmethod
@@ -69,9 +74,9 @@ class NationalID:
             return None
         try:
             return {
-                'location': match_obj.group('location'),
-                'sn': match_obj.group('sn'),
-                'gender': Gender.MALE if int(match_obj.group('gender')) % 2 == 1 else Gender.FEMALE,
+                "location": match_obj.group("location"),
+                "sn": match_obj.group("sn"),
+                "gender": Gender.MALE if int(match_obj.group("gender")) % 2 == 1 else Gender.FEMALE,
             }
         except ValueError:
             # catch the date error

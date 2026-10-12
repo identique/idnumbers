@@ -12,46 +12,52 @@ class NationalHealthIndexNumber:
     Expanded-format implementation is planned for 1 July 2027.
     Legacy implementation provenance: https://gist.github.com/mcshaz/b41dc6bd4aa3104d54da677e2b4f6b45
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'NZ',
-        # length without insignificant chars
-        'min_length': 7,
-        'max_length': 7,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        # no I and no O in alphabet
-        'regexp': re.compile(r'^('
-                             r'[A-HJ-NP-Z]{3}\d{4}|'
-                             r'[A-HJ-NP-Z]{3}\d{2}[A-HJ-NP-Z]{2}'
-                             r')$'),
-        'alias_of': None,
-        'names': ['National Health Index Number',
-                  'NHI'],
-        'links': ['https://www.tewhatuora.govt.nz/assets/Publications/HISO-Standards/'
-                  'HISO-10046-2024-Consumer-Health-Identity-Standard.pdf',
-                  'https://nhi-ig.hip.digital.health.nz/ComplianceTestingImportantInformation.html',
-                  'https://www.healthnz.govt.nz/health-professionals/guidance-standards/topic/'
-                  'health-identity/national-health-index-nhi/upcoming-changes-to-the-nhi',
-                  'https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/'
-                  'data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/'
-                  'library-of-system-data-identifiers-v95989112-d327e56315/'
-                  'new-zealand-national-health-index-number-v117807810-d327e90250/'
-                  'new-zealand-national-health-index-number-narrow-br-v117808786-d327e90350.html'],
-        'deprecated': False,
-        'country_name': 'New Zealand',
-        'id_type': 'National Health Index Number',
-        'official_name': None,
-        'display_format': 'LLL####',
-        'example': 'ZZZ0016',
-        'checksum_algorithm': 'Weighted sum (weights 7-2; letters A-Z without I and O count as 1-24): mod 11 for the '
-                              'legacy format, mod 23 for the expanded format',
-        'masks': ('LLL####', 'LLL##LL')
-    })
 
-    ALPHABET_LIST = list('ABCDEFGHJKLMNPQRSTUVWXYZ')
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "NZ",
+            # length without insignificant chars
+            "min_length": 7,
+            "max_length": 7,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            # no I and no O in alphabet
+            "regexp": re.compile(
+                r"^("
+                r"[A-HJ-NP-Z]{3}\d{4}|"
+                r"[A-HJ-NP-Z]{3}\d{2}[A-HJ-NP-Z]{2}"
+                r")$"
+            ),
+            "alias_of": None,
+            "names": ["National Health Index Number", "NHI"],
+            "links": [
+                "https://www.tewhatuora.govt.nz/assets/Publications/HISO-Standards/"
+                "HISO-10046-2024-Consumer-Health-Identity-Standard.pdf",
+                "https://nhi-ig.hip.digital.health.nz/ComplianceTestingImportantInformation.html",
+                "https://www.healthnz.govt.nz/health-professionals/guidance-standards/topic/"
+                "health-identity/national-health-index-nhi/upcoming-changes-to-the-nhi",
+                "https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/"
+                "data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/"
+                "library-of-system-data-identifiers-v95989112-d327e56315/"
+                "new-zealand-national-health-index-number-v117807810-d327e90250/"
+                "new-zealand-national-health-index-number-narrow-br-v117808786-d327e90350.html",
+            ],
+            "deprecated": False,
+            "country_name": "New Zealand",
+            "id_type": "National Health Index Number",
+            "official_name": None,
+            "display_format": "LLL####",
+            "example": "ZZZ0016",
+            "checksum_algorithm": "Weighted sum (weights 7-2; letters A-Z without I and O count as 1-24): mod 11 for the "
+            "legacy format, mod 23 for the expanded format",
+            "masks": ("LLL####", "LLL##LL"),
+        }
+    )
+
+    ALPHABET_LIST = list("ABCDEFGHJKLMNPQRSTUVWXYZ")
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -73,7 +79,7 @@ class NationalHealthIndexNumber:
         check_digit = id_number[-1]
         source_list = list(id_number[:-1])
         total = 0
-        for (index, char) in enumerate(source_list):
+        for index, char in enumerate(source_list):
             if char in NationalHealthIndexNumber.ALPHABET_LIST:
                 decimal = NationalHealthIndexNumber.ALPHABET_LIST.index(char) + 1
             else:

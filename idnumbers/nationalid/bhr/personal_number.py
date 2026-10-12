@@ -19,33 +19,40 @@ class PersonalNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Bahrain
     * According to the doc, we can know it has checksum algorithm. But we cannot find it.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'BH',
-        'min_length': 9,
-        'max_length': 9,
-        'parsable': True,
-        'checksum': False,
-        'regexp': re.compile(r'^(?P<yymm>\d{2}(?:0[1-9]|1[012]))'
-                             r'(?P<sn>\d{4})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Personal number',
-                  'Identification card number',
-                  'بطاقة الهوية',
-                  'الرقم الشخصي',
-                  'Central population registration number',
-                  'CPR',
-                  'الرقم السكاني'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bahrain'],
-        'deprecated': False,
-        'country_name': 'Bahrain',
-        'id_type': 'Personal Number',
-        'official_name': 'الرقم الشخصي',
-        'display_format': 'YYMMSSSSC',
-        'example': '800101001',
-        'checksum_algorithm': None,
-        'masks': ('#########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "BH",
+            "min_length": 9,
+            "max_length": 9,
+            "parsable": True,
+            "checksum": False,
+            "regexp": re.compile(
+                r"^(?P<yymm>\d{2}(?:0[1-9]|1[012]))"
+                r"(?P<sn>\d{4})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": [
+                "Personal number",
+                "Identification card number",
+                "بطاقة الهوية",
+                "الرقم الشخصي",
+                "Central population registration number",
+                "CPR",
+                "الرقم السكاني",
+            ],
+            "links": ["https://en.wikipedia.org/wiki/National_identification_number#Bahrain"],
+            "deprecated": False,
+            "country_name": "Bahrain",
+            "id_type": "Personal Number",
+            "official_name": "الرقم الشخصي",
+            "display_format": "YYMMSSSSC",
+            "example": "800101001",
+            "checksum_algorithm": None,
+            "masks": ("#########",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -67,7 +74,7 @@ class PersonalNumber:
 
         # TODO: find and implement checksum
         return {
-            'yymm': match_obj.group('yymm'),
-            'sn': match_obj.group('sn'),
-            'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
+            "yymm": match_obj.group("yymm"),
+            "sn": match_obj.group("sn"),
+            "checksum": cast(CHECK_DIGIT, int(match_obj.group("checksum"))),
         }

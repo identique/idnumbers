@@ -7,7 +7,7 @@ from re import Match, Pattern
 from typing import Any, List, Literal, Optional, Type, TypeVar, cast
 
 VERHOEFF = {
-    'D_TABLE': [
+    "D_TABLE": [
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         [1, 2, 3, 4, 0, 6, 7, 8, 9, 5],
         [2, 3, 4, 0, 1, 7, 8, 9, 5, 6],
@@ -17,10 +17,9 @@ VERHOEFF = {
         [6, 5, 9, 8, 7, 1, 0, 4, 3, 2],
         [7, 6, 5, 9, 8, 2, 1, 0, 4, 3],
         [8, 7, 6, 5, 9, 3, 2, 1, 0, 4],
-        [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+        [9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
     ],
-
-    'P_TABLE': [
+    "P_TABLE": [
         [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         [1, 5, 7, 6, 2, 8, 3, 0, 9, 4],
         [5, 8, 0, 3, 7, 9, 6, 1, 4, 2],
@@ -28,17 +27,43 @@ VERHOEFF = {
         [9, 4, 5, 3, 1, 2, 6, 8, 7, 0],
         [4, 2, 8, 6, 5, 7, 3, 9, 0, 1],
         [2, 7, 9, 3, 8, 0, 6, 4, 1, 5],
-        [7, 0, 4, 6, 9, 1, 3, 2, 5, 8]
-    ]
+        [7, 0, 4, 6, 9, 1, 3, 2, 5, 8],
+    ],
 }
 """[Table](https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm) for the Verhoeff algorithm"""
 
 CHECK_DIGIT = Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 """Check digit type. Numeric check digits are only allowed in 0 to 9"""
 
-CHECK_ALPHA = Literal['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-                      'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'Y', 'U',
-                      'V', 'W', 'X', 'Y', 'Z']
+CHECK_ALPHA = Literal[
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "Y",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+]
 """Check digit type. Numeric check digits are only allowed in A to Z (all in upper cases)"""
 
 
@@ -109,9 +134,9 @@ def luhn_digit(digits: List[int], multipliers_start_by_two: bool = False) -> CHE
         if idx % 2 == 0:
             total_sum += int_val
         elif int_val > 4:
-            total_sum += (2 * int_val - 9)
+            total_sum += 2 * int_val - 9
         else:
-            total_sum += (2 * int_val)
+            total_sum += 2 * int_val
     return cast(CHECK_DIGIT, (10 - total_sum % 10) % 10)
 
 
@@ -129,8 +154,9 @@ def verhoeff_check(digits: List[int]) -> bool:
     return c == 0
 
 
-def weighted_modulus_digit(numbers: List[int], weights: Optional[List[int]], divider: int,
-                           modulus_only: bool = False) -> int:
+def weighted_modulus_digit(
+    numbers: List[int], weights: Optional[List[int]], divider: int, modulus_only: bool = False
+) -> int:
     """
     It metrix-multiples numbers and weights and calculate the modulus by the divider.
 
@@ -144,7 +170,7 @@ def weighted_modulus_digit(numbers: List[int], weights: Optional[List[int]], div
     """
     if weights is None:
         weights = [1] * len(numbers)
-    assert len(numbers) <= len(weights), 'numbers length must be less than or equal to weights length'
+    assert len(numbers) <= len(weights), "numbers length must be less than or equal to weights length"
     modulus = sum([value * weights[index] for (index, value) in enumerate(numbers)]) % divider
     return modulus if modulus_only else divider - modulus
 
@@ -184,7 +210,7 @@ def letter_to_number(letter: str, capital: bool = True) -> int:
     """
     English letter to its index. A = 1, B = 2...
     """
-    assert len(letter) == 1 and letter.isalpha(), 'only allow one alphabet'
+    assert len(letter) == 1 and letter.isalpha(), "only allow one alphabet"
     if capital:
         return ord(letter) - 64
     return ord(letter) - 96
@@ -207,15 +233,14 @@ def ean13_digit(numbers: List[int]) -> CHECK_DIGIT:
             odd += value
     total = even * 3 + odd
     modulus = total % 10
-    return cast(CHECK_DIGIT,
-                0 if modulus == 0 else (10 - modulus))
+    return cast(CHECK_DIGIT, 0 if modulus == 0 else (10 - modulus))
 
 
-_T = TypeVar('_T', bound=Type[Any])
+_T = TypeVar("_T", bound=Type[Any])
 
 
 def alias_of(cls: _T) -> _T:
-    assert hasattr(cls, 'METADATA'), f'the type {cls} must have METADATA attribute'
+    assert hasattr(cls, "METADATA"), f"the type {cls} must have METADATA attribute"
     metadata = copy(cls.METADATA)
     metadata.alias_of = cls
 
@@ -230,7 +255,7 @@ def alias_of(cls: _T) -> _T:
     return cast(_T, AliasType)
 
 
-_birth_date_trace: ContextVar[Optional[bool]] = ContextVar('_birth_date_trace', default=None)
+_birth_date_trace: ContextVar[Optional[bool]] = ContextVar("_birth_date_trace", default=None)
 
 
 def birth_date(year: int, month: int, day: int) -> Optional[date]:

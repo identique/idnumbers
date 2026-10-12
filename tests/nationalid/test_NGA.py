@@ -4,17 +4,17 @@ from idnumbers.nationalid import NGA
 
 class TestNGAValidation(TestCase):
     def test_normal_case(self):
-        self.assertTrue(NGA.NationalID.validate('12345678901'))
+        self.assertTrue(NGA.NationalID.validate("12345678901"))
 
     def test_error_case(self):
-        self.assertFalse(NGA.NationalID.validate('1234567890A'))
+        self.assertFalse(NGA.NationalID.validate("1234567890A"))
 
     def test_with_regex(self):
-        self.assertRegex('12345678901', NGA.NationalID.METADATA.regexp)
+        self.assertRegex("12345678901", NGA.NationalID.METADATA.regexp)
 
     def test_with_metadata(self):
         self.assertIsNotNone(NGA.NationalID.METADATA)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

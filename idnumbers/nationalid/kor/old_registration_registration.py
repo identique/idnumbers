@@ -7,11 +7,12 @@ from .resident_registration import ResidentRegistration, ParseResult
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'-', '', id_number)
+    return re.sub(r"-", "", id_number)
 
 
 class OldIDParseResult(ParseResult):
     """Old format contains more information"""
+
     location: str
     """registration location"""
     checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -26,36 +27,39 @@ class OldResidentRegistration(ResidentRegistration):
     # https://en.wikipedia.org/wiki/Resident_registration_number
     # https://centers.ibs.re.kr/html/living_en/overview/arc.html
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'KR',
-        # Significant characters only; separators are excluded.
-        'min_length': 13,
-        'max_length': 13,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})-'
-                             r'(?P<gender>\d)'
-                             r'(?P<location>\d{4})'
-                             r'(?P<sn>\d)'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Resident Registration Number',
-                  '주민등록번호',
-                  'RRN',
-                  '住民登錄番號',
-                  'Jumin Deungnok Beonho'],
-        'links': ['https://en.wikipedia.org/wiki/Resident_registration_number',
-                  'https://centers.ibs.re.kr/html/living_en/overview/arc.html'],
-        'deprecated': True,
-        'country_name': 'South Korea',
-        'id_type': 'Resident Registration Number (Old)',
-        'official_name': '주민등록번호',
-        'display_format': 'YYMMDD-GLLLLSC',
-        'example': '800101-1234560',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 2-9, then 2-5 over the first twelve digits; '
-                              'check = 11 - remainder, reduced to its last digit)',
-        'masks': ('######-#######',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "KR",
+            # Significant characters only; separators are excluded.
+            "min_length": 13,
+            "max_length": 13,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})-"
+                r"(?P<gender>\d)"
+                r"(?P<location>\d{4})"
+                r"(?P<sn>\d)"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Resident Registration Number", "주민등록번호", "RRN", "住民登錄番號", "Jumin Deungnok Beonho"],
+            "links": [
+                "https://en.wikipedia.org/wiki/Resident_registration_number",
+                "https://centers.ibs.re.kr/html/living_en/overview/arc.html",
+            ],
+            "deprecated": True,
+            "country_name": "South Korea",
+            "id_type": "Resident Registration Number (Old)",
+            "official_name": "주민등록번호",
+            "display_format": "YYMMDD-GLLLLSC",
+            "example": "800101-1234560",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 2-9, then 2-5 over the first twelve digits; "
+            "check = 11 - remainder, reduced to its last digit)",
+            "masks": ("######-#######",),
+        }
+    )
 
     MAGIC_MULTIPLIER = [2, 3, 4, 5, 6, 7, 8, 9, 2, 3, 4, 5]
     """multiplier for the checksum"""
@@ -83,9 +87,9 @@ class OldResidentRegistration(ResidentRegistration):
             return None
         return {
             **new_result,
-            'sn': match_obj.group('sn'),
-            'location': match_obj.group('location'),
-            'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
+            "sn": match_obj.group("sn"),
+            "location": match_obj.group("location"),
+            "checksum": cast(CHECK_DIGIT, int(match_obj.group("checksum"))),
         }
 
     @staticmethod
@@ -97,5 +101,6 @@ class OldResidentRegistration(ResidentRegistration):
         # it uses modulus 11 algorithm with magic numbers
         numbers = [int(char) for char in normalized]
         modulus = modulus_overflow_mod10(
-            weighted_modulus_digit(numbers[:-1], OldResidentRegistration.MAGIC_MULTIPLIER, 11))
+            weighted_modulus_digit(numbers[:-1], OldResidentRegistration.MAGIC_MULTIPLIER, 11)
+        )
         return modulus == numbers[-1]

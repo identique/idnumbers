@@ -32,12 +32,12 @@ def _birth_date(match_obj: Match[str]) -> Optional[date]:
     all valid serial numbers get depleted for a day, the number 20 gets added to the value of XX.
     This means that XX can get up to 32 for males, and 82 for females.
     """
-    yy = int(match_obj.group('yy'))
-    mm_code = int(match_obj.group('mm'))
-    dd = int(match_obj.group('dd'))
+    yy = int(match_obj.group("yy"))
+    mm_code = int(match_obj.group("mm"))
+    dd = int(match_obj.group("dd"))
     mm = mm_code if mm_code < 50 else mm_code - 50
     mm = mm - 20 if mm > 20 else mm
-    if match_obj.group('checksum') is None:
+    if match_obj.group("checksum") is None:
         # 9-digit numbers were only given out up to 1953, so the year is always 19yy
         if yy > 53:
             return None
@@ -80,38 +80,43 @@ class BirthNumber:
     ``stdnum/cz/rc.py``, which checks ``int(number[:9]) % 11 % 10`` for 10 digits and accepts 9 digits
     only up to 1953.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'SK',
-        'min_length': 9,
-        'max_length': 10,
-        # length without insignificant chars: 9 digits before 1954 (no check digit), 10 digits since
-        'parsable': True,
-        # has parse function
-        'checksum': True,
-        # has checksum function
-        'regexp': re.compile(r'^(?P<yy>\d{2})'
-                             r'(?P<mm>\d{2})'
-                             r'(?P<dd>\d{2})/?'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)?$'),
-        # regular expression to validate the id
-        'alias_of': None,
-        'names': ['Birth Number',
-                  'rodné číslo',
-                  'RČ'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Slovakia',
-                  'https://cs.wikipedia.org/wiki/Rodn%C3%A9_%C4%8D%C3%ADslo',
-                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cz/rc.py'],
-        'deprecated': False,
-        'country_name': 'Slovakia',
-        'id_type': 'Birth Number',
-        'official_name': 'rodné číslo',
-        'display_format': 'YYMMDD/SSSC',
-        'example': '000101/0009',
-        'checksum_algorithm': 'The whole 10-digit number is divisible by 11, except that a remainder of 10 gives the '
-                              'check digit 0 (a 9-digit number has no check digit)',
-        'masks': ('######/####', '######/###')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "SK",
+            "min_length": 9,
+            "max_length": 10,
+            # length without insignificant chars: 9 digits before 1954 (no check digit), 10 digits since
+            "parsable": True,
+            # has parse function
+            "checksum": True,
+            # has checksum function
+            "regexp": re.compile(
+                r"^(?P<yy>\d{2})"
+                r"(?P<mm>\d{2})"
+                r"(?P<dd>\d{2})/?"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum>\d)?$"
+            ),
+            # regular expression to validate the id
+            "alias_of": None,
+            "names": ["Birth Number", "rodné číslo", "RČ"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Slovakia",
+                "https://cs.wikipedia.org/wiki/Rodn%C3%A9_%C4%8D%C3%ADslo",
+                "https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cz/rc.py",
+            ],
+            "deprecated": False,
+            "country_name": "Slovakia",
+            "id_type": "Birth Number",
+            "official_name": "rodné číslo",
+            "display_format": "YYMMDD/SSSC",
+            "example": "000101/0009",
+            "checksum_algorithm": "The whole 10-digit number is divisible by 11, except that a remainder of 10 gives the "
+            "check digit 0 (a 9-digit number has no check digit)",
+            "masks": ("######/####", "######/###"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -130,7 +135,7 @@ class BirthNumber:
         is returned for it, although ``validate()`` is True.
         """
         match_obj = match_regexp(id_number, BirthNumber.METADATA.regexp)
-        if not match_obj or match_obj.group('checksum') is None:
+        if not match_obj or match_obj.group("checksum") is None:
             return None
 
         if not BirthNumber.checksum(id_number):
@@ -140,10 +145,10 @@ class BirthNumber:
         if birth_date is None:
             return None
         return {
-            'yyyymmdd': birth_date,
-            'gender': Gender.MALE if int(match_obj.group('mm')) < 50 else Gender.FEMALE,
-            'sn': match_obj.group('sn'),
-            'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
+            "yyyymmdd": birth_date,
+            "gender": Gender.MALE if int(match_obj.group("mm")) < 50 else Gender.FEMALE,
+            "sn": match_obj.group("sn"),
+            "checksum": cast(CHECK_DIGIT, int(match_obj.group("checksum"))),
         }
 
     @staticmethod
@@ -167,4 +172,4 @@ class BirthNumber:
     @staticmethod
     def normalize(id_number: str) -> str:
         """remove the / out"""
-        return re.sub(r'/', '', id_number)
+        return re.sub(r"/", "", id_number)

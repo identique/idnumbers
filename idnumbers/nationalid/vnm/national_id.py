@@ -13,6 +13,7 @@ def normalize(id_number: str) -> Optional[str]:
 
 class ParseResult(TypedDict):
     """parse result for NationalID"""
+
     province_country_code: str
     """registration province/country code"""
     yyyy: int
@@ -29,33 +30,41 @@ class NationalID:
     https://vietnaminsider.vn/what-do-the-12-digits-on-the-citizen-id-card-with-chip-mean/
     https://lawnet.vn/en/vb/Circular-07-2016-TT-BCA-detailing-Law-on-Citizen-Identification-137-2015-ND-CP-5CCC3.html
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'VN',
-        'min_length': 12,
-        'max_length': 12,
-        'parsable': True,
-        'checksum': False,
-        'regexp': re.compile(r'^(?P<province_country_code>\d{3})'
-                             r'(?P<gender>\d)'
-                             r'(?P<yy>\d{2})'
-                             r'(?P<sn>\d{6})$'),
-        'alias_of': None,
-        'names': ['National ID Number',
-                  'Thẻ căn cước công dân',
-                  ],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Vietnam',
-                  'https://vietnaminsider.vn/what-do-the-12-digits-on-the-citizen-id-card-with-chip-mean/',
-                  'https://lawnet.vn/en/vb/Circular-07-2016-TT-BCA-detailing-Law-on-Citizen-Identification'
-                  '-137-2015-ND-CP-5CCC3.html'],
-        'deprecated': False,
-        'country_name': 'Vietnam',
-        'id_type': 'Citizen Identity Card Number',
-        'official_name': 'Thẻ căn cước công dân',
-        'display_format': 'PPPGYYSSSSSS',
-        'example': '001089000123',
-        'checksum_algorithm': None,
-        'masks': ('############',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "VN",
+            "min_length": 12,
+            "max_length": 12,
+            "parsable": True,
+            "checksum": False,
+            "regexp": re.compile(
+                r"^(?P<province_country_code>\d{3})"
+                r"(?P<gender>\d)"
+                r"(?P<yy>\d{2})"
+                r"(?P<sn>\d{6})$"
+            ),
+            "alias_of": None,
+            "names": [
+                "National ID Number",
+                "Thẻ căn cước công dân",
+            ],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Vietnam",
+                "https://vietnaminsider.vn/what-do-the-12-digits-on-the-citizen-id-card-with-chip-mean/",
+                "https://lawnet.vn/en/vb/Circular-07-2016-TT-BCA-detailing-Law-on-Citizen-Identification"
+                "-137-2015-ND-CP-5CCC3.html",
+            ],
+            "deprecated": False,
+            "country_name": "Vietnam",
+            "id_type": "Citizen Identity Card Number",
+            "official_name": "Thẻ căn cước công dân",
+            "display_format": "PPPGYYSSSSSS",
+            "example": "001089000123",
+            "checksum_algorithm": None,
+            "masks": ("############",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -72,16 +81,16 @@ class NationalID:
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
-        province_country_code = match_obj.group('province_country_code')
-        century_gender = match_obj.group('gender')
-        yy = match_obj.group('yy')
-        sn = match_obj.group('sn')
+        province_country_code = match_obj.group("province_country_code")
+        century_gender = match_obj.group("gender")
+        yy = match_obj.group("yy")
+        sn = match_obj.group("sn")
         yyyy = NationalID.get_birth_year(int(century_gender), int(yy))
         return {
-            'province_country_code': province_country_code,
-            'yyyy': yyyy,
-            'sn': sn,
-            'gender': Gender.MALE if int(century_gender) % 2 == 0 else Gender.FEMALE
+            "province_country_code": province_country_code,
+            "yyyy": yyyy,
+            "sn": sn,
+            "gender": Gender.MALE if int(century_gender) % 2 == 0 else Gender.FEMALE,
         }
 
     @staticmethod

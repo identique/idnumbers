@@ -21,35 +21,39 @@ class PersonalCode:
     The existing checksum behaviour is retained pending clarification in issue #440.
     https://github.com/identique/idnumbers/issues/440
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'LV',
-        # length without insignificant chars
-        'min_length': 11,
-        'max_length': 11,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{6}-?\d{4}(?P<checksum>\d)$)'),
-        'alias_of': None,
-        'names': ['Personal Code',
-                  'personas kods'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Latvia',
-                  'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
-                  'tax-identification-numbers/Latvia-TIN.pdf',
-                  'https://likumi.lv/ta/id/296185',
-                  'https://www.pmlp.gov.lv/en/change-personal-identity-number',
-                  'https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/latvia-tin.pdf'],
-        'deprecated': False,
-        'country_name': 'Latvia',
-        'id_type': 'Personal Code',
-        'official_name': 'personas kods',
-        'display_format': 'DDMMYY-SSSSS',
-        'example': '161175-19997',
-        'checksum_algorithm': '(1101 - weighted sum) mod 11 mod 10 (weights 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)',
-        'masks': ('######-#####', '###########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "LV",
+            # length without insignificant chars
+            "min_length": 11,
+            "max_length": 11,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^(\d{6}-?\d{4}(?P<checksum>\d)$)"),
+            "alias_of": None,
+            "names": ["Personal Code", "personas kods"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Latvia",
+                "https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/"
+                "tax-identification-numbers/Latvia-TIN.pdf",
+                "https://likumi.lv/ta/id/296185",
+                "https://www.pmlp.gov.lv/en/change-personal-identity-number",
+                "https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/latvia-tin.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Latvia",
+            "id_type": "Personal Code",
+            "official_name": "personas kods",
+            "display_format": "DDMMYY-SSSSS",
+            "example": "161175-19997",
+            "checksum_algorithm": "(1101 - weighted sum) mod 11 mod 10 (weights 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)",
+            "masks": ("######-#####", "###########"),
+        }
+    )
 
     MULTIPLIER = [1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
     """multiplier for checksum"""
@@ -70,6 +74,7 @@ class PersonalCode:
             return False
         # Local import avoids the cycle: OldPersonalCode uses PersonalCode.checksum().
         from .old_personal_code import OldPersonalCode
+
         return OldPersonalCode.validate(id_number)
 
     @staticmethod

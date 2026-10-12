@@ -28,6 +28,7 @@ Refresh the vendored corpus and the golden results with `python3 scripts/sync_pa
 Unlike the port's helper, an exception raised by `validate()` is an error here, not "invalid": `validate()` never
 raises (AGENTS.md, "Input contract").
 """
+
 import hashlib
 import importlib
 import json
@@ -101,7 +102,7 @@ def neighbourhood(seed: str) -> Iterator[str]:
     for index, char in enumerate(seed):
         bumped = bump_character(char)
         if bumped is not None:
-            yield seed[:index] + bumped + seed[index + 1:]
+            yield seed[:index] + bumped + seed[index + 1 :]
     if len(seed) > 1:
         yield seed[:-1]
     yield seed + "0"
@@ -149,9 +150,7 @@ def _accepts(spec: str, cls: Any, code: str, vector: str) -> bool:
             % (code, spec, vector, type(error).__name__, error)
         ) from error
     if not isinstance(result, bool):
-        raise ContractViolation(
-            "%s (%s): validate(%r) returned %r, not a bool" % (code, spec, vector, result)
-        )
+        raise ContractViolation("%s (%s): validate(%r) returned %r, not a bool" % (code, spec, vector, result))
     return result
 
 

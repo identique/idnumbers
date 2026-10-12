@@ -8,30 +8,32 @@ class NationalID:
     Nigeria national ID number format
     https://en.wikipedia.org/wiki/National_identification_number#Nigeria
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'NG',
-        # length without insignificant chars
-        'min_length': 11,
-        'max_length': 11,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': False,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^\d{11}$'),
-        'alias_of': None,
-        'names': ['National Identification Number',
-                  'NIN'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Nigeria'],
-        'deprecated': False,
-        'country_name': 'Nigeria',
-        'id_type': 'National Identification Number',
-        'official_name': None,
-        'display_format': '###########',
-        'example': '12345678901',
-        'checksum_algorithm': None,
-        'masks': ('###########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "NG",
+            # length without insignificant chars
+            "min_length": 11,
+            "max_length": 11,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": False,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^\d{11}$"),
+            "alias_of": None,
+            "names": ["National Identification Number", "NIN"],
+            "links": ["https://en.wikipedia.org/wiki/National_identification_number#Nigeria"],
+            "deprecated": False,
+            "country_name": "Nigeria",
+            "id_type": "National Identification Number",
+            "official_name": None,
+            "display_format": "###########",
+            "example": "12345678901",
+            "checksum_algorithm": None,
+            "masks": ("###########",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

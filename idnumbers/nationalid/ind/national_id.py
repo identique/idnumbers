@@ -5,7 +5,7 @@ from ..util import validate_regexp, verhoeff_check
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[ -]', '', id_number)
+    return re.sub(r"[ -]", "", id_number)
 
 
 class NationalID:
@@ -15,28 +15,31 @@ class NationalID:
     https://archive.org/details/Aadhaar_numbering_scheme/page/n12/mode/1up?view=theater
     https://en.wikipedia.org/wiki/Verhoeff_algorithm#Table-based_algorithm
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'IN',
-        'min_length': 12,
-        'max_length': 12,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^[2-9]\d{3}[ -]?\d{4}[ -]?\d{4}$'),
-        'alias_of': None,
-        'names': ['National ID Number',
-                  'Unique Identification Number',
-                  'UID'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#India',
-                  'https://archive.org/details/Aadhaar_numbering_scheme/page/n12/mode/1up?view=theater'],
-        'deprecated': False,
-        'country_name': 'India',
-        'id_type': 'Unique Identification Number',
-        'official_name': 'आधार',
-        'display_format': '#### #### ####',
-        'example': '8924 7352 8038',
-        'checksum_algorithm': 'Verhoeff algorithm',
-        'masks': ('#### #### ####', '############')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "IN",
+            "min_length": 12,
+            "max_length": 12,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^[2-9]\d{3}[ -]?\d{4}[ -]?\d{4}$"),
+            "alias_of": None,
+            "names": ["National ID Number", "Unique Identification Number", "UID"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#India",
+                "https://archive.org/details/Aadhaar_numbering_scheme/page/n12/mode/1up?view=theater",
+            ],
+            "deprecated": False,
+            "country_name": "India",
+            "id_type": "Unique Identification Number",
+            "official_name": "आधार",
+            "display_format": "#### #### ####",
+            "example": "8924 7352 8038",
+            "checksum_algorithm": "Verhoeff algorithm",
+            "masks": ("#### #### ####", "############"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

@@ -5,11 +5,12 @@ from ..constant import Citizenship
 from ..metadata import IdMetadata
 from ..util import match_regexp
 
-_NPHIES = 'https://portal.nphies.sa/ig/StructureDefinition-patient.html'
+_NPHIES = "https://portal.nphies.sa/ig/StructureDefinition-patient.html"
 
 
 class ParseResult(TypedDict):
     """The holder category implied by the first digit."""
+
     citizenship: Citizenship
     """``CITIZEN`` for a leading ``1`` (national ID), ``RESIDENT`` for a leading ``2`` (Iqama)"""
 
@@ -41,25 +42,28 @@ class NationalID:
     - https://portal.nphies.sa/ig/StructureDefinition-patient.html (NPHIES Patient profile, BV-00797 / BV-00798)
     - https://github.com/identique/idnumbers/issues/335#issuecomment-6107912284 (structure-only decision)
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'SA',
-        'min_length': 10,
-        'max_length': 10,
-        'parsable': True,
-        'checksum': False,
-        'regexp': re.compile(r'^(?P<type>[12])[0-9]{9}$'),
-        'alias_of': None,
-        'names': ['National ID', 'Iqama', 'Resident Identity', 'رقم الهوية الوطنية', 'رقم الإقامة'],
-        'links': [_NPHIES, 'https://github.com/identique/idnumbers/issues/335#issuecomment-6107912284'],
-        'deprecated': False,
-        'country_name': 'Saudi Arabia',
-        'id_type': 'National ID Number',
-        'official_name': 'رقم الهوية الوطنية',
-        'display_format': 'TNNNNNNNNN',
-        'example': '1000000008',
-        'checksum_algorithm': None,
-        'masks': ('##########',),
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "SA",
+            "min_length": 10,
+            "max_length": 10,
+            "parsable": True,
+            "checksum": False,
+            "regexp": re.compile(r"^(?P<type>[12])[0-9]{9}$"),
+            "alias_of": None,
+            "names": ["National ID", "Iqama", "Resident Identity", "رقم الهوية الوطنية", "رقم الإقامة"],
+            "links": [_NPHIES, "https://github.com/identique/idnumbers/issues/335#issuecomment-6107912284"],
+            "deprecated": False,
+            "country_name": "Saudi Arabia",
+            "id_type": "National ID Number",
+            "official_name": "رقم الهوية الوطنية",
+            "display_format": "TNNNNNNNNN",
+            "example": "1000000008",
+            "checksum_algorithm": None,
+            "masks": ("##########",),
+        }
+    )
     """Metadata of this ID; the example is synthetic."""
 
     @staticmethod
@@ -73,5 +77,5 @@ class NationalID:
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if match_obj is None:
             return None
-        citizenship = Citizenship.CITIZEN if match_obj.group('type') == '1' else Citizenship.RESIDENT
-        return {'citizenship': citizenship}
+        citizenship = Citizenship.CITIZEN if match_obj.group("type") == "1" else Citizenship.RESIDENT
+        return {"citizenship": citizenship}

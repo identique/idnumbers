@@ -12,6 +12,7 @@ class ParseResult(TypedDict):
     """
     parse result of JMBG
     """
+
     yyyymmdd: date
     """date of birth"""
     location: str
@@ -31,36 +32,43 @@ class UniqueMasterCitizenNumber:
     Yugoslavia JMBG which is shared among all independent countries from Yugoslavia.
     https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': None,
-        'min_length': 13,
-        'max_length': 13,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<dd>\d{2})'
-                             r'(?P<mm>\d{2})'
-                             r'(?P<yyy>\d{3})'
-                             r'(?P<location>\d{2})'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Unique  master citizen number',
-                  'JMBG',
-                  'Jedinstveni matični broj građana',
-                  'Јединствени матични број грађана',
-                  'ЈМБГ',
-                  'Единствен матичен број на граѓанинот',
-                  'ЕМБГ',
-                  'Enotna matična številka občana,',
-                  'EMŠO'],
-        'links': ['https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number'],
-        'deprecated': False
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": None,
+            "min_length": 13,
+            "max_length": 13,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<dd>\d{2})"
+                r"(?P<mm>\d{2})"
+                r"(?P<yyy>\d{3})"
+                r"(?P<location>\d{2})"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": [
+                "Unique  master citizen number",
+                "JMBG",
+                "Jedinstveni matični broj građana",
+                "Јединствени матични број грађана",
+                "ЈМБГ",
+                "Единствен матичен број на граѓанинот",
+                "ЕМБГ",
+                "Enotna matična številka občana,",
+                "EMŠO",
+            ],
+            "links": ["https://en.wikipedia.org/wiki/Unique_Master_Citizen_Number"],
+            "deprecated": False,
+        }
+    )
 
     MAGIC_MULTIPLIER = [7, 6, 5, 4, 3, 2]
     """multiplier for checksum"""
 
-    LOC_BLACK_LIST = ['20', '40', '51', '52', '53', '54', '55', '56', '57', '58', '59', '90', '97', '98', '99']
+    LOC_BLACK_LIST = ["20", "40", "51", "52", "53", "54", "55", "56", "57", "58", "59", "90", "97", "98", "99"]
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -80,26 +88,26 @@ class UniqueMasterCitizenNumber:
         checksum = UniqueMasterCitizenNumber.checksum(id_number)
         if not checksum:
             return None
-        loc_citizenship = UniqueMasterCitizenNumber.check_location(match_obj.group('location'))
+        loc_citizenship = UniqueMasterCitizenNumber.check_location(match_obj.group("location"))
         if not loc_citizenship:
             return None
         citizenship, location = loc_citizenship
-        yyy = int(match_obj.group('yyy'))
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
+        yyy = int(match_obj.group("yyy"))
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
         year_base = 2000 if yyy < 800 else 1000
-        sn = match_obj.group('sn')
+        sn = match_obj.group("sn")
         try:
             calendar_date = _calendar_date(year_base + yyy, mm, dd)
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
-                'location': location,
-                'citizenship': citizenship,
-                'gender': Gender.MALE if int(sn) < 500 else Gender.FEMALE,
-                'sn': sn,
-                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
+                "yyyymmdd": calendar_date,
+                "location": location,
+                "citizenship": citizenship,
+                "gender": Gender.MALE if int(sn) < 500 else Gender.FEMALE,
+                "sn": sn,
+                "checksum": cast(CHECK_DIGIT, int(match_obj.group("checksum"))),
             }
         except ValueError:
             return None

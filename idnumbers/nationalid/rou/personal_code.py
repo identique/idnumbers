@@ -9,6 +9,7 @@ from ..util import CHECK_DIGIT, weighted_modulus_digit, validate_regexp, match_r
 
 class ParseResult(TypedDict):
     """parse result of CNP"""
+
     yyyymmdd: date
     """dob"""
     location: str
@@ -30,35 +31,39 @@ class PersonalNumericalCode:
     https://en.wikipedia.org/wiki/Romanian_identity_card
     https://github.com/vimishor/cnp-spec/blob/master/spec.md
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'RO',
-        'min_length': 13,
-        'max_length': 13,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<gender_century>\d)'
-                             r'(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})'
-                             r'(?P<location>\d{2})'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Personal Numerical Code',
-                  'Cod Numeric Personal',
-                  'CNP',
-                  'Carte de identitate'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Romania',
-                  'https://en.wikipedia.org/wiki/Romanian_identity_card',
-                  'https://github.com/vimishor/cnp-spec/blob/master/spec.md'],
-        'deprecated': False,
-        'country_name': 'Romania',
-        'id_type': 'Personal Numerical Code',
-        'official_name': 'Cod Numeric Personal',
-        'display_format': 'SAALLZZJJNNNC',
-        'example': '1800101226813',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9; a remainder of 10 '
-                              'becomes 1)',
-        'masks': ('#############',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "RO",
+            "min_length": 13,
+            "max_length": 13,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<gender_century>\d)"
+                r"(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})"
+                r"(?P<location>\d{2})"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Personal Numerical Code", "Cod Numeric Personal", "CNP", "Carte de identitate"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Romania",
+                "https://en.wikipedia.org/wiki/Romanian_identity_card",
+                "https://github.com/vimishor/cnp-spec/blob/master/spec.md",
+            ],
+            "deprecated": False,
+            "country_name": "Romania",
+            "id_type": "Personal Numerical Code",
+            "official_name": "Cod Numeric Personal",
+            "display_format": "SAALLZZJJNNNC",
+            "example": "1800101226813",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9; a remainder of 10 "
+            "becomes 1)",
+            "masks": ("#############",),
+        }
+    )
 
     MAGIC_MULTIPLIER = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9]
     """multiplier for checksum"""
@@ -88,29 +93,29 @@ class PersonalNumericalCode:
         checksum = PersonalNumericalCode.checksum(id_number)
         if not checksum:
             return None
-        location = match_obj.group('location')
-        if not (1 <= int(location) <= 52 or location == '99'):
+        location = match_obj.group("location")
+        if not (1 <= int(location) <= 52 or location == "99"):
             return None
-        gender_century = int(match_obj.group('gender_century'))
-        yy = int(match_obj.group('yy'))
+        gender_century = int(match_obj.group("gender_century"))
+        yy = int(match_obj.group("yy"))
         data = PersonalNumericalCode.get_gender_citizenship_year_base(gender_century, yy)
         if not data:
             return None
         gender, citizenship, year_base = data
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
-        sn = match_obj.group('sn')
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
+        sn = match_obj.group("sn")
         try:
             calendar_date = _calendar_date(year_base + yy, mm, dd)
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
-                'location': location,
-                'gender': gender,
-                'citizenship': citizenship,
-                'sn': sn,
-                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
+                "yyyymmdd": calendar_date,
+                "location": location,
+                "gender": gender,
+                "citizenship": citizenship,
+                "sn": sn,
+                "checksum": cast(CHECK_DIGIT, int(match_obj.group("checksum"))),
             }
         except ValueError:
             return None
