@@ -18,3 +18,4 @@ window._VERSIONS.push('1.14.0');
 window._VERSIONS.push('1.15.0');
 window._VERSIONS.push('1.16.0');
 window._VERSIONS.push('1.17.0');
+window._VERSIONS.push('1.18.0');
