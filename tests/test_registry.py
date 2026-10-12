@@ -225,9 +225,41 @@ class RegistryStateCase(TestCase):
 class SlowKeys(Dict[str, str]):
     """A key table whose lookups yield the processor, so that an unprotected registration visibly interleaves."""
 
+    def __contains__(self, key: object) -> bool:
+        time.sleep(0.001)
+        return super().__contains__(key)
+
+    def __getitem__(self, key: str) -> str:
+        time.sleep(0.001)
+        return super().__getitem__(key)
+
     def get(self, key: str, default: Any = None) -> Any:  # type: ignore[override]
         time.sleep(0.001)
         return super().get(key, default)
+
+
+class TestSlowKeys(TestCase):
+    def test_lookup_paths_yield_and_preserve_results(self) -> None:
+        keys = SlowKeys({'TW': 'TWN'})
+        default = object()
+        cases: List[Any] = [
+            ('get hit', lambda: keys.get('TW'), 'TWN'),
+            ('get hit with default', lambda: keys.get('TW', default), 'TWN'),
+            ('get miss', lambda: keys.get('missing'), None),
+            ('get miss with default', lambda: keys.get('missing', default), default),
+            ('membership hit', lambda: 'TW' in keys, True),
+            ('membership miss', lambda: 'missing' in keys, False),
+            ('indexed hit', lambda: keys['TW'], 'TWN'),
+        ]
+        for name, lookup, expected in cases:
+            with self.subTest(lookup=name), patch.object(time, 'sleep') as sleep:
+                self.assertEqual(lookup(), expected)
+                sleep.assert_called_once_with(0.001)
+        with self.subTest(lookup='indexed miss'), patch.object(time, 'sleep') as sleep:
+            with self.assertRaises(KeyError) as error:
+                keys['missing']
+            self.assertEqual(error.exception.args, ('missing',))
+            sleep.assert_called_once_with(0.001)
 
 
 class RecordingEntries(Dict[str, registry.CountryEntry]):
@@ -435,6 +467,16 @@ class TestRegister(RegistryStateCase):
                 with self.assertRaises(TypeError):
                     registry.register(alpha3, bad_validator, **kwargs)
         self.assertEqual(self.snapshot(), before)
+
+    def test_non_iterable_aliases_preserve_registry_state(self) -> None:
+        validator = make_validator()
+        before = self.snapshot()
+        aliases_values: List[Any] = [5, None]
+        for aliases in aliases_values:
+            with self.subTest(aliases=aliases):
+                with self.assertRaisesRegex(TypeError, 'not iterable'):
+                    registry.register('abc', validator, aliases=aliases)
+                self.assertEqual(self.snapshot(), before)
 
     def test_value_errors(self) -> None:
         validator = make_validator()
