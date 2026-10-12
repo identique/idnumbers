@@ -42,6 +42,13 @@ national ID numbers for many countries, has no runtime dependencies, and support
 
 Never publish to PyPI without the maintainer's approval.
 
+### Line length
+
+- **Wrap at 120 columns:** code, comments, docstrings and Markdown prose. This is a review convention, not a lint rule:
+  ruff does not check it.
+- **Exceptions:** a URL that does not fit stays whole on a line of its own. Don't break or shorten it, and don't move
+  a citation out of a docstring only to fit. Markdown table rows and generated guides are not wrapped.
+
 ## Commands
 
 Before running the full test suite, install its dev-only dependencies in your environment:
