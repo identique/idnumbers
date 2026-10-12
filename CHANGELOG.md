@@ -44,6 +44,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **EGY** national ID number ([#555](https://github.com/identique/idnumbers/issues/555)): distinguish the Node
   sister project's reported Luhn failure from its unproven weighted mod-11 hypothesis in the docstring; the research
   note is not an official source, and validity is unchanged.
+- **Mask vocabulary** ([#570](https://github.com/identique/idnumbers/issues/570)): explain Sweden's retained `+`
+  exception to slot-count matching, with a synthetic layout example; preferred input-mask patterns still use literal
+  `-`, and formatting behavior is unchanged.
 - **Unified API tests** ([#568](https://github.com/identique/idnumbers/issues/568)): document the hostile
   representation helpers with class docstrings; test behavior is unchanged.
 
