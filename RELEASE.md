@@ -69,7 +69,7 @@ persistence remains enabled for the docs workflow's authenticated `gh-pages` bra
 and outputs. Its `GITHUB_TOKEN` PRs still do not trigger CI ([action documentation][pr-token]).
 
 These are local regression checks and a source audit, not proof of a successful updated workflow run. Releases since
-1.16.0 have run these runtimes; 1.18.0, with bot PR [#592](https://github.com/identique/idnumbers/pull/592), was the
+1.16.0 have run these runtimes; 1.18.0 (bot PR [#592](https://github.com/identique/idnumbers/pull/592)) was the
 first to use trusted publication. The default token route still disables attestations. An upstream download-artifact v8
 `Buffer()` deprecation warning may persist; it is not suppressed or claimed fixed by these runtime updates ([upstream
 action][download-runtime]).

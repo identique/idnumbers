@@ -96,14 +96,15 @@ the unified validate/parse and UI APIs select the primary class only. Do not add
   with a `checksum` group in `METADATA.regexp`, so `failure_reason()` can compare the group text with the computed
   value and report `checksum_mismatch`. The group must cover the check character, and its text must equal
   `str(checksum())` of a valid example. If `checksum()` returns a derived value instead, such as the weighted-sum
-  remainder of `aus.tax_file.TaxFileNumber` (0 for a valid number), the group is still required and covers only the
-  check character; the class then needs the same named exemption in `TestComputedChecksumGroups` that the tax file
-  number has. A `bool` `checksum()` needs no group. `TestComputedChecksumGroups` in `tests/test_failure_reasons.py`
-  enforces this.
+  remainder of `aus.tax_file.TaxFileNumber` (0 for a valid number), the group is still required and covers the
+  check character (for the tax file number, only the last digit); the class then needs the same named exemption in
+  `TestComputedChecksumGroups` that the tax file number has. A `bool` `checksum()` needs no group.
+  `TestComputedChecksumGroups` in `tests/test_failure_reasons.py` enforces this.
 - [ ] For shared countries, check parity, regenerate Python goldens only for intentional validity changes and
   coordinate port notes/pin/allowlist updates. Cite source/provenance for any public real-world samples.
 - [ ] Add runnable examples that assert expected results; keep each Python fence independent with optional narrowing.
   Structural pseudocode must be labelled `text`, not `python`.
 - [ ] Regenerate country/failure/input guides and run their `--check`, example execution and strict type checks.
-- [ ] Run full unittest, mypy, ruff and coverage checks from CONTRIBUTING; keep the 97% floor.
+- [ ] Run full unittest, mypy, ruff (check and format) and coverage checks from CONTRIBUTING; keep the 97% floor.
+  Run both `ruff check .` and `ruff format --check .`.
 - [ ] Add CHANGELOG entry, issue-linked branch/PR and review. Do not edit VERSION or publish without approval.
