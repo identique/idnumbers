@@ -48,7 +48,8 @@ class NationalID:
       limitation, so ``parse()`` returns no gender;
     - the final digit: the regulation says it is optional and does not define it, and no check-digit algorithm is
       published. Third-party sources assert a Luhn or a weighted mod-11 check digit, but none cites an official
-      source and neither could be confirmed (see the Node.js sister project's research note below), so
+      source. The Node.js sister project's research note (not an official source; see below) reports that Luhn
+      does not reproduce real check digits, while the weighted mod-11 hypothesis remains unproven. Therefore
       ``METADATA.checksum`` is ``False`` and there is no ``checksum()`` method. ``parse()`` returns the digit
       unverified.
 
