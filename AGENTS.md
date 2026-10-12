@@ -48,9 +48,9 @@ Never publish to PyPI without the maintainer's approval.
 ### Line length
 
 - **Wrap at 120 columns:** new and changed code, comments, docstrings and Markdown prose.
-  `ruff format` wraps Python code at 120 columns and CI checks it, but no tool reflows comments,
-  docstrings, string literals or Markdown prose, so wrapping those stays a review convention. Older lines that exceed
-  it are not swept; wrap one when you change it.
+  `ruff format` wraps Python code at 120 columns and CI checks it, but no tool reflows comments, docstrings, string
+  literals or Markdown prose, so wrapping those stays a review convention. Older lines that exceed it are not swept;
+  wrap one when you change it.
 - **Exceptions:** a URL that does not fit stays whole, on a line of its own or as a single string literal (for
   example an entry of `METADATA.links`). Don't break or shorten it, and don't move a citation out of a docstring
   only to fit. Markdown table rows and generated guides are not wrapped.
@@ -101,7 +101,8 @@ working directories.
   other 3.10+ syntax.
 - **CI:** `.github/workflows/python-test.yml` runs the unittest suite (which includes the README example tests) on
   every supported Python version for pushes and PRs to `main`. The same workflow also runs a strict mypy job, a ruff
-  job that lints and checks formatting, a coverage job that enforces the floor, informational benchmarks and a `ci-summary` job.
+  job that lints and checks formatting, a coverage job that enforces the floor, informational benchmarks and a
+  `ci-summary` job.
 
 ## Architecture
 
