@@ -31,6 +31,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **Contributor guide** ([#551](https://github.com/identique/idnumbers/issues/551)): AGENTS.md documents the
   120-column line-length convention and its exceptions (whole URLs on their own line, Markdown tables and generated
   guides); the 1.17.0 DOM entry now uses python-stdnum's own wording.
+- **Contributor guide** ([#561](https://github.com/identique/idnumbers/issues/561)): specify that the re-export
+  exemption applies to `from .util import ...`, not `from . import util`; only the rule's wording changes.
 - **Display format** ([#557](https://github.com/identique/idnumbers/issues/557)): clarify that capital-letter field
   names are outside `{...}` and `D` usually denotes a day, with widths and meanings defined per class; formats and
   validity are unchanged.
