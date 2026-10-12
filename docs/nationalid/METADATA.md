@@ -64,6 +64,14 @@ COL, CZE, SVK, DNK, ISL and SWE also accept a compact form that has no mask. `fo
 the first mask whose slot count equals the normalized ID length. This selection is length-only: it checks neither
 slot character types nor ID validity. `get_input_mask()` builds its pattern from all the masks.
 
+Sweden's `######-####` and `########-####` masks are a formatting exception: the normalized input may have one more
+character than the slot count, with exactly one retained `+` at the mask's separator position. `format_id()` replaces
+the mask's `-` with `+` and fills the slots with the remaining characters, still without checking character types or
+ID validity. For
+example, `820901+2395` has 11 normalized characters but round-trips through the 10-slot `######-####` mask; this is a
+synthetic layout example, not an officially issued plus-sign variant. `get_input_mask()` still describes the
+preferred literal `-` layouts and its pattern does not match the plus form.
+
 The tests in `tests/test_metadata.py` check every ID class: the example is valid and written in the first mask, it is accepted when it is laid into every mask it fits, and every other mask has a test sample that the class accepts.
 
 ## Use properties
