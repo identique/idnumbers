@@ -17,6 +17,13 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   also settles the quote style of the README example tests
   ([#561](https://github.com/identique/idnumbers/issues/561)).
 
+### Documentation
+
+- **Country template** ([#595](https://github.com/identique/idnumbers/issues/595)): the checksum group item names the
+  check character(s) and covers a `checksum()` that returns a derived value (the tax file number's remainder): the group
+  stays over the check character, and the class needs the named exemption in `TestComputedChecksumGroups`. The BGR
+  13-digit test comment now names digits 9 to 12. Code and behaviour are unchanged.
+
 ## 1.19.0 (2026-10-12)
 
 ### Documentation
