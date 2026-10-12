@@ -12,7 +12,34 @@ import os
 from typing import Any, Callable, Iterator, List, Set, Tuple
 from unittest import TestCase, main
 
-from idnumbers.nationalid import BGR, BRA, CHE, CHL, CZE, EST, GRC, IRN, ISR, JPN, LKA, LVA, NZL, SWE, UKR, ZAF, ZWE
+from idnumbers.nationalid import (
+    BGR,
+    BRA,
+    CAN,
+    CHE,
+    CHL,
+    CZE,
+    EST,
+    FRA,
+    GRC,
+    HKG,
+    HRV,
+    IRL,
+    IRN,
+    ISR,
+    JPN,
+    LKA,
+    LVA,
+    NLD,
+    NZL,
+    PRT,
+    SWE,
+    TUR,
+    UKR,
+    ZAF,
+    ZWE,
+)
+from tests.test_metadata import all_aliases
 from tests.test_validate_regexp import _discover_id_types
 
 ARABIC_INDIC_ONE = "١"
@@ -75,6 +102,62 @@ def _call(method: Callable[[Any], Any], value: Any) -> Tuple[bool, Any]:
 
 def _describe(value: Any) -> str:
     return repr(value) if len(repr(value)) <= 40 else repr(value)[:37] + "..."
+
+
+class TestPublicChecksumNonStringInput(TestCase):
+    def test_every_checksum_rejects_non_string_input(self):
+        classes = list(_discover_id_types())
+        classes.extend((f"{cls.__module__}.{cls.__qualname__}", cls) for cls in all_aliases())
+        checked = 0
+        for name, cls in classes:
+            checksum = getattr(cls, "checksum", None)
+            if checksum is None:
+                continue
+            checked += 1
+            example = getattr(cls.METADATA, "example", "123456789")
+            inputs = NON_STR_INPUTS + [
+                (),
+                False,
+                b"130692544",
+                bytearray(b"10000000146"),
+                list("130692544"),
+                tuple("94577403194"),
+                list("10000000146"),
+                example.encode("utf-8"),
+                list(example),
+                tuple(example),
+            ]
+            for value in inputs:
+                with self.subTest(cls=name, value=_describe(value)):
+                    result = checksum(value)
+                    self.assertTrue(result is None or result is False, repr(result))
+        self.assertGreater(checked, 80)
+
+    def test_issue_619_sentinels_and_string_controls(self):
+        class StringSubclass(str):
+            pass
+
+        # Existing valid vectors from the corresponding tests/nationalid/test_<ISO3>.py files.
+        cases = (
+            (CAN.SocialInsuranceNumber, "130692544", False, True),
+            (FRA.INSEE, "255081416802538", False, True),
+            (HKG.NationalID, "TP1490258", None, "8"),
+            (HRV.PersonalID, "94577403194", False, True),
+            (IRL.PersonalPublicServiceNumber, "1234567FA", False, True),
+            (NLD.BSN, "123456782", False, True),
+            (PRT.CivilIDNumber, "900000007", False, True),
+            (TUR.NationalID, "10000000146", None, "46"),
+        )
+        for cls, vector, sentinel, expected in cases:
+            for value in NON_STR_INPUTS + [tuple(vector), list(vector), vector.encode("ascii")]:
+                with self.subTest(cls=cls.__qualname__, value=_describe(value)):
+                    self.assertIs(cls.checksum(value), sentinel)
+            for value in (vector, StringSubclass(vector)):
+                with self.subTest(cls=cls.__qualname__, string_type=type(value).__name__):
+                    self.assertTrue(cls.validate(value))
+                    result = cls.checksum(value)
+                    self.assertEqual(result, expected)
+                    self.assertIs(type(result), type(expected))
 
 
 class TestEveryIDTypeIsTotal(TestCase):

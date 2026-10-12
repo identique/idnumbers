@@ -226,6 +226,9 @@ not if it is an actual issued ID number.
 
 ### Input handling
 
+- Public `checksum()` methods return their noncomputable sentinel (`False` or `None`, depending on the ID class)
+  for non-string input without converting it. HKG and TUR use `None`. This does not guarantee that malformed
+  strings are safe: use `validate()` to check a complete ID number before calling `checksum()` directly.
 - The `validate()` method of an ID class returns a `bool` for any input and is not meant to raise. Anything that is not
   a `str` (`None`, numbers, `bytes`, lists, ...) gives `False`, an integer is never converted to a string, so
   `NationalID.validate(37605030299)` is `False`.

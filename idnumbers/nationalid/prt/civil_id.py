@@ -49,6 +49,9 @@ class CivilIDNumber:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
+        """Validate the checksum. Return ``False`` for non-string input; malformed strings may raise."""
+        if not isinstance(id_number, str):
+            return False
         multipliers = [9, 8, 7, 6, 5, 4, 3, 2]
         mod = weighted_modulus_digit([int(i) for i in id_number[:-1]], multipliers, 11, True)
         calculated_checksum = 0 if mod == 0 or mod == 1 else (11 - mod)

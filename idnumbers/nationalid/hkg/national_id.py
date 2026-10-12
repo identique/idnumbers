@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 from ..metadata import IdMetadata
 
 from ..util import validate_regexp
@@ -52,10 +53,14 @@ class NationalID:
         return NationalID.checksum(id_number) == id_number[-1]
 
     @staticmethod
-    def checksum(id_number: str) -> str:
+    def checksum(id_number: str) -> Optional[str]:
         """
         Calculate HKG national id checksum digit
+
+        Return ``None`` for non-string input; malformed strings may raise.
         """
+        if not isinstance(id_number, str):
+            return None
         arr = list(id_number[:-1])
         multiplier = [len(arr) + 1 - index for (index, _) in enumerate(arr)]
         total = 0 if len(arr) % 2 == 0 else 36 * 9

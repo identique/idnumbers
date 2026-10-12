@@ -64,7 +64,12 @@ class BSN:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
-        """algorithm: https://nl.wikipedia.org/wiki/Burgerservicenummer#11-proef"""
+        """
+        algorithm: https://nl.wikipedia.org/wiki/Burgerservicenummer#11-proef
+        Return ``False`` for non-string input; malformed strings may raise.
+        """
+        if not isinstance(id_number, str):
+            return False
         normalized = normalize(id_number)
         number_list = [int(char) for char in list(normalized[:-1])]
         total = sum([value * BSN.MAGIC_MULTIPLIER[index] for (index, value) in enumerate(number_list)])
