@@ -7,14 +7,21 @@ from ..util import match_regexp
 
 
 class OldIDParseResult(ParseResult):
-    """old format contains more info"""
+    """Old format parse result; citizenship cannot be inferred from the voter suffix."""
 
-    citizenship: Citizenship
+    citizenship: Optional[Citizenship]
 
 
 class OldNationalID:
     """
     LKA old National ID number format which is phased out on 2016
+
+    The historical V/X suffix indicated voter/nonvoter status, not citizenship: nonvoters included underage
+    citizens. A Canadian High Commission report reproduced by the IRB also notes that cards issued in 2007
+    made no such distinction. The suffix is not a reliable statement of current voter eligibility.
+
+    https://www.irb-cisr.gc.ca/en/country-information/rir/Pages/index.aspx?doc=451823
+
     # https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka
     # https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html
     """
@@ -38,6 +45,7 @@ class OldNationalID:
             "links": [
                 "https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka",
                 "https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html",
+                "https://www.irb-cisr.gc.ca/en/country-information/rir/Pages/index.aspx?doc=451823",
             ],
             "deprecated": True,
             "country_name": "Sri Lanka",
@@ -74,15 +82,15 @@ class OldNationalID:
 
     @staticmethod
     def parse(id_number: str) -> Optional[OldIDParseResult]:
-        """it converts to new format and parse the extra citizen value"""
+        """Parse via the new format, retaining the citizenship key with an unknown (None) value."""
         new_id_num = OldNationalID.to_new(id_number)
         if not new_id_num:
             return None
         result = NationalID.parse(new_id_num)
         if not result:
             return None
-        citizenship = Citizenship.CITIZEN if id_number[-1].upper() == "V" else Citizenship.RESIDENT
-        return {**result, "citizenship": citizenship}
+        # V/X historically described voter eligibility, not citizenship (including underage citizen nonvoters).
+        return {**result, "citizenship": None}
 
     @staticmethod
     def checksum(id_number: str) -> bool:

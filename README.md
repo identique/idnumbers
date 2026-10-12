@@ -307,6 +307,14 @@ This example shows how to use the parse method of the ZAF.NationalID class to ex
 citizenship from a South African ID number. The parse method returns a dictionary with various fields,
 including `yyyymmdd` for date of birth, `gender` for gender and `citizenship` for citizenship.
 
+For Sri Lanka's old NIC, `LKA.OldNationalID.parse()` retains the `citizenship` key but now returns `None` for
+`V`, `v`, `X` and `x`, instead of deriving citizen/resident status. The suffix historically indicated
+voter/nonvoter status, including underage citizens among nonvoters; it does not establish citizenship or current voter
+eligibility. The [Canadian High Commission report reproduced by the IRB][lka-nic-report] also notes that cards issued
+in 2007 made no such distinction. Validation, conversion and the other parsed fields are unchanged.
+
+[lka-nic-report]: https://www.irb-cisr.gc.ca/en/country-information/rir/Pages/index.aspx?doc=451823
+
 Similarly, `TWN.NationalID.parse()` extracts information from a Taiwanese National ID.
 `NGA.NationalID` and `AUS.MedicareNumber` do not provide `parse()`; their metadata marks them non-parsable.
 
