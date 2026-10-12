@@ -394,6 +394,50 @@ class RollbackReportTest(TestCase):
         self.assertEqual(2, code, stderr)
         self.assertEqual([self.directory / "corpus.py"], dropped)
 
+    def test_failed_rollback_constructs_the_report_before_cache_cleanup(self) -> None:
+        events: List[str] = []
+        reports: List[BaseException] = []
+        original = RuntimeError("original failure")
+
+        class RecordingSetupError(self.script.SetupError):
+            def __init__(self, message: str) -> None:
+                events.append("report")
+                super().__init__(message)
+                reports.append(self)
+
+        def failing_restore(snapshot: Dict[Path, Optional[bytes]]) -> None:
+            raise PermissionError("restore failure")
+
+        def drop(module_path: Path) -> None:
+            self.assertEqual(self.directory / "corpus.py", module_path)
+            events.append("cleanup")
+
+        with mock.patch.object(self.script, "SetupError", RecordingSetupError), \
+                mock.patch.object(self.script, "drop_bytecode", drop):
+            code, stderr = self.run_main(self.half_update_then_raise(original), failing_restore)
+
+        self.assertEqual(2, code, stderr)
+        self.assertEqual(["report", "cleanup"], events)
+        self.assertEqual(1, len(reports))
+        self.assertIs(original, reports[0].__cause__)
+
+    def test_failed_rollback_reports_interrupts_with_exit_2(self) -> None:
+        def failing_restore(snapshot: Dict[Path, Optional[bytes]]) -> None:
+            raise PermissionError("restore failure")
+
+        for error in (KeyboardInterrupt("original interrupt"), SystemExit(7)):
+            with self.subTest(error=type(error).__name__):
+                code, stderr = self.run_main(self.half_update_then_raise(error), failing_restore)
+
+                self.assertEqual(2, code, stderr)
+                self.assertNotIn("Traceback", stderr)
+                self.assertTrue(stderr.startswith("sync_parity_corpus.py: "), stderr)
+                self.assertIn("%s: %s" % (type(error).__name__, error), stderr)
+                self.assertIn("PermissionError: restore failure", stderr)
+                self.assertIn("partly updated", stderr)
+                for name in self.original:
+                    self.assertIn(str(self.directory / name), stderr)
+
     def test_successful_rollback_prints_the_original_error_unchanged(self) -> None:
         for error in (self.script.SetupError("cannot read the port"), OSError("disk full")):
             with self.subTest(error=type(error).__name__):
@@ -406,6 +450,14 @@ class RollbackReportTest(TestCase):
         with self.assertRaisesRegex(RuntimeError, "original failure"):
             self.run_main(self.half_update_then_raise(RuntimeError("original failure")))
         self.assertEqual(self.original, self.current())
+
+    def test_successful_rollback_preserves_interrupts(self) -> None:
+        for error in (KeyboardInterrupt("original interrupt"), SystemExit(7)):
+            with self.subTest(error=type(error).__name__):
+                with self.assertRaises(type(error)) as caught:
+                    self.run_main(self.half_update_then_raise(error))
+                self.assertIs(error, caught.exception)
+                self.assertEqual(self.original, self.current())
 
 
 if __name__ == "__main__":
