@@ -73,7 +73,7 @@ class ReleaseGuardTest(unittest.TestCase):
         for extra in ('tools/__init__.py', 'tools/check_release.py',
                       'idnumbers-1.2.3.data/data/version/VERSION', 'other_module.py',
                       'idnumbers.py', 'tests/test_release.py', 'idnumbers-1.2.3.dist-info2/x',
-                      'idnumbers', 'idnumbers-1.2.3.dist-info'):
+                      'idnumbers', 'idnumbers-1.2.3.dist-info', 'idnumbers-9.9.9.dist-info', '/idnumbers/x'):
             with self.subTest(extra=extra), tempfile.TemporaryDirectory() as temp:
                 directory = Path(temp)
                 self.artifacts(directory)

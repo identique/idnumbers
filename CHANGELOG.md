@@ -21,6 +21,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   results and `checksum()` values are unchanged. The Australian tax file number's `checksum()` returns a remainder
   rather than a check digit, so a remainder equal to the last digit keeps the generic reason.
 
+### Other fixes
+
+- **Release tests** ([#559](https://github.com/identique/idnumbers/issues/559)): cover rejection of a bare
+  mismatched-version dist-info entry and an absolute package path in wheels; release guard behavior is unchanged.
+
 ### Documentation
 
 - **Contributor guide** ([#551](https://github.com/identique/idnumbers/issues/551)): AGENTS.md documents the
