@@ -153,6 +153,13 @@ Releases run through GitHub Actions and need the maintainer's approval. Don't ed
    - With `yes` it builds the package on GitHub, publishes it to pypi.org, and then deploys the API docs for the new
      version.
    - Any other value publishes to test.pypi.org.
+   - Set `expected-version` to `<X.Y.Z>`; the workflow stops if it doesn't match `VERSION`.
+   - **`trusted-publishing` ticked:** publishes through PyPI Trusted Publishing, with no token, and uploads PyPI
+     attestations. PyPI trusts only `release_to_pypi.yml` in `identique/idnumbers` running in the GitHub `pypi`
+     environment, which accepts deployments from `main` only. Production only; a TestPyPI run with it ticked fails.
+   - **`trusted-publishing` unticked (default):** publishes with the `PYPI_API_TOKEN` secret, without attestations.
+     Keep that secret: it is the fallback. If a trusted run fails, nothing falls back automatically; rerun with the
+     box unticked.
 4. **Verify:** check that `https://pypi.org/pypi/idnumbers/json` reports the new version.
 5. **Test the published package:** run **Actions → PyPI install test with uv → Run workflow** with `version` set to
    `<X.Y.Z>`. Wait for every Python matrix job to pass before creating the GitHub release. This workflow runs only
@@ -161,7 +168,9 @@ Releases run through GitHub Actions and need the maintainer's approval. Don't ed
    the changelog, and tick **Create a discussion for this release** (see `RELEASE.md`).
 
 The release workflows can also be started from the GitHub CLI, which runs the same GitHub Action:
-`gh workflow run bump_version.yml -f version=<X.Y.Z>` and `gh workflow run release_to_pypi.yml -f to-prod=yes`.
+`gh workflow run bump_version.yml -f version=<X.Y.Z>` and
+`gh workflow run release_to_pypi.yml -f to-prod=yes -f expected-version=<X.Y.Z>` (add `-f trusted-publishing=true`
+for Trusted Publishing).
 Run the published-package check with `gh workflow run pypi-test-cronjob.yml -f version=<X.Y.Z>`.
 `RELEASE.md` also describes a manual release from a local machine (`scripts/publish.ps1`), for use only when the
 Actions release can't run.
