@@ -11,8 +11,8 @@ creating the GitHub release, and could upload the same version twice.
    and `docs/template/versions.js`. The bot uses `GITHUB_TOKEN`, so its PR does not trigger CI; check the diff
    before merging it. Never hand-edit `VERSION` as a shortcut.
 3. Run **Official Release** from the approved `main` commit. Set `to-prod` to `yes` and, preferably,
-   `expected-version` to `<X.Y.Z>`. Leave `trusted-publishing` **false** until the external setup below is
-   confirmed by the maintainer. The default token route still uses the existing `PYPI_API_TOKEN` secret.
+   `expected-version` to `<X.Y.Z>`. Tick `trusted-publishing` to publish through Trusted Publishing (configured,
+   see below); leave it **false** to use the default token route with the existing `PYPI_API_TOKEN` secret.
    The workflow checks the version, builds one wheel and one sdist, checks their metadata and runs
    `twine check --strict`. Publishers only download those artifacts: they do not check out or execute repository
    code. API docs deploy only after successful production publication, using the guarded version.
@@ -28,20 +28,19 @@ surrounding whitespace) select TestPyPI, using `TEST_PYPI_API_TOKEN` and no docs
 Selecting trusted publishing with TestPyPI fails before building; TestPyPI trusted publishing is not prepared here.
 There is no automatic token fallback on OIDC failure, and no `skip-existing` bypass.
 
-## STOP: external Trusted Publisher setup required
+## Trusted Publisher setup
 
-This is **preparation only**, part of [#327](https://github.com/identique/idnumbers/issues/327).
-No release may depend on OIDC until a maintainer has completed and confirmed these human steps:
+Part of [#327](https://github.com/identique/idnumbers/issues/327). The maintainer completed the external setup on
+2026-10-12:
 
-- On pypi.org, open the `idnumbers` project's **Manage → Publishing** and add a GitHub Trusted Publisher with:
-  owner **identique**, repository **idnumbers**, workflow filename **release_to_pypi.yml**, environment **pypi**.
-- In GitHub, configure the **pypi** environment with required maintainer approval and deployment branch/tag rules
-  restricted to approved release sources (normally `main`). Merely naming the environment in YAML is not protection;
-  configure it **before** enabling the input. The build job has read-only permissions and no secrets; only the
-  production OIDC publishing job has `id-token: write`. Docs permissions are confined to its separate caller job.
-- **Retain `PYPI_API_TOKEN`** and the working default token path. Do not remove secrets or enable trusted publishing
-  as part of this preparation PR. TestPyPI retains its separate token.
-- With maintainer approval after setup, run the next production release with `trusted-publishing=true`.
+- On pypi.org, the `idnumbers` project's **Manage → Publishing** has a GitHub Trusted Publisher with owner
+  **identique**, repository **idnumbers**, workflow filename **release_to_pypi.yml** and environment **pypi**.
+- In GitHub, the **pypi** environment exists and accepts deployments from the `main` branch only. It has no required
+  reviewers; adding one would make every trusted release wait for a maintainer to approve the deployment. The build
+  job has read-only permissions and no secrets; only the production OIDC publishing job has `id-token: write`. Docs
+  permissions are confined to its separate caller job.
+- **Retain `PYPI_API_TOKEN`** and the working default token path as the fallback. TestPyPI retains its separate token.
+- With maintainer approval, run the next production release with `trusted-publishing=true`.
   Its dedicated publishing job uses no username/password and enables attestations. It is a top-level job rather
   than a reusable publisher workflow, as required by the publishing action's Trusted Publishing support.
 - After successful publication, verify PyPI's provenance/attestation information for **each distribution**:
@@ -52,7 +51,7 @@ No release may depend on OIDC until a maintainer has completed and confirmed the
 Token publication explicitly disables attestations: the action's PyPI attestations require Trusted Publishing.
 See the [official PyPI setup instructions](https://docs.pypi.org/trusted-publishers/adding-a-publisher/) and
 [PyPA publishing action documentation](https://github.com/pypa/gh-action-pypi-publish) for setup and verification.
-The issue remains open until external configuration and the first verified trusted release are complete.
+The issue remains open until the first trusted release is published and verified.
 
 ## Release workflow runtime maintenance
 
