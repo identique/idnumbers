@@ -35,7 +35,8 @@ use `python -m` or explicitly set `PYTHONPATH` to the checkout for such scripts.
 python -m unittest
 python -m unittest tests.nationalid.test_CHN
 python -m mypy
-python -m mypy --strict tools/scan_ids.py tools/generate_docs.py tools/check_docs_examples.py
+python -m mypy --strict tools/scan_ids.py tools/generate_docs.py tools/check_docs_examples.py \
+  tools/check_release.py tools/coverage_badge.py
 ruff check .
 ruff format --check .
 python -m coverage run -m unittest
