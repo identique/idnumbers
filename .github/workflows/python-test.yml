@@ -1,6 +1,7 @@
 # This workflow runs the unit tests on every supported version of Python, then type-checks the package with mypy,
 # lints it and checks its formatting with ruff, enforces the coverage floor, prints informational benchmarks, and
-# finishes with a single ci-summary result that fails unless every other job succeeded.
+# finishes with a single ci-summary result that fails unless every other job succeeded. Pushes to main also publish the
+# coverage badge JSON to the badges branch (the coverage-badge job, with GITHUB_TOKEN; pull requests never write).
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: Python Unit Test
@@ -55,7 +56,8 @@ jobs:
     - name: Type-check with mypy (strict, Python 3.9 target; config in pyproject.toml)
       run: |
         python -m mypy
-        python -m mypy --strict tools/scan_ids.py tools/generate_docs.py tools/check_docs_examples.py tools/check_release.py
+        python -m mypy --strict tools/scan_ids.py tools/generate_docs.py tools/check_docs_examples.py \
+          tools/check_release.py tools/coverage_badge.py
         python -m tools.check_docs_examples --typecheck
 
   lint:
@@ -92,6 +94,20 @@ jobs:
     - name: Report coverage (fails below fail_under in pyproject.toml)
       shell: bash
       run: python -m coverage report --format=markdown | tee -a "$GITHUB_STEP_SUMMARY"
+    - name: Build the coverage badge endpoint
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'identique/idnumbers'
+      shell: bash
+      run: |
+        python -m coverage json -o "$RUNNER_TEMP/coverage.json"
+        python -m tools.coverage_badge "$RUNNER_TEMP/coverage.json" coverage-badge/coverage.json
+    - name: Upload the coverage badge endpoint
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'identique/idnumbers'
+      uses: actions/upload-artifact@v7
+      with:
+        name: coverage-badge
+        path: coverage-badge/coverage.json
+        retention-days: 1
+        if-no-files-found: error
 
   bench:
 
@@ -107,6 +123,62 @@ jobs:
     - name: Run the benchmarks
       shell: bash
       run: python bench/run.py | tee -a "$GITHUB_STEP_SUMMARY"
+
+  # Publishes the coverage badge on pushes to main only: it is skipped on pull requests and forks, so it is
+  # deliberately not in the ci-summary needs (that job fails on a skipped need). It is the only job with write access.
+  coverage-badge:
+
+    needs: coverage
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'identique/idnumbers'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    concurrency:
+      group: coverage-badge
+      cancel-in-progress: false
+
+    steps:
+    - name: Download the coverage badge endpoint
+      uses: actions/download-artifact@v8
+      with:
+        name: coverage-badge
+        path: ${{ runner.temp }}/badge
+    - name: Push the badge to the badges branch
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        set -euo pipefail
+        # Pass the token per command (never in a URL) so it is not persisted in the clone's .git/config.
+        encoded="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 | tr -d '\n')"
+        echo "::add-mask::${encoded}"
+        auth="AUTHORIZATION: basic ${encoded}"
+        remote="https://github.com/${GITHUB_REPOSITORY}.git"
+        badges="$RUNNER_TEMP/badges"
+        # Probe for the branch first: only a definite "missing" (exit 2) may start an orphan branch, so a transient
+        # network or auth failure cannot reset the history.
+        set +e
+        git -c http.extraheader="$auth" ls-remote --exit-code --heads "$remote" badges > /dev/null
+        probe=$?
+        set -e
+        if [ "$probe" -eq 0 ]; then
+          git -c http.extraheader="$auth" clone --quiet --depth 1 --branch badges "$remote" "$badges"
+        elif [ "$probe" -eq 2 ]; then
+          # First run: the badges branch does not exist yet, so start it as an orphan.
+          git init --quiet "$badges"
+          git -C "$badges" checkout --quiet --orphan badges
+          git -C "$badges" remote add origin "$remote"
+        else
+          echo "::error::git ls-remote failed with exit code ${probe}; not touching the badges branch"
+          exit "$probe"
+        fi
+        cp "$RUNNER_TEMP/badge/coverage.json" "$badges/coverage.json"
+        cd "$badges"
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add coverage.json
+        git diff --cached --quiet || git commit --quiet -m "chore: update the coverage badge"
+        git -c http.extraheader="$auth" push --quiet origin badges
 
   ci-summary:
     # One result to mark as required in branch protection: fails unless every job above succeeded.
