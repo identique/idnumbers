@@ -29,7 +29,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | names | <code>[&#x27;National ID Number&#x27;, &#x27;香港身份證&#x27;]</code> |
 | official_name | <code>香港身份證</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^[A-Z]{1,2}[0-9]{6}[0-9A]$</code> |
+| regexp | <code>^[A-Z]{1,2}[0-9]{6}(?P&lt;checksum&gt;[0-9A])$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

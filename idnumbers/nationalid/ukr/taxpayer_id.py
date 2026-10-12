@@ -30,7 +30,7 @@ class TaxpayerIDNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^\d{10}$'),
+        'regexp': re.compile(r'^\d{9}(?P<checksum>\d)$'),
         'alias_of': None,
         'names': ['Taxpayer ID Number',
                   'RNTRC',

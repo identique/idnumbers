@@ -9,10 +9,10 @@ from unittest import TestCase
 
 import idnumbers
 from idnumbers import FailureReason as R, api, failure_reason, parse_id_info, validate
-from idnumbers.nationalid import AUS, BEL, ITA, LKA, TWN
+from idnumbers.nationalid import AUS, BEL, CHL, ITA, LKA, TWN
 from idnumbers.nationalid import util
 from tests.helpers.failure_reasons import iter_reason_matrix
-from tests.helpers.contract import CHECK_CHARACTER_INDEX, check_character_mutations
+from tests.helpers.contract import CHECK_CHARACTER_INDEX, check_character_mutations, iter_id_classes
 from tests.test_api import isolated_registry
 
 
@@ -63,7 +63,7 @@ class TestReasonMatrix(TestCase):
                 self.assertIsNotNone(util.match_regexp(row.checksum.id_number, row.id_class.METADATA.regexp))
                 self.assertFalse(row.id_class.validate(row.checksum.id_number))
                 counts[row.checksum.expected] += 1
-        self.assertEqual(counts, {R.CHECKSUM_MISMATCH: 62, R.VALIDATION_FAILED: 14})
+        self.assertEqual(counts, {R.CHECKSUM_MISMATCH: 76, R.VALIDATION_FAILED: 0})
 
     def test_all_date_migrations_have_witnesses(self):
         rows = list(iter_reason_matrix())
@@ -261,3 +261,157 @@ class TestTraceIsolation(TestCase):
             return await asyncio.gather(worker(True), worker(False))
         self.assertEqual(asyncio.run(run()), [True, False])
         self.assertIsNone(util._birth_date_trace.get())
+
+
+_PACKAGE = 'idnumbers.nationalid.'
+# The 14 classes whose regexp gained a named `checksum` group in #506 (module.ClassName under idnumbers.nationalid).
+COMPUTED_CHECKSUM_GROUP_KEYS = tuple(_PACKAGE + key for key in (
+    'aus.medicare.MedicareNumber', 'aus.tax_file.TaxFileNumber', 'bgr.unifed_id_code.UnifiedIdCode',
+    'chl.national_id.NationalID', 'col.unique_persional_id.UniquePersonalID', 'grc.tax_id.TaxIdentityNumber',
+    'hkg.national_id.NationalID', 'irn.national_id.NationalID', 'isr.national_id.NationalID',
+    'jpn.national_id.MyNumber', 'lva.personal_code.PersonalCode', 'tur.national_id.NationalID',
+    'ukr.entity_id.EntityIDNumber', 'ukr.taxpayer_id.TaxpayerIDNumber'))
+
+# The regexps before #506, verbatim. The refactor into one `checksum` group must not change what matches.
+OLD_PATTERNS = {_PACKAGE + key: pattern for key, pattern in {
+    'aus.medicare.MedicareNumber': (
+        r'^('
+        r'[2-6]\d{10}|[2-6]\d{3} \d{5} \d|[2-6]\d{3}-\d{5}-\d|'
+        r'[2-6]\d{9}|[2-6]\d{9}([-/]\d)?|'
+        r'[2-6]\d{3} \d{5} \d([-/]\d)?|[2-6]\d{3}-\d{5}-\d([-/]\d)?|'
+        r'[2-6]\d{3} \d{5} \d \d|[2-6]\d{3}-\d{5}-\d-\d'
+        r')$'),
+    'aus.tax_file.TaxFileNumber': r'^(\d{9}|\d{8})$',
+    'bgr.unifed_id_code.UnifiedIdCode': r'^(\d{9}|\d{13})$',
+    'chl.national_id.NationalID': r'^(\d{1,2}\.\d{3}\.\d{3}-[\dKk])$',
+    'col.unique_persional_id.UniquePersonalID': r'^(\d{2,3}\.?\d{3}\.?\d{3}-?\d)$',
+    'grc.tax_id.TaxIdentityNumber': r'^\d{9}$',
+    'hkg.national_id.NationalID': r"^[A-Z]{1,2}[0-9]{6}[0-9A]$",
+    'irn.national_id.NationalID': r'^\d{3}-?\d{6}-?\d$',
+    'isr.national_id.NationalID': r'^(\d{9})$',
+    'jpn.national_id.MyNumber': r'^(\d{12}$)',
+    'lva.personal_code.PersonalCode': r'^(\d{6}-?\d{5}$)',
+    'tur.national_id.NationalID': r'^[1-9]\d{10}$',
+    'ukr.entity_id.EntityIDNumber': r'^\d{8}$',
+    'ukr.taxpayer_id.TaxpayerIDNumber': r'^\d{10}$',
+}.items()}
+
+TAX_FILE_KEY = _PACKAGE + 'aus.tax_file.TaxFileNumber'
+MEDICARE_KEY = _PACKAGE + 'aus.medicare.MedicareNumber'
+
+
+def _classes_by_key():
+    return {cls.__module__ + '.' + cls.__name__: cls for _, cls in iter_id_classes()}
+
+
+class TestComputedChecksumGroups(TestCase):
+    def test_listed_classes_name_a_checksum_group(self):
+        classes = _classes_by_key()
+        self.assertEqual(len(COMPUTED_CHECKSUM_GROUP_KEYS), 14)
+        for key in COMPUTED_CHECKSUM_GROUP_KEYS:
+            with self.subTest(cls=key):
+                self.assertIn('checksum', classes[key].METADATA.regexp.groupindex)
+
+    def test_every_computed_checksum_is_the_group_text(self):
+        # Guards future classes: a non-bool checksum() result is compared with the `checksum` group by the
+        # failure derivation, so the group must cover the check character and hold the computed value.
+        checked = set()
+        for _, cls in iter_id_classes():
+            key = cls.__module__ + '.' + cls.__name__
+            example = cls.METADATA.example
+            computed = cls.checksum(example) if hasattr(cls, 'checksum') else None
+            if computed is None or isinstance(computed, bool):
+                continue
+            checked.add(key)
+            with self.subTest(cls=key):
+                regexp = cls.METADATA.regexp
+                self.assertIn('checksum', regexp.groupindex)
+                match = util.match_regexp(example, regexp)
+                self.assertIsNotNone(match)
+                start, end = match.span('checksum')
+                self.assertGreaterEqual(start, 0)
+                positions = [i for i, char in enumerate(example) if char.isascii() and char.isalnum()]
+                self.assertTrue(start <= positions[CHECK_CHARACTER_INDEX.get(key, -1)] < end)
+                if key == TAX_FILE_KEY:
+                    # checksum() is the weighted-sum remainder (0 means valid), not a check digit, so it
+                    # cannot equal the group text of a valid example.
+                    self.assertEqual(computed, 0)
+                else:
+                    self.assertEqual(str(computed), match.group('checksum'))
+        self.assertLessEqual(set(COMPUTED_CHECKSUM_GROUP_KEYS), checked)
+
+    def test_tax_file_remainder_is_conservative_when_equal_to_last_digit(self):
+        # With 12345678d the weighted sum mod 11 is (2 - d) mod 11 (the last weight, 10, is -1 mod 11), so
+        # d=2 is valid, d=1 gives remainder 1 and d=0 gives remainder 2.
+        self.assertEqual([AUS.TaxFileNumber.checksum('12345678' + digit) for digit in '210'], [0, 1, 2])
+        # Remainder 1 equals the final digit 1: the group cannot prove a mismatch, so the reason stays generic.
+        self.assertEqual(failure_reason(AUS.TaxFileNumber, '123456781'), R.VALIDATION_FAILED)
+        # Remainder 2 differs from the final digit 0: a definite mismatch.
+        self.assertEqual(failure_reason(AUS.TaxFileNumber, '123456780'), R.CHECKSUM_MISMATCH)
+
+    def test_medicare_group_is_the_ninth_digit_not_the_issue_digit(self):
+        # The check digit is the 9th digit; the issue number and optional /n follow it. For these numbers the
+        # computed digit is 0 while the 9th digit is 1.
+        for value in ('2123 45671 1', '2123 45671 1/2', '2123-45671-1', '21234567111'):
+            with self.subTest(value=value):
+                self.assertFalse(AUS.MedicareNumber.validate(value))
+                self.assertEqual(failure_reason(AUS.MedicareNumber, value), R.CHECKSUM_MISMATCH)
+        # Changing only the issue digit leaves the number valid.
+        self.assertTrue(AUS.MedicareNumber.validate('2123 45670 2'))
+        self.assertIsNone(failure_reason(AUS.MedicareNumber, '2123 45670 2'))
+
+    def test_chile_lowercase_k_check_character(self):
+        # Body 10.000.013: digits from the right 3,1,0,0,0,0,0,1 with weights 2,3,4,5,6,7,2,3 sum to 12,
+        # 12 mod 11 = 1, and 11 - 1 = 10, which is written K.
+        self.assertEqual(CHL.NationalID.checksum('10.000.013-0'), 'K')
+        for value in ('10.000.013-K', '10.000.013-k'):
+            with self.subTest(value=value):
+                self.assertTrue(CHL.NationalID.validate(value))
+                self.assertIsNone(failure_reason(CHL.NationalID, value))
+        self.assertEqual(failure_reason(CHL.NationalID, '10.000.013-0'), R.CHECKSUM_MISMATCH)
+        # A lowercase k that is wrong for its body is a definite mismatch too.
+        self.assertNotEqual(CHL.NationalID.checksum('10.000.014-0'), 'K')
+        self.assertEqual(failure_reason(CHL.NationalID, '10.000.014-k'), R.CHECKSUM_MISMATCH)
+
+    def test_group_refactor_matches_the_old_patterns(self):
+        classes = _classes_by_key()
+        self.assertEqual(set(OLD_PATTERNS), set(COMPUTED_CHECKSUM_GROUP_KEYS))
+        for key, old in OLD_PATTERNS.items():
+            cls = classes[key]
+            old_regexp = re.compile(old)
+            new_regexp = cls.METADATA.regexp
+            corpus = self.corpus(key, cls)
+            self.assertGreater(len(corpus), 500)
+            self.assertTrue(any(old_regexp.fullmatch(value) for value in corpus))
+            with self.subTest(cls=key):
+                for value in corpus:
+                    self.assertEqual(old_regexp.fullmatch(value) is not None,
+                                     new_regexp.fullmatch(value) is not None, repr(value))
+
+    @staticmethod
+    def corpus(key, cls):
+        """Deterministic inputs: the example, expanded masks and single-edit neighbours of each."""
+        alphabet = '0123456789 -./AKkXZ\n\u0663'
+        digits = '1234567890'
+        bases = {cls.METADATA.example}
+        for mask in cls.METADATA.masks:
+            for letter in ('7', 'K', 'k'):
+                text = mask.replace('X', letter).replace('L', 'A').replace('C', letter)
+                out = []
+                for char in text:
+                    out.append(digits[len(out) % len(digits)] if char == '#' else char)
+                bases.add(''.join(out))
+        if key == MEDICARE_KEY:
+            for head in ('2123 45670 1', '2123-45670-1', '2123456701', '212345670'):
+                for suffix in ('', '1', '2', '/', '/2', '-2', ' 2', '/22', ' 2 2', '-2-2'):
+                    bases.add(head + suffix)
+        values = set(bases)
+        for base in bases:
+            for index in range(len(base) + 1):
+                if index < len(base):
+                    values.add(base[:index] + base[index + 1:])
+                for char in alphabet:
+                    values.add(base[:index] + char + base[index:])
+                    if index < len(base):
+                        values.add(base[:index] + char + base[index + 1:])
+        return sorted(values)

@@ -29,7 +29,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | names | <code>[&#x27;Legal Entity ID Number&#x27;, &#x27;EDRPOU&#x27;, &#x27;ЄДРПОУ&#x27;]</code> |
 | official_name | <code>Код ЄДРПОУ</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^\d{8}$</code> |
+| regexp | <code>^\d{7}(?P&lt;checksum&gt;\d)$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 
@@ -65,7 +65,7 @@ assert EntityIDNumber.validate(number)
 | names | <code>[&#x27;Taxpayer ID Number&#x27;, &#x27;RNTRC&#x27;, &#x27;РНОКПП&#x27;, &#x27;taxpayer registration number&#x27;]</code> |
 | official_name | <code>Реєстраційний номер облікової картки платника податків</code> |
 | parsable | <code>True</code> |
-| regexp | <code>^\d{10}$</code> |
+| regexp | <code>^\d{9}(?P&lt;checksum&gt;\d)$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

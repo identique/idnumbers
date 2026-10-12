@@ -29,7 +29,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | names | <code>[&#x27;Rol Único Nacional&#x27;, &#x27;RUN&#x27;, &#x27;Rol Único Tributario&#x27;, &#x27;RUT&#x27;]</code> |
 | official_name | <code>Rol Único Nacional</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^(\d{1,2}\.\d{3}\.\d{3}-[\dKk])$</code> |
+| regexp | <code>^(\d{1,2}\.\d{3}\.\d{3}-(?P&lt;checksum&gt;[\dKk]))$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

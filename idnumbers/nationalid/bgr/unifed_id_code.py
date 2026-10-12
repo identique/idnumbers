@@ -17,7 +17,7 @@ class UnifiedIdCode:
         'max_length': 13,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^(\d{9}|\d{13})$'),
+        'regexp': re.compile(r'^(\d{8}(?:\d{4})?(?P<checksum>\d))$'),
         'alias_of': None,
         'names': ['Unified Identification Code',
                   'UIC',

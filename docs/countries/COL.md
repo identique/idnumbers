@@ -29,7 +29,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | names | <code>[&#x27;Unique Personal ID&#x27;, &#x27;NUIP&#x27;, &#x27;Número Único de Identificación Personal&#x27;]</code> |
 | official_name | <code>Número Único de Identificación Personal</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^(\d{2,3}\.?\d{3}\.?\d{3}-?\d)$</code> |
+| regexp | <code>^(\d{2,3}\.?\d{3}\.?\d{3}-?(?P&lt;checksum&gt;\d))$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

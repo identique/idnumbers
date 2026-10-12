@@ -29,7 +29,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | names | <code>[&#x27;Unified Identification Code&#x27;, &#x27;UIC&#x27;, &#x27;EIK&#x27;, &#x27;BULSTAT&#x27;, &#x27;ЕИК&#x27;, &#x27;БУЛСТАТ&#x27;]</code> |
 | official_name | <code>Единен идентификационен код</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^(\d{9}&#124;\d{13})$</code> |
+| regexp | <code>^(\d{8}(?:\d{4})?(?P&lt;checksum&gt;\d))$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

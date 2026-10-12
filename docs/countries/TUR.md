@@ -29,7 +29,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | names | <code>[&#x27;National ID Number&#x27;, &#x27;Türkiye Cumhuriyeti Kimlik Numarası&#x27;, &#x27;T.C. Kimlik No.&#x27;]</code> |
 | official_name | <code>Türkiye Cumhuriyeti Kimlik Numarası</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^[1-9]\d{10}$</code> |
+| regexp | <code>^[1-9]\d{8}(?P&lt;checksum&gt;\d{2})$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

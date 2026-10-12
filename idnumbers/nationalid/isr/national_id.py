@@ -25,7 +25,7 @@ class NationalID:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{9})$'),
+        'regexp': re.compile(r'^(\d{8}(?P<checksum>\d))$'),
         'alias_of': None,
         'names': ['Identity Number',
                   'מספר זהות',

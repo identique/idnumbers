@@ -101,7 +101,7 @@ assert OldIdentityCard.validate(number)
 | names | <code>[&#x27;Tax Identity Number&#x27;]</code> |
 | official_name | <code>Αριθμός Φορολογικού Μητρώου</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^\d{9}$</code> |
+| regexp | <code>^\d{8}(?P&lt;checksum&gt;\d)$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 
