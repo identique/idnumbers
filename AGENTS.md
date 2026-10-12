@@ -53,9 +53,10 @@ Never publish to PyPI without the maintainer's approval.
   review convention. Older lines that exceed it are not swept; wrap one when you change it.
 - **Exceptions:** a URL that does not fit stays whole, on a line of its own or as a single string literal (for
   example an entry of `METADATA.links`). Don't break or shorten it, and don't move a citation out of a docstring
-  only to fit. The exception is for URLs only: split any other long string literal, such as a regexp, for example
-  with implicit string concatenation (`ruff format` never splits string literals), and wrap a citation that is not a
-  URL like other docstring prose. Markdown table rows and generated guides are not wrapped.
+  only to fit. Among long string literals and citations, only URLs are exempt: split any other long string literal,
+  such as a regexp, for example with implicit string concatenation (`ruff format` never splits string literals), and
+  wrap a citation that is not a URL like other docstring prose. Markdown table rows and generated guides are not
+  wrapped.
 
 ## Commands
 
