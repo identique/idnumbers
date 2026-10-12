@@ -70,7 +70,12 @@ class PersonalPublicServiceNumber:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
-        """algorithm: https://en.wikipedia.org/wiki/Personal_Public_Service_Number#Check_character"""
+        """
+        algorithm: https://en.wikipedia.org/wiki/Personal_Public_Service_Number#Check_character
+        Return ``False`` for non-string input; malformed strings may raise.
+        """
+        if not isinstance(id_number, str):
+            return False
         normalized = normalize(id_number)
         number_list = [int(i) for i in normalized[:7]]
         if len(normalized) == 9 and normalized[-1] not in [" ", "W"]:

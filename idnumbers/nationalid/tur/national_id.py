@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 from ..metadata import IdMetadata
 from ..util import validate_regexp, weighted_modulus_digit
 
@@ -47,10 +48,14 @@ class NationalID:
         return NationalID.checksum(id_number) == id_number[-2:]
 
     @staticmethod
-    def checksum(id_number: str) -> str:
+    def checksum(id_number: str) -> Optional[str]:
         """
         Calculate the checksum e.g. digit 10 and digit 11
+
+        Return ``None`` for non-string input; malformed strings may raise.
         """
+        if not isinstance(id_number, str):
+            return None
         numbers_list = [int(i) for i in id_number]
         digit_ten = weighted_modulus_digit(numbers_list[:-2], NationalID.MULTIPLIERS, 10, True)
         digit_eleven = sum(numbers_list[:-1]) % 10

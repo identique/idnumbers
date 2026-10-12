@@ -28,6 +28,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Other fixes
 
+- **Checksums** ([#619](https://github.com/identique/idnumbers/issues/619)): every public `checksum()` returns
+  `False` or `None` for non-string input instead of raising or computing a value. HKG and TUR computed checksums
+  now return `Optional[str]`. All string-input behavior, including malformed strings, is unchanged.
 - **Formatting** ([#618](https://github.com/identique/idnumbers/issues/618)): `normalize_id()` and `format_id()`
   uppercase ASCII letters only, leaving non-ASCII letters (including lowercase Greek letters) unchanged instead of
   folding lookalikes or expanding ligatures into ASCII. Helper outputs change; country validation is unchanged.

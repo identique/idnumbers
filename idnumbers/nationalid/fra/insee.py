@@ -108,7 +108,12 @@ class INSEE:
 
     @staticmethod
     def checksum(id_number: str) -> bool:
-        """algorithm: https://en.wikipedia.org/wiki/INSEE_code#National_identification_numbers"""
+        """
+        algorithm: https://en.wikipedia.org/wiki/INSEE_code#National_identification_numbers
+        Return ``False`` for non-string input; malformed strings may raise.
+        """
+        if not isinstance(id_number, str):
+            return False
         normalized = id_number.upper().replace("2A", "19").replace("2B", "18")
         return 97 - int(normalized[:-2]) % 97 == int(normalized[-2:])
 

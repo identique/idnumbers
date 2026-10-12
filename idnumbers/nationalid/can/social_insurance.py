@@ -52,7 +52,11 @@ class SocialInsuranceNumber:
         """
         Validate social insurance number checksum digits
         http://www.straightlineinternational.com/docs/vaildating_canadian_sin.pdf
+
+        Return ``False`` for non-string input; malformed strings may raise.
         """
+        if not isinstance(id_number, str):
+            return False
 
         number_list = [int(char) for char in list(id_number)]
         multiplied_list = [value * SocialInsuranceNumber.MULTIPLIER[index] for (index, value) in enumerate(number_list)]

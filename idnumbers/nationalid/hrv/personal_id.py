@@ -48,7 +48,11 @@ class PersonalID:
     def checksum(id_number: str) -> bool:
         """
         Calculate HRV personal id checksum digit
+
+        Return ``False`` for non-string input; malformed strings may raise.
         """
+        if not isinstance(id_number, str):
+            return False
         numbers = [int(char) for char in id_number]
         checksum = modulus_overflow_mod10(mn_modulus_digit(numbers[:-1], 10, 11))
         return numbers[-1] == checksum
