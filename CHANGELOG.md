@@ -8,6 +8,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Validity changes
 
+- **BRA** ([#617](https://github.com/identique/idnumbers/issues/617)): RG checksum validation treats `X` as value 10,
+  rejecting it when the weighted sum has remainder 0 modulo 11 and accepting it when the remainder is 1. Numeric
+  check-digit behavior is unchanged; remainder 0 still accepts `0`.
 - **UKR** ([#616](https://github.com/identique/idnumbers/issues/616)): taxpayer ID numbers with encoded birth dates
   after the local current date now return `False` from `validate()` and `None` from `parse()`. Today's date remains
   accepted, and checksum computation and parsed fields for past dates are unchanged.
