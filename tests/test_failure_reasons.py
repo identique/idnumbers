@@ -434,7 +434,8 @@ class TestComputedChecksumGroups(TestCase):
 
     def test_unified_id_code_13_digit_failure_in_the_eik_part_is_generic(self):
         # The checksum group covers only the 13th digit. The first nine digits 123456780 fail the 9-digit check, but
-        # the 13th digit is correct for the tail 123, so no definite mismatch can be shown and the reason stays generic.
+        # the 13th digit is correct for digits 9 to 12 (0123), so no definite mismatch can be shown and the reason
+        # stays generic.
         self.assertEqual(failure_reason(BGR.UnifiedIdCode, "1234567801236"), R.VALIDATION_FAILED)
         # A wrong 13th digit is a definite mismatch of the group.
         self.assertEqual(failure_reason(BGR.UnifiedIdCode, "1234567801237"), R.CHECKSUM_MISMATCH)
