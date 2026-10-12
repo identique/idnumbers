@@ -1,6 +1,6 @@
 # This workflow runs the unit tests on every supported version of Python, then type-checks the package with mypy,
-# lints it with ruff, enforces the coverage floor, prints informational benchmarks, and finishes with a single
-# ci-summary result that fails unless every other job succeeded.
+# lints it and checks its formatting with ruff, enforces the coverage floor, prints informational benchmarks, and
+# finishes with a single ci-summary result that fails unless every other job succeeded.
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: Python Unit Test
@@ -72,6 +72,8 @@ jobs:
       run: python -m pip install ruff==0.16.10
     - name: Lint with ruff (rules in pyproject.toml)
       run: ruff check --output-format=github .
+    - name: Check formatting with ruff format (settings in pyproject.toml)
+      run: ruff format --check --diff .
 
   coverage:
 

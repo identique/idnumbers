@@ -1,0 +1,6 @@
+# Format-only commits that `git blame` should skip. GitHub's blame view reads this file; locally, run
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+# Each entry is a full 40-character commit SHA on main, with a comment naming the change.
+
+# Reformat the Python sources with ruff format (#606, part of #599)
+9ae3d112fb91c38d94f0b2db6abddc68a1a84237
