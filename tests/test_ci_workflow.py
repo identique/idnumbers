@@ -26,6 +26,14 @@ def job_text(name: str, text: Optional[str] = None) -> str:
     return text[headers[index].start() : end]
 
 
+def workflow_events(text: str) -> "list[str]":
+    """Read event keys from this workflow's block-style, top-level ``on:`` mapping only."""
+    blocks = list(re.finditer(r"(?ms)^on:[ \t]*\n(.*?)(?=^[^ \t#\n]|\Z)", text))
+    if len(blocks) != 1:
+        raise AssertionError("python-test.yml must have exactly one block-style on: mapping")
+    return re.findall(r"(?m)^  ([A-Za-z][\w-]*):", blocks[0].group(1))
+
+
 def job_needs(name: str) -> "list[str]":
     """Return the ``needs:`` entries of a job (empty when it has none)."""
     match = re.search(r"^    needs:[ \t]*(.+)$", job_text(name), re.MULTILINE)
@@ -60,6 +68,36 @@ class CIWorkflowTest(unittest.TestCase):
         self.assertIn("ruff check", job)
         self.assertIn("ruff format --check", job)
 
+    def assert_safe_triggers(self, text: str) -> None:
+        self.assertCountEqual(
+            workflow_events(text), ["push", "pull_request"], "CI triggers must be push and pull_request"
+        )
+
+    def test_workflow_triggers_only_push_and_pull_request(self) -> None:
+        self.assert_safe_triggers(WORKFLOW.read_text(encoding="utf-8"))
+
+    def test_trigger_contract_rejects_unsafe_missing_and_duplicate_events(self) -> None:
+        for events in (
+            ["push", "pull_request", "pull_request_target"],
+            ["push", "pull_request", "workflow_run"],
+            ["push", "pull_request", "schedule"],
+            ["push"],
+            ["push", "pull_request", "push"],
+            [],
+        ):
+            text = "on:\n" + "".join(f"  {event}:\n    branches: [main]\n" for event in events)
+            text += "jobs:\n  other:\n    run: echo push pull_request\n"
+            with self.subTest(events=events), self.assertRaisesRegex(AssertionError, "CI triggers"):
+                self.assert_safe_triggers(text)
+        with self.assertRaisesRegex(AssertionError, "on: mapping"):
+            self.assert_safe_triggers("jobs:\n  push:\n  pull_request:\n")
+
+    def test_trigger_contract_ignores_comments_and_script_mentions(self) -> None:
+        self.assert_safe_triggers(
+            "on:\n  pull_request:\n  push:\n# pull_request_target:\njobs:\n"
+            "  other:\n    run: |\n      echo workflow_run pull_request_target\n"
+        )
+
     def test_lint_job_checks_formatting(self) -> None:
         self.assert_lint_checks()
 
@@ -85,12 +123,29 @@ class CIWorkflowTest(unittest.TestCase):
 
 
 class CoverageBadgeWorkflowTest(unittest.TestCase):
-    def test_only_the_badge_job_can_write(self) -> None:
-        text = WORKFLOW.read_text(encoding="utf-8")
+    def test_coverage_checkout_does_not_persist_credentials(self) -> None:
+        checkouts = [step for step in steps(job_text("coverage")) if "actions/checkout@" in step]
+        self.assertEqual(len(checkouts), 1)
+        self.assertRegex(checkouts[0], r"actions/checkout@v7\n      with:\n        persist-credentials: false\n")
+
+    def assert_write_boundary(self, text: str) -> None:
         self.assertRegex(text, r"(?m)^permissions:\n  contents: read\n")
         self.assertEqual(text.count("contents: write"), 1)
         self.assertEqual(text.count("permissions:"), 2)
-        self.assertIn("contents: write", job_text("coverage-badge"))
+        self.assertIn("contents: write", job_text("coverage-badge", text))
+
+    def test_only_the_badge_job_can_write(self) -> None:
+        self.assert_write_boundary(WORKFLOW.read_text(encoding="utf-8"))
+
+    def test_write_boundary_rejects_global_or_other_job_write_permissions(self) -> None:
+        text = WORKFLOW.read_text(encoding="utf-8")
+        for changed in (
+            text.replace("contents: read", "contents: write", 1),
+            text.replace("  coverage:\n", "  coverage:\n    permissions:\n      contents: write\n", 1),
+            text.replace("      contents: write", "      contents: read", 1),
+        ):
+            with self.subTest(text=changed), self.assertRaises(AssertionError):
+                self.assert_write_boundary(changed)
 
     def test_badge_job_runs_only_for_pushes_to_main_of_this_repository(self) -> None:
         job = job_text("coverage-badge")
@@ -108,15 +163,28 @@ class CoverageBadgeWorkflowTest(unittest.TestCase):
         job = job_text("coverage-badge")
         self.assertRegex(job, r"concurrency:\n      group: coverage-badge\n      cancel-in-progress: false\n")
 
-    def test_the_only_secret_is_the_github_token_and_it_stays_out_of_urls(self) -> None:
-        text = WORKFLOW.read_text(encoding="utf-8")
+    def assert_token_boundary(self, text: str) -> None:
         self.assertEqual(set(re.findall(r"secrets\.(\w+)", text)), {"GITHUB_TOKEN"})
-        self.assertEqual(len(re.findall(r"\$\{\{\s*secrets\.", job_text("coverage-badge"))), 1)
+        self.assertEqual(len(re.findall(r"\$\{\{\s*secrets\.", job_text("coverage-badge", text))), 1)
         self.assertNotRegex(text, r"x-access-token:[^\s'\"]*@")
         self.assertNotRegex(text, r"https?://[^\s'\"]*(?:x-access-token|GITHUB_TOKEN|\$\{?encoded)")
-        script = job_text("coverage-badge")
+        script = job_text("coverage-badge", text)
         self.assertIn("-c http.extraheader=", script)
         self.assertIn("::add-mask::", script)
+
+    def test_the_only_secret_is_the_github_token_and_it_stays_out_of_urls(self) -> None:
+        self.assert_token_boundary(WORKFLOW.read_text(encoding="utf-8"))
+
+    def test_token_boundary_rejects_additional_secrets_authenticated_urls_and_unmasked_headers(self) -> None:
+        text = WORKFLOW.read_text(encoding="utf-8")
+        for changed in (
+            text.replace("secrets.GITHUB_TOKEN", "secrets.PAT", 1),
+            text.replace("https://github.com/", "https://x-access-token:$GITHUB_TOKEN@github.com/", 1),
+            text.replace("::add-mask::", "mask-disabled", 1),
+            text.replace("-c http.extraheader=", "-c removed-header= "),
+        ):
+            with self.subTest(text=changed), self.assertRaises(AssertionError):
+                self.assert_token_boundary(changed)
 
     def test_orphan_branch_starts_only_when_ls_remote_reports_a_missing_branch(self) -> None:
         job = job_text("coverage-badge")

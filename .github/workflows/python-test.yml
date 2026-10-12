@@ -83,6 +83,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7
+      with:
+        persist-credentials: false
     - name: Set up Python 3.12
       uses: actions/setup-python@v7
       with:
@@ -155,6 +157,24 @@ jobs:
         auth="AUTHORIZATION: basic ${encoded}"
         remote="https://github.com/${GITHUB_REPOSITORY}.git"
         badges="$RUNNER_TEMP/badges"
+        # A queued older run must not overwrite the badge for a newer main commit. This is a preflight check,
+        # not an atomic guarantee against main advancing after the probe.
+        if main_record="$(git -c http.extraheader="$auth" ls-remote --exit-code --heads "$remote" refs/heads/main)"; then
+          main_pattern=$'^[0-9a-fA-F]{40}\trefs/heads/main$'
+          if [[ ! "$main_record" =~ $main_pattern ]]; then
+            echo "::error::git ls-remote returned an invalid main record; not touching the badges branch"
+            exit 1
+          fi
+          main_sha="${main_record%%$'\t'*}"
+        else
+          main_probe=$?
+          echo "::error::git ls-remote for main failed with exit code ${main_probe}; not touching the badges branch"
+          exit "$main_probe"
+        fi
+        if [ "$main_sha" != "$GITHUB_SHA" ]; then
+          echo "::notice::Skipping coverage badge publication: this commit is no longer the head of main"
+          exit 0
+        fi
         # Probe for the branch first: only a definite "missing" (exit 2) may start an orphan branch, so a transient
         # network or auth failure cannot reset the history.
         set +e
