@@ -51,14 +51,14 @@ assert CPFNumber.validate(number)
 | --- | --- |
 | alias_of | <code>None</code> |
 | checksum | <code>True</code> |
-| checksum_algorithm | <code>Weighted sum mod 11 (weights 2-9 over the first eight digits, the check digit weighted 100; X counts as 11)</code> |
+| checksum_algorithm | <code>Library convention: weights 2-9 over the first eight digits; check value is the complement of the sum modulo 11 (remainder 0 gives 0, remainder 1 gives X; X counts as 10)</code> |
 | country_name | <code>Brazil</code> |
 | deprecated | <code>False</code> |
 | display_format | <code>##.###.###-X</code> |
 | example | <code>12.345.678-2</code> |
 | id_type | <code>General Registry Number</code> |
 | iso3166_alpha2 | <code>BR</code> |
-| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Brazil&#x27;, &#x27;https://en.wikipedia.org/wiki/Brazilian_identity_cards&#x27;]</code> |
+| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Brazil&#x27;, &#x27;https://en.wikipedia.org/wiki/Brazilian_identity_cards&#x27;, &#x27;https://proceedings.sbmac.org.br/sbmac/article/viewFile/1695/1703&#x27;, &#x27;https://legado.moodle.ufsc.br/pluginfile.php/6080117/mod_resource/content/2/digito_verificador.pdf&#x27;]</code> |
 | masks | <code>(&#x27;##.###.###-X&#x27;,)</code> |
 | max_length | <code>9</code> |
 | min_length | <code>9</code> |
@@ -71,6 +71,8 @@ Reference links recorded by this implementation (source quality varies):
 
 - <https://en.wikipedia.org/wiki/National_identification_number#Brazil>
 - <https://en.wikipedia.org/wiki/Brazilian_identity_cards>
+- <https://proceedings.sbmac.org.br/sbmac/article/viewFile/1695/1703>
+- <https://legado.moodle.ufsc.br/pluginfile.php/6080117/mod_resource/content/2/digito_verificador.pdf>
 
 ```python
 from idnumbers.nationalid.bra.rg_number import RGNumber

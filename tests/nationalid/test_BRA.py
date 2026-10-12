@@ -8,7 +8,7 @@ class TestBRARGNumberValidation(TestCase):
     def test_normal_case(self):
         self.assertTrue(BRA.RGNumber.validate("39.985.676-6"))
         self.assertTrue(BRA.RGNumber.validate("56.843.539-4"))
-        self.assertTrue(BRA.RGNumber.validate("99.953.539-X"))
+        self.assertTrue(BRA.RGNumber.validate("00.000.005-X"))
 
     def test_error_case(self):
         self.assertFalse(BRA.RGNumber.validate("39.985.676-5"))
@@ -19,9 +19,49 @@ class TestBRARGNumberValidation(TestCase):
         # reject it, not just the checksum guard
         self.assertIsNone(match_regexp("12.345.678-|", BRA.RGNumber.METADATA.regexp))
         self.assertFalse(BRA.RGNumber.validate("12.345.678-|"))
-        self.assertIsNotNone(match_regexp("99.953.539-X", BRA.RGNumber.METADATA.regexp))
-        self.assertTrue(BRA.RGNumber.validate("99.953.539-X"))
+        self.assertIsNotNone(match_regexp("00.000.005-X", BRA.RGNumber.METADATA.regexp))
+        self.assertTrue(BRA.RGNumber.validate("00.000.005-X"))
         self.assertTrue(BRA.RGNumber.validate("39.985.676-6"))
+
+    def test_modulus_zero_and_one_check_characters(self):
+        # Synthetic prefixes: weighted sums are 0, 45 and 264, respectively.
+        for number, expected in (
+            ("00.000.000-X", False),
+            ("00.000.000-0", True),
+            ("00.000.005-X", True),
+            ("00.000.005-0", False),
+            ("99.953.539-X", False),
+            ("99.953.539-0", True),
+        ):
+            with self.subTest(number=number):
+                self.assertEqual(BRA.RGNumber.checksum(number), expected)
+                self.assertEqual(BRA.RGNumber.validate(number), expected)
+
+    def test_every_remainder_accepts_only_its_check_character(self):
+        # Independent arithmetic over synthetic nonzero prefixes, not the production helper or multipliers.
+        remainders = set()
+        for prefix in range(10000000, 10000100):
+            digits = str(prefix)
+            weighted_sum = sum(int(digit) * weight for digit, weight in zip(digits, range(2, 10)))
+            remainder = weighted_sum % 11
+            if remainder in remainders:
+                continue
+            remainders.add(remainder)
+            complement = (-weighted_sum) % 11
+            expected_character = "X" if complement == 10 else str(complement)
+            for character in "0123456789X":
+                number = f"{digits[:2]}.{digits[2:5]}.{digits[5:]}-{character}"
+                with self.subTest(remainder=remainder, number=number):
+                    expected = character == expected_character
+                    self.assertEqual(BRA.RGNumber.checksum(number), expected)
+                    self.assertEqual(BRA.RGNumber.validate(number), expected)
+        self.assertEqual(remainders, set(range(11)))
+
+    def test_malformed_inputs_are_rejected(self):
+        for number in (None, 0, b"00.000.005-X", "", "00000005X", "00.000.005-x", "00.000.005-X\n"):
+            with self.subTest(number=number):
+                self.assertFalse(BRA.RGNumber.checksum(number))
+                self.assertFalse(BRA.RGNumber.validate(number))
 
     def test_with_metadata(self):
         self.assertIsNotNone(BRA.RGNumber.METADATA)
