@@ -335,11 +335,12 @@ class TestNewKeys(TestCase):
 
     def test_fixed_prefix_masks_describe_shape_not_validity(self) -> None:
         # Synthetic mutations of the metadata examples retain the generic letter-slot shape.
-        for cls, prefix, wrong_prefix, masks in [
+        cases: List[Tuple[Type[Any], str, str, Tuple[str, ...]]] = [
             (SMR.TaxRegistrationNumber, "SM", "XX", ("LL#####",)),
             (AUT.EntityTaxIDNumber, "U", "X", ("L########", "L## ### ###")),
             (CHE.BusinessID, "CHE", "XXX", ("LLL-###.###.###", "LLL#########")),
-        ]:
+        ]
+        for cls, prefix, wrong_prefix, masks in cases:
             metadata = cls.METADATA
             self.assertEqual(metadata.masks, masks)
             value = compact(metadata.example, masks)
