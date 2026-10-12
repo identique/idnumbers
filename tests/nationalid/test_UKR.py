@@ -1,4 +1,6 @@
+from datetime import date, timedelta
 from unittest import TestCase, main
+from unittest.mock import patch
 from idnumbers.nationalid import UKR
 from idnumbers.nationalid.constant import Gender
 
@@ -19,6 +21,92 @@ class TestUKRTINValidation(TestCase):
         self.assertEqual(12, result["yyyymmdd"].day)
         self.assertEqual(Gender.MALE, result["gender"])
         self.assertEqual(1, result["checksum"])
+
+    @staticmethod
+    def number_for_birthday(birthday, serial="1234"):
+        # Synthetic fixtures use independent arithmetic, not the library checksum helper.
+        days = (birthday - date(1900, 1, 1)).days + 1
+        prefix = f"{days:05d}{serial}"
+        weights = (-1, 5, 7, 9, 4, 6, 10, 5, 7)
+        checksum = sum(int(digit) * weight for digit, weight in zip(prefix, weights)) % 11 % 10
+        return prefix + str(checksum)
+
+    def test_birthday_boundary(self):
+        today = date(2026, 10, 12)
+        with patch("idnumbers.nationalid.ukr.taxpayer_id.date", wraps=date) as mocked_date:
+            mocked_date.today.return_value = today
+            for birthday, serial, gender in (
+                (today - timedelta(days=1), "1235", Gender.MALE),
+                (today, "1234", Gender.FEMALE),
+                (date(1900, 1, 1), "1234", Gender.FEMALE),
+            ):
+                number = self.number_for_birthday(birthday, serial)
+                with self.subTest(birthday=birthday):
+                    self.assertTrue(UKR.TaxpayerIDNumber.validate(number))
+                    self.assertEqual(
+                        UKR.TaxpayerIDNumber.parse(number),
+                        {"yyyymmdd": birthday, "gender": gender, "checksum": int(number[-1])},
+                    )
+            for birthday in (today + timedelta(days=1), date(2100, 1, 2), date(2173, 10, 14)):
+                number = self.number_for_birthday(birthday)
+                with self.subTest(birthday=birthday):
+                    self.assertEqual(UKR.TaxpayerIDNumber.checksum(number), int(number[-1]))
+                    self.assertFalse(UKR.TaxpayerIDNumber.validate(number))
+                    self.assertIsNone(UKR.TaxpayerIDNumber.parse(number))
+
+    def test_reported_future_birthdays(self):
+        # Reported vectors: https://github.com/identique/idnumbers/issues/616
+        with patch("idnumbers.nationalid.ukr.taxpayer_id.date", wraps=date) as mocked_date:
+            mocked_date.today.return_value = date(2026, 10, 12)
+            for number, birthday in (("9999912340", date(2173, 10, 14)), ("7305112345", date(2100, 1, 2))):
+                with self.subTest(number=number):
+                    self.assertEqual(self.number_for_birthday(birthday), number)
+                    self.assertEqual(UKR.TaxpayerIDNumber.checksum(number), int(number[-1]))
+                    self.assertFalse(UKR.TaxpayerIDNumber.validate(number))
+                    self.assertIsNone(UKR.TaxpayerIDNumber.parse(number))
+
+    def test_birthday_boundary_advances_with_today(self):
+        today = date(2026, 10, 12)
+        tomorrow = today + timedelta(days=1)
+        number = self.number_for_birthday(tomorrow)
+        with patch("idnumbers.nationalid.ukr.taxpayer_id.date", wraps=date) as mocked_date:
+            mocked_date.today.return_value = today
+            self.assertFalse(UKR.TaxpayerIDNumber.validate(number))
+            self.assertIsNone(UKR.TaxpayerIDNumber.parse(number))
+            mocked_date.today.return_value = tomorrow
+            self.assertTrue(UKR.TaxpayerIDNumber.validate(number))
+            self.assertEqual(
+                UKR.TaxpayerIDNumber.parse(number),
+                {"yyyymmdd": tomorrow, "gender": Gender.FEMALE, "checksum": int(number[-1])},
+            )
+
+    def test_invalid_taxpayer_input(self):
+        for value in (
+            None,
+            3184710691,
+            b"3184710691",
+            [],
+            {},
+            "",
+            "318471069",
+            "31847106911",
+            "３１８４７１０６９１",
+            "3184710691\n",
+            " 3184710691",
+            "3184710691 ",
+            "318471069X",
+        ):
+            with self.subTest(value=value):
+                self.assertFalse(UKR.TaxpayerIDNumber.validate(value))
+                self.assertIsNone(UKR.TaxpayerIDNumber.parse(value))
+                self.assertIsNone(UKR.TaxpayerIDNumber.checksum(value))
+        for digit in range(10):
+            number = "318471069" + str(digit)
+            with self.subTest(number=number):
+                self.assertEqual(UKR.TaxpayerIDNumber.checksum(number), 1)
+                self.assertEqual(UKR.TaxpayerIDNumber.validate(number), digit == 1)
+                if digit != 1:
+                    self.assertIsNone(UKR.TaxpayerIDNumber.parse(number))
 
     def test_with_metadata(self):
         self.assertIsNotNone(UKR.TaxpayerIDNumber.METADATA)
