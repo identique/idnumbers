@@ -4,6 +4,15 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Documentation
+
+- **Failure reasons** ([#578](https://github.com/identique/idnumbers/issues/578)): the country template's checklist
+  now asks for a `checksum` group in `METADATA.regexp` whenever `checksum()` returns the check digit or character, so
+  `failure_reason()` can report `checksum_mismatch`; a `bool` `checksum()` needs no group. Validity and diagnostics are
+  unchanged.
+
 ## 1.18.0 (2026-10-12)
 
 ### Changed
