@@ -67,7 +67,7 @@ assert info is not None
 | names | <code>[&#x27;Personal Code&#x27;, &#x27;personas kods&#x27;]</code> |
 | official_name | <code>personas kods</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^(\d{6}-?\d{5}$)</code> |
+| regexp | <code>^(\d{6}-?\d{4}(?P&lt;checksum&gt;\d)$)</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

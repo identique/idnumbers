@@ -29,7 +29,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | names | <code>[&#x27;National ID Number&#x27;, &#x27;kart-e-meli&#x27;, &#x27;کارت ملی&#x27;, &#x27;شماره ملی&#x27;, &#x27;کد ملی&#x27;]</code> |
 | official_name | <code>شماره ملی</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^\d{3}-?\d{6}-?\d$</code> |
+| regexp | <code>^\d{3}-?\d{6}-?(?P&lt;checksum&gt;\d)$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

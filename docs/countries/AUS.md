@@ -65,7 +65,7 @@ assert DriverLicenseNumber.validate(number)
 | names | <code>[&#x27;Medicare Number&#x27;, &#x27;Medicare No&#x27;]</code> |
 | official_name | <code>None</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^([2-6]\d{10}&#124;[2-6]\d{3} \d{5} \d&#124;[2-6]\d{3}-\d{5}-\d&#124;[2-6]\d{9}&#124;[2-6]\d{9}([-/]\d)?&#124;[2-6]\d{3} \d{5} \d([-/]\d)?&#124;[2-6]\d{3}-\d{5}-\d([-/]\d)?&#124;[2-6]\d{3} \d{5} \d \d&#124;[2-6]\d{3}-\d{5}-\d-\d)$</code> |
+| regexp | <code>^((?=[2-6]\d{3}[ -]?\d{4}(?P&lt;checksum&gt;\d))(?:[2-6]\d{10}&#124;[2-6]\d{3} \d{5} \d&#124;[2-6]\d{3}-\d{5}-\d&#124;[2-6]\d{9}&#124;[2-6]\d{9}([-/]\d)?&#124;[2-6]\d{3} \d{5} \d([-/]\d)?&#124;[2-6]\d{3}-\d{5}-\d([-/]\d)?&#124;[2-6]\d{3} \d{5} \d \d&#124;[2-6]\d{3}-\d{5}-\d-\d))$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 
@@ -100,7 +100,7 @@ assert MedicareNumber.validate(number)
 | names | <code>[&#x27;Tax file number&#x27;, &#x27;TFN&#x27;]</code> |
 | official_name | <code>None</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^(\d{9}&#124;\d{8})$</code> |
+| regexp | <code>^(\d{7,8}(?P&lt;checksum&gt;\d))$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

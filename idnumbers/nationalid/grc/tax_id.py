@@ -15,7 +15,7 @@ class TaxIdentityNumber:
         'max_length': 9,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{9}$'),
+        'regexp': re.compile(r'^\d{8}(?P<checksum>\d)$'),
         'alias_of': None,
         'names': ['Tax Identity Number'],
         'links': ['https://en.wikipedia.org/wiki/National_identification_number#Greece'],

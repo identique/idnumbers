@@ -29,7 +29,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | names | <code>[&#x27;National ID Number&#x27;, &#x27;My Number&#x27;, &#x27;マイナンバー&#x27;]</code> |
 | official_name | <code>マイナンバー</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^(\d{12}$)</code> |
+| regexp | <code>^(\d{11}(?P&lt;checksum&gt;\d)$)</code> |
 
 Reference links recorded by this implementation (source quality varies):
 

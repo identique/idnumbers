@@ -67,9 +67,9 @@
     "format": "!!!!!!!!!",
     "checksum": {
       "input": "2123 45671 1",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -83,9 +83,9 @@
     "format": "!!!!!!!!",
     "checksum": {
       "input": "123456780",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch; checksum() returns the weighted-sum remainder, so a remainder equal to the last digit stays generic.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -211,9 +211,9 @@
     "format": "!!!!!!!!!",
     "checksum": {
       "input": "123456780",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -339,9 +339,9 @@
     "format": "!!!!!!!!",
     "checksum": {
       "input": "11.111.111-0",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -374,9 +374,9 @@
     "format": "!!!!!!!!!",
     "checksum": {
       "input": "12.345.678-0",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -646,9 +646,9 @@
     "format": "!!!!!!!!!",
     "checksum": {
       "input": "123456780",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -688,9 +688,9 @@
     "format": "!!!!!!!!",
     "checksum": {
       "input": "A1234560",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -800,9 +800,9 @@
     "format": "!!!!!!!!!!",
     "checksum": {
       "input": "001-234567-0",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -848,9 +848,9 @@
     "format": "!!!!!!!!!",
     "checksum": {
       "input": "000000010",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -883,9 +883,9 @@
     "format": "!!!!!!!!!!!!",
     "checksum": {
       "input": "765895492870",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -1058,9 +1058,9 @@
     "format": "!!!!!!!!!!!",
     "checksum": {
       "input": "161175-19990",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": {
       "input": "310275-19999",
       "reason": "invalid_birthdate"
@@ -1630,9 +1630,9 @@
     "format": "!!!!!!!!!!!",
     "checksum": {
       "input": "11111111111",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -1662,9 +1662,9 @@
     "format": "!!!!!!!!",
     "checksum": {
       "input": "32000000",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
@@ -1678,9 +1678,9 @@
     "format": "!!!!!!!!!!",
     "checksum": {
       "input": "3245506780",
-      "reason": "validation_failed"
+      "reason": "checksum_mismatch"
     },
-    "checksum_note": "Computed checksum has no named checksum group; best-effort generic fallback.",
+    "checksum_note": "Definite mismatch.",
     "birthdate": null,
     "birthdate_note": "Date is an offset from constant 1900-01-01, not a calendar month/day; no impossible February is representable."
   },

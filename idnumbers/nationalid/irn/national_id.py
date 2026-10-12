@@ -23,7 +23,7 @@ class NationalID:
         'max_length': 10,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^\d{3}-?\d{6}-?\d$'),
+        'regexp': re.compile(r'^\d{3}-?\d{6}-?(?P<checksum>\d)$'),
         'alias_of': None,
         'names': ['National ID Number',
                   'kart-e-meli',

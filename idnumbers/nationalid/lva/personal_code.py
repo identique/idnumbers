@@ -31,7 +31,7 @@ class PersonalCode:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{6}-?\d{5}$)'),
+        'regexp': re.compile(r'^(\d{6}-?\d{4}(?P<checksum>\d)$)'),
         'alias_of': None,
         'names': ['Personal Code',
                   'personas kods'],

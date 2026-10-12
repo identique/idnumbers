@@ -16,7 +16,7 @@ class NationalID:
         'max_length': 11,
         'parsable': False,
         'checksum': True,
-        'regexp': re.compile(r'^[1-9]\d{10}$'),
+        'regexp': re.compile(r'^[1-9]\d{8}(?P<checksum>\d{2})$'),
         'alias_of': None,
         'names': ['National ID Number',
                   'Türkiye Cumhuriyeti Kimlik Numarası',

@@ -20,12 +20,12 @@ class MedicareNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^('
+        'regexp': re.compile(r'^((?=[2-6]\d{3}[ -]?\d{4}(?P<checksum>\d))(?:'
                              r'[2-6]\d{10}|[2-6]\d{3} \d{5} \d|[2-6]\d{3}-\d{5}-\d|'
                              r'[2-6]\d{9}|[2-6]\d{9}([-/]\d)?|'
                              r'[2-6]\d{3} \d{5} \d([-/]\d)?|[2-6]\d{3}-\d{5}-\d([-/]\d)?|'
                              r'[2-6]\d{3} \d{5} \d \d|[2-6]\d{3}-\d{5}-\d-\d'
-                             r')$'),
+                             r'))$'),
         'alias_of': None,
         'names': ['Medicare Number', 'Medicare No'],
         'links': [

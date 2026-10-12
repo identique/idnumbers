@@ -24,7 +24,7 @@ class TaxFileNumber:
         # has checksum function
         'checksum': True,
         # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{9}|\d{8})$'),
+        'regexp': re.compile(r'^(\d{7,8}(?P<checksum>\d))$'),
         'alias_of': None,
         'names': ['Tax file number',
                   'TFN'],

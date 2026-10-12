@@ -26,8 +26,7 @@ Apply your own serialization policy rather than relying on JSON-ready strings.
 
 Failure reasons are **best-effort and non-exhaustive**. Do not make application correctness depend on a particular
 invalid number receiving a specific reason; future releases may extend `FailureReason`. Inconclusive checks and
-exceptions retain generic `VALIDATION_FAILED` (including the limitations tracked in
-[#506](https://github.com/identique/idnumbers/issues/506)). `failure_reason()` also supports explicit secondary
+exceptions retain generic `VALIDATION_FAILED`. `failure_reason()` also supports explicit secondary
 ID classes, without changing their validity rules.
 
 ### Optional normalization and display formatting

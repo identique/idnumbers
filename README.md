@@ -384,8 +384,11 @@ print([result.is_valid for result in validate_many([('tw', 'A123456789'), ('XX',
 
 `failure_reason(id_class, id_number)` also supports secondary types. It returns `None` for a valid ID and never raises.
 For diagnosis only, it considers both the original input and a candidate with whitespace and `. - / ( )` removed.
-This does **not** normalize validation input or make a rejected ID valid. A computed checksum without a named
-`checksum` regexp group is inconclusive, so it retains the generic reason rather than guessing.
+This does **not** normalize validation input or make a rejected ID valid. A `checksum()` that returns `False` for a
+mismatch is reported as `checksum_mismatch` without any regexp group. A `checksum()` that returns the check digit or
+character is compared with the named `checksum` regexp group, and every built-in class whose `checksum()` returns such
+a value has that group. A custom class whose `checksum()` returns a value but has no `checksum` group is inconclusive
+and keeps the generic reason rather than guessing.
 
 ```python
 from idnumbers import FailureReason, failure_reason, validate
