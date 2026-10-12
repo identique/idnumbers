@@ -8,6 +8,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Documentation
 
+- **Contributor guide** ([#581](https://github.com/identique/idnumbers/issues/581)): the 120-column rule in
+  `AGENTS.md` now applies to new and changed lines, and older long lines are not swept. A URL may also stay whole as a
+  single string literal, such as an entry of `METADATA.links`. Code and behavior are unchanged.
 - **Failure reasons** ([#578](https://github.com/identique/idnumbers/issues/578)): the country template's checklist
   now asks for a `checksum` group in `METADATA.regexp` whenever `checksum()` returns the check digit or character, so
   `failure_reason()` can report `checksum_mismatch`; a `bool` `checksum()` needs no group. The BGR Unified

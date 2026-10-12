@@ -44,10 +44,12 @@ Never publish to PyPI without the maintainer's approval.
 
 ### Line length
 
-- **Wrap at 120 columns:** code, comments, docstrings and Markdown prose. This is a review convention, not a lint rule:
-  ruff does not check it.
-- **Exceptions:** a URL that does not fit stays whole on a line of its own. Don't break or shorten it, and don't move
-  a citation out of a docstring only to fit. Markdown table rows and generated guides are not wrapped.
+- **Wrap at 120 columns:** new and changed code, comments, docstrings and Markdown prose. This is a review
+  convention, not a lint rule: ruff does not check it. Older lines that exceed it are not swept; wrap one when you
+  change it.
+- **Exceptions:** a URL that does not fit stays whole, on a line of its own or as a single string literal (for
+  example an entry of `METADATA.links`). Don't break or shorten it, and don't move a citation out of a docstring
+  only to fit. Markdown table rows and generated guides are not wrapped.
 
 ## Commands
 
