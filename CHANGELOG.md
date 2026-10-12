@@ -4,6 +4,20 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Changed
+
+- **Failure reasons** ([#506](https://github.com/identique/idnumbers/issues/506)): `METADATA.regexp` of 14
+  computed-checksum classes (AUS Medicare Number and Tax File Number, BGR Unified Identification Code, CHL National
+  Unique Role Number, COL Unique Personal ID, GRC Tax Identity Number, HKG Hong Kong Identity Card Number, IRN National
+  ID Number, ISR Identity Number, JPN My Number, LVA Personal Code, TUR National ID Number, UKR Legal Entity ID Number
+  and Taxpayer ID Number) now names the check character(s) with a `checksum` group, so `failure_reason()`,
+  `validate()` and `parse_id_info()` report `checksum_mismatch` instead of `validation_failed` for a definite
+  check-character mismatch. Accepted and rejected inputs, parsed results and `checksum()` values are unchanged. The
+  Australian tax file number's `checksum()` returns a remainder rather than a check digit, so a remainder equal to the
+  last digit keeps the generic reason.
+
 ## 1.17.0 (2026-10-12)
 
 ### Other fixes
