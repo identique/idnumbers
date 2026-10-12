@@ -314,6 +314,16 @@
         
 
         
+            <div class="itemName"><code><a href="#_ASCII_UPPER" class="internal-link" title="idnumbers.format._ASCII_UPPER">_ASCII<wbr></wbr>_UPPER</a></code>
+            </div>
+        
+
+    </li><li class="private">
+        
+        
+        
+
+        
             <div class="itemName"><code><a href="#_SEPARATORS" class="internal-link" title="idnumbers.format._SEPARATORS">_SEPARATORS</a></code>
             </div>
         
@@ -482,7 +492,7 @@ validator accepts more (for example Greek identity-card letters).</p>
     
     <td>Function</td>
     <td><code><a href="#normalize_id" class="internal-link" title="idnumbers.format.normalize_id">normalize<wbr></wbr>_id</a></code></td>
-    <td>Uppercase and remove whitespace, zero-width characters and <tt class="rst-docutils literal"><span class="pre">.-/()</span></tt>.</td>
+    <td>Uppercase ASCII letters and remove whitespace, zero-width characters and <tt class="rst-docutils literal"><span class="pre">.-/()</span></tt>.</td>
   </tr><tr class="function private">
     
     <td>Function</td>
@@ -507,6 +517,11 @@ validator accepts more (for example Greek identity-card letters).</p>
     
     <td>Function</td>
     <td><code><a href="#_slots" class="internal-link" title="idnumbers.format._slots">_slots</a></code></td>
+    <td><span class="undocumented">Undocumented</span></td>
+  </tr><tr class="constant private">
+    
+    <td>Constant</td>
+    <td><code><a href="#_ASCII_UPPER" class="internal-link" title="idnumbers.format._ASCII_UPPER">_ASCII<wbr></wbr>_UPPER</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr><tr class="constant private">
     
@@ -553,8 +568,10 @@ validator accepts more (for example Greek identity-card letters).</p>
   <div class="docstring functionBody">
     
     <div><p>Normalize, then insert literals from the first mask with a matching slot count.</p>
-<p>This checks length only, not slot characters or ID validity. For a custom
-country without masks, metadata length bounds select the normalized text.
+<p>Like <code><a href="#normalize_id" class="internal-link" title="idnumbers.format.normalize_id">normalize_id</a></code>, this uppercases only ASCII letters and preserves
+non-ASCII letters verbatim. This checks length only, not slot characters or
+ID validity. For a custom country without masks, metadata length bounds
+select the normalized text.
 Sweden's single <tt class="rst-docutils literal">+</tt> before the last four slots replaces the preferred
 <tt class="rst-docutils literal">-</tt> literal in its 10/12-slot layouts, preserving the significant sign.
 It does not change country validators' input handling.</p>
@@ -612,8 +629,10 @@ preferred layouts still use <tt class="rst-docutils literal">-</tt> and do not m
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Uppercase and remove whitespace, zero-width characters and <tt class="rst-docutils literal"><span class="pre">.-/()</span></tt>.</p>
-<p>With separator-free masks, separators stay if the whitespace-free input has
+    <div><p>Uppercase ASCII letters and remove whitespace, zero-width characters and <tt class="rst-docutils literal"><span class="pre">.-/()</span></tt>.</p>
+<p>Non-ASCII letters remain unchanged, including lowercase Greek letters and
+lookalikes such as <tt class="rst-docutils literal">ſ</tt>, <tt class="rst-docutils literal">ı</tt> and <tt class="rst-docutils literal">ﬁ</tt>; no Unicode case folding is applied.
+With separator-free masks, separators stay if the whitespace-free input has
 an allowed length (preserving Finland's century sign). <tt class="rst-docutils literal">+</tt> always stays.
 Length and validity are not checked. Country lookup accepts alpha-2/alpha-3
 codes and registered aliases, using only the primary ID type.</p>
@@ -737,6 +756,30 @@ codes and registered aliases, using only the primary ID type.</p>
 </div><div class="baseconstant private">
   
   
+  <a name="idnumbers.format._ASCII_UPPER">
+    
+  </a>
+  <a name="_ASCII_UPPER">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">_ASCII_UPPER</span> =
+    
+    <a class="headerLink" href="#_ASCII_UPPER" title="idnumbers.format._ASCII_UPPER">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p class="undocumented">Undocumented</p></div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>str.maketrans(<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">abcdefghijklmnopqrstuvwxyz</span><span class="rst-variable-quote">'</span>, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">ABCDEFGHIJKLMNOPQRSTUVWXYZ</span><span class="rst-variable-quote">'</span>)</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant private">
+  
+  
   <a name="idnumbers.format._SEPARATORS">
     
   </a>
@@ -818,7 +861,7 @@ codes and registered aliases, using only the primary ID type.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-12 15:50:31.
+    22.9.1 at 2026-10-12 16:02:07.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
