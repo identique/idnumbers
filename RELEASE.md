@@ -30,8 +30,8 @@ There is no automatic token fallback on OIDC failure, and no `skip-existing` byp
 
 ## Trusted Publisher setup
 
-Part of [#327](https://github.com/identique/idnumbers/issues/327). The maintainer completed the external setup on
-2026-10-12:
+Part of [#327](https://github.com/identique/idnumbers/issues/327), which is now closed. The maintainer completed the
+external setup on 2026-10-12:
 
 - On pypi.org, the `idnumbers` project's **Manage → Publishing** has a GitHub Trusted Publisher with owner
   **identique**, repository **idnumbers**, workflow filename **release_to_pypi.yml** and environment **pypi**.
@@ -40,18 +40,18 @@ Part of [#327](https://github.com/identique/idnumbers/issues/327). The maintaine
   job has read-only permissions and no secrets; only the production OIDC publishing job has `id-token: write`. Docs
   permissions are confined to its separate caller job.
 - **Retain `PYPI_API_TOKEN`** and the working default token path as the fallback. TestPyPI retains its separate token.
-- With maintainer approval, run the next production release with `trusted-publishing=true`.
+- With maintainer approval, run a production release with `trusted-publishing=true`.
   Its dedicated publishing job uses no username/password and enables attestations. It is a top-level job rather
   than a reusable publisher workflow, as required by the publishing action's Trusted Publishing support.
 - After successful publication, verify PyPI's provenance/attestation information for **each distribution**:
   check its digest and repository/workflow/source identity against the approved release commit and downloaded
-  artifact. Record the first verified trusted release before claiming the migration is complete.
+  artifact. The first verified trusted release was 1.18.0 (2026-10-12); the
+  [evidence is recorded on #327](https://github.com/identique/idnumbers/issues/327#issuecomment-6119449630).
   Local builds and dry runs cannot verify PyPI trust configuration or mint publication attestations.
 
 Token publication explicitly disables attestations: the action's PyPI attestations require Trusted Publishing.
 See the [official PyPI setup instructions](https://docs.pypi.org/trusted-publishers/adding-a-publisher/) and
 [PyPA publishing action documentation](https://github.com/pypa/gh-action-pypi-publish) for setup and verification.
-The issue remains open until the first trusted release is published and verified.
 
 ## Release workflow runtime maintenance
 
@@ -69,9 +69,8 @@ persistence remains enabled for the docs workflow's authenticated `gh-pages` bra
 and outputs. Its `GITHUB_TOKEN` PRs still do not trigger CI ([action documentation][pr-token]).
 
 These are local regression checks and a source audit, not proof of a successful updated workflow run.
-Verify the bot PR, publication and docs deployment during the next approved release. The default token route
-still disables attestations; the external Trusted Publisher setup documented above is complete, but #327 remains
-open until the first approved trusted publication and verification of both distributions' attestations. An upstream
+The 1.18.0 release then exercised the bot PR ([#592](https://github.com/identique/idnumbers/pull/592)), trusted
+publication and docs deployment with these runtimes. The default token route still disables attestations. An upstream
 download-artifact v8 `Buffer()` deprecation warning may persist; it is not
 suppressed or claimed fixed by these runtime updates ([upstream action][download-runtime]).
 
