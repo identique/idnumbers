@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 from idnumbers import InputMask, format_id, get_input_mask, normalize_id, register
 from idnumbers import list_supported_countries
-from idnumbers.nationalid import GRC, ITA, SWE
+from idnumbers.nationalid import AUT, CHE, GRC, ITA, SMR, SWE
 from tests.test_api import isolated_registry
 from tests.test_metadata import MASK_SAMPLES, class_key, compact, fits, layout
 
@@ -253,6 +253,37 @@ class TestCustomMasks(TestCase):
                 self.assertIsNotNone(mask.pattern.fullmatch(text))
             for text in ["１２-A3!", "12-a3!", "12-A３!", "12-A3 ", "12-A3!\n", "x123"]:
                 self.assertIsNone(mask.pattern.match(text))
+
+    def test_registered_fixed_prefix_classes_have_shape_only_patterns(self):
+        # Country-code helpers select only the primary ID; register these actual secondary classes in isolation.
+        for cls, prefix, wrong_prefix, masks in [
+            (SMR.TaxRegistrationNumber, "SM", "XX", ("LL#####",)),
+            (AUT.EntityTaxIDNumber, "U", "X", ("L########", "L## ### ###")),
+            (CHE.BusinessID, "CHE", "XXX", ("LLL-###.###.###", "LLL#########")),
+        ]:
+            with self.subTest(cls=class_key(cls)), isolated_registry():
+                register("QQQ", cls, alpha2="QQ")
+                info = get_input_mask("QQ")
+                self.assertEqual(info.country_code, "QQQ")
+                self.assertEqual(info.masks, masks)
+                value = compact(cls.METADATA.example, masks)
+                wrong_value = wrong_prefix + value[len(prefix) :]
+                for mask in masks:
+                    accepted = layout(value, mask)
+                    rejected = layout(wrong_value, mask)
+                    with self.subTest(mask=mask):
+                        self.assertTrue(cls.validate(accepted))
+                        self.assertFalse(cls.validate(rejected))
+                        self.assertIsNotNone(info.pattern.fullmatch(accepted))
+                        self.assertIsNotNone(info.pattern.fullmatch(rejected))
+                        with patch.object(cls, "validate", side_effect=AssertionError("must not validate")):
+                            self.assertEqual(get_input_mask("QQ").masks, masks)
+                            self.assertEqual(normalize_id("QQ", accepted), value)
+                            self.assertEqual(normalize_id("QQ", rejected), wrong_value)
+                            self.assertEqual(format_id("QQ", accepted), cls.METADATA.example)
+                            self.assertEqual(format_id("QQ", rejected), layout(wrong_value, masks[0]))
+                        self.assertTrue(cls.validate(format_id("QQ", accepted)))
+                        self.assertFalse(cls.validate(format_id("QQ", rejected)))
 
     def test_sweden_sign_handling_does_not_apply_to_other_countries(self):
         with isolated_registry():

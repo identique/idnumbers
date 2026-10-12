@@ -509,9 +509,14 @@ formatting, and `get_input_mask()` returns `None`.
 
 `InputMask` is frozen, with `country_code`, tuple `masks`, and compiled `pattern`. Patterns match the whole input,
 case-sensitively: `#` means `[0-9]`, `L` means `[A-Z]`, `X` means `[A-Z0-9]`, and `*` means Unicode non-whitespace.
-Other mask characters are escaped literals. This is a **UI layout pattern, not the validator's regexp**.
+Other mask characters are escaped literals. This is a **shape-only UI layout pattern, not the validator's regexp**.
+Generic letter slots cannot encode fixed prefixes: San Marino's tax registration `SM`, Austria's UID `U` and
+Switzerland's business ID `CHE` are represented by `LL`, `L` and `LLL` in those classes' metadata masks. Wrong ASCII
+letters can match that shape while failing the class's regexp and validator. Country-code helpers still select only
+the primary ID type; they do not expose these secondary classes' masks.
 It describes literal preferred layouts, not every accepted input: Sweden's masks and pattern retain `-`, even
-though formatting preserves the significant `+` in plus forms.
+though formatting preserves the significant `+` in plus forms. Austria's UID masks likewise omit accepted `-` and
+`/` separator variants such as `U12-345/675`.
 Its intentional ASCII letter restriction excludes Greek identity-card letters even though the country validator
 accepts them and formatting preserves them unchanged. The metadata example uses accepted Latin `AB-123456`.
 Length-only formatting can produce characters that do not match the pattern; call `idnumbers.validate()` separately.

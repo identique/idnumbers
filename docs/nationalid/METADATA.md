@@ -44,11 +44,11 @@ the field is, and its docstring is where to look. Common ones are `YY` or `YYYY`
 Sweden's `YYMMDD-SSSC`). The same letter can mean different things in different classes: `C` is the century digit in
 Egypt's `CYYMMDDGGSSSSV`, and `DD` and `MM` are the department and the municipality, not a day and a month, in
 Guatemala's `NNNNNNNNVDDMM`. Read `display_format` together with the class docstring, and use `masks` for the kinds of
-character that a class accepts.
+character slots in preferred layouts, not for ID validity.
 
 ### Mask vocabulary
 
-A mask describes one accepted layout of the ID, one character per character of the ID:
+A mask describes the shape of a preferred layout, one character per character of the ID, not ID validity:
 
 | character | meaning                                   |
 |-----------|-------------------------------------------|
@@ -57,12 +57,22 @@ A mask describes one accepted layout of the ID, one character per character of t
 | `X`       | a letter or a digit                       |
 | `*`       | any character except white space          |
 
-Every other character of a mask is a separator, and it is one of space, `-`, `.`, `/`, `(` and `)`. A separator is part of the layout, so a validator that rejects separators has masks without them: the masks are layouts the class accepts, not the way an authority prints the ID. A mask has one slot for each character that the ID has without its separators, so the number of slots of a mask is a length between `min_length` and `max_length`. A slot that stands for a fixed character of the ID, such as the `U` of an Austrian UID, is written as the kind of character (`L`), not as the character.
+Every other character of a mask is a separator, and it is one of space, `-`, `.`, `/`, `(` and `)`. A separator
+is part of the layout, so a validator that rejects separators has masks without them. Each mask has an accepted
+representative, but not every string of its shape is valid. A mask has one slot for each character that the ID has
+without its separators, so its slot count is between `min_length` and `max_length`.
 
-The masks are the preferred layouts that the class accepts, not necessarily every layout it accepts: for example ARG,
-COL, CZE, SVK, DNK, ISL and SWE also accept a compact form that has no mask. `format_id()` lays the normalized ID into
-the first mask whose slot count equals the normalized ID length. This selection is length-only: it checks neither
-slot character types nor ID validity. `get_input_mask()` builds its pattern from all the masks.
+Masks cannot encode fixed letters: San Marino's tax registration prefix `SM` uses `LL`, Austria's UID prefix `U`
+uses `L`, and Switzerland's business ID prefix `CHE` uses `LLL`. The generic `L` slots also fit wrong letters that
+the class's `regexp` and `validate()` reject. Read `display_format` for fixed-prefix notation and the class's
+`regexp` for accepted syntax; use `validate()` for ID validity, including checksum rules.
+
+The masks are preferred layouts, not necessarily every layout the class accepts. For example ARG, COL, CZE, SVK,
+DNK, ISL and SWE also accept a compact form that has no mask. Austria's UID accepts `U12-345/675` and other `-`,
+space and `/` combinations allowed by its regexp, but its masks list only compact and fully space-separated layouts.
+`format_id()` lays the normalized ID into the first mask whose slot count equals the normalized ID length. This
+selection is length-only: it checks neither slot character types nor ID validity. `get_input_mask()` builds a
+shape-only pattern from all the masks of the registry's primary ID type, not its secondary ID classes.
 
 Sweden's `######-####` and `########-####` masks are a formatting exception: the normalized input may have one more
 character than the slot count, with exactly one retained `+` at the mask's separator position. `format_id()` replaces
@@ -72,7 +82,10 @@ example, `820901+2395` has 11 normalized characters but round-trips through the 
 synthetic layout example, not an officially issued plus-sign variant. `get_input_mask()` still describes the
 preferred literal `-` layouts and its pattern does not match the plus form.
 
-The tests in `tests/test_metadata.py` check every ID class: the example is valid and written in the first mask, it is accepted when it is laid into every mask it fits, and every other mask has a test sample that the class accepts.
+The tests in `tests/test_metadata.py` check every ID class: the example is valid and written in the first mask.
+For every mask the example fits, its laid-out representative must match the class's `regexp` with `fullmatch()`
+and pass `validate()`. Every other mask has a test sample checked against both. These accepted representatives
+check layout compatibility; they do not imply that every string matching a mask is valid.
 
 ## Use properties
 
