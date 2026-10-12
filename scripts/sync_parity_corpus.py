@@ -236,13 +236,15 @@ def run(arguments: argparse.Namespace) -> int:
         except Exception as restore_error:
             # Report the failure that started it all too, and name the files to check; otherwise the user would see
             # only the rollback error and not know the tree may be half-updated.
-            drop_bytecode(module_path)
-            raise SetupError(
+            # A failed-rollback report deliberately takes priority over KeyboardInterrupt/SystemExit: main returns 2.
+            rollback_report = SetupError(
                 "%s: %s\nrestoring the previous files failed as well (%s: %s); these files may be partly updated, "
                 "check them with `git status` and `git diff`: %s"
                 % (type(error).__name__, error, type(restore_error).__name__, restore_error,
                    ", ".join(display_path(path) for path in snapshot))
-            ) from error
+            )
+            drop_bytecode(module_path)
+            raise rollback_report from error
         drop_bytecode(module_path)
         raise
     print(message)

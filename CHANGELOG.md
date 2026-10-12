@@ -23,6 +23,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Other fixes
 
+- **Parity sync script** ([#564](https://github.com/identique/idnumbers/issues/564)): construct failed-rollback reports
+  before bytecode cleanup and test that a failed restore after `KeyboardInterrupt` or `SystemExit` reports both errors
+  and the tracked paths with exit code 2; successful rollback still propagates the original interrupt.
 - **Release tests** ([#559](https://github.com/identique/idnumbers/issues/559)): cover rejection of a bare
   mismatched-version dist-info entry and an absolute package path in wheels; release guard behavior is unchanged.
 
