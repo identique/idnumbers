@@ -47,13 +47,15 @@ Never publish to PyPI without the maintainer's approval.
 
 ### Line length
 
-- **Wrap at 120 columns:** new and changed code, comments, docstrings and Markdown prose.
-  `ruff format` wraps Python code at 120 columns and CI checks it, but no tool reflows comments, docstrings, string
-  literals or Markdown prose, so wrapping those stays a review convention. Older lines that exceed it are not swept;
-  wrap one when you change it.
+- **Wrap at 120 columns:** new and changed code, comments, docstrings and Markdown prose. Every line of a reflowed
+  paragraph counts as changed, so wrap the whole paragraph. `ruff format` wraps Python code at 120 columns and CI
+  checks it, but no tool reflows comments, docstrings, string literals or Markdown prose, so wrapping those stays a
+  review convention. Older lines that exceed it are not swept; wrap one when you change it.
 - **Exceptions:** a URL that does not fit stays whole, on a line of its own or as a single string literal (for
   example an entry of `METADATA.links`). Don't break or shorten it, and don't move a citation out of a docstring
-  only to fit. Markdown table rows and generated guides are not wrapped.
+  only to fit. The exception is for URLs only: split any other long string literal, such as a regexp, for example
+  with implicit string concatenation (`ruff format` never splits string literals), and wrap a citation that is not a
+  URL like other docstring prose. Markdown table rows and generated guides are not wrapped.
 
 ## Commands
 
