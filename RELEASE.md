@@ -70,8 +70,9 @@ and outputs. Its `GITHUB_TOKEN` PRs still do not trigger CI ([action documentati
 
 These are local regression checks and a source audit, not proof of a successful updated workflow run.
 Verify the bot PR, publication and docs deployment during the next approved release. The default token route
-still disables attestations; external Trusted Publisher setup in #327 remains incomplete and requires separate
-maintainer approval. An upstream download-artifact v8 `Buffer()` deprecation warning may persist; it is not
+still disables attestations; the external Trusted Publisher setup documented above is complete, but #327 remains
+open until the first approved trusted publication and verification of both distributions' attestations. An upstream
+download-artifact v8 `Buffer()` deprecation warning may persist; it is not
 suppressed or claimed fixed by these runtime updates ([upstream action][download-runtime]).
 
 [checkout-runtime]: https://github.com/actions/checkout/blob/v7.0.1/action.yml
