@@ -4,6 +4,16 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Changed
+
+- **Formatting** ([#599](https://github.com/identique/idnumbers/issues/599)): the Python sources are formatted with
+  `ruff format` (ruff 0.16.10, 120 columns; Markdown is left alone) and CI checks them with `ruff format --check`.
+  `.git-blame-ignore-revs` lists the reformat commit, so `git blame` skips it. Code and behaviour are unchanged. This
+  also settles the quote style of the README example tests
+  ([#561](https://github.com/identique/idnumbers/issues/561)).
+
 ## 1.19.0 (2026-10-12)
 
 ### Documentation
