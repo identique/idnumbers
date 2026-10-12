@@ -102,7 +102,8 @@ working directories.
 - **CI:** `.github/workflows/python-test.yml` runs the unittest suite (which includes the README example tests) on
   every supported Python version for pushes and PRs to `main`. The same workflow also runs a strict mypy job, a ruff
   job that lints and checks formatting, a coverage job that enforces the floor, informational benchmarks and a
-  `ci-summary` job.
+  `ci-summary` job. On pushes to `main`, a `coverage-badge` job (outside `ci-summary`) publishes the README's coverage
+  badge JSON to the `badges` branch with `GITHUB_TOKEN`; no other job can write to the repository.
 
 ## Architecture
 

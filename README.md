@@ -6,6 +6,7 @@ various countries. It is an open source project, so feel free to use and contrib
 
 * [![PyPI version](https://badge.fury.io/py/idnumbers.svg)](https://badge.fury.io/py/idnumbers)
 * [![PyPI Stats](https://img.shields.io/pypi/dm/idnumbers)](https://pypistats.org/packages/idnumbers)
+* [![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fidentique%2Fidnumbers%2Fbadges%2Fcoverage.json)](https://github.com/identique/idnumbers/actions/workflows/python-test.yml)
 
 # Features
 

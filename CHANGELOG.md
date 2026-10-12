@@ -8,6 +8,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Changed
 
+- **Coverage badge** ([#600](https://github.com/identique/idnumbers/issues/600)): the README shows the line and branch
+  coverage from a shields.io endpoint JSON that CI publishes to the `badges` branch on pushes to `main`, using
+  `GITHUB_TOKEN` with no secrets or external service. Pull request CI and the 97% floor are unchanged.
 - **Formatting** ([#599](https://github.com/identique/idnumbers/issues/599)): the Python sources are formatted with
   `ruff format` (ruff 0.16.10, 120 columns; Markdown is left alone) and CI checks them with `ruff format --check`.
   `.git-blame-ignore-revs` lists the reformat commit, so `git blame` skips it. Code and behaviour are unchanged. This
