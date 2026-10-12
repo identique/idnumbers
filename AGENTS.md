@@ -37,6 +37,9 @@ national ID numbers for many countries, has no runtime dependencies, and support
   then shows in the issue's timeline, and the issue stays open.
 - **Work in progress:** a PR that isn't ready yet is titled `WIP #<issue> - <description>`.
 - **Version bumps:** the bump workflow's bot PR is titled `Bump version to <X.Y.Z>`; see the release procedure.
+- **Format-only commits:** `.git-blame-ignore-revs` lists format-only commits such as the `ruff format` reformat.
+  GitHub's blame view skips them; locally, run `git config blame.ignoreRevsFile .git-blame-ignore-revs` once. A future
+  repo-wide format-only change lands as its own PR, and a follow-up PR adds its squash commit SHA to the file.
 
 ### Releases
 
@@ -44,9 +47,10 @@ Never publish to PyPI without the maintainer's approval.
 
 ### Line length
 
-- **Wrap at 120 columns:** new and changed code, comments, docstrings and Markdown prose. This is a review
-  convention, not a lint rule: ruff does not check it. Older lines that exceed it are not swept; wrap one when you
-  change it.
+- **Wrap at 120 columns:** new and changed code, comments, docstrings and Markdown prose.
+  `ruff format` wraps Python code at 120 columns and CI checks it, but no tool reflows comments,
+  docstrings, string literals or Markdown prose, so wrapping those stays a review convention. Older lines that exceed
+  it are not swept; wrap one when you change it.
 - **Exceptions:** a URL that does not fit stays whole, on a line of its own or as a single string literal (for
   example an entry of `METADATA.links`). Don't break or shorten it, and don't move a citation out of a docstring
   only to fit. Markdown table rows and generated guides are not wrapped.
@@ -62,6 +66,7 @@ Before running the full test suite, install its dev-only dependencies in your en
 | One country   | `python3 -m unittest tests.nationalid.test_CHN`                                          |
 | Type check    | `python3 -m mypy` with mypy 1.20.2 on Python >= 3.10 (config in `pyproject.toml`)        |
 | Lint          | `ruff check .` with ruff 0.16.10 (rules in `pyproject.toml`)                             |
+| Format        | `ruff format .` with ruff 0.16.10 (CI runs `ruff format --check .`; Python files only)   |
 | Coverage      | `python3 -m coverage run -m unittest && python3 -m coverage report` with coverage 7.16.2 |
 | Benchmarks    | `python3 bench/run.py` (informational)                                                   |
 | Parity golden | `python3 scripts/sync_parity_corpus.py` (`--check`, `--from-port <port checkout>`)       |
@@ -96,7 +101,7 @@ working directories.
   other 3.10+ syntax.
 - **CI:** `.github/workflows/python-test.yml` runs the unittest suite (which includes the README example tests) on
   every supported Python version for pushes and PRs to `main`. The same workflow also runs a strict mypy job, a ruff
-  lint job, a coverage job that enforces the floor, informational benchmarks and a `ci-summary` job.
+  job that lints and checks formatting, a coverage job that enforces the floor, informational benchmarks and a `ci-summary` job.
 
 ## Architecture
 

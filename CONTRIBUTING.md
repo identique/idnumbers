@@ -37,6 +37,7 @@ python -m unittest tests.nationalid.test_CHN
 python -m mypy
 python -m mypy --strict tools/scan_ids.py tools/generate_docs.py tools/check_docs_examples.py
 ruff check .
+ruff format --check .
 python -m coverage run -m unittest
 python -m coverage report
 python scripts/sync_parity_corpus.py --check
@@ -45,8 +46,10 @@ python -m tools.check_docs_examples --typecheck
 python -m tools.scan_ids --markdown-dir docs/countries --failure-reasons-file docs/FAILURE_REASONS.md --input-formats-file docs/INPUT_FORMATS.md --check
 ```
 
-Coverage 7.16.2 enforces the 97% floor in `pyproject.toml`; benchmarks are informational. Ruff 0.16.10 uses the
-repository's configured rules, not a new formatting policy. CI runs unittest, including generated-guide checks
+Coverage 7.16.2 enforces the 97% floor in `pyproject.toml`; benchmarks are informational. Ruff 0.16.10 lints with the
+rules in `pyproject.toml` and formats Python files with `ruff format` (120 columns); run `ruff format .` before
+committing. To make local `git blame` skip the format-only commits, run
+`git config blame.ignoreRevsFile .git-blame-ignore-revs` once. CI runs unittest, including generated-guide checks
 and executed documentation examples, on Python 3.9–3.14. The existing strict type-check job also checks the tools
 and all documentation examples. Keep assertion-based examples independently executable and narrow optional
 results explicitly; do not add type ignores to conceal wrong API usage.
