@@ -12,11 +12,14 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   computed-checksum classes (AUS Medicare Number and Tax File Number, BGR Unified Identification Code, CHL National
   Unique Role Number, COL Unique Personal ID, GRC Tax Identity Number, HKG Hong Kong Identity Card Number, IRN National
   ID Number, ISR Identity Number, JPN My Number, LVA Personal Code, TUR National ID Number, UKR Legal Entity ID Number
-  and Taxpayer ID Number) now names the check character(s) with a `checksum` group, so `failure_reason()`,
-  `validate()` and `parse_id_info()` report `checksum_mismatch` instead of `validation_failed` for a definite
-  check-character mismatch. Accepted and rejected inputs, parsed results and `checksum()` values are unchanged. The
-  Australian tax file number's `checksum()` returns a remainder rather than a check digit, so a remainder equal to the
-  last digit keeps the generic reason.
+  and Taxpayer ID Number) now names the check character(s) with a `checksum` group, so `failure_reason()` reports
+  `checksum_mismatch` instead of `validation_failed` for a definite check-character mismatch. The unified
+  `validate()` and `parse_id_info()` report it too for the nine classes that are their country's primary ID (CHL, COL,
+  HKG, IRN, ISR, JPN, LVA, TUR and the UKR Taxpayer ID Number); they select only the primary ID, so the other five
+  (AUS Medicare Number and Tax File Number, BGR Unified Identification Code, GRC Tax Identity Number and UKR Legal
+  Entity ID Number) are reached through `failure_reason(id_class, number)`. Accepted and rejected inputs, parsed
+  results and `checksum()` values are unchanged. The Australian tax file number's `checksum()` returns a remainder
+  rather than a check digit, so a remainder equal to the last digit keeps the generic reason.
 
 ## 1.17.0 (2026-10-12)
 
