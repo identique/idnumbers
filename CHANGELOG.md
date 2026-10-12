@@ -17,6 +17,13 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   also settles the quote style of the README example tests
   ([#561](https://github.com/identique/idnumbers/issues/561)).
 
+### Other fixes
+
+- **LKA** ([#615](https://github.com/identique/idnumbers/issues/615)): old NIC suffixes `V/v/X/x` historically
+  indicated voter/nonvoter status, not citizenship. `OldNationalID.parse()` keeps the `citizenship` key but returns
+  `None` instead of citizen/resident status, with type `Optional[Citizenship]`. Validation, checksum, conversion and
+  other parsed fields are unchanged.
+
 ### Documentation
 
 - **Contributor guide** ([#598](https://github.com/identique/idnumbers/issues/598)): the line-length rule in

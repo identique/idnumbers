@@ -60,7 +60,7 @@ assert info is not None
 | example | <code>900120001V</code> |
 | id_type | <code>National Identity Card Number (Old)</code> |
 | iso3166_alpha2 | <code>LK</code> |
-| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka&#x27;, &#x27;https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html&#x27;]</code> |
+| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka&#x27;, &#x27;https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html&#x27;, &#x27;https://www.irb-cisr.gc.ca/en/country-information/rir/Pages/index.aspx?doc=451823&#x27;]</code> |
 | masks | <code>(&#x27;#########L&#x27;,)</code> |
 | max_length | <code>10</code> |
 | min_length | <code>10</code> |
@@ -73,6 +73,7 @@ Reference links recorded by this implementation (source quality varies):
 
 - <https://en.wikipedia.org/wiki/National_identification_number#Sri_Lanka>
 - <https://drp.gov.lk/Templates/Artical%20-%20English%20new%20number.html>
+- <https://www.irb-cisr.gc.ca/en/country-information/rir/Pages/index.aspx?doc=451823>
 
 ```python
 from idnumbers.nationalid.lka.old_national_id import OldNationalID

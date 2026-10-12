@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from unittest import TestCase, main
 
 from idnumbers.nationalid import LKA
-from idnumbers.nationalid.constant import Gender, Citizenship
+from idnumbers.nationalid.constant import Gender
 
 
 class TestLKAValidation(TestCase):
@@ -47,7 +47,31 @@ class TestLKAValidation(TestCase):
         self.assertEqual(Gender.MALE, result["gender"])
         self.assertEqual("0471", result["sn"])
         self.assertEqual(6, result["checksum"])
-        self.assertEqual(Citizenship.CITIZEN, result["citizenship"])
+        self.assertIsNone(result["citizenship"])
+
+    def test_old_voter_suffix_does_not_identify_citizenship(self):
+        # Synthetic fixture, sharing the independently calculated checksum used by the day sweep.
+        new_id = self.make_new_id(1992, 501)
+        old_prefix = new_id[2:7] + new_id[8:]
+        expected = {
+            "yyyymmdd": date(1992, 1, 1),
+            "gender": Gender.FEMALE,
+            "sn": "0123",
+            "checksum": int(new_id[-1]),
+            "citizenship": None,
+        }
+        for suffix in ("V", "v", "X", "x"):
+            number = old_prefix + suffix
+            with self.subTest(suffix=suffix):
+                self.assertTrue(LKA.OldNationalID.validate(number))
+                self.assertTrue(LKA.OldNationalID.checksum(number))
+                self.assertEqual(new_id, LKA.OldNationalID.to_new(number))
+                self.assertEqual(expected, LKA.OldNationalID.parse(number))
+        invalid_suffix = old_prefix + "A"
+        self.assertFalse(LKA.OldNationalID.validate(invalid_suffix))
+        self.assertFalse(LKA.OldNationalID.checksum(invalid_suffix))
+        self.assertIsNone(LKA.OldNationalID.parse(invalid_suffix))
+        self.assertIsNone(LKA.OldNationalID.to_new(invalid_suffix))
 
     def test_convert(self):
         self.assertEqual("199612003996", LKA.OldNationalID.to_new("961203996V"))
@@ -94,9 +118,7 @@ class TestLKAValidation(TestCase):
                             "checksum": int(new_id[-1]),
                         }
                         if id_type is LKA.OldNationalID:
-                            expected["citizenship"] = (
-                                Citizenship.CITIZEN if number[-1].upper() == "V" else Citizenship.RESIDENT
-                            )
+                            expected["citizenship"] = None
                             self.assertEqual(new_id, id_type.to_new(number))
                         self.assertEqual(expected, result)
 
