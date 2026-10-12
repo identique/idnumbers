@@ -28,6 +28,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Other fixes
 
+- **Formatting** ([#618](https://github.com/identique/idnumbers/issues/618)): `normalize_id()` and `format_id()`
+  uppercase ASCII letters only, leaving non-ASCII letters (including lowercase Greek letters) unchanged instead of
+  folding lookalikes or expanding ligatures into ASCII. Helper outputs change; country validation is unchanged.
 - **LKA** ([#615](https://github.com/identique/idnumbers/issues/615)): old NIC suffixes `V/v/X/x` historically
   indicated voter/nonvoter status, not citizenship. `OldNationalID.parse()` keeps the `citizenship` key but returns
   `None` instead of citizen/resident status, with type `Optional[Citizenship]`. Validation, checksum, conversion and

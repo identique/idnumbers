@@ -486,10 +486,15 @@ assert validate('BR', formatted).is_valid
 assert normalize_id('se', '811218+9876') == '811218+9876'
 assert format_id('SWE', '811218+9876') == '811218+9876'
 assert format_id('se', '19811218+9876') == '19811218+9876'
+lookalike = normalize_id('IT', 'rſſmra85m01h501q')
+assert lookalike == 'RſſMRA85M01H501Q' and lookalike is not None
+assert not validate('IT', lookalike).is_valid
 print(compact, mask.masks)
 ```
 
-Normalization uppercases and removes whitespace (including U+200B–U+200D, U+2060 and U+FEFF) and `. - / ( )`.
+Normalization uppercases **ASCII letters only** (`a-z` → `A-Z`) and leaves other letters unchanged, including
+`ſ`, `ı`, `ﬁ` and lowercase Greek letters. It does not fold Unicode lookalikes into ASCII or expand ligatures.
+It removes whitespace (including U+200B–U+200D, U+2060 and U+FEFF) and `. - / ( )`.
 If no mask contains literal separators and the whitespace-free text already has an allowed slot count, those
 separators stay: Finland's century sign is significant. `+` is never removed. Sweden's minus is removed and
 reinserted by formatting. A single Swedish plus before the last four digits remains normalized and replaces the
