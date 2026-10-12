@@ -3,6 +3,7 @@
 from pathlib import Path
 import re
 import unittest
+from typing import Optional
 
 ROOT = Path(__file__).resolve().parents[1]
 FORMAT_COMMIT = "9ae3d112fb91c38d94f0b2db6abddc68a1a84237"
@@ -12,9 +13,10 @@ MAIN_PUSH_ONLY = (
 )
 
 
-def job_text(name: str) -> str:
+def job_text(name: str, text: Optional[str] = None) -> str:
     """Return the text of one job of the CI workflow, failing with a readable message if it is missing."""
-    text = WORKFLOW.read_text()
+    if text is None:
+        text = WORKFLOW.read_text(encoding="utf-8")
     headers = list(re.finditer(r"^  ([A-Za-z][\w-]*):[ \t]*$", text, re.MULTILINE))
     names = [header.group(1) for header in headers]
     if name not in names:
@@ -37,20 +39,54 @@ def steps(job: str) -> "list[str]":
     return re.split(r"(?m)^(?=    - (?:name|uses):)", job)[1:]
 
 
+def markdown_format_excluded(text: str) -> bool:
+    """Check the formatter's exclude array, ignoring comments and unrelated TOML sections/keys."""
+    # Keep quoted strings intact so a '#' within an exclusion is not mistaken for a comment.
+    quoted = r'"(?:\\.|[^"\\])*"|\'[^\']*\''
+    text = re.sub(quoted + r"|#[^\n]*", lambda match: "" if match.group().startswith("#") else match.group(), text)
+    section = re.search(r"(?ms)^\[tool\.ruff\.format\][ \t]*\n(.*?)(?=^[ \t]*\[[A-Za-z]|\Z)", text)
+    if section is None:
+        return False
+    exclude = re.search(r"(?m)^[ \t]*exclude[ \t]*=[ \t]*\[((?:" + quoted + r"|[^\]\"'])*?)\]", section.group(1))
+    if exclude is None:
+        return False
+    return any(match.group() in ('"*.md"', "'*.md'") for match in re.finditer(quoted, exclude.group(1)))
+
+
 class CIWorkflowTest(unittest.TestCase):
-    def test_lint_job_checks_formatting(self) -> None:
-        text = (ROOT / ".github/workflows/python-test.yml").read_text()
-        start = text.index("\n  lint:\n")
-        end = text.index("\n  coverage:\n", start)
-        job = text[start:end]
+    def assert_lint_checks(self, text: Optional[str] = None) -> None:
+        job = job_text("lint", text)
         self.assertIn("ruff==0.16.10", job)
         self.assertIn("ruff check", job)
         self.assertIn("ruff format --check", job)
 
+    def test_lint_job_checks_formatting(self) -> None:
+        self.assert_lint_checks()
+
+    def test_lint_contract_tolerates_reordered_jobs_and_missing_coverage(self) -> None:
+        lint = "  lint:\n    run: ruff==0.16.10 && ruff check . && ruff format --check .\n"
+        other = "  other:\n    run: echo other\n"
+        coverage = "  coverage:\n    run: echo coverage\n"
+        for text in (coverage + lint + other, other + lint, lint + other + coverage):
+            with self.subTest(text=text):
+                self.assertEqual(job_text("lint", text), lint)
+                self.assert_lint_checks(text)
+
+    def test_missing_or_renamed_lint_job_has_readable_failure(self) -> None:
+        for text in ("jobs:\n", "  renamed-lint:\n    run: ruff check .\n"):
+            with self.subTest(text=text):
+                with self.assertRaisesRegex(AssertionError, "job 'lint' is not in python-test.yml; its jobs are"):
+                    self.assert_lint_checks(text)
+
+    def test_formatting_check_in_another_job_does_not_satisfy_lint_contract(self) -> None:
+        text = "  lint:\n    run: ruff==0.16.10 && ruff check .\n  other:\n    run: ruff format --check .\n"
+        with self.assertRaisesRegex(AssertionError, "ruff format --check"):
+            self.assert_lint_checks(text)
+
 
 class CoverageBadgeWorkflowTest(unittest.TestCase):
     def test_only_the_badge_job_can_write(self) -> None:
-        text = WORKFLOW.read_text()
+        text = WORKFLOW.read_text(encoding="utf-8")
         self.assertRegex(text, r"(?m)^permissions:\n  contents: read\n")
         self.assertEqual(text.count("contents: write"), 1)
         self.assertEqual(text.count("permissions:"), 2)
@@ -73,7 +109,7 @@ class CoverageBadgeWorkflowTest(unittest.TestCase):
         self.assertRegex(job, r"concurrency:\n      group: coverage-badge\n      cancel-in-progress: false\n")
 
     def test_the_only_secret_is_the_github_token_and_it_stays_out_of_urls(self) -> None:
-        text = WORKFLOW.read_text()
+        text = WORKFLOW.read_text(encoding="utf-8")
         self.assertEqual(set(re.findall(r"secrets\.(\w+)", text)), {"GITHUB_TOKEN"})
         self.assertEqual(len(re.findall(r"\$\{\{\s*secrets\.", job_text("coverage-badge"))), 1)
         self.assertNotRegex(text, r"x-access-token:[^\s'\"]*@")
@@ -126,7 +162,7 @@ class CoverageBadgeWorkflowTest(unittest.TestCase):
 
 class RepositoryFilesTest(unittest.TestCase):
     def test_blame_ignore_revs_lists_full_shas(self) -> None:
-        text = (ROOT / ".git-blame-ignore-revs").read_text()
+        text = (ROOT / ".git-blame-ignore-revs").read_text(encoding="utf-8")
         entries = [line for line in text.splitlines() if line.strip() and not line.startswith("#")]
         self.assertTrue(entries)
         for entry in entries:
@@ -136,5 +172,28 @@ class RepositoryFilesTest(unittest.TestCase):
 
     def test_markdown_is_not_formatted(self) -> None:
         # ruff would also reformat Python code fences in Markdown, including the generated guides.
-        text = (ROOT / "pyproject.toml").read_text()
-        self.assertRegex(text, re.compile(r'^\[tool\.ruff\.format\]\n(?:#.*\n)*exclude = \["\*\.md"\]$', re.MULTILINE))
+        text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        self.assertTrue(markdown_format_excluded(text), "tool.ruff.format.exclude must include *.md")
+
+    def test_markdown_exclusion_tolerates_extra_keys_entries_and_whitespace(self) -> None:
+        for text in (
+            '[tool.ruff.format]\nquote-style = "single"\nexclude = ["build/*", "*.md"]\n',
+            "[tool.ruff.format]\nexclude = [\n  'build/*', # extra exclusion\n  '*.md',\n]\npreview = true\n",
+            '[tool.ruff.format]  \n  exclude  =  ["*.md", "has#hash.py"] # comment\n[tool.ruff.lint]\n',
+        ):
+            with self.subTest(text=text):
+                self.assertTrue(markdown_format_excluded(text))
+
+    def test_markdown_exclusion_requires_actual_formatter_array_entry(self) -> None:
+        for text in (
+            '[tool.ruff.format]\nexclude = ["*.rst"]\n',
+            '[tool.ruff.lint]\nexclude = ["*.md"]\n',
+            '[tool.ruff.format]\npreview = true\n[tool.ruff.lint]\nexclude = ["*.md"]\n',
+            '[tool.ruff.format]\n# exclude = ["*.md"]\nexclude = ["*.py"]\n',
+            '[tool.ruff.format]\nexclude = ["*.py", # "*.md"\n]\n',
+            '[tool.ruff.format]\nother = "*.md"\nexclude = ["*.py"]\n',
+            '[tool.ruff.format]\nexclude = "*.md"\n',
+            '[tool.ruff.format]\nexclude = ["prefix*.md"]\n',
+        ):
+            with self.subTest(text=text):
+                self.assertFalse(markdown_format_excluded(text))

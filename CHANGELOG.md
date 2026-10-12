@@ -41,6 +41,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Documentation
 
+- **Contributor checklists** ([#608](https://github.com/identique/idnumbers/issues/608)): explicitly name both ruff
+  lint and formatting checks. CI contract tests tolerate extra formatter exclusions and reordered jobs while
+  retaining readable failures for missing checks. Clarify checksum-group coverage, line wrapping and the first
+  trusted release wording; CI policy and library behaviour are unchanged.
 - **Contributor guide** ([#598](https://github.com/identique/idnumbers/issues/598)): the line-length rule in
   `AGENTS.md` now says that every line of a reflowed paragraph counts as changed, and that only URLs are exempt: other
   long string literals and citations are wrapped. Code and behaviour are unchanged.
