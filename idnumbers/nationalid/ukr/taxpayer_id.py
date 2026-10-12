@@ -19,6 +19,11 @@ class TaxpayerIDNumber:
     Ukraine Taxpayer ID number format
     https://en.wikipedia.org/wiki/National_identification_number#Ukraine
     This is a python version of https://github.com/therezor/ua-tax-number/blob/main/src/Decoder.php
+    The State Tax Service describes the first five digits as a birth-date day count, with 00001 representing
+    1900-01-01:
+    https://zt.tax.gov.ua/media-ark/local-news/535784.html
+    As a library plausibility check, validation and parsing reject encoded birth dates after the local current date.
+    This check does not change checksum computation.
     The alias: ['RNTRC', 'РНОКПП', 'taxpayer registration number']
     """
 
@@ -37,6 +42,7 @@ class TaxpayerIDNumber:
             "alias_of": None,
             "names": ["Taxpayer ID Number", "RNTRC", "РНОКПП", "taxpayer registration number"],
             "links": [
+                "https://zt.tax.gov.ua/media-ark/local-news/535784.html",
                 "https://en.wikipedia.org/wiki/National_identification_number#Ukraine",
                 "https://uk.wikipedia.org/wiki/"
                 "%D0%A0%D0%B5%D1%94%D1%81%D1%82%D1%80%D0%B0%D1%86%D1%96%D0%B9%D0%BD%D0%B8%D0%B9_%D0"
@@ -76,9 +82,11 @@ class TaxpayerIDNumber:
             return None
         if TaxpayerIDNumber.checksum(id_number) != int(id_number[9]):
             return None
-        # according to the PHP implementation, we need to minus 1, maybe the tail and head values included.
+        # The first five digits count birth-date days with 00001 representing 1900-01-01.
         days = int(id_number[:5]) - 1
         dob = TaxpayerIDNumber.BIRTHDAY_BASE + timedelta(days=days)
+        if dob > date.today():
+            return None
         return {
             "yyyymmdd": dob,
             "gender": Gender.MALE if int(id_number[8]) % 2 == 1 else Gender.FEMALE,
