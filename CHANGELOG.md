@@ -19,6 +19,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Documentation
 
+- **Contributor guide** ([#598](https://github.com/identique/idnumbers/issues/598)): the line-length rule in
+  `AGENTS.md` now says that every line of a reflowed paragraph counts as changed, and that only URLs are exempt: other
+  long string literals and citations are wrapped. Code and behaviour are unchanged.
 - **Country template** ([#595](https://github.com/identique/idnumbers/issues/595)): the checksum group item names the
   check character(s) and covers a `checksum()` that returns a derived value (the tax file number's remainder): the group
   stays over the check character, and the class needs the named exemption in `TestComputedChecksumGroups`. The BGR
