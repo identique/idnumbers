@@ -71,6 +71,8 @@ class HostileText(str):
 
 
 class HostileRepr:
+    """An object whose __repr__ returns a str subclass with raising __len__ and __getitem__."""
+
     def __repr__(self) -> str:
         return HostileText('hostile')
 
@@ -82,6 +84,8 @@ class NamelessMeta(type):
 
 
 class NamelessRepr(metaclass=NamelessMeta):
+    """An object whose type's __name__ and own __repr__ both raise."""
+
     def __repr__(self) -> str:
         raise RuntimeError('no repr')
 
