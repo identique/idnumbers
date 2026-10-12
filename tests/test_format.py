@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 from idnumbers import InputMask, format_id, get_input_mask, normalize_id, register
 from idnumbers import list_supported_countries
-from idnumbers.nationalid import GRC, SWE
+from idnumbers.nationalid import GRC, ITA, SWE
 from tests.test_api import isolated_registry
 from tests.test_metadata import MASK_SAMPLES, class_key, compact, fits, layout
 
@@ -71,6 +71,59 @@ class TestNormalization(TestCase):
             with self.subTest(char=repr(char)):
                 self.assertEqual(normalize_id("TW", char + "a123" + char + "456789" + char), "A123456789")
         self.assertEqual(format_id("BR", " (111).444/777-35 "), "111.444.777-35")
+
+    def test_ascii_only_uppercase_preserves_non_ascii(self):
+        for sample, expected in [
+            ("abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+            ("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+            ("ſ", "ſ"),
+            ("ı", "ı"),
+            ("ﬁ", "ﬁ"),
+            ("ßﬀﬃﬄﬅﬆ", "ßﬀﬃﬄﬅﬆ"),
+            ("aſbıcﬁdßéα", "AſBıCﬁDßéα"),
+            (" (a).ſ/b-ı(c)ﬁ\u200b ", "AſBıCﬁ"),
+        ]:
+            with self.subTest(sample=sample):
+                normalized = normalize_id("BR", sample)
+                self.assertEqual(normalized, expected)
+                self.assertEqual(normalize_id("BR", normalized), expected)
+
+    def test_greek_lowercase_is_preserved(self):
+        for sample, normalized, formatted in [
+            ("αβ-123456", "αβ123456", "αβ-123456"),
+            ("aβ-123456", "Aβ123456", "Aβ-123456"),
+            ("ΑΒ-123456", "ΑΒ123456", "ΑΒ-123456"),
+        ]:
+            with self.subTest(sample=sample):
+                self.assertEqual(normalize_id("GR", sample), normalized)
+                self.assertEqual(format_id("GR", sample), formatted)
+                self.assertEqual(format_id("GR", formatted), formatted)
+
+    def test_italy_lookalikes_cannot_become_valid_ids(self):
+        # The long-s lookalike is the regression reported in #618; other mutations are synthetic.
+        control = "RSSMRA85M01H501Q"
+        self.assertTrue(ITA.NationalID.validate(control))
+        self.assertEqual(normalize_id("IT", control.lower()), control)
+        self.assertEqual(format_id("IT", control.lower()), control)
+        for sample in ["RſſMRA85M01H501Q", "RSSMRA85M01H501ı", "ﬁSMRA85M01H501Q"]:
+            with self.subTest(sample=sample):
+                self.assertFalse(ITA.NationalID.validate(sample))
+                normalized = normalize_id("IT", sample)
+                self.assertEqual(normalized, sample)
+                self.assertFalse(ITA.NationalID.validate(normalized))
+                formatted = format_id("IT", sample)
+                self.assertFalse(ITA.NationalID.validate(formatted))
+                self.assertEqual(formatted, sample if len(sample) == 16 else None)
+        with patch.object(ITA.NationalID, "validate", side_effect=AssertionError("must not validate")):
+            self.assertEqual(normalize_id("IT", "rſſmra85m01h501q"), "RſſMRA85M01H501Q")
+            self.assertEqual(format_id("IT", "rſſmra85m01h501q"), "RſſMRA85M01H501Q")
+
+    def test_length_only_formatting_does_not_expand_unicode(self):
+        for sample, expected in [("ﬁ" * 11, "ﬁﬁﬁ.ﬁﬁﬁ.ﬁﬁﬁ-ﬁﬁ"), ("aſıﬁß123456", "Aſı.ﬁß1.234-56")]:
+            with self.subTest(sample=sample):
+                self.assertEqual(format_id("BR", sample), expected)
+                self.assertEqual(format_id("BR", expected), expected)
+        self.assertIsNone(format_id("BR", "ﬁ" * 5 + "a"))
 
     def test_finland_and_sweden_signs(self):
         for sign in "-+A":
@@ -226,6 +279,16 @@ class TestCustomMasks(TestCase):
                 self.assertEqual(normalize_id("QQ", "a--bc"), "ABC")
                 self.assertEqual(format_id("QQ", "a--bc"), "ABC")
                 self.assertIsNone(format_id("QQ", "x"))
+
+    def test_unicode_preservation_with_custom_masks_and_length_fallback(self):
+        for metadata, expected in [
+            ({"masks": ("**-**",)}, "Aſ-ıﬁ"),
+            ({"min_length": 4, "max_length": 4}, "Aſıﬁ"),
+        ]:
+            with self.subTest(metadata=metadata), isolated_registry():
+                self.custom(**metadata)
+                self.assertEqual(normalize_id("QQ", " a/ſ\u200bıﬁ "), "Aſıﬁ")
+                self.assertEqual(format_id("QQ", " a/ſ\u200bıﬁ "), expected)
 
     def test_minimal_registry_metadata(self):
         with isolated_registry():

@@ -14,6 +14,7 @@ from .registry import get_validator, resolve_country
 
 __all__ = ["InputMask", "normalize_id", "format_id", "get_input_mask"]
 
+_ASCII_UPPER = str.maketrans("abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 _TOKENS = {"#": "[0-9]", "L": "[A-Z]", "X": "[A-Z0-9]", "*": r"\S"}
 _WHITESPACE = re.compile(r"[\s\u200b-\u200d\u2060\ufeff]")
 _SEPARATORS = re.compile(r"[\s\u200b-\u200d\u2060\ufeff.\-/()]")
@@ -54,7 +55,7 @@ def _fits_length(value: str, metadata: Any) -> bool:
 
 
 def _compact(id_number: str, metadata: Any) -> str:
-    upper = id_number.upper()
+    upper = id_number.translate(_ASCII_UPPER)
     stripped = _SEPARATORS.sub("", upper)
     if any(_slots(mask) < len(mask) for mask in _masks(metadata)):
         return stripped
@@ -63,8 +64,10 @@ def _compact(id_number: str, metadata: Any) -> str:
 
 
 def normalize_id(country: str, id_number: str) -> Optional[str]:
-    """Uppercase and remove whitespace, zero-width characters and ``.-/()``.
+    """Uppercase ASCII letters and remove whitespace, zero-width characters and ``.-/()``.
 
+    Non-ASCII letters remain unchanged, including lowercase Greek letters and
+    lookalikes such as ``ſ``, ``ı`` and ``ﬁ``; no Unicode case folding is applied.
     With separator-free masks, separators stay if the whitespace-free input has
     an allowed length (preserving Finland's century sign). ``+`` always stays.
     Length and validity are not checked. Country lookup accepts alpha-2/alpha-3
@@ -81,8 +84,10 @@ def normalize_id(country: str, id_number: str) -> Optional[str]:
 def format_id(country: str, id_number: str) -> Optional[str]:
     """Normalize, then insert literals from the first mask with a matching slot count.
 
-    This checks length only, not slot characters or ID validity. For a custom
-    country without masks, metadata length bounds select the normalized text.
+    Like :func:`normalize_id`, this uppercases only ASCII letters and preserves
+    non-ASCII letters verbatim. This checks length only, not slot characters or
+    ID validity. For a custom country without masks, metadata length bounds
+    select the normalized text.
     Sweden's single ``+`` before the last four slots replaces the preferred
     ``-`` literal in its 10/12-slot layouts, preserving the significant sign.
     It does not change country validators' input handling.
