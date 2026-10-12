@@ -159,7 +159,8 @@ jobs:
         badges="$RUNNER_TEMP/badges"
         # A queued older run must not overwrite the badge for a newer main commit. This is a preflight check,
         # not an atomic guarantee against main advancing after the probe.
-        if main_record="$(git -c http.extraheader="$auth" ls-remote --exit-code --heads "$remote" refs/heads/main)"; then
+        if main_record="$(git -c http.extraheader="$auth" \
+          ls-remote --exit-code --heads "$remote" refs/heads/main)"; then
           main_pattern=$'^[0-9a-fA-F]{40}\trefs/heads/main$'
           if [[ ! "$main_record" =~ $main_pattern ]]; then
             echo "::error::git ls-remote returned an invalid main record; not touching the badges branch"
