@@ -26,6 +26,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   check character(s) and covers a `checksum()` that returns a derived value (the tax file number's remainder): the group
   stays over the check character, and the class needs the named exemption in `TestComputedChecksumGroups`. The BGR
   13-digit test comment now names digits 9 to 12. Code and behaviour are unchanged.
+- **Release procedure** ([#603](https://github.com/identique/idnumbers/issues/603)): `RELEASE.md` dates the closure
+  of [#327](https://github.com/identique/idnumbers/issues/327) (2026-10-12) and says that releases since 1.16.0 have
+  run the updated workflow runtimes, with 1.18.0 the first trusted publication. The procedure is unchanged.
 
 ## 1.19.0 (2026-10-12)
 
