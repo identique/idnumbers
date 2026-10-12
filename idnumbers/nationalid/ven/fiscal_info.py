@@ -6,7 +6,7 @@ from ..util import alias_of, validate_regexp, weighted_modulus_digit
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[ \-.]', '', id_number)
+    return re.sub(r"[ \-.]", "", id_number)
 
 
 class FiscalInformationNumber:
@@ -16,41 +16,36 @@ class FiscalInformationNumber:
     python version of
     https://github.com/anghelvalentin/CountryValidator/blob/master/CountryValidator/CountriesValidators/VenezuelaAfricaValidator.cs
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'VE',
-        # length without insignificant chars
-        'min_length': 10,
-        'max_length': 10,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^[VEJPG]-?\d{8}-?\d$'),
-        'alias_of': None,
-        'names': ['Fiscal Information Number',
-                  'RIF',
-                  'Registro de Informacion Fiscal'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Venezuela'],
-        'deprecated': False,
-        'country_name': 'Venezuela',
-        'id_type': 'Fiscal Information Number',
-        'official_name': 'Registro de Información Fiscal',
-        'display_format': 'L-########-#',
-        'example': 'J-12345678-4',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 1, 3, 2, 7, 6, 5, 4, 3, 2 with the type letter V, E, J, P, '
-                              'G counted as 4, 8, 12, 16, 20; check = 11 - remainder, values above 9 become 0)',
-        'masks': ('L-########-#', 'L#########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "VE",
+            # length without insignificant chars
+            "min_length": 10,
+            "max_length": 10,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^[VEJPG]-?\d{8}-?\d$"),
+            "alias_of": None,
+            "names": ["Fiscal Information Number", "RIF", "Registro de Informacion Fiscal"],
+            "links": ["https://en.wikipedia.org/wiki/National_identification_number#Venezuela"],
+            "deprecated": False,
+            "country_name": "Venezuela",
+            "id_type": "Fiscal Information Number",
+            "official_name": "Registro de Información Fiscal",
+            "display_format": "L-########-#",
+            "example": "J-12345678-4",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 1, 3, 2, 7, 6, 5, 4, 3, 2 with the type letter V, E, J, P, "
+            "G counted as 4, 8, 12, 16, 20; check = 11 - remainder, values above 9 become 0)",
+            "masks": ("L-########-#", "L#########"),
+        }
+    )
 
     WEIGHTS = [1, 3, 2, 7, 6, 5, 4, 3, 2]
-    TYPE_MAP = {
-        'V': 4,
-        'E': 8,
-        'J': 12,
-        'P': 16,
-        'G': 20
-    }
+    TYPE_MAP = {"V": 4, "E": 8, "J": 12, "P": 16, "G": 20}
 
     @staticmethod
     def validate(id_number: str) -> bool:

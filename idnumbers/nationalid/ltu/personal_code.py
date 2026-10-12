@@ -35,32 +35,38 @@ class PersonalCode:
     https://en.wikipedia.org/wiki/National_identification_number#Lithuania
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Lithuania-TIN.pdf
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'LT',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<g>\d)'
-                             r'(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Personal Code',
-                  'asmens kodas'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Lithuania',
-                  'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
-                  'tax-identification-numbers/Lithuania-TIN.pdf'],
-        'deprecated': False,
-        'country_name': 'Lithuania',
-        'id_type': 'Personal Code',
-        'official_name': 'asmens kodas',
-        'display_format': 'GYYMMDDSSSC',
-        'example': '39001010077',
-        'checksum_algorithm': 'Weighted sum mod 11 in two passes (weights 1-9 and 1; then 3-9, 1, 2 and 3 when the '
-                              'remainder is 10; a second 10 becomes 0)',
-        'masks': ('###########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "LT",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<g>\d)"
+                r"(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Personal Code", "asmens kodas"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Lithuania",
+                "https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/"
+                "tax-identification-numbers/Lithuania-TIN.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Lithuania",
+            "id_type": "Personal Code",
+            "official_name": "asmens kodas",
+            "display_format": "GYYMMDDSSSC",
+            "example": "39001010077",
+            "checksum_algorithm": "Weighted sum mod 11 in two passes (weights 1-9 and 1; then 3-9, 1, 2 and 3 when the "
+            "remainder is 10; a second 10 becomes 0)",
+            "masks": ("###########",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -81,21 +87,16 @@ class PersonalCode:
             return None
 
         checksum = PersonalCode.checksum(id_number)
-        if checksum is None or str(checksum) != match_obj.group('checksum'):
+        if checksum is None or str(checksum) != match_obj.group("checksum"):
             return None
-        year_base, gender = PersonalCode.extract_year_base_gender(cast(CHECK_DIGIT, int(match_obj.group('g'))))
-        yy = int(match_obj.group('yy'))
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
+        year_base, gender = PersonalCode.extract_year_base_gender(cast(CHECK_DIGIT, int(match_obj.group("g"))))
+        yy = int(match_obj.group("yy"))
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
         calendar_date = _calendar_date(year_base + yy, mm, dd)
         if calendar_date is None:
             return None
-        return {
-            'yyyymmdd': calendar_date,
-            'gender': gender,
-            'sn': match_obj.group('sn'),
-            'checksum': checksum
-        }
+        return {"yyyymmdd": calendar_date, "gender": gender, "sn": match_obj.group("sn"), "checksum": checksum}
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:

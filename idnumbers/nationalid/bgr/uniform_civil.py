@@ -10,6 +10,7 @@ from ..constant import Gender
 
 class ParseResult(TypedDict):
     """Parse result of UniformCivilNumber"""
+
     yyyymmdd: date
     """birthday"""
     checksum: CHECK_DIGIT
@@ -23,37 +24,40 @@ class UniformCivilNumber:
     Bulgaria Uniform civil number
     https://en.wikipedia.org/wiki/National_identification_number#Bulgaria
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'BG',
-        # length without insignificant chars
-        'min_length': 10,
-        'max_length': 10,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<yy>\d{2})'
-                             r'(?P<mm>\d{2})'
-                             r'(?P<dd>\d{2})'
-                             r'\d{2}'
-                             r'(?P<gender>\d)'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Uniform civil number',
-                  'Единен граждански номер',
-                  'Edinen grazhdanski nomer',
-                  'ЕГН',
-                  'EGN'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Bulgaria',
-                  'https://en.wikipedia.org/wiki/Unique_citizenship_number',
-                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/bg/egn.py'],
-        'deprecated': False,
-        'country_name': 'Bulgaria',
-        'id_type': 'Uniform Civil Number',
-        'official_name': 'Единен граждански номер',
-        'display_format': 'YYMMDDRRGC',
-        'example': '7501020018',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 4, 8, 5, 10, 9, 7, 3, 6; a remainder of 10 becomes 0)',
-        'masks': ('##########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "BG",
+            # length without insignificant chars
+            "min_length": 10,
+            "max_length": 10,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<yy>\d{2})"
+                r"(?P<mm>\d{2})"
+                r"(?P<dd>\d{2})"
+                r"\d{2}"
+                r"(?P<gender>\d)"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Uniform civil number", "Единен граждански номер", "Edinen grazhdanski nomer", "ЕГН", "EGN"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Bulgaria",
+                "https://en.wikipedia.org/wiki/Unique_citizenship_number",
+                "https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/bg/egn.py",
+            ],
+            "deprecated": False,
+            "country_name": "Bulgaria",
+            "id_type": "Uniform Civil Number",
+            "official_name": "Единен граждански номер",
+            "display_format": "YYMMDDRRGC",
+            "example": "7501020018",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 2, 4, 8, 5, 10, 9, 7, 3, 6; a remainder of 10 becomes 0)",
+            "masks": ("##########",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -91,9 +95,9 @@ class UniformCivilNumber:
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
+                "yyyymmdd": calendar_date,
                 "checksum": cast(CHECK_DIGIT, int(checksum)),
-                'gender': Gender.MALE if int(match_obj.group("gender")) % 2 == 0 else Gender.FEMALE
+                "gender": Gender.MALE if int(match_obj.group("gender")) % 2 == 0 else Gender.FEMALE,
             }
         except ValueError:
             return None

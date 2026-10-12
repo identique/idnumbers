@@ -5,7 +5,7 @@ from ..util import validate_regexp
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[-/ ]', '', id_number)
+    return re.sub(r"[-/ ]", "", id_number)
 
 
 class EntityTaxIDNumber:
@@ -14,34 +14,39 @@ class EntityTaxIDNumber:
 
     The official BMF construction rules are linked in METADATA.links.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'AT',
-        # length without insignificant chars
-        'min_length': 9,
-        'max_length': 9,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^(U\d{2}[- ]?\d{3}[ /]?\d{3})$'),
-        'alias_of': None,
-        'names': ['Entities Tax ID number', 'UID', 'Umsatzsteuer-Identifikationsnummer', 'VAT'],
-        'links': ['https://www.finanz.at/en/taxes/vat-number/',
-                  'https://www.glasbenamatica.org/wp-content/uploads/2017/05/TIN_-_country_sheet_AT_en.pdf',
-                  'https://taxid.pro/docs/countries/austria',
-                  'https://www.bmf.gv.at/dam/jcr:d6794f8f-d321-43df-9840-1a841f9bf5dc/'
-                  'BMF_UID_Konstruktionsregeln_Stand_November%202020.pdf'],
-        'deprecated': False,
-        'country_name': 'Austria',
-        'id_type': 'VAT Identification Number',
-        'official_name': 'Umsatzsteuer-Identifikationsnummer',
-        'display_format': 'U########',
-        'example': 'U12345675',
-        'checksum_algorithm': 'Luhn-style mod 10 (every second digit doubled and folded to its digit sum; the sum '
-                              'starts at 4)',
-        'masks': ('L########', 'L## ### ###')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "AT",
+            # length without insignificant chars
+            "min_length": 9,
+            "max_length": 9,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^(U\d{2}[- ]?\d{3}[ /]?\d{3})$"),
+            "alias_of": None,
+            "names": ["Entities Tax ID number", "UID", "Umsatzsteuer-Identifikationsnummer", "VAT"],
+            "links": [
+                "https://www.finanz.at/en/taxes/vat-number/",
+                "https://www.glasbenamatica.org/wp-content/uploads/2017/05/TIN_-_country_sheet_AT_en.pdf",
+                "https://taxid.pro/docs/countries/austria",
+                "https://www.bmf.gv.at/dam/jcr:d6794f8f-d321-43df-9840-1a841f9bf5dc/"
+                "BMF_UID_Konstruktionsregeln_Stand_November%202020.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Austria",
+            "id_type": "VAT Identification Number",
+            "official_name": "Umsatzsteuer-Identifikationsnummer",
+            "display_format": "U########",
+            "example": "U12345675",
+            "checksum_algorithm": "Luhn-style mod 10 (every second digit doubled and folded to its digit sum; the sum "
+            "starts at 4)",
+            "masks": ("L########", "L## ### ###"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -61,7 +66,7 @@ class EntityTaxIDNumber:
         numbers = [int(char) for char in list(normalized[1:])]
         total = 4
         # since we removed the first char, the index of C2 = 0
-        for (index, value) in enumerate(numbers[:-1]):
+        for index, value in enumerate(numbers[:-1]):
             if index % 2 == 0:
                 total += value
             else:

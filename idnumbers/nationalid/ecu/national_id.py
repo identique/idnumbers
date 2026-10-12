@@ -6,6 +6,7 @@ from ..util import CHECK_DIGIT, luhn_digit, match_regexp
 
 class ParseResult(TypedDict):
     """The parse result of Ecuador cédula de identidad"""
+
     province: str
     """the first 2 digits: the province code ``01``-``24``, or ``30`` for a cédula registered abroad"""
     sequence_number: str
@@ -49,31 +50,36 @@ class NationalID:
     - Gob.EC / MINTEL issue 597, the third digit of the cédula: https://minka.gob.ec/mintel/ge/rutr/gobec/-/issues/597
     - python-stdnum, ``stdnum/ec/ci.py``: https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ec/ci.py
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'EC',
-        'min_length': 10,
-        'max_length': 10,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<province>0[1-9]|1\d|2[0-4]|30)(?P<third>\d)(?P<sequence_number>\d{6})-?'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Cédula de Identidad',
-                  'Cédula de Ciudadanía',
-                  'Cédula'],
-        'links': ['https://esacc.corteconstitucional.gob.ec/storage/api/v1/10_DWL_FL/'
-                  'e2NhcnBldGE6J2VzY3JpdG8nLCB1dWlkOicxODMyYTNhZC1hMzRiLTQ0MTUtYTNhYi0wNmEwMWYwYTdhZmQucGRmJ30=',
-                  'https://minka.gob.ec/mintel/ge/rutr/gobec/-/issues/597',
-                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ec/ci.py'],
-        'deprecated': False,
-        'country_name': 'Ecuador',
-        'id_type': 'Identity Card Number',
-        'official_name': 'Cédula de Identidad',
-        'display_format': '##########',
-        'example': '1710000009',
-        'checksum_algorithm': 'Mod 10 with weights 2,1,2,1,2,1,2,1,2 over the first nine digits (Luhn)',
-        'masks': ('##########', '#########-#')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "EC",
+            "min_length": 10,
+            "max_length": 10,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<province>0[1-9]|1\d|2[0-4]|30)(?P<third>\d)(?P<sequence_number>\d{6})-?"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Cédula de Identidad", "Cédula de Ciudadanía", "Cédula"],
+            "links": [
+                "https://esacc.corteconstitucional.gob.ec/storage/api/v1/10_DWL_FL/"
+                "e2NhcnBldGE6J2VzY3JpdG8nLCB1dWlkOicxODMyYTNhZC1hMzRiLTQ0MTUtYTNhYi0wNmEwMWYwYTdhZmQucGRmJ30=",
+                "https://minka.gob.ec/mintel/ge/rutr/gobec/-/issues/597",
+                "https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/ec/ci.py",
+            ],
+            "deprecated": False,
+            "country_name": "Ecuador",
+            "id_type": "Identity Card Number",
+            "official_name": "Cédula de Identidad",
+            "display_format": "##########",
+            "example": "1710000009",
+            "checksum_algorithm": "Mod 10 with weights 2,1,2,1,2,1,2,1,2 over the first nine digits (Luhn)",
+            "masks": ("##########", "#########-#"),
+        }
+    )
     """metadata of this id"""
 
     @staticmethod
@@ -87,18 +93,18 @@ class NationalID:
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
-        province = match_obj.group('province')
-        third = match_obj.group('third')
-        allowed_third = '45' if province == '30' else '0123456'
+        province = match_obj.group("province")
+        third = match_obj.group("third")
+        allowed_third = "45" if province == "30" else "0123456"
         if third not in allowed_third:
             return None
         checksum = NationalID.checksum(id_number)
-        if checksum is None or str(checksum) != match_obj.group('checksum'):
+        if checksum is None or str(checksum) != match_obj.group("checksum"):
             return None
         return {
-            'province': province,
-            'sequence_number': match_obj.group('sequence_number'),
-            'checksum': checksum,
+            "province": province,
+            "sequence_number": match_obj.group("sequence_number"),
+            "checksum": checksum,
         }
 
     @staticmethod
@@ -112,5 +118,5 @@ class NationalID:
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
-        digits = match_obj.group('province') + match_obj.group('third') + match_obj.group('sequence_number')
+        digits = match_obj.group("province") + match_obj.group("third") + match_obj.group("sequence_number")
         return luhn_digit([int(char) for char in digits], multipliers_start_by_two=True)

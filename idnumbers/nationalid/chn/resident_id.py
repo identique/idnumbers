@@ -14,6 +14,7 @@ def normalize(id_number: str) -> Optional[str]:
 
 class ParseResult(TypedDict):
     """The parse result of Resident ID"""
+
     address_code: str
     """registration address code"""
     yyyymmdd: date
@@ -22,7 +23,7 @@ class ParseResult(TypedDict):
     """serial number"""
     gender: Gender
     """gender, possible value: male, female"""
-    checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']
+    checksum: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "X"]
     """checksum digit, numbers or 'X'"""
 
 
@@ -36,34 +37,39 @@ class ResidentID:
     https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/cn/ric.py
     This does not adopt its whitespace normalization or region validation.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'CN',
-        'min_length': 18,
-        'max_length': 18,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<address_code>\d{6})'
-                             r'(?P<yyyy>\d{4})'
-                             r'(?P<mm>0[1-9]|1[012])'
-                             r'(?P<dd>0[1-9]|[12][0-9]|3[01])'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum>(\d|[Xx]))$'),
-        'alias_of': None,
-        'names': ['Resident Identity Number',
-                  '居民身份证',
-                  'Jūmín Shēnfènzhèng'],
-        'links': ['https://en.wikipedia.org/wiki/Resident_Identity_Card',
-                  'https://en.wikipedia.org/wiki/National_identification_number#China',
-                  'https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/cn/ric.py'],
-        'deprecated': False,
-        'country_name': 'China',
-        'id_type': 'Resident Identity Number',
-        'official_name': '居民身份证',
-        'display_format': 'AAAAAAYYYYMMDDSSSC',
-        'example': '11010219840406970X',
-        'checksum_algorithm': 'ISO 7064 MOD 11-2 (weights 2^(17-i) mod 11; 10 becomes X)',
-        'masks': ('#################X',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "CN",
+            "min_length": 18,
+            "max_length": 18,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<address_code>\d{6})"
+                r"(?P<yyyy>\d{4})"
+                r"(?P<mm>0[1-9]|1[012])"
+                r"(?P<dd>0[1-9]|[12][0-9]|3[01])"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum>(\d|[Xx]))$"
+            ),
+            "alias_of": None,
+            "names": ["Resident Identity Number", "居民身份证", "Jūmín Shēnfènzhèng"],
+            "links": [
+                "https://en.wikipedia.org/wiki/Resident_Identity_Card",
+                "https://en.wikipedia.org/wiki/National_identification_number#China",
+                "https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/cn/ric.py",
+            ],
+            "deprecated": False,
+            "country_name": "China",
+            "id_type": "Resident Identity Number",
+            "official_name": "居民身份证",
+            "display_format": "AAAAAAYYYYMMDDSSSC",
+            "example": "11010219840406970X",
+            "checksum_algorithm": "ISO 7064 MOD 11-2 (weights 2^(17-i) mod 11; 10 becomes X)",
+            "masks": ("#################X",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -80,28 +86,30 @@ class ResidentID:
         match_obj = match_regexp(id_number, ResidentID.METADATA.regexp)
         if not match_obj:
             return None
-        address_code = match_obj.group('address_code')
-        sn = match_obj.group('sn')
-        checksum_str = match_obj.group('checksum')
+        address_code = match_obj.group("address_code")
+        sn = match_obj.group("sn")
+        checksum_str = match_obj.group("checksum")
         checksum = ResidentID.checksum(id_number)
         if checksum is None or str(checksum) != checksum_str.upper():
             return None
         try:
-            calendar_date = _calendar_date(int(match_obj.group('yyyy')), int(match_obj.group('mm')), int(match_obj.group('dd')))
+            calendar_date = _calendar_date(
+                int(match_obj.group("yyyy")), int(match_obj.group("mm")), int(match_obj.group("dd"))
+            )
             if calendar_date is None:
                 return None
             return {
-                'address_code': address_code,
-                'yyyymmdd': calendar_date,
-                'sn': sn,
-                'gender': Gender.FEMALE if int(sn) % 2 == 0 else Gender.MALE,
-                'checksum': checksum
+                "address_code": address_code,
+                "yyyymmdd": calendar_date,
+                "sn": sn,
+                "gender": Gender.FEMALE if int(sn) % 2 == 0 else Gender.MALE,
+                "checksum": checksum,
             }
         except ValueError:
             return None
 
     @staticmethod
-    def checksum(id_number: str) -> Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'X']]:
+    def checksum(id_number: str) -> Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "X"]]:
         """algorithm: https://en.wikipedia.org/wiki/Resident_Identity_Card#Identity_card_number"""
         if not validate_regexp(id_number, ResidentID.METADATA.regexp):
             return None
@@ -110,4 +118,4 @@ class ResidentID:
         # The magic number is calculated from 2^(18 - i) % 11 (the first number is 1).
         total = sum([value * (pow(2, 17 - index) % 11) for (index, value) in enumerate(source_list)])
         checksum = (12 - total % 11) % 11
-        return 'X' if checksum == 10 else checksum
+        return "X" if checksum == 10 else checksum

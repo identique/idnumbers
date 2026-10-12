@@ -9,29 +9,30 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#Turkey
     https://stackoverflow.com/questions/53610208/turkish-identity-number-verification
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'TR',
-        # length without insignificant chars
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^[1-9]\d{8}(?P<checksum>\d{2})$'),
-        'alias_of': None,
-        'names': ['National ID Number',
-                  'Türkiye Cumhuriyeti Kimlik Numarası',
-                  'T.C. Kimlik No.'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Turkey'],
-        'deprecated': False,
-        'country_name': 'Türkiye',
-        'id_type': 'National ID Number',
-        'official_name': 'Türkiye Cumhuriyeti Kimlik Numarası',
-        'display_format': '###########',
-        'example': '11111111110',
-        'checksum_algorithm': 'Two check digits: the 10th is (7 x the sum of the odd-position digits - the sum of the '
-                              'even-position digits) mod 10, the 11th is the sum of the first ten digits mod 10',
-        'masks': ('###########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "TR",
+            # length without insignificant chars
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^[1-9]\d{8}(?P<checksum>\d{2})$"),
+            "alias_of": None,
+            "names": ["National ID Number", "Türkiye Cumhuriyeti Kimlik Numarası", "T.C. Kimlik No."],
+            "links": ["https://en.wikipedia.org/wiki/National_identification_number#Turkey"],
+            "deprecated": False,
+            "country_name": "Türkiye",
+            "id_type": "National ID Number",
+            "official_name": "Türkiye Cumhuriyeti Kimlik Numarası",
+            "display_format": "###########",
+            "example": "11111111110",
+            "checksum_algorithm": "Two check digits: the 10th is (7 x the sum of the odd-position digits - the sum of the "
+            "even-position digits) mod 10, the 11th is the sum of the first ten digits mod 10",
+            "masks": ("###########",),
+        }
+    )
 
     MULTIPLIERS = [7, -1, 7, -1, 7, -1, 7, -1, 7]
     """multiplier for the checksum"""
@@ -53,4 +54,4 @@ class NationalID:
         numbers_list = [int(i) for i in id_number]
         digit_ten = weighted_modulus_digit(numbers_list[:-2], NationalID.MULTIPLIERS, 10, True)
         digit_eleven = sum(numbers_list[:-1]) % 10
-        return f'{digit_ten}{digit_eleven}'
+        return f"{digit_ten}{digit_eleven}"

@@ -14,10 +14,7 @@ PIN = alias_of(PersonalID)
 """
 alias of PersonalID
 """
-TIN = SimpleNamespace(**{
-    'individual': PersonalID,
-    'entity': PersonalID
-})
+TIN = SimpleNamespace(**{"individual": PersonalID, "entity": PersonalID})
 """
 According to the doc in https://www.porezna-uprava.hr/en/Pages/PIN.aspx, we know the TIN for individual and entity are
 the same.

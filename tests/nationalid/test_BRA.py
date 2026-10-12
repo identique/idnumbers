@@ -6,22 +6,22 @@ from idnumbers.nationalid.util import match_regexp
 
 class TestBRARGNumberValidation(TestCase):
     def test_normal_case(self):
-        self.assertTrue(BRA.RGNumber.validate('39.985.676-6'))
-        self.assertTrue(BRA.RGNumber.validate('56.843.539-4'))
-        self.assertTrue(BRA.RGNumber.validate('99.953.539-X'))
+        self.assertTrue(BRA.RGNumber.validate("39.985.676-6"))
+        self.assertTrue(BRA.RGNumber.validate("56.843.539-4"))
+        self.assertTrue(BRA.RGNumber.validate("99.953.539-X"))
 
     def test_error_case(self):
-        self.assertFalse(BRA.RGNumber.validate('39.985.676-5'))
-        self.assertFalse(BRA.RGNumber.validate('56.843.539-X'))
+        self.assertFalse(BRA.RGNumber.validate("39.985.676-5"))
+        self.assertFalse(BRA.RGNumber.validate("56.843.539-X"))
 
     def test_regexp_rejects_pipe_as_check_character(self):
         # the check character class must not contain a literal '|' (#370); it is the regexp that has to
         # reject it, not just the checksum guard
-        self.assertIsNone(match_regexp('12.345.678-|', BRA.RGNumber.METADATA.regexp))
-        self.assertFalse(BRA.RGNumber.validate('12.345.678-|'))
-        self.assertIsNotNone(match_regexp('99.953.539-X', BRA.RGNumber.METADATA.regexp))
-        self.assertTrue(BRA.RGNumber.validate('99.953.539-X'))
-        self.assertTrue(BRA.RGNumber.validate('39.985.676-6'))
+        self.assertIsNone(match_regexp("12.345.678-|", BRA.RGNumber.METADATA.regexp))
+        self.assertFalse(BRA.RGNumber.validate("12.345.678-|"))
+        self.assertIsNotNone(match_regexp("99.953.539-X", BRA.RGNumber.METADATA.regexp))
+        self.assertTrue(BRA.RGNumber.validate("99.953.539-X"))
+        self.assertTrue(BRA.RGNumber.validate("39.985.676-6"))
 
     def test_with_metadata(self):
         self.assertIsNotNone(BRA.RGNumber.METADATA)
@@ -30,28 +30,28 @@ class TestBRARGNumberValidation(TestCase):
 
 class TestBRACPFNumberValidation(TestCase):
     def test_normal_case(self):
-        self.assertTrue(BRA.CPFNumber.validate('111.333.666-86'))
+        self.assertTrue(BRA.CPFNumber.validate("111.333.666-86"))
 
     def test_error_case(self):
-        self.assertFalse(BRA.CPFNumber.validate('111.333.666-81'))
+        self.assertFalse(BRA.CPFNumber.validate("111.333.666-81"))
 
     def test_with_metadata(self):
         self.assertIsNotNone(BRA.CPFNumber.METADATA)
         self.assertTrue(BRA.CPFNumber.METADATA.checksum)
 
     def test_repeated_digit_numbers_are_rejected(self):
-        for digit in '0123456789':
-            for number in (digit * 11, f'{digit * 3}.{digit * 3}.{digit * 3}-{digit * 2}'):
+        for digit in "0123456789":
+            for number in (digit * 11, f"{digit * 3}.{digit * 3}.{digit * 3}-{digit * 2}"):
                 with self.subTest(number=number):
                     self.assertFalse(BRA.CPFNumber.validate(number))
                     self.assertFalse(BRA.NationalID.validate(number))
 
     def test_repeated_digit_rule_is_separate_from_checksum(self):
         # The repeated digits pass the check digits, so checksum() stays the pure check-digit computation
-        self.assertTrue(BRA.CPFNumber.checksum('111.111.111-11'))
-        self.assertFalse(BRA.CPFNumber.validate('111.111.111-11'))
-        self.assertTrue(BRA.CPFNumber.validate('111.333.666-86'))
+        self.assertTrue(BRA.CPFNumber.checksum("111.111.111-11"))
+        self.assertFalse(BRA.CPFNumber.validate("111.111.111-11"))
+        self.assertTrue(BRA.CPFNumber.validate("111.333.666-86"))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

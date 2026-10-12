@@ -4,13 +4,16 @@ from ..metadata import IdMetadata
 from typing import Optional, TypedDict
 from ..util import birth_date as _calendar_date, match_regexp
 
-_ART_3 = ('https://lawyeregypt.net/%D8%A7%D9%84%D9%84%D8%A7%D8%A6%D8%AD%D8%A9-%D8%A7%D9%84%D8%AA%D9%86%D9%81%D9%8A'
-          '%D8%B0%D9%8A%D8%A9-%D9%84%D9%82%D8%A7%D9%86%D9%88%D9%86-%D8%A7%D9%84%D8%A3%D8%AD%D9%88%D8%A7%D9%84-'
-          '%D8%A7%D9%84%D9%85/')
+_ART_3 = (
+    "https://lawyeregypt.net/%D8%A7%D9%84%D9%84%D8%A7%D8%A6%D8%AD%D8%A9-%D8%A7%D9%84%D8%AA%D9%86%D9%81%D9%8A"
+    "%D8%B0%D9%8A%D8%A9-%D9%84%D9%82%D8%A7%D9%86%D9%88%D9%86-%D8%A7%D9%84%D8%A3%D8%AD%D9%88%D8%A7%D9%84-"
+    "%D8%A7%D9%84%D9%85/"
+)
 
 
 class ParseResult(TypedDict):
     """The parse result of the Egypt national ID number"""
+
     yyyymmdd: date
     """the date of birth"""
     governorate: str
@@ -62,33 +65,36 @@ class NationalID:
     - identique/idnumbers-npm research note on the Egyptian national ID (checksum investigation; not official):
       https://github.com/identique/idnumbers-npm/blob/main/docs/research/egypt-national-id.md
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'EG',
-        'min_length': 14,
-        'max_length': 14,
-        'parsable': True,
-        'checksum': False,
-        'regexp': re.compile(r'^(?P<century>[23])'
-                             r'(?P<yy>\d{2})'
-                             r'(?P<mm>\d{2})'
-                             r'(?P<dd>\d{2})'
-                             r'(?P<governorate>\d{2})'
-                             r'(?P<sn>\d{4})'
-                             r'(?P<check_digit>\d)$'),
-        'alias_of': None,
-        'names': ['National ID Number',
-                  'الرقم القومي'],
-        'links': [_ART_3,
-                  'https://en.wikipedia.org/wiki/Egyptian_National_Identity_Card'],
-        'deprecated': False,
-        'country_name': 'Egypt',
-        'id_type': 'National ID Number',
-        'official_name': 'الرقم القومي',
-        'display_format': 'CYYMMDDGGSSSSV',
-        'example': '29001010100017',
-        'checksum_algorithm': None,
-        'masks': ('##############',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "EG",
+            "min_length": 14,
+            "max_length": 14,
+            "parsable": True,
+            "checksum": False,
+            "regexp": re.compile(
+                r"^(?P<century>[23])"
+                r"(?P<yy>\d{2})"
+                r"(?P<mm>\d{2})"
+                r"(?P<dd>\d{2})"
+                r"(?P<governorate>\d{2})"
+                r"(?P<sn>\d{4})"
+                r"(?P<check_digit>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["National ID Number", "الرقم القومي"],
+            "links": [_ART_3, "https://en.wikipedia.org/wiki/Egyptian_National_Identity_Card"],
+            "deprecated": False,
+            "country_name": "Egypt",
+            "id_type": "National ID Number",
+            "official_name": "الرقم القومي",
+            "display_format": "CYYMMDDGGSSSSV",
+            "example": "29001010100017",
+            "checksum_algorithm": None,
+            "masks": ("##############",),
+        }
+    )
     """metadata of this id"""
 
     @staticmethod
@@ -102,15 +108,15 @@ class NationalID:
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
             return None
-        century = 1900 if match_obj.group('century') == '2' else 2000
-        birthday = _calendar_date(century + int(match_obj.group('yy')),
-                                  int(match_obj.group('mm')),
-                                  int(match_obj.group('dd')))
+        century = 1900 if match_obj.group("century") == "2" else 2000
+        birthday = _calendar_date(
+            century + int(match_obj.group("yy")), int(match_obj.group("mm")), int(match_obj.group("dd"))
+        )
         if birthday is None:
             return None
         return {
-            'yyyymmdd': birthday,
-            'governorate': match_obj.group('governorate'),
-            'sn': match_obj.group('sn'),
-            'check_digit': match_obj.group('check_digit'),
+            "yyyymmdd": birthday,
+            "governorate": match_obj.group("governorate"),
+            "sn": match_obj.group("sn"),
+            "check_digit": match_obj.group("check_digit"),
         }

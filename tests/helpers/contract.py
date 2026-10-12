@@ -3,6 +3,7 @@
 The metadata suite owns valid-example, mask and in-range length checks.
 Reuse its compact-layout helper instead of inventing another normalization rule.
 """
+
 from typing import Any, Dict, Iterator, Tuple, Type
 
 from idnumbers import list_supported_countries
@@ -13,13 +14,13 @@ from tests.test_metadata import compact
 # Zero-based alphanumeric index, not raw string index. Each exception is class-specific.
 CHECK_CHARACTER_INDEX: Dict[str, int] = {
     # MedicareNumber.validate compares normalized[8], before the issue digit.
-    'idnumbers.nationalid.aus.medicare.MedicareNumber': 8,
+    "idnumbers.nationalid.aus.medicare.MedicareNumber": 8,
     # IcelandicID.checksum compares numbers[-2], before the century digit.
-    'idnumbers.nationalid.isl.icelandic_id.IcelandicID': -2,
+    "idnumbers.nationalid.isl.icelandic_id.IcelandicID": -2,
     # OldNationalID.to_new omits the citizenship letter after the check digit.
-    'idnumbers.nationalid.lka.old_national_id.OldNationalID': -2,
+    "idnumbers.nationalid.lka.old_national_id.OldNationalID": -2,
     # NationalID.get_checksum excludes the two district digits (also for 12-character IDs).
-    'idnumbers.nationalid.zwe.national_id.NationalID': -3,
+    "idnumbers.nationalid.zwe.national_id.NationalID": -3,
 }
 
 
@@ -33,24 +34,24 @@ def iter_id_classes() -> Iterator[Tuple[CountryEntry, Type[Any]]]:
 def single_digit_mutations(value: str) -> Iterator[str]:
     """Change exactly one ASCII digit, leaving layout and other characters intact."""
     for index, char in enumerate(value):
-        if char in '0123456789':
-            for digit in '0123456789':
+        if char in "0123456789":
+            for digit in "0123456789":
                 if digit != char:
-                    yield value[:index] + digit + value[index + 1:]
+                    yield value[:index] + digit + value[index + 1 :]
 
 
 def check_character_mutations(value: str, index: int = -1) -> Iterator[str]:
     """Index is among ASCII alphanumerics, so separators do not change its meaning."""
     positions = [i for i, char in enumerate(value) if char.isascii() and char.isalnum()]
     position = positions[index]
-    for char in '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+    for char in "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ":
         if char != value[position]:
-            yield value[:position] + char + value[position + 1:]
+            yield value[:position] + char + value[position + 1 :]
 
 
 def length_out_of_range_variants(cls: Type[Any]) -> Tuple[str, ...]:
     """Lengths outside metadata bounds both as written and in compact layout."""
     metadata = cls.METADATA
     value = compact(metadata.example, metadata.masks)
-    padding = '1' * max(1, metadata.max_length + 1 - len(value))
-    return (value[:max(0, metadata.min_length - 1)], value + padding, metadata.example + padding)
+    padding = "1" * max(1, metadata.max_length + 1 - len(value))
+    return (value[: max(0, metadata.min_length - 1)], value + padding, metadata.example + padding)

@@ -10,39 +10,45 @@ class MedicareNumber:
     Australia medicare number format
     https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/library-of-system-data-identifiers-v95989112-d327e56315/australian-medicare-number-v115447646-d327e57399.html
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'AU',
-        # length without insignificant chars
-        'min_length': 9,
-        'max_length': 11,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^((?=[2-6]\d{3}[ -]?\d{4}(?P<checksum>\d))(?:'
-                             r'[2-6]\d{10}|[2-6]\d{3} \d{5} \d|[2-6]\d{3}-\d{5}-\d|'
-                             r'[2-6]\d{9}|[2-6]\d{9}([-/]\d)?|'
-                             r'[2-6]\d{3} \d{5} \d([-/]\d)?|[2-6]\d{3}-\d{5}-\d([-/]\d)?|'
-                             r'[2-6]\d{3} \d{5} \d \d|[2-6]\d{3}-\d{5}-\d-\d'
-                             r'))$'),
-        'alias_of': None,
-        'names': ['Medicare Number', 'Medicare No'],
-        'links': [
-            'https://techdocs.broadcom.com/us/en/symantec-security-software/'
-            'information-security/data-loss-prevention/15-8/'
-            'about-data-loss-prevention-policies-v27576413-d327e9'
-            '/library-of-system-data-identifiers-v95989112-d327e56315/'
-            'australian-medicare-number-v115447646-d327e57399.html'],
-        'deprecated': False,
-        'country_name': 'Australia',
-        'id_type': 'Medicare Number',
-        'official_name': None,
-        'display_format': '#### ##### #[/#]',
-        'example': '2123 45670 1',
-        'checksum_algorithm': 'Weighted sum mod 10 (weights 1, 3, 7, 9, 1, 3, 7, 9 over the first 8 digits)',
-        'masks': ('#### ##### #', '#### ##### #/#', '##########', '###########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "AU",
+            # length without insignificant chars
+            "min_length": 9,
+            "max_length": 11,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(
+                r"^((?=[2-6]\d{3}[ -]?\d{4}(?P<checksum>\d))(?:"
+                r"[2-6]\d{10}|[2-6]\d{3} \d{5} \d|[2-6]\d{3}-\d{5}-\d|"
+                r"[2-6]\d{9}|[2-6]\d{9}([-/]\d)?|"
+                r"[2-6]\d{3} \d{5} \d([-/]\d)?|[2-6]\d{3}-\d{5}-\d([-/]\d)?|"
+                r"[2-6]\d{3} \d{5} \d \d|[2-6]\d{3}-\d{5}-\d-\d"
+                r"))$"
+            ),
+            "alias_of": None,
+            "names": ["Medicare Number", "Medicare No"],
+            "links": [
+                "https://techdocs.broadcom.com/us/en/symantec-security-software/"
+                "information-security/data-loss-prevention/15-8/"
+                "about-data-loss-prevention-policies-v27576413-d327e9"
+                "/library-of-system-data-identifiers-v95989112-d327e56315/"
+                "australian-medicare-number-v115447646-d327e57399.html"
+            ],
+            "deprecated": False,
+            "country_name": "Australia",
+            "id_type": "Medicare Number",
+            "official_name": None,
+            "display_format": "#### ##### #[/#]",
+            "example": "2123 45670 1",
+            "checksum_algorithm": "Weighted sum mod 10 (weights 1, 3, 7, 9, 1, 3, 7, 9 over the first 8 digits)",
+            "masks": ("#### ##### #", "#### ##### #/#", "##########", "###########"),
+        }
+    )
 
     MAGIC_MULTIPLIER = [1, 3, 7, 9, 1, 3, 7, 9]
     """magic multiplier for checksum"""

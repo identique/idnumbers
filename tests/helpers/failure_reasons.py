@@ -5,6 +5,7 @@ Checksum witnesses flip only the check character, using the shared per-class pos
 Dates deliberately encode 31 February with repaired checksums. Explicit notes explain
 inapplicable date/checksum cells and generic fallbacks; contract tests prevent omissions.
 """
+
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -36,20 +37,23 @@ class ClassReasonMatrix:
 
 def iter_reason_matrix() -> Iterator[ClassReasonMatrix]:
     """Yield the complete registry matrix; adding/removing a class requires updating witnesses."""
-    rows = json.loads(Path(__file__).with_name('failure_reason_vectors.json').read_text())
+    rows = json.loads(Path(__file__).with_name("failure_reason_vectors.json").read_text())
     classes = list(iter_id_classes())
-    assert set(rows) == {cls.__module__ + '.' + cls.__name__ for _, cls in classes}
+    assert set(rows) == {cls.__module__ + "." + cls.__name__ for _, cls in classes}
     for entry, cls in classes:
-        key = cls.__module__ + '.' + cls.__name__
+        key = cls.__module__ + "." + cls.__name__
         row = rows[key]
-        checksum = row['checksum']
-        birthdate = row['birthdate']
+        checksum = row["checksum"]
+        birthdate = row["birthdate"]
         yield ClassReasonMatrix(
-            key, entry.alpha3, cls, ReasonVector(row['valid'], None),
-            tuple(ReasonVector(value, FailureReason.INVALID_LENGTH) for value in row['length']),
-            ReasonVector(row['format'], FailureReason.INVALID_FORMAT),
-            None if checksum is None else ReasonVector(checksum['input'], FailureReason(checksum['reason'])),
-            row['checksum_note'],
-            None if birthdate is None else ReasonVector(birthdate['input'], FailureReason(birthdate['reason'])),
-            row['birthdate_note'],
+            key,
+            entry.alpha3,
+            cls,
+            ReasonVector(row["valid"], None),
+            tuple(ReasonVector(value, FailureReason.INVALID_LENGTH) for value in row["length"]),
+            ReasonVector(row["format"], FailureReason.INVALID_FORMAT),
+            None if checksum is None else ReasonVector(checksum["input"], FailureReason(checksum["reason"])),
+            row["checksum_note"],
+            None if birthdate is None else ReasonVector(birthdate["input"], FailureReason(birthdate["reason"])),
+            row["birthdate_note"],
         )

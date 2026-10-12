@@ -9,11 +9,12 @@ from ..constant import Citizenship, Gender
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[ -]', '', id_number)
+    return re.sub(r"[ -]", "", id_number)
 
 
 class ParseResult(TypedDict):
     """parse result for the national id"""
+
     yyyymmdd: date
     """birthday"""
     gender: Gender
@@ -31,29 +32,36 @@ class PersonalID:
     Hungary Personal ID number format
     https://en.wikipedia.org/wiki/National_identification_number#Hungary
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'HU',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<gender>\d)[ -]?'
-                             r'(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})[ -]?'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Personal ID Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Hungary',
-                  'https://hu.wikipedia.org/wiki/Szem%C3%A9lyi_sz%C3%A1m'],
-        'deprecated': False,
-        'country_name': 'Hungary',
-        'id_type': 'Personal ID Number',
-        'official_name': 'személyi azonosító',
-        'display_format': 'GYYMMDDSSSC',
-        'example': '18001010016',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 1-10; a remainder of 10 is never valid)',
-        'masks': ('###########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "HU",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<gender>\d)[ -]?"
+                r"(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})[ -]?"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Personal ID Number"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Hungary",
+                "https://hu.wikipedia.org/wiki/Szem%C3%A9lyi_sz%C3%A1m",
+            ],
+            "deprecated": False,
+            "country_name": "Hungary",
+            "id_type": "Personal ID Number",
+            "official_name": "személyi azonosító",
+            "display_format": "GYYMMDDSSSC",
+            "example": "18001010016",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 1-10; a remainder of 10 is never valid)",
+            "masks": ("###########",),
+        }
+    )
 
     MAGIC_MULTIPLIER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     """multiplier for the checksum"""
@@ -76,24 +84,24 @@ class PersonalID:
         checksum = PersonalID.checksum(id_number)
         if not checksum:
             return None
-        gender_citizenship_year_base = PersonalID.get_gender_citizenship_year_base(int(match_obj.group('gender')))
+        gender_citizenship_year_base = PersonalID.get_gender_citizenship_year_base(int(match_obj.group("gender")))
         if not gender_citizenship_year_base:
             return None
         gender, citizenship, year_base = gender_citizenship_year_base
-        yy = int(match_obj.group('yy'))
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
-        sn = match_obj.group('sn')
+        yy = int(match_obj.group("yy"))
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
+        sn = match_obj.group("sn")
         try:
             calendar_date = _calendar_date(yy + year_base, mm, dd)
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
-                'gender': gender,
-                'citizenship': citizenship,
-                'sn': sn,
-                'checksum': cast(CHECK_DIGIT, int(match_obj.group('checksum')))
+                "yyyymmdd": calendar_date,
+                "gender": gender,
+                "citizenship": citizenship,
+                "sn": sn,
+                "checksum": cast(CHECK_DIGIT, int(match_obj.group("checksum"))),
             }
         except ValueError:
             return None

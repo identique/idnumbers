@@ -8,7 +8,4 @@ NationalID = alias_of(PersonalIdentityNumber)
 CPR = alias_of(PersonalIdentityNumber)
 """alias of PersonalIdentityNumber"""
 
-TIN = SimpleNamespace(**{
-    'individual': PersonalIdentityNumber,
-    'entity': EntityVAT
-})
+TIN = SimpleNamespace(**{"individual": PersonalIdentityNumber, "entity": EntityVAT})

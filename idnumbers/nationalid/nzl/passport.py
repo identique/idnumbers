@@ -9,33 +9,38 @@ class PassportNumber:
     New Zealand passport number format
     https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/library-of-system-data-identifiers-v95989112-d327e56315/new-zealand-passport-number-v130004628-d327e90423/new-zealand-passport-number-narrow-breadth-v130007458-d327e90528.html
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'NZ',
-        # length without insignificant chars
-        'min_length': 7,
-        'max_length': 8,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': False,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^([Ll][Aa]|[Ll][Dd]|[Ll][Ff]|[Nn]|[Ee][Aa]|[Ll][Hh])\d{6}$'),
-        'alias_of': None,
-        'names': ['Passport Number'],
-        'links': ['https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/'
-                  'data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/'
-                  'library-of-system-data-identifiers-v95989112-d327e56315/'
-                  'new-zealand-passport-number-v130004628-d327e90423/'
-                  'new-zealand-passport-number-narrow-breadth-v130007458-d327e90528.html'],
-        'deprecated': False,
-        'country_name': 'New Zealand',
-        'id_type': 'Passport Number',
-        'official_name': None,
-        'display_format': 'LL######',
-        'example': 'LA123456',
-        'checksum_algorithm': None,
-        'masks': ('LL######', 'L######')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "NZ",
+            # length without insignificant chars
+            "min_length": 7,
+            "max_length": 8,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": False,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^([Ll][Aa]|[Ll][Dd]|[Ll][Ff]|[Nn]|[Ee][Aa]|[Ll][Hh])\d{6}$"),
+            "alias_of": None,
+            "names": ["Passport Number"],
+            "links": [
+                "https://techdocs.broadcom.com/us/en/symantec-security-software/information-security/"
+                "data-loss-prevention/15-8/about-data-loss-prevention-policies-v27576413-d327e9/"
+                "library-of-system-data-identifiers-v95989112-d327e56315/"
+                "new-zealand-passport-number-v130004628-d327e90423/"
+                "new-zealand-passport-number-narrow-breadth-v130007458-d327e90528.html"
+            ],
+            "deprecated": False,
+            "country_name": "New Zealand",
+            "id_type": "Passport Number",
+            "official_name": None,
+            "display_format": "LL######",
+            "example": "LA123456",
+            "checksum_algorithm": None,
+            "masks": ("LL######", "L######"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

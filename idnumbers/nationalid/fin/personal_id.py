@@ -7,15 +7,45 @@ from ..util import validate_regexp, match_regexp
 from ..constant import Gender
 
 
-CHECKSUM_TYPE = Literal['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                        'A', 'B', 'C', 'D', 'E', 'F', 'H', 'J', 'K', 'L',
-                        'M', 'N', 'P', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
-                        'Y']
+CHECKSUM_TYPE = Literal[
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "H",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "P",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+]
 """literal for checksum type"""
 
 
 class ParseResult(TypedDict):
     """The parse result of Finland personal identity code, HETU"""
+
     yyyymmdd: date
     """Birthday"""
     gender: Gender
@@ -31,45 +61,49 @@ class PersonalIdentityCode:
     Finland personal identity code, HETU
     https://en.wikipedia.org/wiki/National_identification_number#Finland
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'FI',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})'
-                             r'(?P<century>[-+ABCDEFUVWXY])'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<check>[0-9A-Z])$'),
-        'alias_of': None,
-        'names': ['personal identity code',
-                  'HETU'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Finland'],
-        'deprecated': False,
-        'country_name': 'Finland',
-        'id_type': 'Personal Identity Code',
-        'official_name': 'henkilötunnus',
-        'display_format': 'DDMMYY{+-A}SSSC',
-        'example': '131052-308T',
-        'checksum_algorithm': 'Mod 31 check character (the nine digits DDMMYYSSS as a number mod 31, mapped to 0-9 and '
-                              'A-Y without G, I, O, Q)',
-        'masks': ('######*###X',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "FI",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})"
+                r"(?P<century>[-+ABCDEFUVWXY])"
+                r"(?P<sn>\d{3})"
+                r"(?P<check>[0-9A-Z])$"
+            ),
+            "alias_of": None,
+            "names": ["personal identity code", "HETU"],
+            "links": ["https://en.wikipedia.org/wiki/National_identification_number#Finland"],
+            "deprecated": False,
+            "country_name": "Finland",
+            "id_type": "Personal Identity Code",
+            "official_name": "henkilötunnus",
+            "display_format": "DDMMYY{+-A}SSSC",
+            "example": "131052-308T",
+            "checksum_algorithm": "Mod 31 check character (the nine digits DDMMYYSSS as a number mod 31, mapped to 0-9 and "
+            "A-Y without G, I, O, Q)",
+            "masks": ("######*###X",),
+        }
+    )
 
     DOB_BASE_MAP = {
-        '+': 1800,
-        '-': 1900,
-        'U': 1900,
-        'V': 1900,
-        'W': 1900,
-        'X': 1900,
-        'Y': 1900,
-        'A': 2000,
-        'B': 2000,
-        'C': 2000,
-        'D': 2000,
-        'E': 2000,
-        'F': 2000,
+        "+": 1800,
+        "-": 1900,
+        "U": 1900,
+        "V": 1900,
+        "W": 1900,
+        "X": 1900,
+        "Y": 1900,
+        "A": 2000,
+        "B": 2000,
+        "C": 2000,
+        "D": 2000,
+        "E": 2000,
+        "F": 2000,
     }
     """ The century map for id """
 
@@ -87,27 +121,27 @@ class PersonalIdentityCode:
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
-        """ parse the FIN HETU id"""
+        """parse the FIN HETU id"""
         match_obj = match_regexp(id_number, PersonalIdentityCode.METADATA.regexp)
         if not match_obj:
             return None
         elif not PersonalIdentityCode.checksum(id_number):
             return None
-        yy = int(match_obj.group('yy'))
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
-        century = match_obj.group('century')
-        sn = match_obj.group('sn')
+        yy = int(match_obj.group("yy"))
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
+        century = match_obj.group("century")
+        sn = match_obj.group("sn")
         yyyy_base = PersonalIdentityCode.DOB_BASE_MAP[century]
         try:
             calendar_date = _calendar_date(yyyy_base + yy, mm, dd)
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
-                'gender': Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
-                'sn': sn,
-                'checksum': cast(CHECKSUM_TYPE, match_obj.group('check'))
+                "yyyymmdd": calendar_date,
+                "gender": Gender.MALE if int(sn) % 2 == 1 else Gender.FEMALE,
+                "sn": sn,
+                "checksum": cast(CHECKSUM_TYPE, match_obj.group("check")),
             }
         except ValueError:
             return None
@@ -118,6 +152,6 @@ class PersonalIdentityCode:
         match_obj = match_regexp(id_number, PersonalIdentityCode.METADATA.regexp)
         if not match_obj:
             return False
-        numbers = int(match_obj.group('dd') + match_obj.group('mm') + match_obj.group('yy') + match_obj.group('sn'))
+        numbers = int(match_obj.group("dd") + match_obj.group("mm") + match_obj.group("yy") + match_obj.group("sn"))
         check_digit: str = PersonalIdentityCode.CHECKSUM_LIST[numbers % 31]
-        return match_obj.group('check') == check_digit
+        return match_obj.group("check") == check_digit

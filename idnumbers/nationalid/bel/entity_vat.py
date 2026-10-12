@@ -15,34 +15,41 @@ class EntityVAT:
     (FOD Economie). The old 9-digit form is the same number with the leading 0 left out, so a
     9-digit input has an implied leading 0 and its first digit may be any digit.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'BE',
-        'min_length': 9,
-        'max_length': 10,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^(?:[01]\d{9}|\d{9})$'),
-        'alias_of': None,
-        'names': ['tax registration numbers',
-                  'Belgium BE VAT',
-                  'TVA',
-                  'BTW identificatienummer',
-                  'Numéro de TVA',
-                  'BTW-nr',
-                  'Mwst-nr'],
-        'links': ['https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698',
-                  'https://en.wikipedia.org/wiki/VAT_identification_number',
-                  'https://www.vatcalc.com/belgium/belgian-vat-number-format-changes/',
-                  'https://news.economie.fgov.be/228778-ondernemingsnummers-beginnen-nu-ook-met-het-cijfer-1/'],
-        'deprecated': False,
-        'country_name': 'Belgium',
-        'id_type': 'VAT Identification Number',
-        'official_name': 'BTW identificatienummer',
-        'display_format': '0#########',
-        'example': '0123456749',
-        'checksum_algorithm': 'Mod 97 (the last two digits are 97 - (the first eight digits mod 97))',
-        'masks': ('##########', '#########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "BE",
+            "min_length": 9,
+            "max_length": 10,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^(?:[01]\d{9}|\d{9})$"),
+            "alias_of": None,
+            "names": [
+                "tax registration numbers",
+                "Belgium BE VAT",
+                "TVA",
+                "BTW identificatienummer",
+                "Numéro de TVA",
+                "BTW-nr",
+                "Mwst-nr",
+            ],
+            "links": [
+                "https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698",
+                "https://en.wikipedia.org/wiki/VAT_identification_number",
+                "https://www.vatcalc.com/belgium/belgian-vat-number-format-changes/",
+                "https://news.economie.fgov.be/228778-ondernemingsnummers-beginnen-nu-ook-met-het-cijfer-1/",
+            ],
+            "deprecated": False,
+            "country_name": "Belgium",
+            "id_type": "VAT Identification Number",
+            "official_name": "BTW identificatienummer",
+            "display_format": "0#########",
+            "example": "0123456749",
+            "checksum_algorithm": "Mod 97 (the last two digits are 97 - (the first eight digits mod 97))",
+            "masks": ("##########", "#########"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

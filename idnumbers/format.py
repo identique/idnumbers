@@ -12,11 +12,11 @@ from typing import Any, Optional, Pattern, Tuple
 
 from .registry import get_validator, resolve_country
 
-__all__ = ['InputMask', 'normalize_id', 'format_id', 'get_input_mask']
+__all__ = ["InputMask", "normalize_id", "format_id", "get_input_mask"]
 
-_TOKENS = {'#': '[0-9]', 'L': '[A-Z]', 'X': '[A-Z0-9]', '*': r'\S'}
-_WHITESPACE = re.compile(r'[\s\u200b-\u200d\u2060\ufeff]')
-_SEPARATORS = re.compile(r'[\s\u200b-\u200d\u2060\ufeff.\-/()]')
+_TOKENS = {"#": "[0-9]", "L": "[A-Z]", "X": "[A-Z0-9]", "*": r"\S"}
+_WHITESPACE = re.compile(r"[\s\u200b-\u200d\u2060\ufeff]")
+_SEPARATORS = re.compile(r"[\s\u200b-\u200d\u2060\ufeff.\-/()]")
 
 
 @dataclass(frozen=True)
@@ -37,7 +37,7 @@ def _metadata_for(country: str) -> Any:
 
 
 def _masks(metadata: Any) -> Tuple[str, ...]:
-    return tuple(getattr(metadata, 'masks', ()) or ())
+    return tuple(getattr(metadata, "masks", ()) or ())
 
 
 def _slots(mask: str) -> int:
@@ -48,18 +48,17 @@ def _fits_length(value: str, metadata: Any) -> bool:
     masks = _masks(metadata)
     if masks:
         return any(_slots(mask) == len(value) for mask in masks)
-    minimum = getattr(metadata, 'min_length', None)
-    maximum = getattr(metadata, 'max_length', None)
-    return (isinstance(minimum, int) and isinstance(maximum, int)
-            and minimum <= len(value) <= maximum)
+    minimum = getattr(metadata, "min_length", None)
+    maximum = getattr(metadata, "max_length", None)
+    return isinstance(minimum, int) and isinstance(maximum, int) and minimum <= len(value) <= maximum
 
 
 def _compact(id_number: str, metadata: Any) -> str:
     upper = id_number.upper()
-    stripped = _SEPARATORS.sub('', upper)
+    stripped = _SEPARATORS.sub("", upper)
     if any(_slots(mask) < len(mask) for mask in _masks(metadata)):
         return stripped
-    trimmed = _WHITESPACE.sub('', upper)
+    trimmed = _WHITESPACE.sub("", upper)
     return trimmed if _fits_length(trimmed, metadata) else stripped
 
 
@@ -99,19 +98,23 @@ def format_id(country: str, id_number: str) -> Optional[str]:
     masks = _masks(metadata)
     if not masks:
         return value if _fits_length(value, metadata) else None
-    swedish = resolve_country(country) == 'SWE'
+    swedish = resolve_country(country) == "SWE"
     for mask in masks:
         slot_value = value
         display_mask = mask
-        if (swedish and mask in ('######-####', '########-####')
-                and len(value) == _slots(mask) + 1 and value.count('+') == 1):
-            separator = mask.index('-')
-            if value[separator] == '+':
-                slot_value = value[:separator] + value[separator + 1:]
-                display_mask = mask.replace('-', '+')
+        if (
+            swedish
+            and mask in ("######-####", "########-####")
+            and len(value) == _slots(mask) + 1
+            and value.count("+") == 1
+        ):
+            separator = mask.index("-")
+            if value[separator] == "+":
+                slot_value = value[:separator] + value[separator + 1 :]
+                display_mask = mask.replace("-", "+")
         if _slots(mask) == len(slot_value):
             chars = iter(slot_value)
-            return ''.join(next(chars) if char in _TOKENS else char for char in display_mask)
+            return "".join(next(chars) if char in _TOKENS else char for char in display_mask)
     return None
 
 
@@ -135,7 +138,6 @@ def get_input_mask(country: str) -> Optional[InputMask]:
     masks = _masks(metadata)
     if not masks:
         return None
-    alternatives = [''.join(_TOKENS[char] if char in _TOKENS else re.escape(char) for char in mask)
-                    for mask in masks]
-    pattern = re.compile(r'\A(?:' + '|'.join(alternatives) + r')\Z')
+    alternatives = ["".join(_TOKENS[char] if char in _TOKENS else re.escape(char) for char in mask) for mask in masks]
+    pattern = re.compile(r"\A(?:" + "|".join(alternatives) + r")\Z")
     return InputMask(resolved, masks, pattern)

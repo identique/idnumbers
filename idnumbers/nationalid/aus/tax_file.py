@@ -14,34 +14,37 @@ class TaxFileNumber:
     https://www.ato.gov.au/General/What-is-a-tax-file-number----Easy-Read/
     https://en-academic.com/dic.nsf/enwiki/436130
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'AU',
-        # length without insignificant chars
-        'min_length': 8,
-        'max_length': 9,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{7,8}(?P<checksum>\d))$'),
-        'alias_of': None,
-        'names': ['Tax file number',
-                  'TFN'],
-        'links': [
-            'https://en.wikipedia.org/wiki/National_identification_number#Australia',
-            'https://en.wikipedia.org/wiki/Tax_file_number',
-            'https://www.ato.gov.au/General/What-is-a-tax-file-number----Easy-Read/',
-            'https://en-academic.com/dic.nsf/enwiki/436130'],
-        'deprecated': False,
-        'country_name': 'Australia',
-        'id_type': 'Tax File Number',
-        'official_name': None,
-        'display_format': '#########',
-        'example': '123456782',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 1, 4, 3, 7, 5, 8, 6, 9, 10; the sum must be 0)',
-        'masks': ('#########', '########')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "AU",
+            # length without insignificant chars
+            "min_length": 8,
+            "max_length": 9,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^(\d{7,8}(?P<checksum>\d))$"),
+            "alias_of": None,
+            "names": ["Tax file number", "TFN"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Australia",
+                "https://en.wikipedia.org/wiki/Tax_file_number",
+                "https://www.ato.gov.au/General/What-is-a-tax-file-number----Easy-Read/",
+                "https://en-academic.com/dic.nsf/enwiki/436130",
+            ],
+            "deprecated": False,
+            "country_name": "Australia",
+            "id_type": "Tax File Number",
+            "official_name": None,
+            "display_format": "#########",
+            "example": "123456782",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 1, 4, 3, 7, 5, 8, 6, 9, 10; the sum must be 0)",
+            "masks": ("#########", "########"),
+        }
+    )
 
     MULTIPLIER = [1, 4, 3, 7, 5, 8, 6, 9, 10]
     """The magic multiplier for checksum"""
@@ -67,7 +70,7 @@ class TaxFileNumber:
             return None
         normalized = normalize(id_number)
         if len(normalized) == 8:
-            normalized = normalized[0:7] + '0' + normalized[7]
+            normalized = normalized[0:7] + "0" + normalized[7]
         number_list = [int(char) for char in list(normalized)]
         return sum([value * TaxFileNumber.MULTIPLIER[index] for (index, value) in enumerate(number_list)]) % 11
 

@@ -18,9 +18,9 @@ from idnumbers.nationalid import TWN, USA
 from tests.parity.corpus import expand_corpus, load_corpus
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-TWN_VALID = 'A123456789'
-TWN_INVALID = 'A123456780'
-USA_VALID = '012-12-0928'  # Existing regression vector of tests/nationalid/test_USA.py.
+TWN_VALID = "A123456789"
+TWN_INVALID = "A123456780"
+USA_VALID = "012-12-0928"  # Existing regression vector of tests/nationalid/test_USA.py.
 
 
 @contextmanager
@@ -31,15 +31,15 @@ def isolated_registry() -> Iterator[None]:
 
 
 class RaisingValidator:
-    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+    METADATA = SimpleNamespace(iso3166_alpha2="QQ")
 
     @staticmethod
     def validate(id_number: str) -> bool:
-        raise RuntimeError('boom ' + str(id_number))
+        raise RuntimeError("boom " + str(id_number))
 
 
 class RaisingParser:
-    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+    METADATA = SimpleNamespace(iso3166_alpha2="QQ")
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -47,56 +47,56 @@ class RaisingParser:
 
     @staticmethod
     def parse(id_number: str) -> Dict[str, Any]:
-        raise ValueError('cannot parse')
+        raise ValueError("cannot parse")
 
 
 class RaisingRepr:
     def __repr__(self) -> str:
-        raise RuntimeError('no repr')
+        raise RuntimeError("no repr")
 
 
 class RaisingReprStr(str):
     def __repr__(self) -> str:
-        raise RuntimeError('no repr')
+        raise RuntimeError("no repr")
 
 
 class HostileText(str):
     """A str whose length and slicing run user code that raises."""
 
     def __len__(self) -> int:
-        raise RuntimeError('no len')
+        raise RuntimeError("no len")
 
     def __getitem__(self, key: Any) -> str:
-        raise RuntimeError('no slice')
+        raise RuntimeError("no slice")
 
 
 class HostileRepr:
     """An object whose __repr__ returns a str subclass with raising __len__ and __getitem__."""
 
     def __repr__(self) -> str:
-        return HostileText('hostile')
+        return HostileText("hostile")
 
 
 class NamelessMeta(type):
     @property
     def __name__(cls) -> str:  # type: ignore[override]
-        raise RuntimeError('no name')
+        raise RuntimeError("no name")
 
 
 class NamelessRepr(metaclass=NamelessMeta):
     """An object whose type's __name__ and own __repr__ both raise."""
 
     def __repr__(self) -> str:
-        raise RuntimeError('no repr')
+        raise RuntimeError("no repr")
 
 
 class NamelessError(Exception, metaclass=NamelessMeta):
     def __str__(self) -> str:
-        raise RuntimeError('no text')
+        raise RuntimeError("no text")
 
 
 class NamelessValidator:
-    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+    METADATA = SimpleNamespace(iso3166_alpha2="QQ")
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -106,20 +106,20 @@ class NamelessValidator:
 def unsupported_country_cases() -> Dict[str, Any]:
     """Countries whose message must stay short and must not raise, with the expected message prefix."""
     return {
-        'raising repr': RaisingRepr(),
-        'huge str': 'x' * 10_000_000,
-        'long list': list(range(1000)),
-        'str subclass with a raising repr': RaisingReprStr('y' * 1000),
+        "raising repr": RaisingRepr(),
+        "huge str": "x" * 10_000_000,
+        "long list": list(range(1000)),
+        "str subclass with a raising repr": RaisingReprStr("y" * 1000),
     }
 
 
 class UntextableError(Exception):
     def __str__(self) -> str:
-        raise RuntimeError('no text')
+        raise RuntimeError("no text")
 
 
 class UntextableValidator:
-    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+    METADATA = SimpleNamespace(iso3166_alpha2="QQ")
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -127,7 +127,7 @@ class UntextableValidator:
 
 
 class UntextableParser:
-    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+    METADATA = SimpleNamespace(iso3166_alpha2="QQ")
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -139,7 +139,7 @@ class UntextableParser:
 
 
 class NoneParser:
-    METADATA = SimpleNamespace(iso3166_alpha2='QQ')
+    METADATA = SimpleNamespace(iso3166_alpha2="QQ")
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -152,46 +152,46 @@ class NoneParser:
 
 class TestValidate(TestCase):
     def test_every_lookup_form(self) -> None:
-        for country in ('tw', 'TW', 'twn', 'TWN'):
+        for country in ("tw", "TW", "twn", "TWN"):
             with self.subTest(country=country):
                 valid = api.validate(country, TWN_VALID)
                 self.assertTrue(valid.is_valid)
-                self.assertEqual(valid.country_code, 'TWN')
+                self.assertEqual(valid.country_code, "TWN")
                 self.assertEqual(valid.id_number, TWN_VALID)
                 invalid = api.validate(country, TWN_INVALID)
                 self.assertFalse(invalid.is_valid)
-                self.assertEqual(invalid.country_code, 'TWN')
+                self.assertEqual(invalid.country_code, "TWN")
                 self.assertEqual(invalid.reason, api.FailureReason.CHECKSUM_MISMATCH)
                 self.assertIsNone(invalid.error_message)
                 self.assertIsNone(invalid.extracted_info)
 
     def test_extracted_info_is_the_parse_result(self) -> None:
-        result = api.validate('tw', TWN_VALID)
+        result = api.validate("tw", TWN_VALID)
         self.assertEqual(result.extracted_info, TWN.NationalID.parse(TWN_VALID))
         assert result.extracted_info is not None
-        self.assertEqual(result.extracted_info['gender'], Gender.MALE)
+        self.assertEqual(result.extracted_info["gender"], Gender.MALE)
         self.assertIsNone(result.reason)
         self.assertIsNone(result.error_message)
 
     def test_extracted_info_is_a_new_dict_each_call(self) -> None:
-        first = api.validate('tw', TWN_VALID)
+        first = api.validate("tw", TWN_VALID)
         assert isinstance(first.extracted_info, dict)
-        first.extracted_info['sn'] = 'changed'
-        second = api.validate('tw', TWN_VALID)
+        first.extracted_info["sn"] = "changed"
+        second = api.validate("tw", TWN_VALID)
         assert second.extracted_info is not None
         self.assertIsNot(first.extracted_info, second.extracted_info)
-        self.assertEqual(second.extracted_info['sn'], '2345678')
+        self.assertEqual(second.extracted_info["sn"], "2345678")
 
     def test_valid_id_of_a_type_without_parse(self) -> None:
-        self.assertFalse(callable(getattr(USA.NationalID, 'parse', None)))
-        result = api.validate('us', USA_VALID)
+        self.assertFalse(callable(getattr(USA.NationalID, "parse", None)))
+        result = api.validate("us", USA_VALID)
         self.assertTrue(result.is_valid)
-        self.assertEqual(result.country_code, 'USA')
+        self.assertEqual(result.country_code, "USA")
         self.assertIsNone(result.extracted_info)
         self.assertIsNone(result.reason)
 
     def test_unsupported_countries(self) -> None:
-        for country in ('XX', '', ' tw', 'ın', None, 1, b'TW', object()):
+        for country in ("XX", "", " tw", "ın", None, 1, b"TW", object()):
             with self.subTest(country=repr(country)):
                 result = api.validate(country, TWN_VALID)  # type: ignore[arg-type]
                 self.assertFalse(result.is_valid)
@@ -203,8 +203,8 @@ class TestValidate(TestCase):
                 self.assertEqual(result.id_number, TWN_VALID)
 
     def test_unsupported_country_message_never_raises_or_grows(self) -> None:
-        prefix = 'unsupported country: '
-        limit = len(prefix) + api._REPR_LIMIT + len('...')
+        prefix = "unsupported country: "
+        limit = len(prefix) + api._REPR_LIMIT + len("...")
         for name, country in unsupported_country_cases().items():
             with self.subTest(case=name):
                 result = api.validate(country, TWN_VALID)
@@ -212,128 +212,130 @@ class TestValidate(TestCase):
                 self.assertIsNone(result.country_code)
                 assert result.error_message is not None
                 self.assertTrue(result.error_message.startswith(prefix))
-                if name != 'raising repr':
+                if name != "raising repr":
                     self.assertLessEqual(len(result.error_message), limit)
-                    self.assertTrue(result.error_message.endswith('...'))
+                    self.assertTrue(result.error_message.endswith("..."))
 
     def test_unsupported_country_message_texts(self) -> None:
         cases = unsupported_country_cases()
         expected = {
-            'raising repr': 'unsupported country: <RaisingRepr object, repr() failed>',
-            'huge str': "unsupported country: 'xxx",
-            'long list': 'unsupported country: [0, 1, 2, 3',
-            'str subclass with a raising repr': "unsupported country: 'yyy",
+            "raising repr": "unsupported country: <RaisingRepr object, repr() failed>",
+            "huge str": "unsupported country: 'xxx",
+            "long list": "unsupported country: [0, 1, 2, 3",
+            "str subclass with a raising repr": "unsupported country: 'yyy",
         }
         for name, country in cases.items():
             with self.subTest(case=name):
-                message = api.validate(country, '').error_message
+                message = api.validate(country, "").error_message
                 assert message is not None
-                if name == 'raising repr':
+                if name == "raising repr":
                     self.assertEqual(message, expected[name])
                 else:
                     self.assertTrue(message.startswith(expected[name]), message)
 
     def test_unsupported_country_message_keeps_a_repr_that_fits(self) -> None:
-        fits = 'x' * (api._REPR_LIMIT - 2)
-        self.assertEqual(api.validate(fits, '').error_message, 'unsupported country: %r' % (fits,))
+        fits = "x" * (api._REPR_LIMIT - 2)
+        self.assertEqual(api.validate(fits, "").error_message, "unsupported country: %r" % (fits,))
 
     def test_unsupported_country_message_cuts_at_the_boundary(self) -> None:
         # A 79-character str has an 81-character repr: one over the limit.
-        over = 'x' * (api._REPR_LIMIT - 1)
+        over = "x" * (api._REPR_LIMIT - 1)
         self.assertEqual(len(repr(over)), api._REPR_LIMIT + 1)
-        self.assertEqual(api.validate(over, '').error_message,
-                         'unsupported country: ' + repr(over)[:api._REPR_LIMIT] + '...')
+        self.assertEqual(
+            api.validate(over, "").error_message, "unsupported country: " + repr(over)[: api._REPR_LIMIT] + "..."
+        )
 
     def test_unsupported_country_message_with_a_repr_that_is_a_hostile_str(self) -> None:
         country = HostileRepr()
-        expected = 'unsupported country: hostile'
+        expected = "unsupported country: hostile"
         self.assertEqual(api.validate(country, TWN_VALID).error_message, expected)
         self.assertEqual(api.validate(country, TWN_VALID).reason, api.FailureReason.UNSUPPORTED_COUNTRY)
         parsed = api.parse_id_info(country, TWN_VALID)  # type: ignore[arg-type]
         self.assertEqual(parsed, api.ParseFailure(None, TWN_VALID, api.FailureReason.UNSUPPORTED_COUNTRY, expected))
-        results = api.validate_many([(country, TWN_VALID), ('tw', TWN_VALID)])  # type: ignore[list-item]
+        results = api.validate_many([(country, TWN_VALID), ("tw", TWN_VALID)])  # type: ignore[list-item]
         self.assertEqual([r.is_valid for r in results], [False, True])
         self.assertEqual(results[0].error_message, expected)
 
     def test_unsupported_country_message_when_the_type_name_raises(self) -> None:
         result = api.validate(NamelessRepr(), TWN_VALID)  # type: ignore[arg-type]
         self.assertEqual(result.reason, api.FailureReason.UNSUPPORTED_COUNTRY)
-        self.assertEqual(result.error_message, 'unsupported country: <object, repr() failed>')
+        self.assertEqual(result.error_message, "unsupported country: <object, repr() failed>")
 
     def test_exception_whose_text_and_type_name_raise(self) -> None:
         with isolated_registry():
-            registry.register('QQQ', NamelessValidator, alpha2='QQ')
-            result = api.validate('qq', 'x1')
+            registry.register("QQQ", NamelessValidator, alpha2="QQ")
+            result = api.validate("qq", "x1")
         self.assertFalse(result.is_valid)
-        self.assertEqual(result.country_code, 'QQQ')
+        self.assertEqual(result.country_code, "QQQ")
         self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
-        self.assertEqual(result.error_message, 'Exception')
+        self.assertEqual(result.error_message, "Exception")
 
     def test_id_number_that_is_not_a_string(self) -> None:
-        for id_number in (None, 123, b'A123456789'):
+        for id_number in (None, 123, b"A123456789"):
             with self.subTest(id_number=repr(id_number)):
-                result = api.validate('tw', id_number)  # type: ignore[arg-type]
+                result = api.validate("tw", id_number)  # type: ignore[arg-type]
                 self.assertFalse(result.is_valid)
-                self.assertEqual(result.country_code, 'TWN')
+                self.assertEqual(result.country_code, "TWN")
                 self.assertEqual(result.reason, api.FailureReason.INVALID_FORMAT)
                 self.assertIsNone(result.extracted_info)
                 self.assertIs(result.id_number, id_number)
 
     def test_id_number_is_not_normalized(self) -> None:
-        for id_number in (' ' + TWN_VALID, TWN_VALID.lower()):
+        for id_number in (" " + TWN_VALID, TWN_VALID.lower()):
             with self.subTest(id_number=id_number):
-                result = api.validate('tw', id_number)
+                result = api.validate("tw", id_number)
                 self.assertEqual(result.is_valid, TWN.NationalID.validate(id_number))
                 self.assertEqual(result.id_number, id_number)
 
     def test_validator_that_raises(self) -> None:
         with isolated_registry():
-            registry.register('QQQ', RaisingValidator, alpha2='QQ')
-            result = api.validate('qq', 'x1')
+            registry.register("QQQ", RaisingValidator, alpha2="QQ")
+            result = api.validate("qq", "x1")
         self.assertFalse(result.is_valid)
-        self.assertEqual(result.country_code, 'QQQ')
+        self.assertEqual(result.country_code, "QQQ")
         self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
-        self.assertEqual(result.error_message, 'RuntimeError: boom x1')
+        self.assertEqual(result.error_message, "RuntimeError: boom x1")
         self.assertIsNone(result.extracted_info)
 
     def test_parser_that_raises(self) -> None:
         with isolated_registry():
-            registry.register('QQQ', RaisingParser, alpha2='QQ')
-            result = api.validate('QQQ', 'x1')
+            registry.register("QQQ", RaisingParser, alpha2="QQ")
+            result = api.validate("QQQ", "x1")
         self.assertFalse(result.is_valid)
-        self.assertEqual(result.country_code, 'QQQ')
+        self.assertEqual(result.country_code, "QQQ")
         self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
-        self.assertEqual(result.error_message, 'ValueError: cannot parse')
+        self.assertEqual(result.error_message, "ValueError: cannot parse")
         self.assertIsNone(result.extracted_info)
 
     def test_exception_whose_text_raises(self) -> None:
         for validator in (UntextableValidator, UntextableParser):
             with self.subTest(validator=validator.__name__), isolated_registry():
-                registry.register('QQQ', validator, alpha2='QQ')
-                result = api.validate('qq', 'x1')
+                registry.register("QQQ", validator, alpha2="QQ")
+                result = api.validate("qq", "x1")
                 self.assertFalse(result.is_valid)
-                self.assertEqual(result.country_code, 'QQQ')
+                self.assertEqual(result.country_code, "QQQ")
                 self.assertEqual(result.reason, api.FailureReason.VALIDATION_FAILED)
-                self.assertEqual(result.error_message, 'UntextableError')
+                self.assertEqual(result.error_message, "UntextableError")
                 self.assertIsNone(result.extracted_info)
-                self.assertEqual(api.parse_id_info('qq', 'x1'),
-                                 api.ParseFailure('QQQ', 'x1', api.FailureReason.VALIDATION_FAILED,
-                                                  'UntextableError'))
+                self.assertEqual(
+                    api.parse_id_info("qq", "x1"),
+                    api.ParseFailure("QQQ", "x1", api.FailureReason.VALIDATION_FAILED, "UntextableError"),
+                )
 
     def test_parser_that_returns_none(self) -> None:
         with isolated_registry():
-            registry.register('QQQ', NoneParser, alpha2='QQ')
-            result = api.validate('QQQ', 'x1')
+            registry.register("QQQ", NoneParser, alpha2="QQ")
+            result = api.validate("QQQ", "x1")
         self.assertTrue(result.is_valid)
         self.assertIsNone(result.extracted_info)
         self.assertIsNone(result.reason)
 
     def test_reason_is_set_iff_invalid(self) -> None:
         results = [
-            api.validate('tw', TWN_VALID),
-            api.validate('us', USA_VALID),
-            api.validate('tw', TWN_INVALID),
-            api.validate('XX', TWN_VALID),
+            api.validate("tw", TWN_VALID),
+            api.validate("us", USA_VALID),
+            api.validate("tw", TWN_INVALID),
+            api.validate("XX", TWN_VALID),
         ]
         self.assertEqual([result.is_valid for result in results], [True, True, False, False])
         for result in results:
@@ -353,40 +355,40 @@ class TestValidate(TestCase):
                     result = api.validate(alpha3, vector)
                     expected = validator.validate(vector)
                     if result.is_valid != expected or result.country_code != alpha3 or result.error_message:
-                        self.fail('%s %r: %r, expected %r' % (alpha3, vector, result, expected))
+                        self.fail("%s %r: %r, expected %r" % (alpha3, vector, result, expected))
 
 
 class TestValidationResult(TestCase):
     def test_truthiness(self) -> None:
-        self.assertTrue(api.validate('tw', TWN_VALID))
-        self.assertFalse(api.validate('tw', TWN_INVALID))
-        self.assertFalse(api.validate('XX', TWN_VALID))
+        self.assertTrue(api.validate("tw", TWN_VALID))
+        self.assertFalse(api.validate("tw", TWN_INVALID))
+        self.assertFalse(api.validate("XX", TWN_VALID))
 
     def test_is_frozen(self) -> None:
-        result = api.validate('tw', TWN_VALID)
+        result = api.validate("tw", TWN_VALID)
         with self.assertRaises(dataclasses.FrozenInstanceError):
             result.is_valid = False  # type: ignore[misc]
 
     def test_hashing(self) -> None:
-        invalid = api.validate('tw', TWN_INVALID)
-        non_parsable = api.validate('us', USA_VALID)
+        invalid = api.validate("tw", TWN_INVALID)
+        non_parsable = api.validate("us", USA_VALID)
         self.assertTrue(non_parsable.is_valid)
         self.assertIsNone(non_parsable.extracted_info)
         for result in (invalid, non_parsable):
             with self.subTest(result=result):
                 self.assertEqual(hash(result), hash(dataclasses.replace(result)))
-        self.assertEqual(len({invalid, api.validate('tw', TWN_INVALID), non_parsable}), 2)
-        parsed = api.validate('tw', TWN_VALID)
+        self.assertEqual(len({invalid, api.validate("tw", TWN_INVALID), non_parsable}), 2)
+        parsed = api.validate("tw", TWN_VALID)
         self.assertIsNotNone(parsed.extracted_info)
         with self.assertRaises(TypeError):
             hash(parsed)
         with self.assertRaises(TypeError):
-            hash(api.parse_id_info('tw', TWN_VALID))
-        failure = api.parse_id_info('tw', TWN_INVALID)
+            hash(api.parse_id_info("tw", TWN_VALID))
+        failure = api.parse_id_info("tw", TWN_INVALID)
         self.assertEqual(hash(failure), hash(dataclasses.replace(failure)))
 
     def test_defaults(self) -> None:
-        result = api.ValidationResult(is_valid=False, country_code=None, id_number='x')
+        result = api.ValidationResult(is_valid=False, country_code=None, id_number="x")
         self.assertIsNone(result.extracted_info)
         self.assertIsNone(result.reason)
         self.assertIsNone(result.error_message)
@@ -397,33 +399,33 @@ class TestFailureReason(TestCase):
         self.assertEqual(
             {reason.name: reason.value for reason in api.FailureReason},
             {
-                'UNSUPPORTED_COUNTRY': 'unsupported_country',
-                'INVALID_LENGTH': 'invalid_length',
-                'INVALID_FORMAT': 'invalid_format',
-                'CHECKSUM_MISMATCH': 'checksum_mismatch',
-                'INVALID_BIRTHDATE': 'invalid_birthdate',
-                'VALIDATION_FAILED': 'validation_failed',
-                'NOT_PARSABLE': 'not_parsable',
+                "UNSUPPORTED_COUNTRY": "unsupported_country",
+                "INVALID_LENGTH": "invalid_length",
+                "INVALID_FORMAT": "invalid_format",
+                "CHECKSUM_MISMATCH": "checksum_mismatch",
+                "INVALID_BIRTHDATE": "invalid_birthdate",
+                "VALIDATION_FAILED": "validation_failed",
+                "NOT_PARSABLE": "not_parsable",
             },
         )
 
     def test_lookup_by_value_and_str(self) -> None:
-        reason = api.FailureReason('checksum_mismatch')
+        reason = api.FailureReason("checksum_mismatch")
         self.assertIs(reason, api.FailureReason.CHECKSUM_MISMATCH)
         self.assertIsInstance(reason, str)
-        self.assertEqual(reason, 'checksum_mismatch')
+        self.assertEqual(reason, "checksum_mismatch")
 
 
 class TestValidateMany(TestCase):
     def test_keeps_the_order(self) -> None:
-        results = api.validate_many([('tw', TWN_VALID), ('XX', '1'), ('us', USA_VALID), ('tw', TWN_INVALID)])
+        results = api.validate_many([("tw", TWN_VALID), ("XX", "1"), ("us", USA_VALID), ("tw", TWN_INVALID)])
         self.assertEqual([result.is_valid for result in results], [True, False, True, False])
-        self.assertEqual([result.country_code for result in results], ['TWN', None, 'USA', 'TWN'])
+        self.assertEqual([result.country_code for result in results], ["TWN", None, "USA", "TWN"])
         self.assertEqual(results[1].reason, api.FailureReason.UNSUPPORTED_COUNTRY)
-        self.assertEqual(results[0], api.validate('tw', TWN_VALID))
+        self.assertEqual(results[0], api.validate("tw", TWN_VALID))
 
     def test_accepts_any_iterable(self) -> None:
-        pairs = iter([('tw', TWN_VALID), ('tw', TWN_INVALID)])
+        pairs = iter([("tw", TWN_VALID), ("tw", TWN_INVALID)])
         self.assertEqual([bool(result) for result in api.validate_many(pairs)], [True, False])
 
     def test_empty(self) -> None:
@@ -438,10 +440,20 @@ class TestPackageExports(TestCase):
         self.assertIs(idnumbers.FailureReason, api.FailureReason)
 
     def test_all(self) -> None:
-        self.assertEqual(api.__all__, [
-            'FailureReason', 'ValidationResult', 'ParseSuccess', 'ParseFailure', 'ParseIdInfoResult',
-            'validate', 'validate_many', 'parse_id_info', 'failure_reason',
-        ])
+        self.assertEqual(
+            api.__all__,
+            [
+                "FailureReason",
+                "ValidationResult",
+                "ParseSuccess",
+                "ParseFailure",
+                "ParseIdInfoResult",
+                "validate",
+                "validate_many",
+                "parse_id_info",
+                "failure_reason",
+            ],
+        )
         for name in api.__all__:
             self.assertTrue(hasattr(api, name))
 
@@ -449,24 +461,24 @@ class TestPackageExports(TestCase):
 class TestLazyImport(TestCase):
     def run_code(self, code: str) -> None:
         env = dict(os.environ, PYTHONPATH=str(REPO_ROOT))
-        subprocess.run([sys.executable, '-c', code], cwd=str(REPO_ROOT), env=env, check=True)
+        subprocess.run([sys.executable, "-c", code], cwd=str(REPO_ROOT), env=env, check=True)
 
     def test_unsupported_country_loads_no_country_module(self) -> None:
         self.run_code(
-            'import sys, idnumbers\n'
+            "import sys, idnumbers\n"
             "result = idnumbers.validate('XX', '1')\n"
-            'assert not result.is_valid\n'
+            "assert not result.is_valid\n"
             "assert 'idnumbers.nationalid' not in sys.modules\n"
         )
 
     def test_validate_loads_only_that_country(self) -> None:
         self.run_code(
-            'import sys, idnumbers\n'
+            "import sys, idnumbers\n"
             "assert idnumbers.validate('tw', 'A123456789').is_valid\n"
             "assert 'idnumbers.nationalid.TWN' in sys.modules\n"
             "assert 'idnumbers.nationalid.JPN' not in sys.modules\n"
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

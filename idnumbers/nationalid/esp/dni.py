@@ -17,30 +17,34 @@ class DNI:
     This is a user-input policy, not a claim that issued DNI numbers use lowercase letters.
     The unchanged mod-23 check-letter table is documented by Spain's Ministry of Interior (see METADATA.links).
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'ES',
-        # length without insignificant chars
-        'min_length': 9,
-        'max_length': 9,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^(\d{8})([A-Za-z])$'),
-        'alias_of': None,
-        'names': ['Documento Nacional de Identidad',
-                  'DNI'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Spain',
-                  'https://es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal',
-                  'https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/tramites-y-gestiones/dni/'
-                  'calculo-del-digito-de-control-del-nif-nie/'],
-        'deprecated': False,
-        'country_name': 'Spain',
-        'id_type': 'National Identity Document',
-        'official_name': 'Documento Nacional de Identidad',
-        'display_format': '########L',
-        'example': '12345678Z',
-        'checksum_algorithm': 'Mod 23 check letter (table TRWAGMYFPDXBNJZSQVHLCKE)',
-        'masks': ('########L',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "ES",
+            # length without insignificant chars
+            "min_length": 9,
+            "max_length": 9,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^(\d{8})([A-Za-z])$"),
+            "alias_of": None,
+            "names": ["Documento Nacional de Identidad", "DNI"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Spain",
+                "https://es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal",
+                "https://www.interior.gob.es/opencms/es/servicios-al-ciudadano/tramites-y-gestiones/dni/"
+                "calculo-del-digito-de-control-del-nif-nie/",
+            ],
+            "deprecated": False,
+            "country_name": "Spain",
+            "id_type": "National Identity Document",
+            "official_name": "Documento Nacional de Identidad",
+            "display_format": "########L",
+            "example": "12345678Z",
+            "checksum_algorithm": "Mod 23 check letter (table TRWAGMYFPDXBNJZSQVHLCKE)",
+            "masks": ("########L",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -49,7 +53,7 @@ class DNI:
         """
         return DNI.checksum(id_number)
 
-    MAGIC_LETTERS = 'TRWAGMYFPDXBNJZSQVHLCKE'
+    MAGIC_LETTERS = "TRWAGMYFPDXBNJZSQVHLCKE"
 
     @staticmethod
     def checksum(id_number: str) -> bool:

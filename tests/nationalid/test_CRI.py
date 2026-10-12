@@ -7,57 +7,64 @@ from idnumbers.nationalid.cri.national_id import PROVINCE_NAMES
 
 class TestCRIValidation(TestCase):
     def test_country_metadata(self):
-        self.assertEqual(CRI.NationalID.METADATA.iso3166_alpha2, 'CR')
-        self.assertEqual(CRI.NationalID.METADATA.country_name, 'Costa Rica')
+        self.assertEqual(CRI.NationalID.METADATA.iso3166_alpha2, "CR")
+        self.assertEqual(CRI.NationalID.METADATA.country_name, "Costa Rica")
         self.assertFalse(CRI.NationalID.METADATA.checksum)
         self.assertTrue(CRI.NationalID.validate(CRI.NationalID.METADATA.example))
 
     def test_normal_case(self):
         for id_number in (
-            '1-0913-0259',  # example used by the Node port
-            '109130259',
-            '3-0455-0175',  # python-stdnum documentation example
-            '701610395',  # python-stdnum documentation example
-            '8-0123-0456',  # synthetic: naturalized citizen
-            '9-0123-0456',  # synthetic: special birth register
-            '1-0234-0567',  # synthetic
+            "1-0913-0259",  # example used by the Node port
+            "109130259",
+            "3-0455-0175",  # python-stdnum documentation example
+            "701610395",  # python-stdnum documentation example
+            "8-0123-0456",  # synthetic: naturalized citizen
+            "9-0123-0456",  # synthetic: special birth register
+            "1-0234-0567",  # synthetic
         ):
             with self.subTest(id_number=id_number):
                 self.assertTrue(CRI.NationalID.validate(id_number))
 
     def test_optional_hyphen_layouts(self):
-        expected = {'province': 1, 'province_name': 'San José', 'tomo': '0234', 'asiento': '0567'}
-        for id_number in ('102340567', '1-0234-0567', '1-02340567', '10234-0567'):
+        expected = {"province": 1, "province_name": "San José", "tomo": "0234", "asiento": "0567"}
+        for id_number in ("102340567", "1-0234-0567", "1-02340567", "10234-0567"):
             with self.subTest(id_number=id_number):
                 self.assertTrue(CRI.NationalID.validate(id_number))
                 self.assertEqual(expected, CRI.NationalID.parse(id_number))
 
     def test_malformed_hyphens(self):
-        for id_number in ('1--0234-0567', '1-0234--0567', '-102340567', '102340567-',
-                          '10-234-0567', '1-023-40567', '1-02340-567'):
+        for id_number in (
+            "1--0234-0567",
+            "1-0234--0567",
+            "-102340567",
+            "102340567-",
+            "10-234-0567",
+            "1-023-40567",
+            "1-02340-567",
+        ):
             with self.subTest(id_number=id_number):
                 self.assertFalse(CRI.NationalID.validate(id_number))
                 self.assertIsNone(CRI.NationalID.parse(id_number))
 
     def test_error_case(self):
         for id_number in (
-            '009130259',  # province 0
-            '0-0913-0259',  # province 0
-            '0109130259',  # python-stdnum 10-digit Hacienda form
-            '01-0913-0259',  # python-stdnum 10-digit Hacienda form
-            '1091302599',  # 10 digits
-            '3101123456',  # cédula jurídica
-            '155812345678',  # 12-digit DIMEX
-            '12345678901',  # 11 digits
-            '10913025',  # 8 digits
-            '1-913-259',  # unpadded
-            '1 0913 0259',  # unsupported separator
-            '1/0913/0259',  # unsupported separator
-            '1--0913-0259',
-            '109130259\n',  # trailing newline
-            ' 109130259',  # leading space
-            '１０９１３０２５９',  # full-width digits
-            '',
+            "009130259",  # province 0
+            "0-0913-0259",  # province 0
+            "0109130259",  # python-stdnum 10-digit Hacienda form
+            "01-0913-0259",  # python-stdnum 10-digit Hacienda form
+            "1091302599",  # 10 digits
+            "3101123456",  # cédula jurídica
+            "155812345678",  # 12-digit DIMEX
+            "12345678901",  # 11 digits
+            "10913025",  # 8 digits
+            "1-913-259",  # unpadded
+            "1 0913 0259",  # unsupported separator
+            "1/0913/0259",  # unsupported separator
+            "1--0913-0259",
+            "109130259\n",  # trailing newline
+            " 109130259",  # leading space
+            "１０９１３０２５９",  # full-width digits
+            "",
         ):
             with self.subTest(id_number=id_number):
                 self.assertFalse(CRI.NationalID.validate(id_number))
@@ -71,29 +78,30 @@ class TestCRIValidation(TestCase):
 
     def test_parse(self):
         self.assertEqual(
-            {'province': 1, 'province_name': 'San José', 'tomo': '0913', 'asiento': '0259'},
-            CRI.NationalID.parse('1-0913-0259'))
-        self.assertEqual(CRI.NationalID.parse('1-0913-0259'), CRI.NationalID.parse('109130259'))
-        naturalized = CRI.NationalID.parse('8-0123-0456')
+            {"province": 1, "province_name": "San José", "tomo": "0913", "asiento": "0259"},
+            CRI.NationalID.parse("1-0913-0259"),
+        )
+        self.assertEqual(CRI.NationalID.parse("1-0913-0259"), CRI.NationalID.parse("109130259"))
+        naturalized = CRI.NationalID.parse("8-0123-0456")
         assert naturalized is not None
-        self.assertEqual(8, naturalized['province'])
-        self.assertEqual('Naturalized', naturalized['province_name'])
-        special = CRI.NationalID.parse('9-0123-0456')
+        self.assertEqual(8, naturalized["province"])
+        self.assertEqual("Naturalized", naturalized["province_name"])
+        special = CRI.NationalID.parse("9-0123-0456")
         assert special is not None
-        self.assertEqual('Partida Especial de Nacimientos', special['province_name'])
+        self.assertEqual("Partida Especial de Nacimientos", special["province_name"])
 
     def test_every_province_has_a_name(self):
         self.assertEqual(set(range(1, 10)), set(PROVINCE_NAMES))
         for province in range(1, 10):
             with self.subTest(province=province):
-                result = CRI.NationalID.parse('%d-0123-0456' % province)
+                result = CRI.NationalID.parse("%d-0123-0456" % province)
                 assert result is not None
-                self.assertEqual(PROVINCE_NAMES[province], result['province_name'])
+                self.assertEqual(PROVINCE_NAMES[province], result["province_name"])
 
     def test_unified_api(self):
-        self.assertTrue(idnumbers.validate('CRI', '1-0913-0259'))
-        self.assertTrue(idnumbers.validate('CR', '109130259'))
-        self.assertFalse(idnumbers.validate('CR', '0109130259'))
-        info = idnumbers.parse_id_info('CR', '1-0913-0259')
+        self.assertTrue(idnumbers.validate("CRI", "1-0913-0259"))
+        self.assertTrue(idnumbers.validate("CR", "109130259"))
+        self.assertFalse(idnumbers.validate("CR", "0109130259"))
+        info = idnumbers.parse_id_info("CR", "1-0913-0259")
         assert info.ok
-        self.assertEqual('San José', info.info['province_name'])
+        self.assertEqual("San José", info.info["province_name"])

@@ -31,12 +31,12 @@ import threading
 from typing import Any, Dict, Iterable, List, NamedTuple, Optional, Set, Tuple, Type
 
 __all__ = [
-    'CountryEntry',
-    'get_country',
-    'get_validator',
-    'list_supported_countries',
-    'register',
-    'resolve_country',
+    "CountryEntry",
+    "get_country",
+    "get_validator",
+    "list_supported_countries",
+    "register",
+    "resolve_country",
 ]
 
 
@@ -60,91 +60,91 @@ class CountryEntry(NamedTuple):
 
 
 _BUILTIN: Dict[str, Tuple[str, str]] = {
-    'ALB': ('AL', 'Albania'),
-    'ARE': ('AE', 'United Arab Emirates'),
-    'ARG': ('AR', 'Argentina'),
-    'AUS': ('AU', 'Australia'),
-    'AUT': ('AT', 'Austria'),
-    'BEL': ('BE', 'Belgium'),
-    'BGD': ('BD', 'Bangladesh'),
-    'BGR': ('BG', 'Bulgaria'),
-    'BHR': ('BH', 'Bahrain'),
-    'BIH': ('BA', 'Bosnia and Herzegovina'),
-    'BRA': ('BR', 'Brazil'),
-    'CAN': ('CA', 'Canada'),
-    'CHE': ('CH', 'Switzerland'),
-    'CHL': ('CL', 'Chile'),
-    'CHN': ('CN', 'China'),
-    'COL': ('CO', 'Colombia'),
-    'CRI': ('CR', 'Costa Rica'),
-    'CYP': ('CY', 'Cyprus'),
-    'CZE': ('CZ', 'Czechia'),
-    'DEU': ('DE', 'Germany'),
-    'DNK': ('DK', 'Denmark'),
-    'DOM': ('DO', 'Dominican Republic'),
-    'ECU': ('EC', 'Ecuador'),
-    'EGY': ('EG', 'Egypt'),
-    'ESP': ('ES', 'Spain'),
-    'EST': ('EE', 'Estonia'),
-    'FIN': ('FI', 'Finland'),
-    'FRA': ('FR', 'France'),
-    'GBR': ('GB', 'United Kingdom'),
-    'GEO': ('GE', 'Georgia'),
-    'GRC': ('GR', 'Greece'),
-    'GTM': ('GT', 'Guatemala'),
-    'HKG': ('HK', 'Hong Kong'),
-    'HRV': ('HR', 'Croatia'),
-    'HUN': ('HU', 'Hungary'),
-    'IDN': ('ID', 'Indonesia'),
-    'IND': ('IN', 'India'),
-    'IRL': ('IE', 'Ireland'),
-    'IRN': ('IR', 'Iran'),
-    'IRQ': ('IQ', 'Iraq'),
-    'ISL': ('IS', 'Iceland'),
-    'ISR': ('IL', 'Israel'),
-    'ITA': ('IT', 'Italy'),
-    'JPN': ('JP', 'Japan'),
-    'KAZ': ('KZ', 'Kazakhstan'),
-    'KOR': ('KR', 'South Korea'),
-    'KWT': ('KW', 'Kuwait'),
-    'LKA': ('LK', 'Sri Lanka'),
-    'LTU': ('LT', 'Lithuania'),
-    'LUX': ('LU', 'Luxembourg'),
-    'LVA': ('LV', 'Latvia'),
-    'MAC': ('MO', 'Macao'),
-    'MDA': ('MD', 'Moldova'),
-    'MEX': ('MX', 'Mexico'),
-    'MKD': ('MK', 'North Macedonia'),
-    'MNE': ('ME', 'Montenegro'),
-    'MYS': ('MY', 'Malaysia'),
-    'NGA': ('NG', 'Nigeria'),
-    'NLD': ('NL', 'Netherlands'),
-    'NOR': ('NO', 'Norway'),
-    'NPL': ('NP', 'Nepal'),
-    'NZL': ('NZ', 'New Zealand'),
-    'PAK': ('PK', 'Pakistan'),
-    'PHL': ('PH', 'Philippines'),
-    'PNG': ('PG', 'Papua New Guinea'),
-    'POL': ('PL', 'Poland'),
-    'PRT': ('PT', 'Portugal'),
-    'ROU': ('RO', 'Romania'),
-    'RUS': ('RU', 'Russia'),
-    'SAU': ('SA', 'Saudi Arabia'),
-    'SGP': ('SG', 'Singapore'),
-    'SMR': ('SM', 'San Marino'),
-    'SRB': ('RS', 'Serbia'),
-    'SVK': ('SK', 'Slovakia'),
-    'SVN': ('SI', 'Slovenia'),
-    'SWE': ('SE', 'Sweden'),
-    'THA': ('TH', 'Thailand'),
-    'TUR': ('TR', 'Türkiye'),
-    'TWN': ('TW', 'Taiwan'),
-    'UKR': ('UA', 'Ukraine'),
-    'USA': ('US', 'United States'),
-    'VEN': ('VE', 'Venezuela'),
-    'VNM': ('VN', 'Vietnam'),
-    'ZAF': ('ZA', 'South Africa'),
-    'ZWE': ('ZW', 'Zimbabwe'),
+    "ALB": ("AL", "Albania"),
+    "ARE": ("AE", "United Arab Emirates"),
+    "ARG": ("AR", "Argentina"),
+    "AUS": ("AU", "Australia"),
+    "AUT": ("AT", "Austria"),
+    "BEL": ("BE", "Belgium"),
+    "BGD": ("BD", "Bangladesh"),
+    "BGR": ("BG", "Bulgaria"),
+    "BHR": ("BH", "Bahrain"),
+    "BIH": ("BA", "Bosnia and Herzegovina"),
+    "BRA": ("BR", "Brazil"),
+    "CAN": ("CA", "Canada"),
+    "CHE": ("CH", "Switzerland"),
+    "CHL": ("CL", "Chile"),
+    "CHN": ("CN", "China"),
+    "COL": ("CO", "Colombia"),
+    "CRI": ("CR", "Costa Rica"),
+    "CYP": ("CY", "Cyprus"),
+    "CZE": ("CZ", "Czechia"),
+    "DEU": ("DE", "Germany"),
+    "DNK": ("DK", "Denmark"),
+    "DOM": ("DO", "Dominican Republic"),
+    "ECU": ("EC", "Ecuador"),
+    "EGY": ("EG", "Egypt"),
+    "ESP": ("ES", "Spain"),
+    "EST": ("EE", "Estonia"),
+    "FIN": ("FI", "Finland"),
+    "FRA": ("FR", "France"),
+    "GBR": ("GB", "United Kingdom"),
+    "GEO": ("GE", "Georgia"),
+    "GRC": ("GR", "Greece"),
+    "GTM": ("GT", "Guatemala"),
+    "HKG": ("HK", "Hong Kong"),
+    "HRV": ("HR", "Croatia"),
+    "HUN": ("HU", "Hungary"),
+    "IDN": ("ID", "Indonesia"),
+    "IND": ("IN", "India"),
+    "IRL": ("IE", "Ireland"),
+    "IRN": ("IR", "Iran"),
+    "IRQ": ("IQ", "Iraq"),
+    "ISL": ("IS", "Iceland"),
+    "ISR": ("IL", "Israel"),
+    "ITA": ("IT", "Italy"),
+    "JPN": ("JP", "Japan"),
+    "KAZ": ("KZ", "Kazakhstan"),
+    "KOR": ("KR", "South Korea"),
+    "KWT": ("KW", "Kuwait"),
+    "LKA": ("LK", "Sri Lanka"),
+    "LTU": ("LT", "Lithuania"),
+    "LUX": ("LU", "Luxembourg"),
+    "LVA": ("LV", "Latvia"),
+    "MAC": ("MO", "Macao"),
+    "MDA": ("MD", "Moldova"),
+    "MEX": ("MX", "Mexico"),
+    "MKD": ("MK", "North Macedonia"),
+    "MNE": ("ME", "Montenegro"),
+    "MYS": ("MY", "Malaysia"),
+    "NGA": ("NG", "Nigeria"),
+    "NLD": ("NL", "Netherlands"),
+    "NOR": ("NO", "Norway"),
+    "NPL": ("NP", "Nepal"),
+    "NZL": ("NZ", "New Zealand"),
+    "PAK": ("PK", "Pakistan"),
+    "PHL": ("PH", "Philippines"),
+    "PNG": ("PG", "Papua New Guinea"),
+    "POL": ("PL", "Poland"),
+    "PRT": ("PT", "Portugal"),
+    "ROU": ("RO", "Romania"),
+    "RUS": ("RU", "Russia"),
+    "SAU": ("SA", "Saudi Arabia"),
+    "SGP": ("SG", "Singapore"),
+    "SMR": ("SM", "San Marino"),
+    "SRB": ("RS", "Serbia"),
+    "SVK": ("SK", "Slovakia"),
+    "SVN": ("SI", "Slovenia"),
+    "SWE": ("SE", "Sweden"),
+    "THA": ("TH", "Thailand"),
+    "TUR": ("TR", "Türkiye"),
+    "TWN": ("TW", "Taiwan"),
+    "UKR": ("UA", "Ukraine"),
+    "USA": ("US", "United States"),
+    "VEN": ("VE", "Venezuela"),
+    "VNM": ("VN", "Vietnam"),
+    "ZAF": ("ZA", "South Africa"),
+    "ZWE": ("ZW", "Zimbabwe"),
 }
 """The built-in countries: alpha-3 code -> (alpha-2 code, English name). A new country module is added here."""
 
@@ -251,21 +251,21 @@ def register(
     """
     alias_list = _check_types(alpha3, validator, alpha2, name, aliases)
     if not _is_code(alpha3, 3):
-        raise ValueError(f'alpha3 must be exactly 3 ASCII letters, got {alpha3!r}')
+        raise ValueError(f"alpha3 must be exactly 3 ASCII letters, got {alpha3!r}")
     key3 = alpha3.upper()
-    code2 = alpha2 if alpha2 is not None else getattr(validator.METADATA, 'iso3166_alpha2', None)
+    code2 = alpha2 if alpha2 is not None else getattr(validator.METADATA, "iso3166_alpha2", None)
     if code2 is None:
-        raise ValueError(f'{key3} has no alpha2: pass alpha2 or set METADATA.iso3166_alpha2 on the validator')
+        raise ValueError(f"{key3} has no alpha2: pass alpha2 or set METADATA.iso3166_alpha2 on the validator")
     if not isinstance(code2, str) or not _is_code(code2, 2):
-        raise ValueError(f'alpha2 must be exactly 2 ASCII letters, got {code2!r} for {key3}')
+        raise ValueError(f"alpha2 must be exactly 2 ASCII letters, got {code2!r} for {key3}")
     key2 = code2.upper()
     if name is not None and not name.strip():
-        raise ValueError(f'the name of {key3} must not be empty or blank')
+        raise ValueError(f"the name of {key3} must not be empty or blank")
     keys_of_aliases = tuple(_alias_key(key3, alias) for alias in alias_list)
     all_keys = (key3, key2) + keys_of_aliases
     for key in all_keys:
         if all_keys.count(key) > 1:
-            raise ValueError(f'the code {key!r} is repeated in the registration of {key3}')
+            raise ValueError(f"the code {key!r} is repeated in the registration of {key3}")
 
     with _LOCK:
         if key3 in _BUILTIN:
@@ -278,7 +278,7 @@ def register(
         for key in all_keys:
             owner = _KEYS.get(key)
             if owner is not None and owner != key3:
-                raise ValueError(f'the code {key!r} of {key3} is already used by {owner}')
+                raise ValueError(f"the code {key!r} of {key3} is already used by {owner}")
         _ENTRIES[key3] = CountryEntry(key3, key2, resolved_name, validator, (validator,))
         _CUSTOM[key3] = keys_of_aliases
         for key in all_keys:
@@ -302,15 +302,15 @@ def _entry(alpha3: str) -> CountryEntry:
 def _load_builtin(alpha3: str) -> CountryEntry:
     """Import ``idnumbers.nationalid.<alpha3>`` and describe it."""
     alpha2, name = _BUILTIN[alpha3]
-    module = importlib.import_module('idnumbers.nationalid.' + alpha3)
+    module = importlib.import_module("idnumbers.nationalid." + alpha3)
     id_types = tuple(dict.fromkeys(obj for obj in vars(module).values() if _is_id_type(obj)))
     return CountryEntry(alpha3, alpha2, name, module.NationalID, id_types)
 
 
 def _is_id_type(obj: object) -> bool:
     """Whether ``obj`` is an ID class of a country module, which has ``METADATA`` and is not an alias."""
-    metadata = getattr(obj, 'METADATA', None)
-    return isinstance(obj, type) and metadata is not None and getattr(metadata, 'alias_of', None) is None
+    metadata = getattr(obj, "METADATA", None)
+    return isinstance(obj, type) and metadata is not None and getattr(metadata, "alias_of", None) is None
 
 
 def _is_code(code: str, length: int) -> bool:
@@ -327,28 +327,28 @@ def _check_types(
     :return: the aliases as a tuple, so that a one-shot iterable is read only once.
     """
     if not isinstance(alpha3, str):
-        raise TypeError(f'alpha3 must be a str, got {type(alpha3).__name__}')
-    if not isinstance(validator, type) or not hasattr(validator, 'METADATA'):
-        raise TypeError(f'the validator of {alpha3} must be a class with a METADATA attribute, got {validator!r}')
-    if not callable(getattr(validator, 'validate', None)):
-        raise TypeError(f'the validator of {alpha3} must have a callable validate attribute, got {validator!r}')
+        raise TypeError(f"alpha3 must be a str, got {type(alpha3).__name__}")
+    if not isinstance(validator, type) or not hasattr(validator, "METADATA"):
+        raise TypeError(f"the validator of {alpha3} must be a class with a METADATA attribute, got {validator!r}")
+    if not callable(getattr(validator, "validate", None)):
+        raise TypeError(f"the validator of {alpha3} must have a callable validate attribute, got {validator!r}")
     if alpha2 is not None and not isinstance(alpha2, str):
-        raise TypeError(f'alpha2 of {alpha3} must be a str, got {type(alpha2).__name__}')
+        raise TypeError(f"alpha2 of {alpha3} must be a str, got {type(alpha2).__name__}")
     if name is not None and not isinstance(name, str):
-        raise TypeError(f'the name of {alpha3} must be a str, got {type(name).__name__}')
+        raise TypeError(f"the name of {alpha3} must be a str, got {type(name).__name__}")
     if isinstance(aliases, str):
-        raise TypeError(f'aliases of {alpha3} must be an iterable of str, not the single str {aliases!r}')
+        raise TypeError(f"aliases of {alpha3} must be an iterable of str, not the single str {aliases!r}")
     materialized = tuple(aliases)
     for alias in materialized:
         if not isinstance(alias, str):
-            raise TypeError(f'an alias of {alpha3} must be a str, got {type(alias).__name__}')
+            raise TypeError(f"an alias of {alpha3} must be a str, got {type(alias).__name__}")
     return materialized
 
 
 def _alias_key(alpha3: str, alias: str) -> str:
     """Validate an alias of ``alpha3`` and return its upper-case lookup key."""
     if not alias or not alias.isascii() or any(char.isspace() for char in alias):
-        raise ValueError(f'an alias of {alpha3} must be non-empty ASCII without whitespace, got {alias!r}')
+        raise ValueError(f"an alias of {alpha3} must be non-empty ASCII without whitespace, got {alias!r}")
     return alias.upper()
 
 
@@ -358,12 +358,10 @@ def _check_builtin_noop(
     """Accept only the registration that repeats a built-in country exactly, raise ``ValueError`` otherwise."""
     entry = _entry(alpha3)
     if validator is not entry.national_id or alpha2 != entry.alpha2 or name not in (None, entry.name) or aliases:
-        raise ValueError(f'{alpha3} is a built-in country and can be neither replaced nor widened')
+        raise ValueError(f"{alpha3} is a built-in country and can be neither replaced nor widened")
 
 
-def _check_custom_noop(
-    alpha3: str, validator: Type[Any], alpha2: str, name: str, aliases: Tuple[str, ...]
-) -> None:
+def _check_custom_noop(alpha3: str, validator: Type[Any], alpha2: str, name: str, aliases: Tuple[str, ...]) -> None:
     """Accept only the registration that repeats an earlier one exactly, raise ``ValueError`` otherwise."""
     entry = _ENTRIES[alpha3]
     same_aliases: Set[str] = set(_CUSTOM[alpha3])
@@ -373,4 +371,4 @@ def _check_custom_noop(
         or name != entry.name
         or same_aliases != set(aliases)
     ):
-        raise ValueError(f'{alpha3} is already registered with different arguments')
+        raise ValueError(f"{alpha3} is already registered with different arguments")

@@ -9,30 +9,31 @@ class PersonalID:
     Croatia Personal ID number format, OIB
     https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia%29
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'HR',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r"^\d{11}$"),
-        'alias_of': None,
-        'names': ['Personal ID Number',
-                  'Osobni identifikacijski broj',
-                  'OIB',
-                  'PIN'],
-        'links': ['https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)',
-                  'https://www.porezna-uprava.hr/en/Pages/PIN.aspx'],
-        'deprecated': False
-,
-        'country_name': 'Croatia',
-        'id_type': 'Personal Identification Number',
-        'official_name': 'Osobni identifikacijski broj',
-        'display_format': '###########',
-        'example': '12345678903',
-        'checksum_algorithm': 'ISO 7064 MOD 11,10',
-        'masks': ('###########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "HR",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^\d{11}$"),
+            "alias_of": None,
+            "names": ["Personal ID Number", "Osobni identifikacijski broj", "OIB", "PIN"],
+            "links": [
+                "https://en.wikipedia.org/wiki/Personal_identification_number_(Croatia)",
+                "https://www.porezna-uprava.hr/en/Pages/PIN.aspx",
+            ],
+            "deprecated": False,
+            "country_name": "Croatia",
+            "id_type": "Personal Identification Number",
+            "official_name": "Osobni identifikacijski broj",
+            "display_format": "###########",
+            "example": "12345678903",
+            "checksum_algorithm": "ISO 7064 MOD 11,10",
+            "masks": ("###########",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

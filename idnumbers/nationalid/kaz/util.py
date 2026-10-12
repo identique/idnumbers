@@ -1,5 +1,3 @@
-
-
 from enum import Enum
 from typing import Optional, cast
 from ..util import CHECK_DIGIT, weighted_modulus_digit
@@ -7,17 +5,19 @@ from ..util import CHECK_DIGIT, weighted_modulus_digit
 
 class EntityType(Enum):
     """Kazakhstan BIN entity type"""
-    ResidentEntity = 'resident_entity'
-    NonResidentEntity = 'non_resident_entity'
-    IP = 'ip'
+
+    ResidentEntity = "resident_entity"
+    NonResidentEntity = "non_resident_entity"
+    IP = "ip"
 
 
 class EntityDivision(Enum):
     """Kazakhstan BIN entity division type"""
-    HeadUnit = 'head_unit'
-    Branch = 'branch'
-    Representative = 'representative_office'
-    Peasant = 'peasant'
+
+    HeadUnit = "head_unit"
+    Branch = "branch"
+    Representative = "representative_office"
+    Peasant = "peasant"
 
 
 WEIGHTS1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]

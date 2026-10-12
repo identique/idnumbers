@@ -36,8 +36,15 @@ _REPR_LIMIT = 80
 """The longest ``repr()`` of an unsupported country that an error message keeps whole."""
 
 __all__ = [
-    'FailureReason', 'ValidationResult', 'ParseSuccess', 'ParseFailure', 'ParseIdInfoResult',
-    'validate', 'validate_many', 'parse_id_info', 'failure_reason',
+    "FailureReason",
+    "ValidationResult",
+    "ParseSuccess",
+    "ParseFailure",
+    "ParseIdInfoResult",
+    "validate",
+    "validate_many",
+    "parse_id_info",
+    "failure_reason",
 ]
 
 
@@ -48,25 +55,25 @@ class FailureReason(str, Enum):
     The set of reasons is not exhaustive: later releases may add values, so don't match it exhaustively.
     """
 
-    UNSUPPORTED_COUNTRY = 'unsupported_country'
+    UNSUPPORTED_COUNTRY = "unsupported_country"
     """The country code is unknown, or it isn't a ``str``."""
 
-    INVALID_LENGTH = 'invalid_length'
+    INVALID_LENGTH = "invalid_length"
     """The ID number has a length the ID type doesn't allow."""
 
-    INVALID_FORMAT = 'invalid_format'
+    INVALID_FORMAT = "invalid_format"
     """The ID number doesn't have the format of the ID type."""
 
-    CHECKSUM_MISMATCH = 'checksum_mismatch'
+    CHECKSUM_MISMATCH = "checksum_mismatch"
     """The check digit or check characters are wrong."""
 
-    INVALID_BIRTHDATE = 'invalid_birthdate'
+    INVALID_BIRTHDATE = "invalid_birthdate"
     """The birth date inside the ID number isn't a real date."""
 
-    VALIDATION_FAILED = 'validation_failed'
+    VALIDATION_FAILED = "validation_failed"
     """The validator rejected the ID number without a more precise reason, or it raised an exception."""
 
-    NOT_PARSABLE = 'not_parsable'
+    NOT_PARSABLE = "not_parsable"
     """A valid ID has no extractable information, including when its type has no parser.
 
     Only :func:`parse_id_info` produces this reason.
@@ -190,7 +197,7 @@ def validate(country: str, id_number: str) -> ValidationResult:
             country_code=None,
             id_number=id_number,
             reason=FailureReason.UNSUPPORTED_COUNTRY,
-            error_message='unsupported country: ' + _short_repr(country),
+            error_message="unsupported country: " + _short_repr(country),
         )
     return _check(alpha3, validator, id_number)
 
@@ -208,13 +215,13 @@ def _short_repr(value: object) -> str:
         # A repr may be a str subclass: copy it to an exact str before len() and slicing can run user code.
         text = str.__getitem__(repr(value), slice(None))
         if len(text) > _REPR_LIMIT:
-            text = text[:_REPR_LIMIT] + '...'
+            text = text[:_REPR_LIMIT] + "..."
         return text
     except Exception:
         try:
-            return '<%s object, repr() failed>' % type(value).__name__
+            return "<%s object, repr() failed>" % type(value).__name__
         except Exception:
-            return '<object, repr() failed>'
+            return "<object, repr() failed>"
 
 
 def validate_many(items: Iterable[Tuple[str, str]]) -> List[ValidationResult]:
@@ -250,7 +257,7 @@ def _check_validator(alpha3: str, validator: Any, id_number: str) -> ValidationR
                 reason=_derive_failure_reason(validator, id_number),
             )
         extracted_info = None
-        if callable(getattr(validator, 'parse', None)):
+        if callable(getattr(validator, "parse", None)):
             parsed = validator.parse(id_number)
             if parsed is not None:
                 extracted_info = dict(parsed)
@@ -268,12 +275,12 @@ def _check_validator(alpha3: str, validator: Any, id_number: str) -> ValidationR
 def _exception_text(exc: BaseException) -> str:
     """Return ``'<TypeName>: <message>'`` for an exception, or just its type name when its text can't be built."""
     try:
-        return '%s: %s' % (type(exc).__name__, exc)
+        return "%s: %s" % (type(exc).__name__, exc)
     except Exception:
         try:
             return type(exc).__name__
         except Exception:
-            return 'Exception'
+            return "Exception"
 
 
 def failure_reason(id_class: Type[Any], id_number: str) -> Optional[FailureReason]:
@@ -305,7 +312,7 @@ def _derive_failure_reason(id_class: Type[Any], id_number: str) -> FailureReason
         # Keep importing the package and unsupported-country lookup free of country-module imports.
         from .nationalid import util
 
-        stripped = ''.join(char for char in id_number if not char.isspace() and char not in '.-/()')
+        stripped = "".join(char for char in id_number if not char.isspace() and char not in ".-/()")
         candidates = list(dict.fromkeys((id_number, stripped)))
         metadata = id_class.METADATA
         matches = [(candidate, util.match_regexp(candidate, metadata.regexp)) for candidate in candidates]
@@ -314,17 +321,22 @@ def _derive_failure_reason(id_class: Type[Any], id_number: str) -> FailureReason
             if not any(metadata.min_length <= len(candidate) <= metadata.max_length for candidate in candidates):
                 return FailureReason.INVALID_LENGTH
             return FailureReason.INVALID_FORMAT
-        checksum = getattr(id_class, 'checksum', None)
+        checksum = getattr(id_class, "checksum", None)
         if callable(checksum):
             mismatches = []
             for candidate, match in matching:
                 try:
                     computed = checksum(candidate)
-                    group = match.groupdict().get('checksum')
-                    mismatches.append(computed is False or (
-                        computed is not None and not isinstance(computed, bool)
-                        and group is not None and str(computed) != group
-                    ))
+                    group = match.groupdict().get("checksum")
+                    mismatches.append(
+                        computed is False
+                        or (
+                            computed is not None
+                            and not isinstance(computed, bool)
+                            and group is not None
+                            and str(computed) != group
+                        )
+                    )
                 except Exception:
                     mismatches.append(False)
             if all(mismatches):

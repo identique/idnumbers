@@ -6,7 +6,4 @@ from .util import alias_of
 NationalID = alias_of(NationalRegistrationNumber)
 """alias of national registration number"""
 
-TIN = SimpleNamespace(**{
-    'individual': NationalRegistrationNumber,
-    'entity': EntityVAT
-})
+TIN = SimpleNamespace(**{"individual": NationalRegistrationNumber, "entity": EntityVAT})

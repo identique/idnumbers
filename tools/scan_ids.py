@@ -25,54 +25,50 @@ def collect_ids(package_name: str, output_filename: str) -> None:
     classes_count = 0
     for entry in list_supported_countries():
         for cls in entry.id_types:
-            if cls.__module__ != package_name and not cls.__module__.startswith(package_name + '.'):
+            if cls.__module__ != package_name and not cls.__module__.startswith(package_name + "."):
                 continue
             # Work on a copy: the live METADATA, shared with the library, must stay unchanged
             cls_metadata = dict(vars(cls.METADATA))
-            cls_metadata['regexp'] = cls_metadata['regexp'].pattern
-            cls_metadata['masks'] = list(cls_metadata['masks'])
-            alias_of = cls_metadata['alias_of']
-            cls_metadata['alias_of'] = None if alias_of is None else alias_of.__name__
-            module = modules.setdefault(cls.__module__, {
-                'package_name': cls.__module__,
-                'country_code': cls.__module__.split('.')[2],
-                'ids': []
-            })
-            module['ids'].append({
-                'class_name': cls.__name__,
-                'metadata': cls_metadata
-            })
+            cls_metadata["regexp"] = cls_metadata["regexp"].pattern
+            cls_metadata["masks"] = list(cls_metadata["masks"])
+            alias_of = cls_metadata["alias_of"]
+            cls_metadata["alias_of"] = None if alias_of is None else alias_of.__name__
+            module = modules.setdefault(
+                cls.__module__,
+                {"package_name": cls.__module__, "country_code": cls.__module__.split(".")[2], "ids": []},
+            )
+            module["ids"].append({"class_name": cls.__name__, "metadata": cls_metadata})
             classes_count += 1
 
     if not classes_count:
-        raise ValueError(f'no ID class is defined in {package_name}')
+        raise ValueError(f"no ID class is defined in {package_name}")
     metadata: List[Dict[str, Any]] = list(modules.values())
-    country_codes = {module['country_code'] for module in metadata}
-    print('----------------------------------------------------------------------------')
-    print(f'Modules: {len(metadata)}')
-    print(f'Countries: {len(country_codes)}')
-    print(f'IDs: {classes_count}')
-    print('----------------------------------------------------------------------------')
+    country_codes = {module["country_code"] for module in metadata}
+    print("----------------------------------------------------------------------------")
+    print(f"Modules: {len(metadata)}")
+    print(f"Countries: {len(country_codes)}")
+    print(f"IDs: {classes_count}")
+    print("----------------------------------------------------------------------------")
     # Write the metadata to a JSON file
-    with open(output_filename, 'w') as f:
+    with open(output_filename, "w") as f:
         json.dump(metadata, f, indent=2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('pkg', nargs='?', help='the package to parse')
-    parser.add_argument('output_file', nargs='?', help='path to the output JSON file')
-    parser.add_argument('--markdown-dir', type=Path)
-    parser.add_argument('--failure-reasons-file', type=Path)
-    parser.add_argument('--input-formats-file', type=Path)
-    parser.add_argument('--check', action='store_true')
+    parser.add_argument("pkg", nargs="?", help="the package to parse")
+    parser.add_argument("output_file", nargs="?", help="path to the output JSON file")
+    parser.add_argument("--markdown-dir", type=Path)
+    parser.add_argument("--failure-reasons-file", type=Path)
+    parser.add_argument("--input-formats-file", type=Path)
+    parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     if bool(args.pkg) != bool(args.output_file):
-        parser.error('package and JSON output must be supplied together')
+        parser.error("package and JSON output must be supplied together")
     if args.pkg is None and not any((args.markdown_dir, args.failure_reasons_file, args.input_formats_file)):
-        parser.error('supply a package/JSON output or a Markdown output option')
+        parser.error("supply a package/JSON output or a Markdown output option")
     if args.check and args.output_file is not None:
-        parser.error('--check applies only to generated Markdown, not JSON output')
+        parser.error("--check applies only to generated Markdown, not JSON output")
     if args.pkg is not None:
         try:
             collect_ids(args.pkg, args.output_file)

@@ -6,7 +6,7 @@ from ..util import validate_regexp, weighted_modulus_digit
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'[-.]', '', id_number)
+    return re.sub(r"[-.]", "", id_number)
 
 
 class NationalID:
@@ -14,35 +14,37 @@ class NationalID:
     CHL national ID number format, RUN (Rol Único Nacional), RUT (Rol Único Tributario)
     https://en.wikipedia.org/wiki/National_identification_number#Chile
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'CL',
-        # length without insignificant chars
-        'min_length': 8,
-        'max_length': 9,
-        # has parse function
-        'parsable': False,
-        # has checksum function
-        'checksum': True,
-        # regular expression to validate the id
-        'regexp': re.compile(r'^(\d{1,2}\.\d{3}\.\d{3}-(?P<checksum>[\dKk]))$'),
-        'alias_of': None,
-        'names': ['Rol Único Nacional',
-                  'RUN',
-                  'Rol Único Tributario',
-                  'RUT'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Chile',
-                  'https://es.wikipedia.org/wiki/Rol_%C3%9Anico_Tributario#Algoritmo',
-                  'https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cl/rut.py'],
-        'deprecated': False,
-        'country_name': 'Chile',
-        'id_type': 'National Unique Role Number',
-        'official_name': 'Rol Único Nacional',
-        'display_format': '##.###.###-C',
-        'example': '11.111.111-1',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 2-7 repeating from the right; 11 becomes 0 and 10 becomes '
-                              'K)',
-        'masks': ('##.###.###-X', '#.###.###-X')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "CL",
+            # length without insignificant chars
+            "min_length": 8,
+            "max_length": 9,
+            # has parse function
+            "parsable": False,
+            # has checksum function
+            "checksum": True,
+            # regular expression to validate the id
+            "regexp": re.compile(r"^(\d{1,2}\.\d{3}\.\d{3}-(?P<checksum>[\dKk]))$"),
+            "alias_of": None,
+            "names": ["Rol Único Nacional", "RUN", "Rol Único Tributario", "RUT"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Chile",
+                "https://es.wikipedia.org/wiki/Rol_%C3%9Anico_Tributario#Algoritmo",
+                "https://github.com/arthurdejong/python-stdnum/blob/master/stdnum/cl/rut.py",
+            ],
+            "deprecated": False,
+            "country_name": "Chile",
+            "id_type": "National Unique Role Number",
+            "official_name": "Rol Único Nacional",
+            "display_format": "##.###.###-C",
+            "example": "11.111.111-1",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 2-7 repeating from the right; 11 becomes 0 and 10 becomes "
+            "K)",
+            "masks": ("##.###.###-X", "#.###.###-X"),
+        }
+    )
 
     # The weights are applied to the digits of the body counted from the RIGHT and cycle: 2, 3, 4, 5, 6, 7, 2, 3, ...
     MULTIPLIER = [2, 3, 4, 5, 6, 7]
@@ -74,4 +76,4 @@ class NationalID:
         number_list = [int(char) for char in reversed(normalize(id_number)[:-1])]
         weights = [NationalID.MULTIPLIER[index % len(NationalID.MULTIPLIER)] for index in range(len(number_list))]
         modulus = weighted_modulus_digit(number_list, weights, 11)
-        return str(0 if modulus == 11 else 'K' if modulus == 10 else modulus)
+        return str(0 if modulus == 11 else "K" if modulus == 10 else modulus)

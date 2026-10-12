@@ -8,6 +8,7 @@ from ..util import CHECK_DIGIT, validate_regexp, luhn_digit, verhoeff_check, mat
 
 class ParseResult(TypedDict):
     """The parse result of Luxembourg ID"""
+
     yyyymmdd: date
     """dob"""
     sn: str
@@ -24,30 +25,37 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#Luxembourg
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Luxembourg-TIN.pdf
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'LU',
-        'min_length': 13,
-        'max_length': 13,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<yyyy>\d{4})(?P<mm>\d{2})(?P<dd>\d{2})'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum1>\d)'
-                             r'(?P<checksum2>\d)$'),
-        'alias_of': None,
-        'names': ['National ID Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Luxembourg',
-                  'https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/'
-                  'tax-identification-numbers/Luxembourg-TIN.pdf'],
-        'deprecated': False,
-        'country_name': 'Luxembourg',
-        'id_type': 'National Identification Number',
-        'official_name': None,
-        'display_format': 'YYYYMMDDSSSCC',
-        'example': '1893120105732',
-        'checksum_algorithm': 'Luhn (mod 10) check digit at position 12 and a Verhoeff check digit at position 13',
-        'masks': ('#############',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "LU",
+            "min_length": 13,
+            "max_length": 13,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<yyyy>\d{4})(?P<mm>\d{2})(?P<dd>\d{2})"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum1>\d)"
+                r"(?P<checksum2>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["National ID Number"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Luxembourg",
+                "https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/"
+                "tax-identification-numbers/Luxembourg-TIN.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Luxembourg",
+            "id_type": "National Identification Number",
+            "official_name": None,
+            "display_format": "YYYYMMDDSSSCC",
+            "example": "1893120105732",
+            "checksum_algorithm": "Luhn (mod 10) check digit at position 12 and a Verhoeff check digit at position 13",
+            "masks": ("#############",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -65,18 +73,18 @@ class NationalID:
         checksum = NationalID.checksum(id_number)
         if not checksum:
             return None
-        yyyy = int(match_obj.group('yyyy'))
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
+        yyyy = int(match_obj.group("yyyy"))
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
         try:
             calendar_date = _calendar_date(yyyy, mm, dd)
             if calendar_date is None:
                 return None
             return {
-                'yyyymmdd': calendar_date,
-                'sn': match_obj.group('sn'),
-                'checksum1': cast(CHECK_DIGIT, int(match_obj.group('checksum1'))),
-                'checksum2': cast(CHECK_DIGIT, int(match_obj.group('checksum2')))
+                "yyyymmdd": calendar_date,
+                "sn": match_obj.group("sn"),
+                "checksum1": cast(CHECK_DIGIT, int(match_obj.group("checksum1"))),
+                "checksum2": cast(CHECK_DIGIT, int(match_obj.group("checksum2"))),
             }
         except ValueError:
             # catch the date error

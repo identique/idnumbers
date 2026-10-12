@@ -21,32 +21,38 @@ class CivilNumber:
     https://en.wikipedia.org/wiki/National_identification_number#Kuwait
     https://prakhar.me/articles/kuwait-civil-id-checksum/
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'KW',
-        'min_length': 12,
-        'max_length': 12,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<century>\d)'
-                             r'(?P<yy>\d{2})'
-                             r'(?P<mm>\d{2})'
-                             r'(?P<dd>\d{2})'
-                             r'(?P<sn>\d{4})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Civil Number',
-                  'الرقم المدني'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Kuwait',
-                  'https://prakhar.me/articles/kuwait-civil-id-checksum/'],
-        'deprecated': False,
-        'country_name': 'Kuwait',
-        'id_type': 'Civil Number',
-        'official_name': 'الرقم المدني',
-        'display_format': 'CYYMMDDSSSSK',
-        'example': '280010100004',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2; check = 11 - remainder)',
-        'masks': ('############',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "KW",
+            "min_length": 12,
+            "max_length": 12,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<century>\d)"
+                r"(?P<yy>\d{2})"
+                r"(?P<mm>\d{2})"
+                r"(?P<dd>\d{2})"
+                r"(?P<sn>\d{4})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Civil Number", "الرقم المدني"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Kuwait",
+                "https://prakhar.me/articles/kuwait-civil-id-checksum/",
+            ],
+            "deprecated": False,
+            "country_name": "Kuwait",
+            "id_type": "Civil Number",
+            "official_name": "الرقم المدني",
+            "display_format": "CYYMMDDSSSSK",
+            "example": "280010100004",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2; check = 11 - remainder)",
+            "masks": ("############",),
+        }
+    )
 
     MULTIPLIER = [2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
 
@@ -69,27 +75,27 @@ class CivilNumber:
             return None
 
         checksum = CivilNumber.checksum(id_number)
-        if checksum is None or str(checksum) != match_obj.group('checksum'):
+        if checksum is None or str(checksum) != match_obj.group("checksum"):
             return None
 
-        century = match_obj.group('century')
-        if century == '2':
+        century = match_obj.group("century")
+        if century == "2":
             year_base = 1900
-        elif century == '3':
+        elif century == "3":
             year_base = 2000
         else:
             return None
-        yy = int(match_obj.group('yy'))
-        mm = int(match_obj.group('mm'))
-        dd = int(match_obj.group('dd'))
+        yy = int(match_obj.group("yy"))
+        mm = int(match_obj.group("mm"))
+        dd = int(match_obj.group("dd"))
         birthday = _calendar_date(year_base + yy, mm, dd)
         if birthday is None:
             return None
         return {
-            'yyyymmdd': birthday,
-            'sn': match_obj.group('sn'),
+            "yyyymmdd": birthday,
+            "sn": match_obj.group("sn"),
             # it equals the single matched digit above, so it is in 0..9
-            'checksum': cast(CHECK_DIGIT, checksum)
+            "checksum": cast(CHECK_DIGIT, checksum),
         }
 
     @staticmethod

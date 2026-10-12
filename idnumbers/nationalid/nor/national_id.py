@@ -10,6 +10,7 @@ from ..util import validate_regexp, match_regexp
 
 class ParseResult(TypedDict):
     """parse result of National ID"""
+
     gender: Gender
     """gender, possible value: male, female"""
     yyyymmdd: date
@@ -34,36 +35,40 @@ class NationalID:
     A number that has both additions is not a defined type and is invalid. FH-numbers (first digit 8 or 9) carry no
     birth date and are invalid as well.
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'NO',
-        # length without insignificant chars
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<dd>\d{2})'
-                             r'(?P<mm>\d{2})'
-                             r'(?P<yy>\d{2})'
-                             r'(?P<individual_number>\d{3})'
-                             r'(?P<checksum>\d{2})$'),
-        'alias_of': None,
-        'names': ['National ID Number',
-                  'fødselsnummer',
-                  'birth number',
-                  'riegádannummir'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Norway',
-                  'https://en.wikipedia.org/wiki/National_identity_number_(Norway)',
-                  'https://no.wikipedia.org/wiki/F%C3%B8dselsnummer'],
-        'deprecated': False,
-        'country_name': 'Norway',
-        'id_type': 'National Identity Number',
-        'official_name': 'fødselsnummer',
-        'display_format': 'DDMMYYIIIKK',
-        'example': '17054026641',
-        'checksum_algorithm': 'Two mod 11 check digits (weights 3, 7, 6, 1, 8, 9, 4, 5, 2, 1 over the first ten digits '
-                              'and 5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1 over all eleven; both sums must be divisible by 11)',
-        'masks': ('###########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "NO",
+            # length without insignificant chars
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<dd>\d{2})"
+                r"(?P<mm>\d{2})"
+                r"(?P<yy>\d{2})"
+                r"(?P<individual_number>\d{3})"
+                r"(?P<checksum>\d{2})$"
+            ),
+            "alias_of": None,
+            "names": ["National ID Number", "fødselsnummer", "birth number", "riegádannummir"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Norway",
+                "https://en.wikipedia.org/wiki/National_identity_number_(Norway)",
+                "https://no.wikipedia.org/wiki/F%C3%B8dselsnummer",
+            ],
+            "deprecated": False,
+            "country_name": "Norway",
+            "id_type": "National Identity Number",
+            "official_name": "fødselsnummer",
+            "display_format": "DDMMYYIIIKK",
+            "example": "17054026641",
+            "checksum_algorithm": "Two mod 11 check digits (weights 3, 7, 6, 1, 8, 9, 4, 5, 2, 1 over the first ten digits "
+            "and 5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1 over all eleven; both sums must be divisible by 11)",
+            "masks": ("###########",),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -87,12 +92,12 @@ class NationalID:
         if not match_obj:
             return None
 
-        individual_code = match_obj.group('individual_number')
-        yy = match_obj.group('yy')
-        mm = match_obj.group('mm')
-        dd = match_obj.group('dd')
+        individual_code = match_obj.group("individual_number")
+        yy = match_obj.group("yy")
+        mm = match_obj.group("mm")
+        dd = match_obj.group("dd")
 
-        birth_century: Union[str, int] = '20'
+        birth_century: Union[str, int] = "20"
         individual_num = int(individual_code)
         if 0 <= individual_num < 500:
             birth_century = 19
@@ -113,7 +118,7 @@ class NationalID:
             month -= NationalID.NUMBER_OFFSET
 
         try:
-            birth_date = _calendar_date(int(f'{birth_century}{yy}'), month, day)
+            birth_date = _calendar_date(int(f"{birth_century}{yy}"), month, day)
             if birth_date is None:
                 return None
         except ValueError:
@@ -121,8 +126,8 @@ class NationalID:
 
         return {
             "gender": Gender.FEMALE if int(individual_code[2]) % 2 == 0 else Gender.MALE,
-            'yyyymmdd': birth_date,
-            "checksum": match_obj.group('checksum')
+            "yyyymmdd": birth_date,
+            "checksum": match_obj.group("checksum"),
         }
 
     NUMBER_OFFSET = 40

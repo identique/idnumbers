@@ -9,6 +9,7 @@ from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, match_r
 
 class ParseResult(TypedDict):
     """The parse result of Resident ID"""
+
     yyyymmdd: date
     """birthday"""
     sn: str
@@ -25,31 +26,37 @@ class PersonalID:
     https://en.wikipedia.org/wiki/National_identification_number#Estonia
     https://et.wikipedia.org/wiki/Isikukood
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'EE',
-        'min_length': 11,
-        'max_length': 11,
-        'parsable': True,
-        'checksum': True,
-        'regexp': re.compile(r'^(?P<gender_century>\d)'
-                             r'(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})'
-                             r'(?P<sn>\d{3})'
-                             r'(?P<checksum>\d)$'),
-        'alias_of': None,
-        'names': ['Personal ID Number',
-                  'isikukood'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Estonia',
-                  'https://et.wikipedia.org/wiki/Isikukood'],
-        'deprecated': False,
-        'country_name': 'Estonia',
-        'id_type': 'Personal ID Number',
-        'official_name': 'isikukood',
-        'display_format': 'GYYMMDDSSSC',
-        'example': '37605030299',
-        'checksum_algorithm': 'Weighted sum mod 11 in two passes (weights 1-9 and 1; then 3-9, 1, 2 and 3 when the '
-                              'remainder is 10; a second 10 becomes 0)',
-        'masks': ('###########',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "EE",
+            "min_length": 11,
+            "max_length": 11,
+            "parsable": True,
+            "checksum": True,
+            "regexp": re.compile(
+                r"^(?P<gender_century>\d)"
+                r"(?P<yy>\d{2})(?P<mm>\d{2})(?P<dd>\d{2})"
+                r"(?P<sn>\d{3})"
+                r"(?P<checksum>\d)$"
+            ),
+            "alias_of": None,
+            "names": ["Personal ID Number", "isikukood"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Estonia",
+                "https://et.wikipedia.org/wiki/Isikukood",
+            ],
+            "deprecated": False,
+            "country_name": "Estonia",
+            "id_type": "Personal ID Number",
+            "official_name": "isikukood",
+            "display_format": "GYYMMDDSSSC",
+            "example": "37605030299",
+            "checksum_algorithm": "Weighted sum mod 11 in two passes (weights 1-9 and 1; then 3-9, 1, 2 and 3 when the "
+            "remainder is 10; a second 10 becomes 0)",
+            "masks": ("###########",),
+        }
+    )
 
     WEIGHTS1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 1]
     WEIGHTS2 = [3, 4, 5, 6, 7, 8, 9, 1, 2, 3]
@@ -69,27 +76,22 @@ class PersonalID:
         match_obj = match_regexp(id_number, PersonalID.METADATA.regexp)
         if not match_obj:
             return None
-        checksum_str = match_obj.group('checksum')
+        checksum_str = match_obj.group("checksum")
         checksum = PersonalID.checksum(id_number)
         if checksum is None or str(checksum) != checksum_str:
             return None
-        gender_year_base = PersonalID.get_gender_year_base(int(match_obj.group('gender_century')))
+        gender_year_base = PersonalID.get_gender_year_base(int(match_obj.group("gender_century")))
         if gender_year_base is None:
             return None
         gender, year_base = gender_year_base
         try:
-            sn = match_obj.group('sn')
-            calendar_date = _calendar_date(int(match_obj.group('yy')) + year_base,
-                                 int(match_obj.group('mm')),
-                                 int(match_obj.group('dd')))
+            sn = match_obj.group("sn")
+            calendar_date = _calendar_date(
+                int(match_obj.group("yy")) + year_base, int(match_obj.group("mm")), int(match_obj.group("dd"))
+            )
             if calendar_date is None:
                 return None
-            return {
-                'yyyymmdd': calendar_date,
-                'sn': sn,
-                'gender': gender,
-                'checksum': checksum
-            }
+            return {"yyyymmdd": calendar_date, "sn": sn, "gender": gender, "checksum": checksum}
         except ValueError:
             return None
 

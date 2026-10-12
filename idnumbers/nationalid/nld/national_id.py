@@ -5,7 +5,7 @@ from ..util import validate_regexp
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'\.', '', id_number)
+    return re.sub(r"\.", "", id_number)
 
 
 class BSN:
@@ -21,34 +21,35 @@ class BSN:
     https://en.wikipedia.org/wiki/National_identification_number#Netherlands
     https://nl.wikipedia.org/wiki/Burgerservicenummer
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'NL',
-        # length without insignificant chars
-        'min_length': 9,
-        'max_length': 9,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^(?!0{4}\.?0{2}\.?0{3}$)(?:[0-9]{9}|[0-9]{4}\.[0-9]{2}\.[0-9]{3})$'),
-        'alias_of': None,
-        'names': ['Burgerservicenummer',
-                  'BSN',
-                  'Citizen Service Number',
-                  'Personal Number'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Netherlands',
-                  'https://nl.wikipedia.org/wiki/Burgerservicenummer',
-                  'https://www.rvig.nl/veelgestelde-vragen-burgerservicenummer-bsn',
-                  'https://www.rvig.nl/sites/default/files/2023-12/Logisch%20Ontwerp%20BSN%202024.Q1.pdf'],
-        'deprecated': False
-,
-        'country_name': 'Netherlands',
-        'id_type': 'Citizen Service Number',
-        'official_name': 'Burgerservicenummer',
-        'display_format': '#########',
-        'example': '123456782',
-        'checksum_algorithm': 'Weighted sum mod 11 (weights 9-2 over the first eight digits; the remainder is the '
-                              'check digit, 10 is invalid)',
-        'masks': ('#########', '####.##.###')
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "NL",
+            # length without insignificant chars
+            "min_length": 9,
+            "max_length": 9,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^(?!0{4}\.?0{2}\.?0{3}$)(?:[0-9]{9}|[0-9]{4}\.[0-9]{2}\.[0-9]{3})$"),
+            "alias_of": None,
+            "names": ["Burgerservicenummer", "BSN", "Citizen Service Number", "Personal Number"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Netherlands",
+                "https://nl.wikipedia.org/wiki/Burgerservicenummer",
+                "https://www.rvig.nl/veelgestelde-vragen-burgerservicenummer-bsn",
+                "https://www.rvig.nl/sites/default/files/2023-12/Logisch%20Ontwerp%20BSN%202024.Q1.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Netherlands",
+            "id_type": "Citizen Service Number",
+            "official_name": "Burgerservicenummer",
+            "display_format": "#########",
+            "example": "123456782",
+            "checksum_algorithm": "Weighted sum mod 11 (weights 9-2 over the first eight digits; the remainder is the "
+            "check digit, 10 is invalid)",
+            "masks": ("#########", "####.##.###"),
+        }
+    )
 
     @staticmethod
     def validate(id_number: str) -> bool:

@@ -28,9 +28,9 @@ def by_class(result: ParseIdInfoResult) -> None:
         print(failure.reason)
 
 
-by_discriminator(parse_id_info('tw', 'A123456789'))
-by_class(parse_id_info('us', '012-12-0928'))
+by_discriminator(parse_id_info("tw", "A123456789"))
+by_class(parse_id_info("us", "012-12-0928"))
 
 
-secondary_reason: Optional[FailureReason] = failure_reason(AUS.MedicareNumber, '2123 45670 1')
+secondary_reason: Optional[FailureReason] = failure_reason(AUS.MedicareNumber, "2123 45670 1")
 print(secondary_reason)

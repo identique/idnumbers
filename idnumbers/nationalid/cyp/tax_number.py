@@ -16,43 +16,50 @@ class TaxNumber:
     https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698
 
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'CY',
-        'min_length': 9,
-        'max_length': 9,
-        'parsable': False,
-        'checksum': True,
-        'regexp': re.compile(r'^\d{8}[A-Z]$'),
-        'alias_of': None,
-        'names': ['tax number',
-                  'Αριθμός Φορολογικής Ταυτότητας',
-                  'ΑΦΤ',
-                  'Αριθμός Εγγραφής',
-                  'ΦΠΑ',
-                  'Φ.Π.Α.',
-                  'phi. pi. a.',
-                  'Arithmós Engraphḗs',
-                  'φορολογικού κωδικού',
-                  'φορολογική ταυτότητα',
-                  'κωδικός φορολογικού μητρώου',
-                  'αριθμός φορολογικού μητρώου',
-                  'vergi kimlik numarası',
-                  'vergi kimlik kodu'],
-        'links': ['https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698',
-                  'https://en.wikipedia.org/wiki/VAT_identification_number',
-                  'https://www.gov.cy/oikonomia/anakoinosi-tou-tmimatos-forologias-anaforika-me-ti-nea-morfi-'
-                  'arithmou-forologikis-taftotitas-a-f-t/',
-                  'https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/cyprus-tin.pdf'],
-        'deprecated': False,
-        'country_name': 'Cyprus',
-        'id_type': 'Tax Number',
-        'official_name': 'Αριθμός Φορολογικής Ταυτότητας',
-        'display_format': '########L',
-        'example': '01234567U',
-        'checksum_algorithm': 'Mod 26 check letter (the 2nd, 4th, 6th and 8th digits are added to a table value of '
-                              'each of the 1st, 3rd, 5th and 7th digits)',
-        'masks': ('########L',)
-    })
+
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "CY",
+            "min_length": 9,
+            "max_length": 9,
+            "parsable": False,
+            "checksum": True,
+            "regexp": re.compile(r"^\d{8}[A-Z]$"),
+            "alias_of": None,
+            "names": [
+                "tax number",
+                "Αριθμός Φορολογικής Ταυτότητας",
+                "ΑΦΤ",
+                "Αριθμός Εγγραφής",
+                "ΦΠΑ",
+                "Φ.Π.Α.",
+                "phi. pi. a.",
+                "Arithmós Engraphḗs",
+                "φορολογικού κωδικού",
+                "φορολογική ταυτότητα",
+                "κωδικός φορολογικού μητρώου",
+                "αριθμός φορολογικού μητρώου",
+                "vergi kimlik numarası",
+                "vergi kimlik kodu",
+            ],
+            "links": [
+                "https://docs.oracle.com/en/cloud/saas/financials/22d/faitx/belgium.html#s20077698",
+                "https://en.wikipedia.org/wiki/VAT_identification_number",
+                "https://www.gov.cy/oikonomia/anakoinosi-tou-tmimatos-forologias-anaforika-me-ti-nea-morfi-"
+                "arithmou-forologikis-taftotitas-a-f-t/",
+                "https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/cyprus-tin.pdf",
+            ],
+            "deprecated": False,
+            "country_name": "Cyprus",
+            "id_type": "Tax Number",
+            "official_name": "Αριθμός Φορολογικής Ταυτότητας",
+            "display_format": "########L",
+            "example": "01234567U",
+            "checksum_algorithm": "Mod 26 check letter (the 2nd, 4th, 6th and 8th digits are added to a table value of "
+            "each of the 1st, 3rd, 5th and 7th digits)",
+            "masks": ("########L",),
+        }
+    )
 
     NUM_MAP = {0: 1, 1: 0, 2: 5, 3: 7, 4: 9, 5: 13, 6: 15, 7: 17, 8: 19, 9: 21}
 
@@ -61,7 +68,7 @@ class TaxNumber:
         """validate the id"""
         if not validate_regexp(id_number, TaxNumber.METADATA.regexp):
             return False
-        if id_number.startswith('12'):
+        if id_number.startswith("12"):
             return False
         return TaxNumber.checksum(id_number)
 
@@ -84,4 +91,4 @@ class TaxNumber:
 
     @staticmethod
     def is_individual(id_number: str) -> bool:
-        return id_number[0] == '0' or id_number[0] == '9'
+        return id_number[0] == "0" or id_number[0] == "9"

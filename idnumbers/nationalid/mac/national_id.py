@@ -7,19 +7,20 @@ from ..util import validate_regexp, match_regexp
 
 def normalize(id_number: str) -> str:
     """strip out useless characters/whitespaces"""
-    return re.sub(r'/\(\)', '', id_number)
+    return re.sub(r"/\(\)", "", id_number)
 
 
 class DocType(Enum):
-    FIRST_GEN = 'first generation'
-    MCA = 'macau civil authority'
-    MPSP = 'macau public security police'
-    ENTITY = 'entity'
-    CI = 'commercial individual'
+    FIRST_GEN = "first generation"
+    MCA = "macau civil authority"
+    MPSP = "macau public security police"
+    ENTITY = "entity"
+    CI = "commercial individual"
 
 
 class ParseResult(TypedDict):
     """parse result for Identification Number"""
+
     doc_type: DocType
     """issuer"""
     sn: str
@@ -38,37 +39,46 @@ class NationalID:
     https://en.wikipedia.org/wiki/Macau_Resident_Identity_Card
     https://validatetin.com/macao/
     """
-    METADATA = IdMetadata(**{
-        'iso3166_alpha2': 'MO',
-        # Significant digits, excluding the paired parentheses in printed input.
-        'min_length': 8,
-        'max_length': 8,
-        'parsable': True,
-        'checksum': False,
-        # The lookahead pairs parentheses without changing the capture groups.
-        'regexp': re.compile(r'^(?P<doc_type>[01578])'
-                             r'(?P<sn>\d{6})'
-                             r'(?=\d$|\(\d\)$)\(?(?P<extra>\d)\)?$'),
-        'alias_of': None,
-        'names': ['National ID Number',
-                  'Permanent Resident Identity Card',
-                  'BIRP',
-                  'Non-Permanent Resident Identity Card',
-                  'BIRNP'],
-        'links': ['https://en.wikipedia.org/wiki/National_identification_number#Macau',
-                  'https://en.wikipedia.org/wiki/Macau_Resident_Identity_Card',
-                  'https://validatetin.com/macao/'],
-        'deprecated': False,
-        'country_name': 'Macao',
-        'id_type': 'Resident Identity Card Number',
-        'official_name': 'Bilhete de Identidade de Residente',
-        'display_format': '#######(#)',
-        'example': '5215432(8)',
-        'checksum_algorithm': None,
-        'masks': ('#######(#)', '########')
-    })
 
-    TYPE_MAP = {'0': DocType.CI, '1': DocType.FIRST_GEN, '5': DocType.MCA, '7': DocType.MPSP, '8': DocType.ENTITY}
+    METADATA = IdMetadata(
+        **{
+            "iso3166_alpha2": "MO",
+            # Significant digits, excluding the paired parentheses in printed input.
+            "min_length": 8,
+            "max_length": 8,
+            "parsable": True,
+            "checksum": False,
+            # The lookahead pairs parentheses without changing the capture groups.
+            "regexp": re.compile(
+                r"^(?P<doc_type>[01578])"
+                r"(?P<sn>\d{6})"
+                r"(?=\d$|\(\d\)$)\(?(?P<extra>\d)\)?$"
+            ),
+            "alias_of": None,
+            "names": [
+                "National ID Number",
+                "Permanent Resident Identity Card",
+                "BIRP",
+                "Non-Permanent Resident Identity Card",
+                "BIRNP",
+            ],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Macau",
+                "https://en.wikipedia.org/wiki/Macau_Resident_Identity_Card",
+                "https://validatetin.com/macao/",
+            ],
+            "deprecated": False,
+            "country_name": "Macao",
+            "id_type": "Resident Identity Card Number",
+            "official_name": "Bilhete de Identidade de Residente",
+            "display_format": "#######(#)",
+            "example": "5215432(8)",
+            "checksum_algorithm": None,
+            "masks": ("#######(#)", "########"),
+        }
+    )
+
+    TYPE_MAP = {"0": DocType.CI, "1": DocType.FIRST_GEN, "5": DocType.MCA, "7": DocType.MPSP, "8": DocType.ENTITY}
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -86,13 +96,10 @@ class NationalID:
 
         if not match_obj:
             return None
-        doc_type = match_obj.group('doc_type')
-        sn = match_obj.group('sn')
-        extra = match_obj.group('extra')
+        doc_type = match_obj.group("doc_type")
+        sn = match_obj.group("sn")
+        extra = match_obj.group("extra")
         try:
-            return {
-                'doc_type': NationalID.TYPE_MAP[doc_type],
-                'sn': sn + extra
-            }
+            return {"doc_type": NationalID.TYPE_MAP[doc_type], "sn": sn + extra}
         except ValueError:
             return None

@@ -40,8 +40,7 @@ class TestExplicitReexports(TestCase):
             for lineno, module_text, name in implicit_reexports(tree):
                 with self.subTest(file=path.name, name=name):
                     self.fail(
-                        f"{path.name}:{lineno}: import {name!r} from {module_text} "
-                        f"must be written '{name} as {name}'"
+                        f"{path.name}:{lineno}: import {name!r} from {module_text} must be written '{name} as {name}'"
                     )
 
     def test_checker_flags_only_single_dot_implicit_reexports(self) -> None:
