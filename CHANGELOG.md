@@ -21,6 +21,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   results and `checksum()` values are unchanged. The Australian tax file number's `checksum()` returns a remainder
   rather than a check digit, so a remainder equal to the last digit keeps the generic reason.
 
+### Documentation
+
+- **Contributor guide** ([#551](https://github.com/identique/idnumbers/issues/551)): AGENTS.md documents the
+  120-column line-length convention and its exceptions (whole URLs on their own line, Markdown tables and generated
+  guides); the 1.17.0 DOM entry now uses python-stdnum's own wording.
+
 ## 1.17.0 (2026-10-12)
 
 ### Other fixes
@@ -45,8 +51,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   provenance to the Node port and add tests for compact, fully hyphenated, mixed and malformed hyphen layouts;
   validity and parsed results are unchanged.
 - **DOM** cédula de identidad y electoral ([#519](https://github.com/identique/idnumbers/issues/519)): state the
-  exact size of python-stdnum's list of issued numbers that fail Luhn (578 entries: 576 with 11 digits, 2 with 10
-  digits) and quote its own description of them; validity is unchanged.
+  exact size of python-stdnum's list of cédulas that "do not match the checksum but are nonetheless valid" (578
+  entries: 576 with 11 digits, 2 with 10 digits) and quote that description in the docstring; validity is unchanged.
 - **ECU** cédula de identidad ([#521](https://github.com/identique/idnumbers/issues/521)): drop the unsourced RUC
   remark, describe the Gob.EC issue on the third digit 6 as reported validation failures, and cite python-stdnum's
   actual hyphenated example `171430710-3`; validity is unchanged.
