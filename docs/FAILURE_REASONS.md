@@ -7,8 +7,10 @@ Diagnostics are best effort and never change validity or normalize validation in
 
 Precedence: unsupported country, length, format, definite checksum mismatch, traced calendar
 failure, then generic `validation_failed`. Diagnostic candidate cleanup is not input acceptance.
-A computed checksum is compared with the named `checksum` regexp group. Without that group
-(for example in a custom class) the comparison is inconclusive and the generic reason is kept.
+A `checksum()` that returns `False` for a mismatch is reported as `checksum_mismatch` without a group.
+A `checksum()` that returns the check digit or character is compared with the named `checksum` regexp
+group; every built-in class with such a value has that group. A custom class with such a value but no
+group is inconclusive and keeps the generic reason.
 Validator/parser exceptions also use the generic fallback. `not_parsable` is only produced by
 `parse_id_info()` for a valid ID with no parser or no extracted information.
 This enum is non-exhaustive: handle unknown future reasons with a generic fallback.
