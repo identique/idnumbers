@@ -213,7 +213,7 @@
       "input": "123456780",
       "reason": "checksum_mismatch"
     },
-    "checksum_note": "Definite mismatch.",
+    "checksum_note": "Definite mismatch of the last digit; a 13-digit code whose first nine digits fail the 9-digit check but whose 13th digit is correct stays generic (validation_failed) because the checksum group covers only the 13th digit.",
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },

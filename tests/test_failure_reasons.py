@@ -9,7 +9,7 @@ from unittest import TestCase
 
 import idnumbers
 from idnumbers import FailureReason as R, api, failure_reason, parse_id_info, validate
-from idnumbers.nationalid import AUS, BEL, CHL, ITA, LKA, TWN
+from idnumbers.nationalid import AUS, BEL, BGR, CHL, ITA, LKA, TWN
 from idnumbers.nationalid import util
 from tests.helpers.failure_reasons import iter_reason_matrix
 from tests.helpers.contract import CHECK_CHARACTER_INDEX, check_character_mutations, iter_id_classes
@@ -348,6 +348,13 @@ class TestComputedChecksumGroups(TestCase):
         self.assertEqual(failure_reason(AUS.TaxFileNumber, '123456781'), R.VALIDATION_FAILED)
         # Remainder 2 differs from the final digit 0: a definite mismatch.
         self.assertEqual(failure_reason(AUS.TaxFileNumber, '123456780'), R.CHECKSUM_MISMATCH)
+
+    def test_unified_id_code_13_digit_failure_in_the_eik_part_is_generic(self):
+        # The checksum group covers only the 13th digit. The first nine digits 123456780 fail the 9-digit check, but
+        # the 13th digit is correct for the tail 123, so no definite mismatch can be shown and the reason stays generic.
+        self.assertEqual(failure_reason(BGR.UnifiedIdCode, '1234567801236'), R.VALIDATION_FAILED)
+        # A wrong 13th digit is a definite mismatch of the group.
+        self.assertEqual(failure_reason(BGR.UnifiedIdCode, '1234567801237'), R.CHECKSUM_MISMATCH)
 
     def test_medicare_group_is_the_ninth_digit_not_the_issue_digit(self):
         # The check digit is the 9th digit; the issue number and optional /n follow it. For these numbers the

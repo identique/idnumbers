@@ -92,6 +92,11 @@ the unified validate/parse and UI APIs select the primary class only. Do not add
 - [ ] Add explicit frozen diagnostic witnesses and notes to `tests/helpers/failure_reason_vectors.json` for new
   classes; never generate expected reasons from `failure_reason()` itself. Date/checksum cells can be unsupported
   or inconclusive, but require honest notes. Do not imply every checksum gets a specific diagnostic.
+- [ ] When `checksum()` returns the check digit or character (not a pass/fail `bool`), name the character(s) it
+  checks with a `checksum` group in `METADATA.regexp`, so `failure_reason()` can compare the group text with the
+  computed value and report `checksum_mismatch`. The group must cover the check character, and its text must equal
+  `str(checksum())` of a valid example. A `bool` `checksum()` needs no group. `TestComputedChecksumGroups` in
+  `tests/test_failure_reasons.py` enforces this.
 - [ ] For shared countries, check parity, regenerate Python goldens only for intentional validity changes and
   coordinate port notes/pin/allowlist updates. Cite source/provenance for any public real-world samples.
 - [ ] Add runnable examples that assert expected results; keep each Python fence independent with optional narrowing.
