@@ -3,7 +3,7 @@ Tests of the typed ``METADATA`` of the ID classes (``idnumbers.nationalid.metada
 
 Every ID class describes itself with the ten keys that exist since the beginning and with seven descriptive keys:
 ``country_name``, ``id_type``, ``official_name``, ``display_format``, ``example``, ``checksum_algorithm`` and ``masks``.
-The tests check the types of the keys, and that the example and the masks agree with the validator of the class.
+The tests check the key types and accepted mask representatives against the class's regexp and validator.
 """
 
 import importlib
@@ -16,7 +16,7 @@ from unittest import TestCase, main
 
 import idnumbers.nationalid as nationalid_package
 from idnumbers import list_supported_countries
-from idnumbers.nationalid import AUS, BGR, COL, CYP, FIN, HKG, IRL, IRN
+from idnumbers.nationalid import AUS, AUT, BGR, CHE, COL, CYP, FIN, HKG, IRL, IRN, SMR
 from idnumbers.nationalid.metadata import IdMetadata
 from idnumbers.registry import CountryEntry
 
@@ -39,7 +39,7 @@ SEPARATORS = " -./()"
 STRIPPED = ".-/()"
 
 # The masks that the example of a class does not fit (a mask of another length, or a layout with other slot types) get
-# a synthetic sample written in their layout, so that every mask of every class is checked against the validator. The
+# a synthetic sample written in their layout, so every mask is checked against the class's regexp and validator. The
 # samples are not real numbers: they are random strings in the layout that the validator of the class accepts, found
 # with the checksum logic of the class. The key is the module and the name of the class, as in ``class_key``.
 MASK_SAMPLES: Dict[str, Tuple[str, ...]] = {
@@ -302,6 +302,7 @@ class TestNewKeys(TestCase):
         for mask in fitting:
             laid = layout(compact_id, mask)
             with self.subTest(mask=mask):
+                self.assertIsNotNone(metadata.regexp.fullmatch(laid), f"{mask} -> {laid} fails regexp")
                 self.assertIs(cls.validate(laid), True, f"{mask} -> {laid}")
         # Every other mask has a sample written in its layout, which the class accepts.
         for mask in metadata.masks:
@@ -310,7 +311,64 @@ class TestNewKeys(TestCase):
                     samples = [sample for sample in MASK_SAMPLES.get(class_key(cls), ()) if written_in(sample, mask)]
                     self.assertTrue(samples, f"{mask} is not fitted by {example} and has no sample in MASK_SAMPLES")
                     for sample in samples:
+                        self.assertIsNotNone(metadata.regexp.fullmatch(sample), f"{mask} -> {sample} fails regexp")
                         self.assertIs(cls.validate(sample), True, f"{mask} -> {sample}")
+
+    def test_mask_representative_must_match_regexp_even_if_validate_accepts_it(self) -> None:
+        class CompactOnly:
+            METADATA = SimpleNamespace(
+                example="12-34",
+                masks=("##-##",),
+                min_length=4,
+                max_length=4,
+                parsable=False,
+                regexp=re.compile(r"[0-9]{4}"),
+            )
+
+            @staticmethod
+            def validate(value: str) -> bool:
+                return True
+
+        # A fresh TestCase has no running subTest outcome, so the assertion propagates here.
+        with self.assertRaisesRegex(AssertionError, "fails regexp"):
+            TestNewKeys().check_example(CompactOnly)
+
+    def test_fixed_prefix_masks_describe_shape_not_validity(self) -> None:
+        # Synthetic mutations of the metadata examples retain the generic letter-slot shape.
+        for cls, prefix, wrong_prefix, masks in [
+            (SMR.TaxRegistrationNumber, "SM", "XX", ("LL#####",)),
+            (AUT.EntityTaxIDNumber, "U", "X", ("L########", "L## ### ###")),
+            (CHE.BusinessID, "CHE", "XXX", ("LLL-###.###.###", "LLL#########")),
+        ]:
+            metadata = cls.METADATA
+            self.assertEqual(metadata.masks, masks)
+            value = compact(metadata.example, masks)
+            self.assertTrue(value.startswith(prefix))
+            for mask in masks:
+                accepted = layout(value, mask)
+                rejected = wrong_prefix + accepted[len(prefix) :]
+                with self.subTest(cls=class_key(cls), mask=mask):
+                    self.assertTrue(written_in(accepted, mask))
+                    self.assertIsNotNone(metadata.regexp.fullmatch(accepted))
+                    self.assertTrue(cls.validate(accepted))
+                    self.assertTrue(written_in(rejected, mask))
+                    self.assertIsNone(metadata.regexp.fullmatch(rejected))
+                    self.assertFalse(cls.validate(rejected))
+
+    def test_austrian_uid_masks_are_preferred_not_exhaustive(self) -> None:
+        cls = AUT.EntityTaxIDNumber
+        self.assertEqual(cls.METADATA.example, "U12345675")
+        self.assertEqual(cls.METADATA.masks, ("L########", "L## ### ###"))
+        for first in ("", "-", " "):
+            for second in ("", " ", "/"):
+                sample = "U12" + first + "345" + second + "675"
+                with self.subTest(sample=sample):
+                    self.assertIsNotNone(cls.METADATA.regexp.fullmatch(sample))
+                    self.assertTrue(cls.validate(sample))
+                    self.assertEqual(
+                        any(written_in(sample, mask) for mask in cls.METADATA.masks),
+                        (first, second) in (("", ""), (" ", " ")),
+                    )
 
     def test_every_mask_sample_is_in_use(self) -> None:
         classes = {class_key(cls): cls for _, cls in id_classes()}

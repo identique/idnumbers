@@ -1,7 +1,8 @@
 """Primary-ID normalization, display formatting and UI input masks.
 
 These helpers use the registry's ``NationalID`` metadata, never its validator.
-Formatting is length-only; a mask pattern describes layout, not ID validity.
+Formatting is length-only; masks describe preferred shapes, not ID validity or
+all accepted layouts. Generic letter slots cannot encode a fixed prefix.
 Letters and digits in patterns are intentionally ASCII, even where a country
 validator accepts more (for example Greek identity-card letters).
 """
@@ -22,7 +23,11 @@ _SEPARATORS = re.compile(r"[\s\u200b-\u200d\u2060\ufeff.\-/()]")
 
 @dataclass(frozen=True)
 class InputMask:
-    """Immutable primary-ID layouts and their case-sensitive whole-input pattern."""
+    """Immutable preferred primary-ID shapes and their case-sensitive whole-input pattern.
+
+    Generic letter slots do not enforce fixed prefixes; these are not validators
+    or an exhaustive list of accepted layouts.
+    """
 
     country_code: str
     """Resolved alpha-3 registry code."""
@@ -86,8 +91,9 @@ def format_id(country: str, id_number: str) -> Optional[str]:
 
     Like :func:`normalize_id`, this uppercases only ASCII letters and preserves
     non-ASCII letters verbatim. This checks length only, not slot characters or
-    ID validity. For a custom country without masks, metadata length bounds
-    select the normalized text.
+    ID validity, including fixed letter prefixes. Masks describe preferred
+    layouts, not every layout a validator accepts. For a custom country without
+    masks, metadata length bounds select the normalized text.
     Sweden's single ``+`` before the last four slots replaces the preferred
     ``-`` literal in its 10/12-slot layouts, preserving the significant sign.
     It does not change country validators' input handling.
@@ -128,8 +134,13 @@ def get_input_mask(country: str) -> Optional[InputMask]:
 
     ``#``, ``L`` and ``X`` use ASCII digits/uppercase letters; ``*`` uses Unicode
     non-whitespace. Literals are escaped. A pattern match is not validation;
-    length-only formatting can produce text that the pattern rejects. Greek
-    identity-card letters remain accepted by the validator and unchanged by
+    generic letter slots can match an invalid fixed prefix, and length-only
+    formatting can produce text that the pattern rejects. For example, the
+    secondary SMR tax, AUT UID and CHE business metadata masks use generic
+    letters for fixed ``SM``, ``U`` and ``CHE`` prefixes. Country-code lookup
+    still selects only the registry's primary ID type, not secondary classes.
+    Masks are preferred layouts, not every validator-accepted separator variant.
+    Greek identity-card letters remain accepted by the validator and unchanged by
     formatting, but intentionally do not match the ASCII ``L`` pattern.
     Sweden's significant ``+`` is preserved by formatting, but these literal
     preferred layouts still use ``-`` and do not match the plus form.
