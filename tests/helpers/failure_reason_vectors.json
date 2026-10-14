@@ -1029,6 +1029,22 @@
     },
     "birthdate_note": "Synthetic 31 February; checksum repaired where required."
   },
+  "idnumbers.nationalid.lux.entity_tin.EntityTIN": {
+    "valid": "12345678903",
+    "length": [
+      "1234567890",
+      "123456789031",
+      "123456789031"
+    ],
+    "format": "!!!!!!!!!!!",
+    "checksum": {
+      "input": "12345678900",
+      "reason": "checksum_mismatch"
+    },
+    "checksum_note": "Definite mismatch.",
+    "birthdate": null,
+    "birthdate_note": "No full calendar date encoded or validated."
+  },
   "idnumbers.nationalid.lux.national_id.NationalID": {
     "valid": "1893120105732",
     "length": [

@@ -57,7 +57,7 @@ not personal data or proof of issuance. Each snippet runs independently.
 | [Kuwait (KWT)](KWT.md) | KW | CivilNumber | 1 |
 | [Sri Lanka (LKA)](LKA.md) | LK | NationalID | 2 |
 | [Lithuania (LTU)](LTU.md) | LT | PersonalCode | 1 |
-| [Luxembourg (LUX)](LUX.md) | LU | NationalID | 1 |
+| [Luxembourg (LUX)](LUX.md) | LU | NationalID | 2 |
 | [Latvia (LVA)](LVA.md) | LV | PersonalCode | 2 |
 | [Macao (MAC)](MAC.md) | MO | NationalID | 1 |
 | [Moldova (MDA)](MDA.md) | MD | PersonalCode | 1 |

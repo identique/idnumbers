@@ -4,6 +4,15 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Added
+
+- **LUX** entity TIN ([#272](https://github.com/identique/idnumbers/issues/272)): add `LUX.EntityTIN`, the 11-digit
+  national identifier that serves as the TIN of non-natural persons, with the weighted mod 11 check digit from the
+  OECD Luxembourg TIN sheet; numbers whose remainder is 1 are rejected because it is never allocated. `LUX.TIN`
+  groups `individual` (`LUX.NationalID`) and `entity` (`LUX.EntityTIN`). `LUX.NationalID` is unchanged.
+
 ## 1.20.0 (2026-10-13)
 
 ### Validity changes

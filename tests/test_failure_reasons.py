@@ -33,7 +33,7 @@ def rejecting(pattern=r"(?P<checksum>\d)", checksum=None, validator=None):
 class TestReasonMatrix(TestCase):
     def test_all_classes(self):
         rows = list(iter_reason_matrix())
-        self.assertEqual(len(rows), 111)
+        self.assertEqual(len(rows), 112)
         for row in rows:
             self.assertTrue(row.checksum_note)
             self.assertTrue(row.birthdate_note)
@@ -67,7 +67,7 @@ class TestReasonMatrix(TestCase):
                 self.assertIsNotNone(util.match_regexp(row.checksum.id_number, row.id_class.METADATA.regexp))
                 self.assertFalse(row.id_class.validate(row.checksum.id_number))
                 counts[row.checksum.expected] += 1
-        self.assertEqual(counts, {R.CHECKSUM_MISMATCH: 76, R.VALIDATION_FAILED: 0})
+        self.assertEqual(counts, {R.CHECKSUM_MISMATCH: 77, R.VALIDATION_FAILED: 0})
 
     def test_all_date_migrations_have_witnesses(self):
         rows = list(iter_reason_matrix())
