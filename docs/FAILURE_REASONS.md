@@ -40,7 +40,7 @@ assert not parsed.ok and parsed.reason == FailureReason.NOT_PARSABLE
 ## Frozen per-class witnesses
 
 Source: [frozen vectors](../tests/helpers/failure_reason_vectors.json), not inferred from diagnostic output.
-All 111 registered non-alias classes: 665 vectors, 76 flipped-checksum witnesses (all specific),
+All 112 registered non-alias classes: 671 vectors, 77 flipped-checksum witnesses (all specific),
 and 35 impossible-date witnesses (checksum repaired where required)
 across 32 countries.
 These are finite observations, not exhaustive coverage of every input or checksum class.

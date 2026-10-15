@@ -45,6 +45,8 @@ class TestGeneratedDocumentation(TestCase):
         guide = failure_guide()
         vectors = json.loads((ROOT / "tests/helpers/failure_reason_vectors.json").read_text())
         self.assertEqual(len(vectors), 112)
+        # the header counts are derived from the frozen vectors, not hard-coded
+        self.assertIn(f"All {len(vectors)} registered non-alias classes: 671 vectors, 77 flipped-checksum", guide)
         for key, row in vectors.items():
             self.assertIn(key, guide)
             self.assertIn(cell(row["valid"]), guide)

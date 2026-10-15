@@ -7,10 +7,10 @@ class EntityTIN:
     """
     Luxembourg TIN-like number for non-natural persons (entities)
 
-    The national identifier of a non-natural person, regulated by the law of 30 March 1979, is used as its TIN. It has
-    11 digits and the last one is a check digit. Multiply the first ten digits by the weights 5, 4, 3, 2, 7, 6, 5, 4, 3
-    and 2 and take the remainder of the sum divided by 11. The check digit is 11 minus that remainder, and 0 when the
-    remainder is 0. A remainder of 1 is never allocated, so such numbers are invalid.
+    The national identifier of a non-natural person, regulated by the law of 30 March 1979, is used as a TIN-like
+    number. It has 11 digits and the last one is a check digit. Multiply the first ten digits by the weights 5, 4, 3, 2,
+    7, 6, 5, 4, 3 and 2 and take the remainder of the sum divided by 11. The check digit is 11 minus that remainder, and
+    0 when the remainder is 0. A remainder of 1 is never allocated, so such numbers are invalid.
 
     Only the check digit is verified: the OECD sheet does not describe the meaning of the first ten digits.
 

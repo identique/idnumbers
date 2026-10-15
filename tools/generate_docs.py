@@ -101,6 +101,13 @@ def witness(vector: Optional["ReasonVector"]) -> str:
 def failure_guide() -> str:
     from tests.helpers.failure_reasons import iter_reason_matrix
 
+    # The header counts come from the frozen vectors, so adding or removing a class can't leave them stale.
+    rows = sorted(iter_reason_matrix(), key=lambda row: row.key)
+    checksums = [row for row in rows if row.checksum is not None]
+    dates = [row for row in rows if row.birthdate is not None]
+    vectors = sum(2 + len(row.length) for row in rows) + len(checksums) + len(dates)
+    specific = sum(1 for row in checksums if row.checksum and row.checksum.expected != FailureReason.VALIDATION_FAILED)
+    specific_text = "all specific" if specific == len(checksums) else f"{specific} specific"
     lines = [
         MARKER,
         "# Failure reasons",
@@ -141,16 +148,17 @@ def failure_guide() -> str:
             "## Frozen per-class witnesses",
             "",
             "Source: [frozen vectors](../tests/helpers/failure_reason_vectors.json), not inferred from diagnostic output.",
-            "All 111 registered non-alias classes: 665 vectors, 76 flipped-checksum witnesses (all specific),",
-            "and 35 impossible-date witnesses (checksum repaired where required)",
-            "across 32 countries.",
+            f"All {len(rows)} registered non-alias classes: {vectors} vectors, {len(checksums)} flipped-checksum "
+            f"witnesses ({specific_text}),",
+            f"and {len(dates)} impossible-date witnesses (checksum repaired where required)",
+            f"across {len({row.country for row in dates})} countries.",
             "These are finite observations, not exhaustive coverage of every input or checksum class.",
             "",
             "| Class | Valid | Invalid lengths | Invalid format | Checksum witness / note | Date witness / note |",
             "| --- | --- | --- | --- | --- | --- |",
         ]
     )
-    for row in sorted(iter_reason_matrix(), key=lambda row: row.key):
+    for row in rows:
         lines.append(
             f"| [{row.key}](countries/{row.country}.md) | {witness(row.valid)} | "
             + "<br>".join(witness(vector) for vector in row.length)
