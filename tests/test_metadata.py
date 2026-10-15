@@ -149,9 +149,9 @@ def all_aliases() -> List[Type[Any]]:
 class TestMetadataType(TestCase):
     def test_the_id_classes_are_found(self) -> None:
         classes = [cls for _, cls in id_classes()]
-        # Independent pin: tests/test_registry.py has ID_TYPE_COUNT = 111;
-        # tests/test_validate_regexp.py pins 112 classes including the shared Yugoslav base.
-        expected = 111
+        # Independent pin: tests/test_registry.py has ID_TYPE_COUNT = 112;
+        # tests/test_validate_regexp.py pins 113 classes including the shared Yugoslav base.
+        expected = 112
         self.assertEqual(len(classes), expected)
         self.assertEqual(len(set(classes)), expected, "id_classes() lists a class twice")
 

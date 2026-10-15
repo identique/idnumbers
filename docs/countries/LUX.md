@@ -7,6 +7,42 @@ Primary class: `idnumbers.nationalid.lux.national_id.NationalID`.
 
 Current implementation metadata, not a promise that an ID was issued. All examples are synthetic.
 
+## EntityTIN
+
+[Source](../../idnumbers/nationalid/lux/entity_tin.py) · [API](https://identique.github.io/idnumbers/idnumbers.nationalid.lux.entity_tin.EntityTIN.html)
+
+| METADATA field | Value |
+| --- | --- |
+| alias_of | <code>None</code> |
+| checksum | <code>True</code> |
+| checksum_algorithm | <code>Weighted mod 11 check digit (weights 5, 4, 3, 2, 7, 6, 5, 4, 3, 2): 11 minus the remainder, 0 for remainder 0; remainder 1 is never allocated</code> |
+| country_name | <code>Luxembourg</code> |
+| deprecated | <code>False</code> |
+| display_format | <code>###########</code> |
+| example | <code>12345678903</code> |
+| id_type | <code>Tax Identification Number for Entities</code> |
+| iso3166_alpha2 | <code>LU</code> |
+| links | <code>[&#x27;https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Luxembourg-TIN.pdf&#x27;, &#x27;https://impotsdirects.public.lu/fr/az/n/num__ro_dossier.html&#x27;]</code> |
+| masks | <code>(&#x27;###########&#x27;,)</code> |
+| max_length | <code>11</code> |
+| min_length | <code>11</code> |
+| names | <code>[&#x27;Entity TIN&#x27;, &#x27;TIN for non-natural persons&#x27;, &#x27;National identifier of non-natural persons&#x27;]</code> |
+| official_name | <code>None</code> |
+| parsable | <code>False</code> |
+| regexp | <code>^\d{11}$</code> |
+
+Reference links recorded by this implementation (source quality varies):
+
+- <https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Luxembourg-TIN.pdf>
+- <https://impotsdirects.public.lu/fr/az/n/num__ro_dossier.html>
+
+```python
+from idnumbers.nationalid.lux.entity_tin import EntityTIN
+
+number = '12345678903'
+assert EntityTIN.validate(number)
+```
+
 ## NationalID
 
 [Source](../../idnumbers/nationalid/lux/national_id.py) · [API](https://identique.github.io/idnumbers/idnumbers.nationalid.lux.national_id.NationalID.html)
