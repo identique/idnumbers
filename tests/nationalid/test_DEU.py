@@ -1,5 +1,7 @@
 from unittest import TestCase, main
+from idnumbers import FailureReason, failure_reason
 from idnumbers.nationalid import DEU
+from idnumbers.nationalid.deu.tax_number import BERLIN_A, BERLIN_B
 
 
 class TestDEUNationalIDValidation(TestCase):
@@ -190,9 +192,33 @@ class TestDEUTaxNumberValidation(TestCase):
             with self.subTest(vector=vector):
                 self.assertTrue(DEU.TaxNumber.checksum(vector))
                 self.assertFalse(DEU.TaxNumber.validate(vector))
-        # a district under 100 is allowed outside the Bavarian programming group (Bremen); 0010 is allowed in NRW
+        # a district under 100 is allowed outside the Bavarian programming group (Bremen); UUUP 0017 is allowed in NRW
         self.assertTrue(DEU.TaxNumber.validate("2497000108152"))
         self.assertTrue(DEU.TaxNumber.validate("5400000100017"))
+
+    def test_district_boundaries(self):
+        # constructed: each pair differs only at the boundary, and every check digit is right
+        cases = [
+            # Bavarian programming group: district 100 is allowed, 099 is not
+            ("9198010008159", True),
+            ("9198009908154", False),
+            # Bremen: district 997 and 001 are allowed, 998 and 000 are not
+            ("2497099708156", True),
+            ("2497099808150", False),
+            ("2497000108152", True),
+            # North Rhine-Westphalia: district 0997 and 0001 are allowed, 0998 and 0000 are not
+            ("5400009970812", True),
+            ("5400009980816", False),
+            ("5400000010810", True),
+            ("5400000000817", False),
+            # North Rhine-Westphalia: UUUP 0010 is allowed, 0009 is not
+            ("5400000050010", True),
+            ("5400000020009", False),
+        ]
+        for vector, valid in cases:
+            with self.subTest(vector=vector):
+                self.assertTrue(DEU.TaxNumber.checksum(vector))
+                self.assertEqual(valid, DEU.TaxNumber.validate(vector))
 
     def test_two_digit_check_digit_is_never_allocated(self):
         # constructed: the 11er-Verfahren gives 10 for these first 12 digits, so no check digit is valid
@@ -221,10 +247,20 @@ class TestDEUTaxNumberValidation(TestCase):
         self.assertFalse(DEU.TaxNumber.validate("1119068000009"))
         self.assertTrue(DEU.TaxNumber.validate("1119068100004"))
         self.assertFalse(DEU.TaxNumber.validate("1119068100005"))
-        # a Berlin tax office missing from the ELSTER table may use either
-        self.assertTrue(DEU.TaxNumber.validate("1101010000004"))
-        self.assertTrue(DEU.TaxNumber.validate("1101010000005"))
-        self.assertFalse(DEU.TaxNumber.validate("1101010000006"))
+
+    def test_berlin_office_missing_from_the_table_is_rejected(self):
+        # ELSTER section 7.2 gives no method for 1101, so neither the Berlin-A (4) nor the Berlin-B (5) check digit
+        # is accepted; the regexp rejects the office, so the failure reason is a format error, not a checksum one
+        for check_digit in "0123456789":
+            with self.subTest(check_digit=check_digit):
+                self.assertFalse(DEU.TaxNumber.validate("110101000000" + check_digit))
+                self.assertFalse(DEU.TaxNumber.checksum("110101000000" + check_digit))
+        self.assertEqual(FailureReason.INVALID_FORMAT, failure_reason(DEU.TaxNumber, "1101010000004"))
+        # every office of the table is accepted by the regexp
+        offices = set(BERLIN_A) | BERLIN_B
+        for office in offices:
+            with self.subTest(office=office):
+                self.assertIsNotNone(DEU.TaxNumber.METADATA.regexp.match(office + "081508154"))
 
 
 if __name__ == "__main__":

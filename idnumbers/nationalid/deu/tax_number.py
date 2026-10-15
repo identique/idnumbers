@@ -106,9 +106,9 @@ BERLIN_B = {
 }
 
 
-def get_state(id_number: str) -> Optional[str]:
-    """the ISO 3166-2 code of the federal state of a number in the ELSTER format, None if unknown"""
-    return STATES.get(id_number[:1]) or STATES.get(id_number[:2])
+def get_state(id_number: str) -> str:
+    """the ISO 3166-2 code of the federal state of a number that matches TaxNumber.METADATA.regexp"""
+    return STATES.get(id_number[:1]) or STATES[id_number[:2]]
 
 
 def eleven_digit(numbers: List[int], weights: List[int]) -> Optional[int]:
@@ -118,7 +118,12 @@ def eleven_digit(numbers: List[int], weights: List[int]) -> Optional[int]:
 
 
 def nrw_digit(numbers: List[int]) -> Optional[int]:
-    """11er-Verfahren of North Rhine-Westphalia: the weighted sum modulo 11, None if it has two digits"""
+    """
+    11er-Verfahren of North Rhine-Westphalia: the weighted sum modulo 11, None if it has two digits
+
+    ELSTER section 6.6 does not state the case of remainder 0 for North Rhine-Westphalia; a check digit of 0 is
+    inferred from the rule that the remainder is the check digit.
+    """
     check = sum(number * weight for number, weight in zip(numbers, WEIGHTS_NRW)) % 11
     return None if check == 10 else check
 
@@ -137,7 +142,12 @@ def two_digit(numbers: List[int]) -> int:
 
 
 def rp_digit(numbers: List[int]) -> int:
-    """modified 11er-Verfahren of Rhineland-Palatinate"""
+    """
+    modified 11er-Verfahren of Rhineland-Palatinate
+
+    ELSTER section 6.4 does not state the case of a sum that ends in 0; a check digit of 0 is inferred, as the 2er- and
+    11er-Verfahren state it for their own sums.
+    """
     total = 0
     for number, factor in zip(numbers, FACTORS_RP):
         product = number * factor
@@ -145,15 +155,11 @@ def rp_digit(numbers: List[int]) -> int:
     return -total % 10
 
 
-def berlin_weights(tax_office: str, district: int) -> List[List[int]]:
-    """the Berlin weights that apply, both of them for a tax office missing from the ELSTER table"""
-    if tax_office in BERLIN_B:
-        return [WEIGHTS_BERLIN_B]
-    if tax_office in BERLIN_A:
-        if any(low <= district <= high for low, high in BERLIN_A[tax_office]):
-            return [WEIGHTS_BERLIN_B]
-        return [WEIGHTS_BERLIN_A]
-    return [WEIGHTS_BERLIN_A, WEIGHTS_BERLIN_B]
+def berlin_weights(tax_office: str, district: int) -> List[int]:
+    """the Berlin weights of a tax office listed in ELSTER section 7.2 (the regexp rejects unlisted offices)"""
+    if tax_office in BERLIN_A and not any(low <= district <= high for low, high in BERLIN_A[tax_office]):
+        return WEIGHTS_BERLIN_A
+    return WEIGHTS_BERLIN_B
 
 
 class TaxNumber:
@@ -161,7 +167,7 @@ class TaxNumber:
     Germany tax number, Steuernummer, St.-Nr., in the 13-digit ELSTER format
 
     The tax offices of the federal states allocate the tax number. The ELSTER format is FFFF0BBBUUUUP, and
-    FFFF0BBBBUUUP in North Rhine-Westphalia: the 4-digit federal tax office number (Bundesfinanzamtsnummer), whose
+    FFFF0BBBBUUUP in North Rhine-Westphalia (display format FFFF0BBB{BU}UUUC covers both): the 4-digit federal tax office number (Bundesfinanzamtsnummer), whose
     leading digits are the state number, a 0, the district number (Bezirksnummer), the distinguishing number
     (Unterscheidungsnummer) and the check digit.
 
@@ -176,9 +182,9 @@ class TaxNumber:
     - In North Rhine-Westphalia, the distinguishing number and the check digit together are greater than 0009.
     - The check digit follows the method of the state: the 2er-Verfahren in Baden-Württemberg, Hesse and
       Schleswig-Holstein, the modified 11er-Verfahren in Rhineland-Palatinate, and the 11er-Verfahren with
-      state-specific weights elsewhere. Berlin uses the weights Berlin-A or Berlin-B by tax office and district; a
-      Berlin tax office missing from the ELSTER table may use either. Numbers whose check digit would have two digits
-      are never allocated.
+      state-specific weights elsewhere. Berlin uses the weights Berlin-A or Berlin-B by tax office and district, as
+      listed in section 7.2; a Berlin tax office missing from that table is rejected, because its method is unknown.
+      Numbers whose check digit would have two digits are never allocated.
 
     Only the ELSTER format is accepted. The format printed on tax notices (for example 198/815/08152) omits part of
     the federal tax office number, so it can't be validated reliably. The tax office itself is not checked against
@@ -192,7 +198,10 @@ class TaxNumber:
             "max_length": 13,
             "parsable": True,
             "checksum": True,
-            "regexp": re.compile(r"^(?:10|11|2[1-46-8]|3[0-2]|4[01]|5\d|9\d)\d{2}0\d{8}$"),
+            # state number and tax office: Berlin (11) is limited to the offices listed in ELSTER section 7.2
+            "regexp": re.compile(
+                r"^(?:(?:10|2[1-46-8]|3[0-2]|4[01]|5\d|9\d)\d{2}|11(?:1[3-9]|2[0134579]|3[0-8]|9[4-8]))0\d{8}$"
+            ),
             "alias_of": None,
             "names": ["Tax Number", "Steuernummer", "St.-Nr."],
             "links": [
@@ -202,7 +211,7 @@ class TaxNumber:
             "country_name": "Germany",
             "id_type": "Tax Number",
             "official_name": "Steuernummer",
-            "display_format": "FFFF0BBBUUUUC",
+            "display_format": "FFFF0BBB{BU}UUUC",
             "example": "9198081508152",
             "checksum_algorithm": "State-specific: 11er-Verfahren (weighted mod 11), 2er-Verfahren or modified "
             "11er-Verfahren (Rhineland-Palatinate)",
@@ -223,8 +232,6 @@ class TaxNumber:
         if not validate_regexp(id_number, TaxNumber.METADATA.regexp):
             return None
         state = get_state(id_number)
-        if state is None:
-            return None
         if state == "DE-NW":
             district, distinguishing_number = id_number[5:9], id_number[9:12]
             if int(id_number[9:13]) <= 9:
@@ -251,8 +258,6 @@ class TaxNumber:
         if not validate_regexp(id_number, TaxNumber.METADATA.regexp):
             return False
         state = get_state(id_number)
-        if state is None:
-            return False
         numbers = [int(char) for char in id_number]
         check = numbers[12]
         if state == "DE-NW":
@@ -262,7 +267,7 @@ class TaxNumber:
         if state == "DE-RP":
             return rp_digit(numbers[:12]) == check
         if state == "DE-BE":
-            weights_list = berlin_weights(id_number[:4], int(id_number[5:8]))
+            weights = berlin_weights(id_number[:4], int(id_number[5:8]))
         else:
-            weights_list = [WEIGHTS_11[state]]
-        return any(eleven_digit(numbers[:12], weights) == check for weights in weights_list)
+            weights = WEIGHTS_11[state]
+        return eleven_digit(numbers[:12], weights) == check

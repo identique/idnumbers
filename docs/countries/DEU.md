@@ -54,7 +54,7 @@ assert TaxID.validate(number)
 | checksum_algorithm | <code>State-specific: 11er-Verfahren (weighted mod 11), 2er-Verfahren or modified 11er-Verfahren (Rhineland-Palatinate)</code> |
 | country_name | <code>Germany</code> |
 | deprecated | <code>False</code> |
-| display_format | <code>FFFF0BBBUUUUC</code> |
+| display_format | <code>FFFF0BBB{BU}UUUC</code> |
 | example | <code>9198081508152</code> |
 | id_type | <code>Tax Number</code> |
 | iso3166_alpha2 | <code>DE</code> |
@@ -65,7 +65,7 @@ assert TaxID.validate(number)
 | names | <code>[&#x27;Tax Number&#x27;, &#x27;Steuernummer&#x27;, &#x27;St.-Nr.&#x27;]</code> |
 | official_name | <code>Steuernummer</code> |
 | parsable | <code>True</code> |
-| regexp | <code>^(?:10&#124;11&#124;2[1-46-8]&#124;3[0-2]&#124;4[01]&#124;5\d&#124;9\d)\d{2}0\d{8}$</code> |
+| regexp | <code>^(?:(?:10&#124;2[1-46-8]&#124;3[0-2]&#124;4[01]&#124;5\d&#124;9\d)\d{2}&#124;11(?:1[3-9]&#124;2[0134579]&#124;3[0-8]&#124;9[4-8]))0\d{8}$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 
