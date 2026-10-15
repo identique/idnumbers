@@ -24,10 +24,10 @@ class TestGeneratedDocumentation(TestCase):
         before = [dict(vars(cls.METADATA)) for cls in classes]
         pages = country_pages()
         self.assertEqual(len(entries), 85)
-        self.assertEqual(len(classes), 112)
+        self.assertEqual(len(classes), 113)
         self.assertEqual(len(pages), 86)
         self.assertEqual(pages, country_pages())
-        self.assertEqual(sum(len(python_blocks(source)) for source in pages.values()), 112)
+        self.assertEqual(sum(len(python_blocks(source)) for source in pages.values()), 113)
         self.assertEqual(before, [dict(vars(cls.METADATA)) for cls in classes])
         for entry in entries:
             for cls in entry.id_types:
@@ -44,7 +44,7 @@ class TestGeneratedDocumentation(TestCase):
     def test_frozen_guide_coverage(self) -> None:
         guide = failure_guide()
         vectors = json.loads((ROOT / "tests/helpers/failure_reason_vectors.json").read_text())
-        self.assertEqual(len(vectors), 112)
+        self.assertEqual(len(vectors), 113)
         # the header counts are derived from the frozen vectors, so adding a class needs no edit here
         checksums = sum(1 for row in vectors.values() if row["checksum"] is not None)
         dates = sum(1 for row in vectors.values() if row["birthdate"] is not None)
@@ -107,7 +107,7 @@ class TestGeneratedDocumentation(TestCase):
             )
             self.assertEqual(direct.read_bytes(), cli.read_bytes())
             rows = json.loads(direct.read_text())
-            self.assertEqual(sum(len(row["ids"]) for row in rows), 112)
+            self.assertEqual(sum(len(row["ids"]) for row in rows), 113)
             for row in rows:
                 for item in row["ids"]:
                     self.assertIsInstance(item["metadata"]["regexp"], str)

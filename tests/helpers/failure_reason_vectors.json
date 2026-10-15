@@ -460,6 +460,22 @@
     "birthdate": null,
     "birthdate_note": "No full calendar date encoded or validated."
   },
+  "idnumbers.nationalid.deu.tax_number.TaxNumber": {
+    "valid": "9198081508152",
+    "length": [
+      "919808150815",
+      "91980815081520",
+      "9198 0815 081520"
+    ],
+    "format": "!!!!!!!!!!!!!",
+    "checksum": {
+      "input": "9198081508153",
+      "reason": "checksum_mismatch"
+    },
+    "checksum_note": "Definite mismatch.",
+    "birthdate": null,
+    "birthdate_note": "No full calendar date encoded or validated."
+  },
   "idnumbers.nationalid.dnk.personal_id.PersonalIdentityNumber": {
     "valid": "010100-1234",
     "length": [

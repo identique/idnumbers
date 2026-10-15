@@ -42,3 +42,40 @@ from idnumbers.nationalid.deu.tax_id import TaxID
 number = '12 345 678 911'
 assert TaxID.validate(number)
 ```
+
+## TaxNumber
+
+[Source](../../idnumbers/nationalid/deu/tax_number.py) · [API](https://identique.github.io/idnumbers/idnumbers.nationalid.deu.tax_number.TaxNumber.html)
+
+| METADATA field | Value |
+| --- | --- |
+| alias_of | <code>None</code> |
+| checksum | <code>True</code> |
+| checksum_algorithm | <code>State-specific: 11er-Verfahren (weighted mod 11), 2er-Verfahren or modified 11er-Verfahren (Rhineland-Palatinate)</code> |
+| country_name | <code>Germany</code> |
+| deprecated | <code>False</code> |
+| display_format | <code>FFFF0BBB{BU}UUUC</code> |
+| example | <code>9198081508152</code> |
+| id_type | <code>Tax Number</code> |
+| iso3166_alpha2 | <code>DE</code> |
+| links | <code>[&#x27;https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf&#x27;]</code> |
+| masks | <code>(&#x27;#############&#x27;,)</code> |
+| max_length | <code>13</code> |
+| min_length | <code>13</code> |
+| names | <code>[&#x27;Tax Number&#x27;, &#x27;Steuernummer&#x27;, &#x27;St.-Nr.&#x27;]</code> |
+| official_name | <code>Steuernummer</code> |
+| parsable | <code>True</code> |
+| regexp | <code>^(?:(?:10&#124;2[1-46-8]&#124;3[0-2]&#124;4[01]&#124;5\d&#124;9\d)\d{2}&#124;11(?:1[3-9]&#124;2[0134579]&#124;3[0-8]&#124;9[4-8]))0\d{8}$</code> |
+
+Reference links recorded by this implementation (source quality varies):
+
+- <https://download.elster.de/download/schnittstellen/Pruefung_der_Steuer_und_Steueridentifikatsnummer.pdf>
+
+```python
+from idnumbers.nationalid.deu.tax_number import TaxNumber
+
+number = '9198081508152'
+assert TaxNumber.validate(number)
+info = TaxNumber.parse(number)
+assert info is not None
+```

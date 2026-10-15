@@ -1,5 +1,7 @@
 from unittest import TestCase, main
+from idnumbers import FailureReason, failure_reason
 from idnumbers.nationalid import DEU
+from idnumbers.nationalid.deu.tax_number import BERLIN_A, BERLIN_B
 
 
 class TestDEUNationalIDValidation(TestCase):
@@ -75,6 +77,190 @@ class TestDEUNationalIDValidation(TestCase):
 
     def test_leading_zero_is_not_well_formed(self):
         self.assertFalse(DEU.TaxID.checksum("02476291358"))
+
+
+class TestDEUTaxNumberValidation(TestCase):
+    # ELSTER Tabelle 4-1: test numbers in the ELSTER format, one or more per federal state
+    ELSTER_VECTORS = {
+        "2866081508156": "DE-BW",
+        "9198081508152": "DE-BY",
+        "9296081508153": "DE-BY",
+        "1197081508154": "DE-BE",
+        "3098081508157": "DE-BB",
+        "2497012301233": "DE-HB",
+        "2293081508150": "DE-HH",
+        "2653081508158": "DE-HE",
+        "4098081508157": "DE-MV",
+        "2388081508158": "DE-NI",
+        "5400081508159": "DE-NW",
+        "5500081508151": "DE-NW",
+        "5600081508154": "DE-NW",
+        "2799081508152": "DE-RP",
+        "1096081508187": "DE-SL",
+        "3248081508156": "DE-SN",
+        "3198081508152": "DE-ST",
+        "2138081508154": "DE-SH",
+        "4198081508152": "DE-TH",
+    }
+
+    def test_elster_vectors(self):
+        for klass in (DEU.TaxNumber, DEU.Steuernummer):
+            for vector, state in self.ELSTER_VECTORS.items():
+                with self.subTest(klass=klass.__name__, vector=vector):
+                    self.assertTrue(klass.validate(vector))
+                    self.assertTrue(klass.checksum(vector))
+                    self.assertEqual(state, klass.parse(vector)["state"])
+
+    def test_wrong_check_digit(self):
+        for vector in self.ELSTER_VECTORS:
+            for check_digit in "0123456789":
+                if check_digit == vector[-1]:
+                    continue
+                with self.subTest(vector=vector, check_digit=check_digit):
+                    self.assertFalse(DEU.TaxNumber.validate(vector[:-1] + check_digit))
+                    self.assertFalse(DEU.TaxNumber.checksum(vector[:-1] + check_digit))
+
+    def test_parse(self):
+        self.assertEqual(
+            {
+                "state": "DE-BY",
+                "tax_office": "9198",
+                "district": "815",
+                "distinguishing_number": "0815",
+                "checksum": 2,
+            },
+            DEU.TaxNumber.parse("9198081508152"),
+        )
+        # North Rhine-Westphalia: 4-digit district and 3-digit distinguishing number
+        self.assertEqual(
+            {
+                "state": "DE-NW",
+                "tax_office": "5400",
+                "district": "8150",
+                "distinguishing_number": "815",
+                "checksum": 9,
+            },
+            DEU.TaxNumber.parse("5400081508159"),
+        )
+        self.assertIsNone(DEU.TaxNumber.parse("9198081508153"))
+        self.assertIsNone(DEU.TaxNumber.parse(None))
+
+    def test_format(self):
+        vectors = [
+            # the format printed on tax notices is not accepted
+            "198/815/08152",
+            "19881508152",
+            # 5th digit is not 0
+            "9198181508152",
+            # unknown state number (25, 29, 33, 42, 6, 7, 8, 0)
+            "2598081508152",
+            "2998081508152",
+            "3398081508152",
+            "4298081508152",
+            "6198081508152",
+            "7198081508152",
+            "8198081508152",
+            "0198081508152",
+            # length, separators, letters and empty input
+            "919808150815",
+            "91980815081520",
+            "9198 0815 08152",
+            "919808150815A",
+            "",
+        ]
+        for vector in vectors:
+            with self.subTest(vector=vector):
+                self.assertFalse(DEU.TaxNumber.validate(vector))
+                self.assertFalse(DEU.TaxNumber.checksum(vector))
+        self.assertFalse(DEU.TaxNumber.validate(None))
+        self.assertFalse(DEU.TaxNumber.checksum(None))
+
+    def test_district_rules(self):
+        # constructed: the check digit is right, so only the district rules reject them
+        vectors = [
+            # district 000, 998 and 999 (0999 in North Rhine-Westphalia)
+            "9198000008150",
+            "9198099808153",
+            "5400009990820",
+            # district under 100 in the Bavarian programming group (Bavaria, Brandenburg)
+            "9198009908154",
+            "3098009908159",
+            # North Rhine-Westphalia: distinguishing number and check digit not greater than 0009
+            "5400000100006",
+        ]
+        for vector in vectors:
+            with self.subTest(vector=vector):
+                self.assertTrue(DEU.TaxNumber.checksum(vector))
+                self.assertFalse(DEU.TaxNumber.validate(vector))
+        # a district under 100 is allowed outside the Bavarian programming group (Bremen); UUUP 0017 is allowed in NRW
+        self.assertTrue(DEU.TaxNumber.validate("2497000108152"))
+        self.assertTrue(DEU.TaxNumber.validate("5400000100017"))
+
+    def test_district_boundaries(self):
+        # constructed: each pair differs only at the boundary, and every check digit is right
+        cases = [
+            # Bavarian programming group: district 100 is allowed, 099 is not
+            ("9198010008159", True),
+            ("9198009908154", False),
+            # Bremen: district 997 and 001 are allowed, 998 and 000 are not
+            ("2497099708156", True),
+            ("2497099808150", False),
+            ("2497000108152", True),
+            # North Rhine-Westphalia: district 0997 and 0001 are allowed, 0998 and 0000 are not
+            ("5400009970812", True),
+            ("5400009980816", False),
+            ("5400000010810", True),
+            ("5400000000817", False),
+            # North Rhine-Westphalia: UUUP 0010 is allowed, 0009 is not
+            ("5400000050010", True),
+            ("5400000020009", False),
+        ]
+        for vector, valid in cases:
+            with self.subTest(vector=vector):
+                self.assertTrue(DEU.TaxNumber.checksum(vector))
+                self.assertEqual(valid, DEU.TaxNumber.validate(vector))
+
+    def test_two_digit_check_digit_is_never_allocated(self):
+        # constructed: the 11er-Verfahren gives 10 for these first 12 digits, so no check digit is valid
+        for prefix in ("919808150002", "540008150018", "111301000008"):
+            for check_digit in "0123456789":
+                with self.subTest(prefix=prefix, check_digit=check_digit):
+                    self.assertFalse(DEU.TaxNumber.validate(prefix + check_digit))
+
+    def test_berlin_weights(self):
+        # constructed: Berlin-A and Berlin-B give different check digits for these first 12 digits
+        # 1113 uses Berlin-A, and Berlin-B for districts 201 to 693
+        self.assertTrue(DEU.TaxNumber.validate("1113010000004"))
+        self.assertFalse(DEU.TaxNumber.validate("1113010000007"))
+        self.assertTrue(DEU.TaxNumber.validate("1113020100004"))
+        self.assertFalse(DEU.TaxNumber.validate("1113020100003"))
+        # 1115 always uses Berlin-B
+        self.assertTrue(DEU.TaxNumber.validate("1115010000000"))
+        self.assertFalse(DEU.TaxNumber.validate("1115010000004"))
+        # 1116 uses Berlin-B for districts 1 to 29, 201 to 693 and 875 to 899
+        self.assertTrue(DEU.TaxNumber.validate("1116001000003"))
+        self.assertFalse(DEU.TaxNumber.validate("1116001000005"))
+        self.assertTrue(DEU.TaxNumber.validate("1116010000004"))
+        self.assertFalse(DEU.TaxNumber.validate("1116010000002"))
+        # 1119 uses Berlin-B for district 680, but Berlin-A for 681
+        self.assertTrue(DEU.TaxNumber.validate("1119068000000"))
+        self.assertFalse(DEU.TaxNumber.validate("1119068000009"))
+        self.assertTrue(DEU.TaxNumber.validate("1119068100004"))
+        self.assertFalse(DEU.TaxNumber.validate("1119068100005"))
+
+    def test_berlin_office_missing_from_the_table_is_rejected(self):
+        # ELSTER section 7.2 gives no method for 1101, so neither the Berlin-A (4) nor the Berlin-B (5) check digit
+        # is accepted; the regexp rejects the office, so the failure reason is a format error, not a checksum one
+        for check_digit in "0123456789":
+            with self.subTest(check_digit=check_digit):
+                self.assertFalse(DEU.TaxNumber.validate("110101000000" + check_digit))
+                self.assertFalse(DEU.TaxNumber.checksum("110101000000" + check_digit))
+        self.assertEqual(FailureReason.INVALID_FORMAT, failure_reason(DEU.TaxNumber, "1101010000004"))
+        # every office of the table is accepted by the regexp
+        offices = set(BERLIN_A) | BERLIN_B
+        for office in offices:
+            with self.subTest(office=office):
+                self.assertIsNotNone(DEU.TaxNumber.METADATA.regexp.match(office + "081508154"))
 
 
 if __name__ == "__main__":
