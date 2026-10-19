@@ -9,8 +9,8 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 ### Validity changes
 
 - **CAN** ([#635](https://github.com/identique/idnumbers/issues/635)): `SocialInsuranceNumber.validate()` rejects
-  personal SINs starting with 0 or 8. `checksum()` remains an arithmetic-only Luhn check and may return `True` for
-  numbers with those unissued prefixes.
+  prefixes 0 and 8 under the standard SIN rules, excluding the CESP-specific exception for primary-caregiver SINs
+  beginning with 0. `checksum()` remains an arithmetic-only Luhn check.
 
 ### Added
 

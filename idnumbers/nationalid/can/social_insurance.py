@@ -8,7 +8,8 @@ class SocialInsuranceNumber:
     """
     Canada social insurance number format.
 
-    Personal SINs do not use prefixes 0 or 8. ``checksum()`` checks only the Luhn arithmetic and does not establish
+    This validator follows the standard SIN prefix rules: 1–7 or 9. It does not accept the CESP-specific zero-prefix
+    exception for primary-caregiver SINs. ``checksum()`` checks only the Luhn arithmetic and does not establish
     that a number was issued.
 
     https://en.wikipedia.org/wiki/National_identification_number#Canada
