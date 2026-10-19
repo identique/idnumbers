@@ -6,7 +6,11 @@ from ..util import validate_regexp
 
 class SocialInsuranceNumber:
     """
-    Canada social insurance number format
+    Canada social insurance number format.
+
+    Personal SINs do not use prefixes 0 or 8. ``checksum()`` checks only the Luhn arithmetic and does not establish
+    that a number was issued.
+
     https://en.wikipedia.org/wiki/National_identification_number#Canada
     """
 
@@ -21,10 +25,13 @@ class SocialInsuranceNumber:
             # has checksum function
             "checksum": True,
             # regular expression to validate the id
-            "regexp": re.compile(r"^\d{9}$"),
+            "regexp": re.compile(r"^[1-79][0-9]{8}$"),
             "alias_of": None,
             "names": ["Social Insurance Number", "SIN"],
-            "links": ["https://en.wikipedia.org/wiki/National_identification_number#Canada"],
+            "links": [
+                "https://www.canada.ca/en/employment-social-development/services/student-financial-aid/education-savings/resp/resp-promoters/bulletin/2008-282.html",
+                "https://en.wikipedia.org/wiki/National_identification_number#Canada",
+            ],
             "deprecated": False,
             "country_name": "Canada",
             "id_type": "Social Insurance Number",

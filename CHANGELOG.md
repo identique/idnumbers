@@ -6,6 +6,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ## Unreleased
 
+### Validity changes
+
+- **CAN** ([#635](https://github.com/identique/idnumbers/issues/635)): `SocialInsuranceNumber.validate()` rejects
+  personal SINs starting with 0 or 8. `checksum()` remains an arithmetic-only Luhn check and may return `True` for
+  numbers with those unissued prefixes.
+
 ### Added
 
 - **LUX** entity TIN ([#272](https://github.com/identique/idnumbers/issues/272)): add `LUX.EntityTIN`, the 11-digit
