@@ -346,7 +346,7 @@ class TestValidate(TestCase):
 
     def test_matches_the_validator_on_the_parity_corpus(self) -> None:
         expanded = expand_corpus(load_corpus())
-        self.assertEqual(len(expanded), 78)
+        self.assertEqual(len(expanded), 85)
         for alpha3, vectors in sorted(expanded.items()):
             with self.subTest(alpha3=alpha3):
                 validator = registry.get_validator(alpha3)
