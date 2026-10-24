@@ -130,6 +130,26 @@ class TestNORDAndHNumbers(TestCase):
     def test_wrong_checksum_is_still_invalid(self):
         self.assertFalse(NOR.NationalID.validate("41019912350"))
         self.assertFalse(NOR.NationalID.validate("01419912341"))
+        self.assertIsNone(NOR.NationalID.parse("41019912350"))
+        self.assertIsNone(NOR.NationalID.parse("01419912341"))
+
+    def test_parse_rejects_wrong_check_digits(self):
+        # issue #637: parse() used to return a result for numbers whose check digits validate() rejects
+        self.assertFalse(NOR.NationalID.validate("17054026640"))
+        self.assertIsNone(NOR.NationalID.parse("17054026640"))
+        self.assertEqual(date(1940, 5, 17), NOR.NationalID.parse("17054026641")["yyyymmdd"])
+
+    def test_individual_numbers_900_to_999_use_the_century_table(self):
+        # synthetic numbers (not issued to anyone): the date and individual number 950 were chosen, then the last two
+        # digits were searched for the first pair that NOR.NationalID.checksum() accepts
+        cases = (
+            ("01014595089", date(1945, 1, 1)),  # yy >= 40 gives 19yy
+            ("01010595076", date(2005, 1, 1)),  # yy < 40 gives 20yy
+        )
+        for number, expected in cases:
+            with self.subTest(number=number):
+                self.assertTrue(NOR.NationalID.validate(number))
+                self.assertEqual(expected, NOR.NationalID.parse(number)["yyyymmdd"])
 
     def test_day_and_month_both_increased_is_invalid(self):
         # a D-number and an H-number at once is not a defined type (python-stdnum accepts it, the sources define the two separately)
