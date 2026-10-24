@@ -102,11 +102,12 @@ class ReleaseWorkflowRuntimeTest(unittest.TestCase):
             "for attempt in 1 2 3; do",
             "git push origin gh-pages && exit 0",
             "git pull --rebase origin gh-pages",
-            "done\n          exit 1",
+            "done\n          git push origin gh-pages\n",
         ):
             with self.subTest(contract=contract):
                 self.assertIn(contract, push)
-        self.assertEqual(workflow.count("git push"), 1)
+        self.assertNotIn("exit 1", push)
+        self.assertEqual(workflow.count("git push"), 2)
         self.assertNotRegex(workflow, r"git push\b[^\n]*(--force|\s-f\b)")
 
     def test_release_token_route_stays_default(self):

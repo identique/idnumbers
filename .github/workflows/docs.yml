@@ -79,4 +79,4 @@ jobs:
             echo "gh-pages moved on the remote (attempt $attempt); rebasing the docs commit"
             git pull --rebase origin gh-pages
           done
-          exit 1
+          git push origin gh-pages
