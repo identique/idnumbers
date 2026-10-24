@@ -27,6 +27,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Other fixes
 
+- **FRA** INSEE ([#637](https://github.com/identique/idnumbers/issues/637)): `INSEE.parse()` (and
+  `FRA.NationalID.parse()`) returns `None` for a number with a wrong control key, which `validate()` already rejected.
+  Valid numbers parse as before.
+- **NOR** ([#637](https://github.com/identique/idnumbers/issues/637)): `NationalID.parse()` returns `None` for a number
+  with wrong check digits, which `validate()` already rejected. `validate()` results and `idnumbers.parse_id_info()`
+  are unchanged.
 - **Parity corpus** ([#636](https://github.com/identique/idnumbers/issues/636)): vendor the Node port's parity corpus
   at port commit `782680d`, which adds CRI, DOM, ECU, EGY, GTM, RUS and SAU (85 countries, 20,672 vectors), and record
   Python's validity for them, so a validity change in those seven countries now fails `tests/parity/test_corpus.py`.
