@@ -25,6 +25,13 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   Steueridentifikationsnummer", and `parse()` returns the state, tax office, district and distinguishing number. The
   format printed on tax notices is not accepted. `DEU.NationalID` is unchanged.
 
+### Other fixes
+
+- **Parity corpus** ([#636](https://github.com/identique/idnumbers/issues/636)): vendor the Node port's parity corpus
+  at port commit `782680d`, which adds CRI, DOM, ECU, EGY, GTM, RUS and SAU (85 countries, 20,672 vectors), and record
+  Python's validity for them, so a validity change in those seven countries now fails `tests/parity/test_corpus.py`.
+  Python's recorded validity for the other 78 countries is unchanged.
+
 ## 1.20.0 (2026-10-13)
 
 ### Validity changes
