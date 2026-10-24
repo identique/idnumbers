@@ -22,17 +22,18 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | example | <code>123456782</code> |
 | id_type | <code>Social Insurance Number</code> |
 | iso3166_alpha2 | <code>CA</code> |
-| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Canada&#x27;]</code> |
+| links | <code>[&#x27;https://www.canada.ca/en/employment-social-development/services/student-financial-aid/education-savings/resp/resp-promoters/bulletin/2008-282.html&#x27;, &#x27;https://en.wikipedia.org/wiki/National_identification_number#Canada&#x27;]</code> |
 | masks | <code>(&#x27;#########&#x27;,)</code> |
 | max_length | <code>9</code> |
 | min_length | <code>9</code> |
 | names | <code>[&#x27;Social Insurance Number&#x27;, &#x27;SIN&#x27;]</code> |
 | official_name | <code>None</code> |
 | parsable | <code>False</code> |
-| regexp | <code>^\d{9}$</code> |
+| regexp | <code>^[1-79][0-9]{8}$</code> |
 
 Reference links recorded by this implementation (source quality varies):
 
+- <https://www.canada.ca/en/employment-social-development/services/student-financial-aid/education-savings/resp/resp-promoters/bulletin/2008-282.html>
 - <https://en.wikipedia.org/wiki/National_identification_number#Canada>
 
 ```python
