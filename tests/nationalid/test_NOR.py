@@ -130,6 +130,14 @@ class TestNORDAndHNumbers(TestCase):
     def test_wrong_checksum_is_still_invalid(self):
         self.assertFalse(NOR.NationalID.validate("41019912350"))
         self.assertFalse(NOR.NationalID.validate("01419912341"))
+        self.assertIsNone(NOR.NationalID.parse("41019912350"))
+        self.assertIsNone(NOR.NationalID.parse("01419912341"))
+
+    def test_parse_rejects_wrong_check_digits(self):
+        # issue #637: parse() used to return a result for numbers whose check digits validate() rejects
+        self.assertFalse(NOR.NationalID.validate("17054026640"))
+        self.assertIsNone(NOR.NationalID.parse("17054026640"))
+        self.assertEqual(date(1940, 5, 17), NOR.NationalID.parse("17054026641")["yyyymmdd"])
 
     def test_day_and_month_both_increased_is_invalid(self):
         # a D-number and an H-number at once is not a defined type (python-stdnum accepts it, the sources define the two separately)

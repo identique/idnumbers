@@ -31,6 +31,16 @@ class TestFRAValidation(TestCase):
     def test_birth_department_96_wrong_key(self):
         self.assertFalse(FRA.NationalID.validate("145089612304583"))
 
+    def test_parse_rejects_a_wrong_control_key(self):
+        # issue #637: parse() used to return a result for numbers whose control key validate() rejects
+        for number in ("255081416802530", "150019612345691"):
+            with self.subTest(number=number):
+                self.assertFalse(FRA.NationalID.validate(number))
+                self.assertIsNone(FRA.NationalID.parse(number))
+                self.assertIsNone(FRA.INSEE.parse(number))
+        # the METADATA example, with its correct key 38, still parses
+        self.assertIsNotNone(FRA.NationalID.parse("255081416802538"))
+
     def test_birth_department_00(self):
         # correct key (55), but there is no department 00
         self.assertFalse(FRA.NationalID.validate("145080012304555"))

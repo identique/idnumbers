@@ -77,19 +77,19 @@ class NationalID:
         """
         if not validate_regexp(id_number, NationalID.METADATA.regexp):
             return False
-        if not NationalID.parse(id_number):
-            return False
-        return NationalID.checksum(id_number)
+        return NationalID.parse(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
         """
-        parse the result, None if the input is invalid or has no real calendar birth date
+        parse the result, None if the input is invalid (including wrong check digits) or has no real calendar birth date
 
         For a D-number or an H-number, yyyymmdd is the real birth date, with the 40 taken off again.
         """
         match_obj = match_regexp(id_number, NationalID.METADATA.regexp)
         if not match_obj:
+            return None
+        if not NationalID.checksum(id_number):
             return None
 
         individual_code = match_obj.group("individual_number")

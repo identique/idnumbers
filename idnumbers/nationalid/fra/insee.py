@@ -82,17 +82,21 @@ class INSEE:
         """
         if not validate_regexp(id_number, INSEE.METADATA.regexp):
             return False
-        if not INSEE.parse(id_number):
-            return False
-        return INSEE.checksum(id_number)
+        return INSEE.parse(id_number) is not None
 
     @staticmethod
     def parse(id_number: str) -> Optional[ParseResult]:
+        """
+        parse the result, None if the input is invalid: a malformed number, an unknown birth department or a wrong
+        control key
+        """
         match_obj = match_regexp(id_number, INSEE.METADATA.regexp)
         if not match_obj:
             return None
         birth_department = INSEE.validate_birth_department(match_obj.group("birth_department"))
         if not birth_department:
+            return None
+        if not INSEE.checksum(id_number):
             return None
         gender = match_obj.group("gender")
         yy = match_obj.group("yy")
