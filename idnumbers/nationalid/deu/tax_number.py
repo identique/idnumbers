@@ -166,10 +166,10 @@ class TaxNumber:
     """
     Germany tax number, Steuernummer, St.-Nr., in the 13-digit ELSTER format
 
-    The tax offices of the federal states allocate the tax number. The ELSTER format is FFFF0BBBUUUUP, and
-    FFFF0BBBBUUUP in North Rhine-Westphalia (display format FFFF0BBB{BU}UUUC covers both): the 4-digit federal tax office number (Bundesfinanzamtsnummer), whose
-    leading digits are the state number, a 0, the district number (Bezirksnummer), the distinguishing number
-    (Unterscheidungsnummer) and the check digit.
+    The tax offices of the federal states allocate the tax number. The ELSTER format is FFFF0BBBUUUUP, and FFFF0BBBBUUUP
+    in North Rhine-Westphalia (display format FFFF0BBB{BU}UUUC covers both): the 4-digit federal tax office number
+    (Bundesfinanzamtsnummer), whose leading digits are the state number, a 0, the district number (Bezirksnummer), the
+    distinguishing number (Unterscheidungsnummer) and the check digit.
 
     The rules follow chapters 3 to 7 of the ELSTER document "Prüfung der Steuer- und Steueridentifikationsnummer"
     (Bayerisches Landesamt für Steuern):
