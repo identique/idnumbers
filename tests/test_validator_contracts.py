@@ -52,6 +52,21 @@ class TestValidatorContracts(TestCase):
                     with self.subTest(country=entry.alpha3, cls=class_key(cls), value=value):
                         self.assertIs(cls.validate(value), False)
 
+    def test_parse_rejects_what_validate_rejects(self) -> None:
+        for entry, cls in iter_id_classes():
+            if not cls.METADATA.parsable:
+                continue
+            values = set(single_digit_mutations(cls.METADATA.example))
+            if cls.METADATA.checksum:
+                values.update(
+                    check_character_mutations(cls.METADATA.example, CHECK_CHARACTER_INDEX.get(class_key(cls), -1))
+                )
+            with self.subTest(country=entry.alpha3, cls=class_key(cls)):
+                parsed_but_invalid = sorted(
+                    value for value in values if not cls.validate(value) and cls.parse(value) is not None
+                )
+                self.assertEqual(parsed_but_invalid, [])
+
     def test_single_digit_mutations_and_exception_staleness(self) -> None:
         checksum_keys = set()
         for entry, cls in iter_id_classes():
