@@ -27,6 +27,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Other fixes
 
+- **API docs deployment** ([#644](https://github.com/identique/idnumbers/issues/644)): the `apidoc` workflow queues its
+  deploys in a concurrency group (`apidoc-dev` for pushes to `main`, `apidoc-<version>` for a release) and rebases and
+  retries a rejected `gh-pages` push, so back-to-back pushes to `main` no longer fail the docs deploy and a push to
+  `main` never cancels a release's docs deploy.
 - **FRA** INSEE ([#637](https://github.com/identique/idnumbers/issues/637)): `INSEE.parse()` (and
   `FRA.NationalID.parse()`) returns `None` for a number with a wrong control key, which `validate()` already rejected.
   Valid numbers parse as before.

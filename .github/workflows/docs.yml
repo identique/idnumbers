@@ -24,6 +24,12 @@ jobs:
   # Build and Deploy the documentation and upload the static HTML files as an artifact.
   build_deploy:
     runs-on: ubuntu-24.04
+    # One deploy per group at a time, never cancelled: dev builds share a group, so back-to-back pushes to main queue
+    # and the newest pending run replaces an older pending one. A release has its own group per version, so a dev
+    # build never cancels or replaces it.
+    concurrency:
+      group: apidoc-${{ inputs.version || 'dev' }}
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v7
         with:
@@ -64,4 +70,13 @@ jobs:
           cp pydocs/versions.js ./docs/versions.js
           git add ./docs
           git diff-index --quiet HEAD || git commit -m "Add release doc v${{ inputs.version }}"
-      - run: git push origin gh-pages
+      # A deploy in the other group may have pushed gh-pages first: rebase this run's docs commit onto it and push
+      # again. A rebase conflict fails the job instead of overwriting the other deploy.
+      - name: push gh-pages
+        run: |
+          for attempt in 1 2 3; do
+            git push origin gh-pages && exit 0
+            echo "gh-pages moved on the remote (attempt $attempt); rebasing the docs commit"
+            git pull --rebase origin gh-pages
+          done
+          git push origin gh-pages

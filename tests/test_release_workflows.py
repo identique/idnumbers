@@ -92,6 +92,24 @@ class ReleaseWorkflowRuntimeTest(unittest.TestCase):
         self.assertNotIn("persist-credentials: false", workflow)
         self.assertNotIn("id-token:", workflow)
 
+    def test_docs_deploys_queue_per_group_and_retry_a_rejected_push(self):
+        workflow = self.workflow("docs.yml")
+        group = "concurrency:\n      group: apidoc-${{ inputs.version || 'dev' }}\n      cancel-in-progress: false\n"
+        self.assertEqual(workflow.count(group), 1)
+        self.assertNotIn("cancel-in-progress: true", workflow)
+        push = workflow.split("      - name: push gh-pages\n", 1)[1]
+        for contract in (
+            "for attempt in 1 2 3; do",
+            "git push origin gh-pages && exit 0",
+            "git pull --rebase origin gh-pages",
+            "done\n          git push origin gh-pages\n",
+        ):
+            with self.subTest(contract=contract):
+                self.assertIn(contract, push)
+        self.assertNotIn("exit 1", push)
+        self.assertEqual(workflow.count("git push"), 2)
+        self.assertNotRegex(workflow, r"git push\b[^\n]*(--force|\s-f\b)")
+
     def test_release_token_route_stays_default(self):
         workflow = self.workflow("release_to_pypi.yml")
         inputs = workflow.split("permissions:", 1)[0]

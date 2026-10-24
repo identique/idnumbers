@@ -68,6 +68,12 @@ persistence remains enabled for the docs workflow's authenticated `gh-pages` bra
 [checkout credential behavior][checkout-credentials]. The bump action retains its token, committer, PR inputs
 and outputs. Its `GITHUB_TOKEN` PRs still do not trigger CI ([action documentation][pr-token]).
 
+The docs workflow queues its deploys per concurrency group: `apidoc-dev` for pushes to `main`, where a newer pending
+run replaces an older pending one so the newest commit's docs land last, and `apidoc-<version>` for a release, which a
+push to `main` therefore never cancels or replaces. A `gh-pages` push that is rejected because the other group pushed
+first is rebased onto it and retried, up to three times; a rebase conflict fails the run instead of overwriting the
+other deploy.
+
 These are local regression checks and a source audit, not proof of a successful updated workflow run. Releases since
 1.16.0 have run these runtimes; 1.18.0 (bot PR [#592](https://github.com/identique/idnumbers/pull/592)) was the
 first to use trusted publication. The default token route still disables attestations. An upstream download-artifact v8
