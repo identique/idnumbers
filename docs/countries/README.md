@@ -27,7 +27,7 @@ not personal data or proof of issuance. Each snippet runs independently.
 | [Costa Rica (CRI)](CRI.md) | CR | NationalID | 1 |
 | [Cyprus (CYP)](CYP.md) | CY | TaxNumber | 1 |
 | [Czechia (CZE)](CZE.md) | CZ | BirthNumber | 2 |
-| [Germany (DEU)](DEU.md) | DE | TaxID | 1 |
+| [Germany (DEU)](DEU.md) | DE | TaxID | 2 |
 | [Denmark (DNK)](DNK.md) | DK | PersonalIdentityNumber | 2 |
 | [Dominican Republic (DOM)](DOM.md) | DO | NationalID | 1 |
 | [Ecuador (ECU)](ECU.md) | EC | NationalID | 1 |

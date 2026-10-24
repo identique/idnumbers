@@ -32,6 +32,8 @@ SINGLE_DIGIT_CHANGE_UNDETECTED: Dict[str, Tuple[str, ...]] = {
         "25123491",
         "25123831",
     ),
+    # tax_number.py: the first digit has weight 0, and Saxony-Anhalt (31) and Thuringia (41) share the Bavarian weights
+    "idnumbers.nationalid.deu.tax_number.TaxNumber": ("3198081508152", "4198081508152"),
     # personal_id.py: checksum retries mod 11 with different weights
     "idnumbers.nationalid.est.personal_id.PersonalID": ("47605030299",),
     # icelandic_id.py: checksum excludes the century digit (numbers[0:-2])

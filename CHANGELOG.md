@@ -18,6 +18,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   national identifier that is used as a TIN-like number for non-natural persons, with the weighted mod 11 check digit
   from the OECD Luxembourg TIN sheet; numbers whose remainder is 1 are rejected because it is never allocated. `LUX.TIN`
   groups `individual` (`LUX.NationalID`) and `entity` (`LUX.EntityTIN`). `LUX.NationalID` is unchanged.
+- **DEU** tax number ([#130](https://github.com/identique/idnumbers/issues/130)): add `DEU.TaxNumber` (alias
+  `DEU.Steuernummer`), the Steuernummer in the 13-digit ELSTER format. It checks the state number, the district rules
+  and the state-specific check digit (11er-Verfahren, 2er-Verfahren or the modified 11er-Verfahren of
+  Rhineland-Palatinate, with the Berlin-A and Berlin-B weights) from the ELSTER document "Prüfung der Steuer- und
+  Steueridentifikationsnummer", and `parse()` returns the state, tax office, district and distinguishing number. The
+  format printed on tax notices is not accepted. `DEU.NationalID` is unchanged.
 
 ## 1.20.0 (2026-10-13)
 
