@@ -2,7 +2,7 @@
 The cross-implementation parity corpus, and Python's own recorded validity for it.
 
 The Node.js/TypeScript port (`identique/idnumbers-npm <https://github.com/identique/idnumbers-npm>`_, MIT) keeps a
-differential parity harness: `parity/corpus.json` maps 78 countries to seed inputs, and the harness expands every seed
+differential parity harness: `parity/corpus.json` maps 85 countries to seed inputs, and the harness expands every seed
 into neighbouring test vectors and compares the two libraries' validity. This module vendors that corpus and records
 which of the expanded vectors *this* library accepts (`tests/parity/expected_python.json`), so that a change of Python
 validity on any shared vector fails `tests/parity/test_corpus.py` and prompts a note on the port (AGENTS.md, "Fixing
@@ -37,7 +37,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 PORT_REPOSITORY = "identique/idnumbers-npm"
-PORT_COMMIT = "694a9cc56615813603e554e5b19071b750b2362d"
+PORT_COMMIT = "782680de876c807e2814cd1e5448c85f80c38a9b"
 CORPUS_RELATIVE_PATH = "parity/corpus.json"
 
 CORPUS_PATH = Path(__file__).with_name("corpus.json")
