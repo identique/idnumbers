@@ -19,6 +19,7 @@ from tools.generate_docs import (
     cell,
     country_pages,
     english_list,
+    example_summary,
     failure_guide,
     generate,
     input_guide,
@@ -80,6 +81,20 @@ class TestGeneratedDocumentation(TestCase):
         self.assertEqual(english_list(["CHE"]), "CHE")
         self.assertEqual(english_list(["CHE", "CHL"]), "CHE and CHL")
         self.assertEqual(english_list(["CHE", "CHL", "KOR", "USA"]), "CHE, CHL, KOR and USA")
+
+    def test_example_summary(self) -> None:
+        self.assertEqual(
+            example_summary(85, ["CHE", "CHL", "KOR", "USA"], []),
+            "CHE, CHL, KOR and USA reject their normalized example; all 85 formatted examples validate.",
+        )
+        self.assertEqual(
+            example_summary(3, [], []),
+            "All 3 normalized examples validate; all 3 formatted examples validate.",
+        )
+        self.assertEqual(
+            example_summary(3, ["CHE"], ["KOR", "USA"]),
+            "CHE rejects its normalized example; KOR and USA reject their formatted example.",
+        )
 
     def test_check_missing_changed_stale_and_user_files(self) -> None:
         with TemporaryDirectory() as directory:
