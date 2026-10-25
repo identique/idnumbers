@@ -8,7 +8,7 @@ from typing import Any, Dict, Iterator, Tuple, Type
 
 from idnumbers import list_supported_countries
 from idnumbers.registry import CountryEntry
-from tests.test_metadata import compact
+from tests.test_metadata import MASK_SAMPLES, class_key, compact, fits, layout
 
 
 # Zero-based alphanumeric index, not raw string index. Each exception is class-specific.
@@ -29,6 +29,15 @@ def iter_id_classes() -> Iterator[Tuple[CountryEntry, Type[Any]]]:
     for entry in list_supported_countries():
         for cls in entry.id_types:
             yield entry, cls
+
+
+def example_layouts(cls: Type[Any]) -> Tuple[str, ...]:
+    """The example, then its accepted samples in every other mask layout (as tests/test_format.py builds them)."""
+    metadata = cls.METADATA
+    value = compact(metadata.example, metadata.masks)
+    samples = [metadata.example, *MASK_SAMPLES.get(class_key(cls), ())]
+    samples += [layout(value, mask) for mask in metadata.masks if fits(value, mask)]
+    return tuple(dict.fromkeys(samples))
 
 
 def single_digit_mutations(value: str) -> Iterator[str]:

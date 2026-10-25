@@ -41,6 +41,22 @@ class TestFRAValidation(TestCase):
         # the METADATA example, with its correct key 38, still parses
         self.assertIsNotNone(FRA.NationalID.parse("255081416802538"))
 
+    def test_parse_rejects_a_wrong_corsica_control_key(self):
+        # checksum() upper-cases the department and maps 2A to 19 and 2B to 18, so the lowercase letters take part in
+        # the key: a wrong key on a lowercase Corsica number must not parse either
+        for number in ("185052a12345634", "185052b12345633"):
+            with self.subTest(number=number):
+                self.assertFalse(FRA.NationalID.validate(number))
+                self.assertIsNone(FRA.NationalID.parse(number))
+                self.assertIsNone(FRA.INSEE.parse(number))
+        # the right keys, 33 for 2a and 60 for 2b, still parse and keep the department as it was written
+        for number, department in (("185052a12345633", "2a"), ("185052b12345660", "2b")):
+            with self.subTest(number=number):
+                self.assertTrue(FRA.NationalID.validate(number))
+                result = FRA.NationalID.parse(number)
+                self.assertIsNotNone(result)
+                self.assertEqual(department, result["birth_department"]["department"])
+
     def test_birth_department_00(self):
         # correct key (55), but there is no department 00
         self.assertFalse(FRA.NationalID.validate("145080012304555"))
