@@ -14,15 +14,15 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | METADATA field | Value |
 | --- | --- |
 | alias_of | <code>None</code> |
-| checksum | <code>True</code> |
-| checksum_algorithm | <code>Weighted sum mod 11 (weights 3, 2, 7, 6, 5, 4, 3, 2 over the first eight digits; check = 11 - remainder)</code> |
+| checksum | <code>False</code> |
+| checksum_algorithm | <code>None</code> |
 | country_name | <code>Iceland</code> |
 | deprecated | <code>False</code> |
 | display_format | <code>DDMMYY-SSKC</code> |
 | example | <code>120174-3399</code> |
 | id_type | <code>Icelandic Identification Number</code> |
 | iso3166_alpha2 | <code>IS</code> |
-| links | <code>[&#x27;https://en.wikipedia.org/wiki/Icelandic_identification_number&#x27;]</code> |
+| links | <code>[&#x27;https://en.wikipedia.org/wiki/Icelandic_identification_number&#x27;, &#x27;https://www.skra.is/folk/eg-i-thjodskra/um-kennitolur/&#x27;, &#x27;https://www.skra.is/um-okkur/frettir/frett/2025/05/14/Kennitolur-an-vartolu/&#x27;, &#x27;https://www.skra.is/gogn/gervigogn-thjodskrar/&#x27;]</code> |
 | masks | <code>(&#x27;######-####&#x27;,)</code> |
 | max_length | <code>10</code> |
 | min_length | <code>10</code> |
@@ -34,6 +34,9 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 Reference links recorded by this implementation (source quality varies):
 
 - <https://en.wikipedia.org/wiki/Icelandic_identification_number>
+- <https://www.skra.is/folk/eg-i-thjodskra/um-kennitolur/>
+- <https://www.skra.is/um-okkur/frettir/frett/2025/05/14/Kennitolur-an-vartolu/>
+- <https://www.skra.is/gogn/gervigogn-thjodskrar/>
 
 ```python
 from idnumbers.nationalid.isl.icelandic_id import IcelandicID

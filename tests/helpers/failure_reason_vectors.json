@@ -843,16 +843,13 @@
       "120174-33991"
     ],
     "format": "!!!!!!!!!!",
-    "checksum": {
-      "input": "120174-3309",
-      "reason": "checksum_mismatch"
-    },
-    "checksum_note": "Definite mismatch.",
+    "checksum": null,
+    "checksum_note": "Registers Iceland issues every kennitala without a calculated check digit since 18 February 2026 (issue #638); no checksum method.",
     "birthdate": {
       "input": "310274-0899",
       "reason": "invalid_birthdate"
     },
-    "birthdate_note": "Synthetic 31 February, encoded using the class date rules; checksum repaired."
+    "birthdate_note": "Synthetic 31 February, encoded using the class date rules; no checksum to repair."
   },
   "idnumbers.nationalid.isr.national_id.NationalID": {
     "valid": "000000018",

@@ -3,12 +3,7 @@ from ..util import birth_date as _calendar_date
 from datetime import date
 from ..metadata import IdMetadata
 from typing import Optional, TypedDict, cast
-from ..util import CHECK_DIGIT, validate_regexp, weighted_modulus_digit, match_regexp
-
-
-def normalize(id_number: str) -> str:
-    """strip out useless characters/whitespaces"""
-    return re.sub(r"[ -]", "", id_number)
+from ..util import CHECK_DIGIT, validate_regexp, match_regexp
 
 
 class ParseResult(TypedDict):
@@ -19,13 +14,38 @@ class ParseResult(TypedDict):
     sn: str
     """serial number"""
     checksum: CHECK_DIGIT
-    """check digit"""
+    """the ninth digit as printed; it is not verified, because kennitölur issued since 18 February 2026 have no
+    calculated check digit"""
 
 
 class IcelandicID:
     """
     Iceland Icelandic identification number, kennitala
     https://en.wikipedia.org/wiki/Icelandic_identification_number
+
+    The number has 10 digits, ``DDMMYY-SSKC``: the date of birth, two serial digits, a ninth digit and the century
+    digit. Þjóðskrá (Registers Iceland) says the last digit is 8, 9 or 0 and gives the century of birth, so ``C`` is 8
+    for 1800-1899, 9 for 1900-1999 and 0 for 2000-2099.
+
+    The ninth digit is not checked. Since 18 February 2026, Þjóðskrá issues every kennitala, both those of individuals
+    registered in Þjóðskrá and system kennitölur, without a calculated check digit (*vartala*), and it asks systems to
+    remove the check-digit test. The number carries no issue date, so a kennitala issued before that date, whose ninth
+    digit is a mod-11 check digit, cannot be told apart from a new one. ``METADATA.checksum`` is ``False`` and there is
+    no ``checksum()`` method. Þjóðskrá's six synthetic test kennitölur without a check digit, such as ``281191-3049``,
+    validate.
+
+    ``validate()`` checks the 10 ASCII digits (with an optional hyphen after the date), the century digit and that
+    the date of birth is a real calendar date. Kennitölur of legal entities (day of registration + 40) are not
+    supported.
+
+    Sources:
+
+    - Þjóðskrá, Um kennitölur (layout, century digit, the pre-2026 check digit and the 2026 change):
+      https://www.skra.is/folk/eg-i-thjodskra/um-kennitolur/
+    - Þjóðskrá, Allar kennitölur án vartölu (14 May 2025):
+      https://www.skra.is/um-okkur/frettir/frett/2025/05/14/Kennitolur-an-vartolu/
+    - Þjóðskrá, Gervigögn Þjóðskrár (test kennitölur without a check digit):
+      https://www.skra.is/gogn/gervigogn-thjodskrar/
     """
 
     METADATA = IdMetadata(
@@ -34,7 +54,7 @@ class IcelandicID:
             "min_length": 10,
             "max_length": 10,
             "parsable": True,
-            "checksum": True,
+            "checksum": False,
             "regexp": re.compile(
                 r"^(?P<dd>\d{2})(?P<mm>\d{2})(?P<yy>\d{2})-?"
                 r"(?P<sn>\d{2})"
@@ -43,20 +63,25 @@ class IcelandicID:
             ),
             "alias_of": None,
             "names": ["Icelandic identification number", "kennitala", "kt."],
-            "links": ["https://en.wikipedia.org/wiki/Icelandic_identification_number"],
+            "links": [
+                "https://en.wikipedia.org/wiki/Icelandic_identification_number",
+                "https://www.skra.is/folk/eg-i-thjodskra/um-kennitolur/",
+                "https://www.skra.is/um-okkur/frettir/frett/2025/05/14/Kennitolur-an-vartolu/",
+                "https://www.skra.is/gogn/gervigogn-thjodskrar/",
+            ],
             "deprecated": False,
             "country_name": "Iceland",
             "id_type": "Icelandic Identification Number",
             "official_name": "kennitala",
             "display_format": "DDMMYY-SSKC",
             "example": "120174-3399",
-            "checksum_algorithm": "Weighted sum mod 11 (weights 3, 2, 7, 6, 5, 4, 3, 2 over the first eight digits; check "
-            "= 11 - remainder)",
+            "checksum_algorithm": None,
             "masks": ("######-####",),
         }
     )
 
-    WEIGHTS = [3, 2, 7, 6, 5, 4, 3, 2]
+    CENTURY_MAP = {"8": 1800, "9": 1900, "0": 2000}
+    """the first year of the century of birth, by the last digit"""
 
     @staticmethod
     def validate(id_number: str) -> bool:
@@ -71,14 +96,8 @@ class IcelandicID:
         match_obj = match_regexp(id_number, IcelandicID.METADATA.regexp)
         if not match_obj:
             return None
-        checksum = IcelandicID.checksum(id_number)
-        if not checksum:
-            return None
-        if match_obj.group("century") == "9":
-            year_base = 1900
-        elif match_obj.group("century") == "0":
-            year_base = 2000
-        else:
+        year_base = IcelandicID.CENTURY_MAP.get(match_obj.group("century"))
+        if year_base is None:
             return None
         yy = int(match_obj.group("yy"))
         mm = int(match_obj.group("mm"))
@@ -95,20 +114,3 @@ class IcelandicID:
         except ValueError:
             # catch the date error
             return None
-
-    @staticmethod
-    def checksum(id_number: str) -> bool:
-        """
-        check the checksum
-        https://en.wikipedia.org/wiki/Icelandic_identification_number
-        ref: https://github.com/aldavigdis/kennitala-gem/blob/main/lib/kennitala.rb#L295 for the 10
-        """
-        if not validate_regexp(id_number, IcelandicID.METADATA.regexp):
-            return False
-        numbers = [int(char) for char in normalize(id_number)]
-        modulus = weighted_modulus_digit(numbers[0:-2], IcelandicID.WEIGHTS, 11, True)
-        if modulus == 10:
-            # ref https://github.com/aldavigdis/kennitala-gem/blob/main/lib/kennitala.rb#L295
-            return False
-        modulus = 0 if modulus == 0 else 11 - modulus
-        return numbers[-2] == modulus
