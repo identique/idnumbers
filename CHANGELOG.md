@@ -12,6 +12,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   and country modules with a static scan of the source tree instead of hard-coded count pins, so a lost or extra class
   fails by name. Adding an ID type or a country needs no count edits. The input guide and the README derive or drop
   their example counts. Library behavior is unchanged.
+- **Contributor guide** ([#658](https://github.com/identique/idnumbers/issues/658)): `AGENTS.md` names the count pins
+  that remain (the vendored parity corpus and the classes with birth-date witnesses) and lists regenerating the guides
+  among the steps for a new ID type. The tests also require a checksum witness for every class with a `checksum()`
+  method, and the input guide derives its formatted-example sentence from its table. Library behavior is unchanged.
 
 ## 1.21.0 (2026-10-24)
 
