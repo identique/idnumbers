@@ -3,6 +3,7 @@
 Hypothesis runs 100 arbitrary Unicode strings per class, without an example database.
 A failing unittest names the country/type and Hypothesis prints its minimized input.
 Mutation checks exhaust the synthetic example's digits, not all possible valid IDs.
+The parse check also feeds each class's frozen failure-reason witnesses and every mask layout of its example.
 Valid-example, mask and in-range length checks remain in test_metadata.py.
 This module checks regexp agreement using that suite's existing compact-layout helper.
 """

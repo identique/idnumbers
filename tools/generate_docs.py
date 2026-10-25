@@ -175,10 +175,25 @@ def english_list(names: Sequence[str]) -> str:
     return ", ".join(names[:-1]) + " and " + names[-1]
 
 
+def _example_clause(total: int, form: str, rejected: Sequence[str]) -> str:
+    if not rejected:
+        return f"all {total} {form} examples validate"
+    if len(rejected) == 1:
+        return f"{rejected[0]} rejects its {form} example"
+    return f"{english_list(rejected)} reject their {form} example"
+
+
+def example_summary(total: int, normalized: Sequence[str], formatted: Sequence[str]) -> str:
+    """Summarize which countries reject their normalized or formatted example, out of ``total`` countries."""
+    sentence = f"{_example_clause(total, 'normalized', normalized)}; {_example_clause(total, 'formatted', formatted)}."
+    return sentence[0].upper() + sentence[1:]
+
+
 def input_guide() -> str:
     entries = sorted(list_supported_countries(), key=lambda entry: entry.alpha3)
     table = []
     rejected = []
+    formatted_rejected = []
     for entry in entries:
         cls = entry.national_id
         value = cls.METADATA.example
@@ -186,6 +201,8 @@ def input_guide() -> str:
         outcomes = ["yes" if cls.validate(variant) else "no" for variant in variants]
         if outcomes[2] == "no":
             rejected.append(entry.alpha3)
+        if outcomes[3] == "no":
+            formatted_rejected.append(entry.alpha3)
         table.append(
             f"| [{entry.alpha3}](countries/{entry.alpha3}.md) | {cell(value)} | " + " | ".join(outcomes) + " |"
         )
@@ -226,7 +243,7 @@ def input_guide() -> str:
         "",
         "Empirical only: one synthetic current METADATA example per country, plus its lowercase, surrounding",
         "space, normalized and formatted variants. This is **not** a complete country input policy.",
-        f"{english_list(rejected)} reject their normalized example; all {len(entries)} formatted examples validate.",
+        example_summary(len(entries), rejected, formatted_rejected),
         "",
         "| Country | Example | Lowercase | Surrounding spaces | Normalized | Formatted |",
         "| --- | --- | --- | --- | --- | --- |",
