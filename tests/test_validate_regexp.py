@@ -8,6 +8,7 @@ from unittest import TestCase, main
 import idnumbers.nationalid as nationalid_package
 from idnumbers.nationalid import CHN, DEU, ESP, FRA, IND, IRL, ITA, KOR, MEX, NLD, POL, SWE, TWN, USA
 from idnumbers.nationalid.util import match_regexp, validate_regexp
+from tests.helpers.inventory import MIN_ID_TYPES, static_id_classes
 
 ARABIC_INDIC_ONE = "١"
 FULL_WIDTH_ONE = "１"
@@ -122,8 +123,10 @@ class TestEveryIDTypeRejectsMalformedInput(TestCase):
 
     def test_id_types_are_discovered(self):
         names = [name for name, _ in _discover_id_types()]
-        # adding or removing an ID type must update this number
-        self.assertEqual(114, len(names))
+        self.assertEqual(len(names), len(set(names)), "an ID type is discovered twice")
+        # The expected set is read from the source tree, so an ID type that is lost or extra is named here.
+        self.assertEqual(set(names), static_id_classes())
+        self.assertGreaterEqual(len(names), MIN_ID_TYPES)
         self.assertIn("idnumbers.nationalid.chn.resident_id.ResidentID", names)
         self.assertIn("idnumbers.nationalid.yugoslavia.UniqueMasterCitizenNumber", names)
 

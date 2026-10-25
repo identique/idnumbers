@@ -16,11 +16,10 @@ from unittest.mock import patch
 import idnumbers
 from idnumbers import registry
 from idnumbers.nationalid import AUS, GRC, TWN
+from tests.helpers.inventory import MIN_COUNTRIES, MIN_ID_TYPES, registered_id_classes, static_country_modules
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-NATIONALID_DIR = REPO_ROOT / "idnumbers" / "nationalid"
-COUNTRY_COUNT = 85
-ID_TYPE_COUNT = 113
+COUNTRY_COUNT = len(static_country_modules())
 
 
 def make_validator(alpha2: Optional[str] = "QQ") -> Type[Any]:
@@ -38,12 +37,11 @@ def make_validator(alpha2: Optional[str] = "QQ") -> Type[Any]:
 
 class TestBuiltinTable(TestCase):
     def test_table_matches_the_country_modules(self) -> None:
-        stems = {path.stem for path in NATIONALID_DIR.glob("[A-Z][A-Z][A-Z].py")}
-        self.assertEqual(len(stems), COUNTRY_COUNT)
-        self.assertEqual(stems, set(registry._BUILTIN))
+        self.assertEqual(static_country_modules(), set(registry._BUILTIN))
+        self.assertGreaterEqual(COUNTRY_COUNT, MIN_COUNTRIES)
 
     def test_every_entry_agrees_with_its_module(self) -> None:
-        id_type_total = 0
+        class_keys = []
         names = []
         for alpha3 in sorted(registry._BUILTIN):
             with self.subTest(alpha3=alpha3):
@@ -63,9 +61,11 @@ class TestBuiltinTable(TestCase):
                     self.assertEqual(id_type.METADATA.iso3166_alpha2, alpha2)
                 self.assertTrue(entry.name)
                 names.append(entry.name)
-                id_type_total += len(entry.id_types)
+                class_keys.extend(id_type.__module__ + "." + id_type.__qualname__ for id_type in entry.id_types)
         self.assertEqual(len(names), len(set(names)))
-        self.assertEqual(id_type_total, ID_TYPE_COUNT)
+        self.assertEqual(len(class_keys), len(set(class_keys)), "an ID class is listed by two countries")
+        self.assertEqual(set(class_keys), registered_id_classes())
+        self.assertGreaterEqual(len(class_keys), MIN_ID_TYPES)
 
     def test_primary_types_are_unchanged(self) -> None:
         aus = registry.get_country("AUS")

@@ -13,6 +13,7 @@ from idnumbers import FailureReason as R, api, failure_reason, parse_id_info, va
 from idnumbers.nationalid import AUS, BEL, BGR, CHL, ITA, LKA, TWN
 from idnumbers.nationalid import util
 from tests.helpers.failure_reasons import iter_reason_matrix
+from tests.helpers.inventory import registered_id_classes
 from tests.helpers.contract import CHECK_CHARACTER_INDEX, check_character_mutations, iter_id_classes
 from tests.test_api import isolated_registry
 
@@ -33,7 +34,8 @@ def rejecting(pattern=r"(?P<checksum>\d)", checksum=None, validator=None):
 class TestReasonMatrix(TestCase):
     def test_all_classes(self):
         rows = list(iter_reason_matrix())
-        self.assertEqual(len(rows), 113)
+        self.assertEqual(len(rows), len(registered_id_classes()))
+        self.assertEqual({row.key for row in rows}, registered_id_classes())
         for row in rows:
             self.assertTrue(row.checksum_note)
             self.assertTrue(row.birthdate_note)
