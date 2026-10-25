@@ -59,7 +59,8 @@ class TestReasonMatrix(TestCase):
     def test_checksum_witnesses_change_only_check_character(self):
         counts = {R.CHECKSUM_MISMATCH: 0, R.VALIDATION_FAILED: 0}
         witnesses = 0
-        for row in iter_reason_matrix():
+        rows = list(iter_reason_matrix())
+        for row in rows:
             if row.checksum is None:
                 continue
             with self.subTest(cls=row.key):
@@ -73,6 +74,11 @@ class TestReasonMatrix(TestCase):
                 witnesses += 1
         self.assertGreater(witnesses, 0)
         self.assertEqual(counts, {R.CHECKSUM_MISMATCH: witnesses, R.VALIDATION_FAILED: 0})
+        # A dropped checksum witness fails here by class name, even when the guides are regenerated in the same change.
+        self.assertSetEqual(
+            {row.key for row in rows if row.checksum is not None},
+            {row.key for row in rows if row.id_class.METADATA.checksum},
+        )
 
     def test_all_date_migrations_have_witnesses(self):
         rows = list(iter_reason_matrix())
