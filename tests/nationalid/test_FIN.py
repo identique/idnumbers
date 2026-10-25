@@ -8,11 +8,31 @@ class TestKORValidation(TestCase):
     def test_normal_case(self):
         self.assertTrue(FIN.PersonalIdentityCode.validate("131052-308T"))
         self.assertTrue(FIN.PersonalIdentityCode.validate("240147-632T"))
-        self.assertTrue(FIN.PersonalIdentityCode.validate("280378-999U"))
 
     def test_error_case(self):
         self.assertFalse(FIN.PersonalIdentityCode.validate("131052-308t"))
         self.assertFalse(FIN.PersonalIdentityCode.validate("131052-308A"))
+
+    def test_individual_number_range(self):
+        # DVV issues individual numbers 002-899; 000 and 001 are not issued and 900-999 are temporary codes.
+        for value in ("131052-002X", "131052-003Y", "131052-898U", "131052-899V", "010100A002H", "010100A899E"):
+            with self.subTest(value=value):
+                self.assertTrue(FIN.PersonalIdentityCode.validate(value))
+        for value in (
+            "131052-000V",
+            "131052-001W",
+            "131052-900W",
+            "131052-901X",
+            "131052-9993",
+            "280378-999U",
+            "010100A000E",
+            "010100A999N",
+        ):
+            with self.subTest(value=value):
+                # The check character is correct; only the individual number is out of range.
+                self.assertTrue(FIN.PersonalIdentityCode.checksum(value))
+                self.assertFalse(FIN.PersonalIdentityCode.validate(value))
+                self.assertIsNone(FIN.PersonalIdentityCode.parse(value))
 
     def test_parse(self):
         result = FIN.PersonalIdentityCode.parse("131052-308T")

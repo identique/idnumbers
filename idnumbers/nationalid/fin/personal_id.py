@@ -60,6 +60,20 @@ class PersonalIdentityCode:
     """
     Finland personal identity code, HETU
     https://en.wikipedia.org/wiki/National_identification_number#Finland
+
+    The individual number (``SSS``) must be between 002 and 899. Government Decree 128/2010 § 2 defines it only as a
+    three-digit number, odd for men and even for women, but DVV (the Digital and Population Data Services Agency) says
+    that in practice all individual numbers issued are between 002 and 899. Numbers 900-999 are temporary codes, used
+    for example in hospitals when a person's personal identity code is not known yet; DVV does not issue them and they
+    are not recorded in the Population Information System. python-stdnum rejects the same numbers by default.
+
+    Sources:
+
+    - DVV, Personal identity code: https://dvv.fi/en/personal-identity-code
+    - Government Decree on the Population Information System 128/2010, § 2:
+      https://www.finlex.fi/fi/lainsaadanto/2010/128
+    - Finnish Wikipedia, Henkilötunnus (temporary codes; not official):
+      https://fi.wikipedia.org/wiki/Henkil%C3%B6tunnus
     """
 
     METADATA = IdMetadata(
@@ -77,7 +91,11 @@ class PersonalIdentityCode:
             ),
             "alias_of": None,
             "names": ["personal identity code", "HETU"],
-            "links": ["https://en.wikipedia.org/wiki/National_identification_number#Finland"],
+            "links": [
+                "https://en.wikipedia.org/wiki/National_identification_number#Finland",
+                "https://dvv.fi/en/personal-identity-code",
+                "https://www.finlex.fi/fi/lainsaadanto/2010/128",
+            ],
             "deprecated": False,
             "country_name": "Finland",
             "id_type": "Personal Identity Code",
@@ -110,6 +128,9 @@ class PersonalIdentityCode:
     CHECKSUM_LIST = list(get_args(CHECKSUM_TYPE))
     """ possible checksum characteres """
 
+    ISSUED_SN_RANGE = range(2, 900)
+    """individual numbers DVV issues: 000 and 001 are not issued, and 900-999 are temporary codes"""
+
     @staticmethod
     def validate(id_number: str) -> bool:
         """
@@ -132,6 +153,8 @@ class PersonalIdentityCode:
         dd = int(match_obj.group("dd"))
         century = match_obj.group("century")
         sn = match_obj.group("sn")
+        if int(sn) not in PersonalIdentityCode.ISSUED_SN_RANGE:
+            return None
         yyyy_base = PersonalIdentityCode.DOB_BASE_MAP[century]
         try:
             calendar_date = _calendar_date(yyyy_base + yy, mm, dd)
