@@ -125,7 +125,7 @@ class TestEveryIDTypeRejectsMalformedInput(TestCase):
         names = [name for name, _ in _discover_id_types()]
         self.assertEqual(len(names), len(set(names)), "an ID type is discovered twice")
         # The expected set is read from the source tree, so an ID type that is lost or extra is named here.
-        self.assertEqual(set(names), static_id_classes())
+        self.assertSetEqual(set(names), static_id_classes())
         self.assertGreaterEqual(len(names), MIN_ID_TYPES)
         self.assertIn("idnumbers.nationalid.chn.resident_id.ResidentID", names)
         self.assertIn("idnumbers.nationalid.yugoslavia.UniqueMasterCitizenNumber", names)

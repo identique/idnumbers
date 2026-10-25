@@ -33,9 +33,9 @@ class TestGeneratedDocumentation(TestCase):
         classes = [cls for entry in entries for cls in entry.id_types]
         before = [dict(vars(cls.METADATA)) for cls in classes]
         pages = country_pages()
-        self.assertEqual({entry.alpha3 for entry in entries}, static_country_modules())
-        self.assertEqual({cls.__module__ + "." + cls.__qualname__ for cls in classes}, registered_id_classes())
-        self.assertEqual(set(pages), {f"{alpha3}.md" for alpha3 in static_country_modules()} | {"README.md"})
+        self.assertSetEqual({entry.alpha3 for entry in entries}, static_country_modules())
+        self.assertSetEqual({cls.__module__ + "." + cls.__qualname__ for cls in classes}, registered_id_classes())
+        self.assertSetEqual(set(pages), {f"{alpha3}.md" for alpha3 in static_country_modules()} | {"README.md"})
         self.assertEqual(pages, country_pages())
         self.assertEqual(sum(len(python_blocks(source)) for source in pages.values()), len(classes))
         self.assertEqual(before, [dict(vars(cls.METADATA)) for cls in classes])
@@ -54,7 +54,7 @@ class TestGeneratedDocumentation(TestCase):
     def test_frozen_guide_coverage(self) -> None:
         guide = failure_guide()
         vectors = json.loads((ROOT / "tests/helpers/failure_reason_vectors.json").read_text())
-        self.assertEqual(set(vectors), registered_id_classes())
+        self.assertSetEqual(set(vectors), registered_id_classes())
         # the header counts are derived from the frozen vectors, so adding a class needs no edit here
         checksums = sum(1 for row in vectors.values() if row["checksum"] is not None)
         dates = sum(1 for row in vectors.values() if row["birthdate"] is not None)

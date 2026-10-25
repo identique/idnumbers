@@ -37,7 +37,7 @@ def make_validator(alpha2: Optional[str] = "QQ") -> Type[Any]:
 
 class TestBuiltinTable(TestCase):
     def test_table_matches_the_country_modules(self) -> None:
-        self.assertEqual(static_country_modules(), set(registry._BUILTIN))
+        self.assertSetEqual(static_country_modules(), set(registry._BUILTIN))
         self.assertGreaterEqual(COUNTRY_COUNT, MIN_COUNTRIES)
 
     def test_every_entry_agrees_with_its_module(self) -> None:
@@ -64,7 +64,7 @@ class TestBuiltinTable(TestCase):
                 class_keys.extend(id_type.__module__ + "." + id_type.__qualname__ for id_type in entry.id_types)
         self.assertEqual(len(names), len(set(names)))
         self.assertEqual(len(class_keys), len(set(class_keys)), "an ID class is listed by two countries")
-        self.assertEqual(set(class_keys), registered_id_classes())
+        self.assertSetEqual(set(class_keys), registered_id_classes())
         self.assertGreaterEqual(len(class_keys), MIN_ID_TYPES)
 
     def test_primary_types_are_unchanged(self) -> None:

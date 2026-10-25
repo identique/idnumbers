@@ -154,7 +154,7 @@ class TestMetadataType(TestCase):
         self.assertEqual(len(set(classes)), len(classes), "id_classes() lists a class twice")
         self.assertEqual(len(set(keys)), len(keys), "id_classes() lists a class twice")
         # The expected set is read from the source tree, so a class that is lost or extra is named here.
-        self.assertEqual(set(keys), registered_id_classes())
+        self.assertSetEqual(set(keys), registered_id_classes())
         self.assertGreaterEqual(len(keys), MIN_ID_TYPES)
 
     def test_every_metadata_is_an_id_metadata(self) -> None:
