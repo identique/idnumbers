@@ -8,6 +8,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Validity changes
 
+- **FIN** ([#639](https://github.com/identique/idnumbers/issues/639)): `PersonalIdentityCode.validate()` rejects the
+  individual numbers 000, 001 and 900-999, and `parse()` returns `None` for them. DVV, the issuing agency, says that
+  all individual numbers issued are between 002 and 899; 900-999 are temporary codes that are not recorded in the
+  Population Information System. The check character is unchanged.
 - **ISL** ([#638](https://github.com/identique/idnumbers/issues/638)): `IcelandicID.validate()` no longer checks the
   ninth digit. Since 18 February 2026, Registers Iceland (Þjóðskrá) issues every kennitala without a calculated check
   digit, and a kennitala carries no issue date, so new numbers can't be told apart from older ones. The six test

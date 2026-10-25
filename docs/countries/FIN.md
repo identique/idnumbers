@@ -22,7 +22,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | example | <code>131052-308T</code> |
 | id_type | <code>Personal Identity Code</code> |
 | iso3166_alpha2 | <code>FI</code> |
-| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Finland&#x27;]</code> |
+| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#Finland&#x27;, &#x27;https://dvv.fi/en/personal-identity-code&#x27;, &#x27;https://www.finlex.fi/fi/lainsaadanto/2010/128&#x27;]</code> |
 | masks | <code>(&#x27;######*###X&#x27;,)</code> |
 | max_length | <code>11</code> |
 | min_length | <code>11</code> |
@@ -34,6 +34,8 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 Reference links recorded by this implementation (source quality varies):
 
 - <https://en.wikipedia.org/wiki/National_identification_number#Finland>
+- <https://dvv.fi/en/personal-identity-code>
+- <https://www.finlex.fi/fi/lainsaadanto/2010/128>
 
 ```python
 from idnumbers.nationalid.fin.personal_id import PersonalIdentityCode
