@@ -6,6 +6,17 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ## Unreleased
 
+### Validity changes
+
+- **ISL** ([#638](https://github.com/identique/idnumbers/issues/638)): `IcelandicID.validate()` no longer checks the
+  ninth digit. Since 18 February 2026, Registers Iceland (Þjóðskrá) issues every kennitala without a calculated check
+  digit, and a kennitala carries no issue date, so new numbers can't be told apart from older ones. The six test
+  kennitölur that Þjóðskrá published for the change now validate, and so do numbers whose pre-2026 check digit was 1
+  (remainder 10), which were rejected before. Century digit 8 (1800-1899) is accepted. **Breaking:**
+  `METADATA.checksum` is `False`, and `IcelandicID.checksum()`, `IcelandicID.WEIGHTS` and the module's `normalize()`
+  are removed, so calling `checksum()` raises `AttributeError`. `parse()` still returns the ninth digit as `checksum`,
+  unverified.
+
 ### Documentation
 
 - **Contributor guide** ([#640](https://github.com/identique/idnumbers/issues/640)): the tests compare the ID classes
