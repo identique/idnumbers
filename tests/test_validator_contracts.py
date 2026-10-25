@@ -7,7 +7,7 @@ Valid-example, mask and in-range length checks remain in test_metadata.py.
 This module checks regexp agreement using that suite's existing compact-layout helper.
 """
 
-from typing import Any, Callable, Type
+from typing import Any, Callable, Dict, Set, Tuple, Type
 from unittest import TestCase
 
 from tests.helpers.hypothesis_setup import given, settings, strategies as st
@@ -16,11 +16,22 @@ from tests.helpers.checksum_limits import SINGLE_DIGIT_CHANGE_UNDETECTED
 from tests.helpers.contract import (
     CHECK_CHARACTER_INDEX,
     check_character_mutations,
+    example_layouts,
     iter_id_classes,
     length_out_of_range_variants,
     single_digit_mutations,
 )
+from tests.helpers.failure_reasons import iter_reason_matrix
 from tests.test_metadata import class_key, compact
+
+
+def frozen_witnesses() -> Dict[str, Tuple[str, ...]]:
+    """The frozen failure-reason inputs (length, format, checksum and birth-date) of each class, by class key."""
+    witnesses: Dict[str, Tuple[str, ...]] = {}
+    for row in iter_reason_matrix():
+        vectors = (*row.length, row.format, row.checksum, row.birthdate)
+        witnesses[row.key] = tuple(vector.id_number for vector in vectors if vector is not None)
+    return witnesses
 
 
 class TestValidatorContracts(TestCase):
@@ -53,15 +64,21 @@ class TestValidatorContracts(TestCase):
                         self.assertIs(cls.validate(value), False)
 
     def test_parse_rejects_what_validate_rejects(self) -> None:
+        # Mutations of the example only reach rules that a changed digit breaks (such as a check digit). The frozen
+        # witnesses add the inputs that break a single rule on purpose (such as an impossible birth date with a
+        # repaired check digit), and the other mask layouts and their mutations add the separator forms.
+        witnesses = frozen_witnesses()
         for entry, cls in iter_id_classes():
             if not cls.METADATA.parsable:
                 continue
-            values = set(single_digit_mutations(cls.METADATA.example))
-            if cls.METADATA.checksum:
-                values.update(
-                    check_character_mutations(cls.METADATA.example, CHECK_CHARACTER_INDEX.get(class_key(cls), -1))
-                )
-            with self.subTest(country=entry.alpha3, cls=class_key(cls)):
+            key = class_key(cls)
+            values: Set[str] = set(witnesses[key])
+            for sample in example_layouts(cls):
+                values.add(sample)
+                values.update(single_digit_mutations(sample))
+                if cls.METADATA.checksum:
+                    values.update(check_character_mutations(sample, CHECK_CHARACTER_INDEX.get(key, -1)))
+            with self.subTest(country=entry.alpha3, cls=key):
                 parsed_but_invalid = sorted(
                     value for value in values if not cls.validate(value) and cls.parse(value) is not None
                 )
