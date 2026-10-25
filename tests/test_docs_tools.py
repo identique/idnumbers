@@ -14,7 +14,16 @@ from unittest.mock import patch
 from idnumbers.registry import list_supported_countries
 from tests.helpers.inventory import registered_id_classes, static_country_modules
 from tools.check_docs_examples import ROOT, Example, discover, execute, python_blocks, typecheck
-from tools.generate_docs import MARKER, cell, country_pages, failure_guide, generate, input_guide, write_files
+from tools.generate_docs import (
+    MARKER,
+    cell,
+    country_pages,
+    english_list,
+    failure_guide,
+    generate,
+    input_guide,
+    write_files,
+)
 from tools.scan_ids import collect_ids
 
 
@@ -64,6 +73,13 @@ class TestGeneratedDocumentation(TestCase):
         self.assertEqual(guide, failure_guide())
         self.assertEqual(input_guide(), input_guide())
         self.assertIn("CHE, CHL, KOR and USA", input_guide())
+        self.assertIn(f"all {len(list_supported_countries())} formatted examples validate", input_guide())
+
+    def test_english_list(self) -> None:
+        self.assertEqual(english_list([]), "")
+        self.assertEqual(english_list(["CHE"]), "CHE")
+        self.assertEqual(english_list(["CHE", "CHL"]), "CHE and CHL")
+        self.assertEqual(english_list(["CHE", "CHL", "KOR", "USA"]), "CHE, CHL, KOR and USA")
 
     def test_check_missing_changed_stale_and_user_files(self) -> None:
         with TemporaryDirectory() as directory:
