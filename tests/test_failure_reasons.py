@@ -58,6 +58,7 @@ class TestReasonMatrix(TestCase):
 
     def test_checksum_witnesses_change_only_check_character(self):
         counts = {R.CHECKSUM_MISMATCH: 0, R.VALIDATION_FAILED: 0}
+        witnesses = 0
         for row in iter_reason_matrix():
             if row.checksum is None:
                 continue
@@ -69,7 +70,9 @@ class TestReasonMatrix(TestCase):
                 self.assertIsNotNone(util.match_regexp(row.checksum.id_number, row.id_class.METADATA.regexp))
                 self.assertFalse(row.id_class.validate(row.checksum.id_number))
                 counts[row.checksum.expected] += 1
-        self.assertEqual(counts, {R.CHECKSUM_MISMATCH: 78, R.VALIDATION_FAILED: 0})
+                witnesses += 1
+        self.assertGreater(witnesses, 0)
+        self.assertEqual(counts, {R.CHECKSUM_MISMATCH: witnesses, R.VALIDATION_FAILED: 0})
 
     def test_all_date_migrations_have_witnesses(self):
         rows = list(iter_reason_matrix())

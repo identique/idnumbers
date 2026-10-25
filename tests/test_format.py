@@ -13,6 +13,7 @@ from unittest.mock import patch
 from idnumbers import InputMask, format_id, get_input_mask, normalize_id, register
 from idnumbers import list_supported_countries
 from idnumbers.nationalid import AUT, CHE, GRC, ITA, SMR, SWE
+from tests.helpers.inventory import static_country_modules
 from tests.test_api import isolated_registry
 from tests.test_metadata import MASK_SAMPLES, class_key, compact, fits, layout
 
@@ -20,7 +21,7 @@ from tests.test_metadata import MASK_SAMPLES, class_key, compact, fits, layout
 class TestPrimaryFormats(TestCase):
     def test_all_primary_examples_and_accepted_mask_variants(self):
         entries = list_supported_countries()
-        self.assertEqual(len(entries), 85)
+        self.assertEqual({entry.alpha3 for entry in entries}, static_country_modules())
         for entry in entries:
             cls = entry.national_id
             metadata = cls.METADATA
