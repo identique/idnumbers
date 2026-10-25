@@ -36,8 +36,6 @@ SINGLE_DIGIT_CHANGE_UNDETECTED: Dict[str, Tuple[str, ...]] = {
     "idnumbers.nationalid.deu.tax_number.TaxNumber": ("3198081508152", "4198081508152"),
     # personal_id.py: checksum retries mod 11 with different weights
     "idnumbers.nationalid.est.personal_id.PersonalID": ("47605030299",),
-    # icelandic_id.py: checksum excludes the century digit (numbers[0:-2])
-    "idnumbers.nationalid.isl.icelandic_id.IcelandicID": ("120174-3390",),
     # business_id.py: weight 11 is zero mod 11; retry uses shifted weights
     "idnumbers.nationalid.kaz.business_id.BusinessIDNumber": (
         "800140000003",

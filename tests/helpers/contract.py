@@ -15,8 +15,6 @@ from tests.test_metadata import MASK_SAMPLES, class_key, compact, fits, layout
 CHECK_CHARACTER_INDEX: Dict[str, int] = {
     # MedicareNumber.validate compares normalized[8], before the issue digit.
     "idnumbers.nationalid.aus.medicare.MedicareNumber": 8,
-    # IcelandicID.checksum compares numbers[-2], before the century digit.
-    "idnumbers.nationalid.isl.icelandic_id.IcelandicID": -2,
     # OldNationalID.to_new omits the citizenship letter after the check digit.
     "idnumbers.nationalid.lka.old_national_id.OldNationalID": -2,
     # NationalID.get_checksum excludes the two district digits (also for 12-character IDs).
