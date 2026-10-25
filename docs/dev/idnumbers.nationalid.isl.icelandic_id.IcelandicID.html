@@ -212,16 +212,6 @@
         
 
         
-            <div class="itemName"><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.checksum">checksum</a></code>
-            </div>
-        
-
-    </li><li class="">
-        
-        
-        
-
-        
             <div class="itemName"><code><a href="#parse" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.parse">parse</a></code>
             </div>
         
@@ -251,7 +241,7 @@
         
 
         
-            <div class="itemName"><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.METADATA">METADATA</a></code>
+            <div class="itemName"><code><a href="#CENTURY_MAP" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.CENTURY_MAP">CENTURY<wbr></wbr>_MAP</a></code>
             </div>
         
 
@@ -261,7 +251,7 @@
         
 
         
-            <div class="itemName"><code><a href="#WEIGHTS" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.WEIGHTS">WEIGHTS</a></code>
+            <div class="itemName"><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.METADATA">METADATA</a></code>
             </div>
         
 
@@ -311,21 +301,8 @@
     </li>
 </ul>
 
-        <div class="childrenKindTitle">Functions</div>
-        <ul>
-    
-    <li class="">
         
-        
-        
-
-        
-            <div class="itemName"><code><a href="idnumbers.nationalid.isl.icelandic_id.html#normalize" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.normalize">normalize</a></code>
-            </div>
-        
-
-    </li>
-</ul> 
+         
 
         
          
@@ -373,6 +350,27 @@
         <div class="moduleDocstring">
           <div><p>Iceland Icelandic identification number, kennitala
 <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Icelandic_identification_number" target="_top">https://en.wikipedia.org/wiki/Icelandic_identification_number</a></p>
+<p>The number has 10 digits, <tt class="rst-docutils literal"><span class="pre">DDMMYY-SSKC</span></tt>: the date of birth, two serial digits, a ninth digit and the century
+digit. Þjóðskrá (Registers Iceland) says the last digit is 8, 9 or 0 and gives the century of birth, so <tt class="rst-docutils literal">C</tt> is 8
+for 1800-1899, 9 for 1900-1999 and 0 for 2000-2099.</p>
+<p>The ninth digit is not checked. Since 18 February 2026, Þjóðskrá issues every kennitala, both those of individuals
+registered in Þjóðskrá and system kennitölur, without a calculated check digit (<em>vartala</em>), and it asks systems to
+remove the check-digit test. The number carries no issue date, so a kennitala issued before that date, whose ninth
+digit is a mod-11 check digit, cannot be told apart from a new one. <tt class="rst-docutils literal">METADATA.checksum</tt> is <tt class="rst-docutils literal">False</tt> and there is
+no <tt class="rst-docutils literal">checksum()</tt> method. Þjóðskrá's six synthetic test kennitölur without a check digit, such as <tt class="rst-docutils literal"><span class="pre">281191-3049</span></tt>,
+validate.</p>
+<p><tt class="rst-docutils literal">validate()</tt> checks the 10 ASCII digits (with an optional hyphen after the date), the century digit and that
+the date of birth is a real calendar date. Kennitölur of legal entities (day of registration + 40) are not
+supported.</p>
+<p>Sources:</p>
+<ul class="rst-simple">
+<li>Þjóðskrá, Um kennitölur (layout, century digit, the pre-2026 check digit and the 2026 change):
+<a class="rst-reference rst-external" href="https://www.skra.is/folk/eg-i-thjodskra/um-kennitolur/" target="_top">https://www.skra.is/folk/eg-i-thjodskra/um-kennitolur/</a></li>
+<li>Þjóðskrá, Allar kennitölur án vartölu (14 May 2025):
+<a class="rst-reference rst-external" href="https://www.skra.is/um-okkur/frettir/frett/2025/05/14/Kennitolur-an-vartolu/" target="_top">https://www.skra.is/um-okkur/frettir/frett/2025/05/14/Kennitolur-an-vartolu/</a></li>
+<li>Þjóðskrá, Gervigögn Þjóðskrár (test kennitölur without a check digit):
+<a class="rst-reference rst-external" href="https://www.skra.is/gogn/gervigogn-thjodskrar/" target="_top">https://www.skra.is/gogn/gervigogn-thjodskrar/</a></li>
+</ul>
 </div>
         </div>
 
@@ -381,11 +379,6 @@
   
   
   <tr class="staticmethod">
-    
-    <td>Static Method</td>
-    <td><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.checksum">checksum</a></code></td>
-    <td>check the checksum <a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Icelandic_identification_number" target="_top">https://en.wikipedia.org/wiki/Icelandic_identification_number</a> ref: <a class="rst-reference rst-external" href="https://github.com/aldavigdis/kennitala-gem/blob/main/lib/kennitala.rb#L295" target="_top">https://github.com/aldavigdis/kennitala-gem/blob/main/lib/kennitala.rb#L295</a> for the 10</td>
-  </tr><tr class="staticmethod">
     
     <td>Static Method</td>
     <td><code><a href="#parse" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.parse">parse</a></code></td>
@@ -398,12 +391,12 @@
   </tr><tr class="constant">
     
     <td>Constant</td>
-    <td><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.METADATA">METADATA</a></code></td>
-    <td><span class="undocumented">Undocumented</span></td>
+    <td><code><a href="#CENTURY_MAP" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.CENTURY_MAP">CENTURY<wbr></wbr>_MAP</a></code></td>
+    <td>the first year of the century of birth, by the last digit</td>
   </tr><tr class="constant">
     
     <td>Constant</td>
-    <td><code><a href="#WEIGHTS" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.WEIGHTS">WEIGHTS</a></code></td>
+    <td><code><a href="#METADATA" class="internal-link" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.METADATA">METADATA</a></code></td>
     <td><span class="undocumented">Undocumented</span></td>
   </tr>
 </table>
@@ -414,32 +407,6 @@
 
         <div id="childList">
           <div class="basestaticmethod">
-  
-  
-  <a name="idnumbers.nationalid.isl.icelandic_id.IcelandicID.checksum">
-    
-  </a>
-  <a name="checksum">
-    
-  </a>
-  <div class="functionHeader">
-    @staticmethod<br />
-    <span class="py-keyword">def</span> <span class="py-defname">checksum</span>(id_number):
-    
-    <a class="headerLink" href="#checksum" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.checksum">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="docstring functionBody">
-    
-    <div><p>check the checksum
-<a class="rst-reference rst-external" href="https://en.wikipedia.org/wiki/Icelandic_identification_number" target="_top">https://en.wikipedia.org/wiki/Icelandic_identification_number</a>
-ref: <a class="rst-reference rst-external" href="https://github.com/aldavigdis/kennitala-gem/blob/main/lib/kennitala.rb#L295" target="_top">https://github.com/aldavigdis/kennitala-gem/blob/main/lib/kennitala.rb#L295</a> for the 10</p>
-<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>bool</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
-  </div>
-</div><div class="basestaticmethod">
   
   
   <a name="idnumbers.nationalid.isl.icelandic_id.IcelandicID.parse">
@@ -490,6 +457,31 @@ ref: <a class="rst-reference rst-external" href="https://github.com/aldavigdis/k
 </div><div class="baseconstant">
   
   
+  <a name="idnumbers.nationalid.isl.icelandic_id.IcelandicID.CENTURY_MAP">
+    
+  </a>
+  <a name="CENTURY_MAP">
+    
+  </a>
+  <div class="functionHeader">
+    
+    <span class="py-defname">CENTURY_MAP</span>: <code>dict[<wbr></wbr>str, <wbr></wbr>int]</code> =
+    
+    <a class="headerLink" href="#CENTURY_MAP" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.CENTURY_MAP">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="functionBody">
+    
+    <div><p>the first year of the century of birth, by the last digit</p>
+</div>
+    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>{<wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">8</span><span class="rst-variable-quote">'</span>: 1800, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">9</span><span class="rst-variable-quote">'</span>: 1900, <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">0</span><span class="rst-variable-quote">'</span>: 2000}</code></pre></td></tr></table>
+  </div>
+</div><div class="baseconstant">
+  
+  
   <a name="idnumbers.nationalid.isl.icelandic_id.IcelandicID.METADATA">
     
   </a>
@@ -513,34 +505,10 @@ ref: <a class="rst-reference rst-external" href="https://github.com/aldavigdis/k
               <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">min_length</span><span class="rst-variable-quote">'</span>: 10,
               <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">max_length</span><span class="rst-variable-quote">'</span>: 10,
               <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">parsable</span><span class="rst-variable-quote">'</span>: True,
-              <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">checksum</span><span class="rst-variable-quote">'</span>: True,
+              <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">checksum</span><span class="rst-variable-quote">'</span>: False,
               <wbr></wbr><span class="rst-variable-quote">'</span><span class="rst-variable-string">regexp</span><span class="rst-variable-quote">'</span>: re.compile(r<span class="rst-variable-quote">'</span>^<span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">dd</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">mm</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">yy</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span>-<span class="rst-re-op">?</span><span class="rst-re-group">(</span><span class="rst-variable-linewrap">↵</span>
 <span class="rst-re-group">?P&lt;</span><span class="rst-re-ref">sn</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-op">{2}</span><span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">checksum</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-group">)</span><span class="rst-re-group">(?P&lt;</span><span class="rst-re-ref">century</span><span class="rst-re-group">&gt;</span>\d<span class="rst-re-group">)</span>$<span class="rst-variable-quote">'</span>),
 <span class="rst-variable-ellipsis">...</span></code></pre></td></tr></table>
-  </div>
-</div><div class="baseconstant">
-  
-  
-  <a name="idnumbers.nationalid.isl.icelandic_id.IcelandicID.WEIGHTS">
-    
-  </a>
-  <a name="WEIGHTS">
-    
-  </a>
-  <div class="functionHeader">
-    
-    <span class="py-defname">WEIGHTS</span>: <code>list[<wbr></wbr>int]</code> =
-    
-    <a class="headerLink" href="#WEIGHTS" title="idnumbers.nationalid.isl.icelandic_id.IcelandicID.WEIGHTS">
-      
-      
-      ¶
-    </a>
-  </div>
-  <div class="functionBody">
-    
-    <div><p class="undocumented">Undocumented</p></div>
-    <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr>3, <wbr></wbr>2, <wbr></wbr>7, <wbr></wbr>6, <wbr></wbr>5, <wbr></wbr>4, <wbr></wbr>3, <wbr></wbr>2]</code></pre></td></tr></table>
   </div>
 </div>
         </div>
@@ -554,7 +522,7 @@ ref: <a class="rst-reference rst-external" href="https://github.com/aldavigdis/k
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-10-25 07:54:36.
+    22.9.1 at 2026-10-25 12:57:34.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
