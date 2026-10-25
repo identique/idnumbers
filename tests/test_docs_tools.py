@@ -12,8 +12,18 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from idnumbers.registry import list_supported_countries
+from tests.helpers.inventory import registered_id_classes, static_country_modules
 from tools.check_docs_examples import ROOT, Example, discover, execute, python_blocks, typecheck
-from tools.generate_docs import MARKER, cell, country_pages, failure_guide, generate, input_guide, write_files
+from tools.generate_docs import (
+    MARKER,
+    cell,
+    country_pages,
+    english_list,
+    failure_guide,
+    generate,
+    input_guide,
+    write_files,
+)
 from tools.scan_ids import collect_ids
 
 
@@ -23,11 +33,11 @@ class TestGeneratedDocumentation(TestCase):
         classes = [cls for entry in entries for cls in entry.id_types]
         before = [dict(vars(cls.METADATA)) for cls in classes]
         pages = country_pages()
-        self.assertEqual(len(entries), 85)
-        self.assertEqual(len(classes), 113)
-        self.assertEqual(len(pages), 86)
+        self.assertSetEqual({entry.alpha3 for entry in entries}, static_country_modules())
+        self.assertSetEqual({cls.__module__ + "." + cls.__qualname__ for cls in classes}, registered_id_classes())
+        self.assertSetEqual(set(pages), {f"{alpha3}.md" for alpha3 in static_country_modules()} | {"README.md"})
         self.assertEqual(pages, country_pages())
-        self.assertEqual(sum(len(python_blocks(source)) for source in pages.values()), 113)
+        self.assertEqual(sum(len(python_blocks(source)) for source in pages.values()), len(classes))
         self.assertEqual(before, [dict(vars(cls.METADATA)) for cls in classes])
         for entry in entries:
             for cls in entry.id_types:
@@ -44,7 +54,7 @@ class TestGeneratedDocumentation(TestCase):
     def test_frozen_guide_coverage(self) -> None:
         guide = failure_guide()
         vectors = json.loads((ROOT / "tests/helpers/failure_reason_vectors.json").read_text())
-        self.assertEqual(len(vectors), 113)
+        self.assertSetEqual(set(vectors), registered_id_classes())
         # the header counts are derived from the frozen vectors, so adding a class needs no edit here
         checksums = sum(1 for row in vectors.values() if row["checksum"] is not None)
         dates = sum(1 for row in vectors.values() if row["birthdate"] is not None)
@@ -63,6 +73,13 @@ class TestGeneratedDocumentation(TestCase):
         self.assertEqual(guide, failure_guide())
         self.assertEqual(input_guide(), input_guide())
         self.assertIn("CHE, CHL, KOR and USA", input_guide())
+        self.assertIn(f"all {len(list_supported_countries())} formatted examples validate", input_guide())
+
+    def test_english_list(self) -> None:
+        self.assertEqual(english_list([]), "")
+        self.assertEqual(english_list(["CHE"]), "CHE")
+        self.assertEqual(english_list(["CHE", "CHL"]), "CHE and CHL")
+        self.assertEqual(english_list(["CHE", "CHL", "KOR", "USA"]), "CHE, CHL, KOR and USA")
 
     def test_check_missing_changed_stale_and_user_files(self) -> None:
         with TemporaryDirectory() as directory:
@@ -107,7 +124,7 @@ class TestGeneratedDocumentation(TestCase):
             )
             self.assertEqual(direct.read_bytes(), cli.read_bytes())
             rows = json.loads(direct.read_text())
-            self.assertEqual(sum(len(row["ids"]) for row in rows), 113)
+            self.assertEqual(sum(len(row["ids"]) for row in rows), len(registered_id_classes()))
             for row in rows:
                 for item in row["ids"]:
                     self.assertIsInstance(item["metadata"]["regexp"], str)
@@ -175,8 +192,10 @@ sys.meta_path.insert(0, NoTests())
                 + """from tools.scan_ids import collect_ids
 collect_ids('idnumbers.nationalid', 'direct.json')
 from tools.generate_docs import country_pages, input_guide
-assert len(country_pages()) == 86
-assert 'Input formats' in input_guide()
+"""
+                # the snippet cannot import the tests package, so the parent injects the expected page count
+                + f"assert len(country_pages()) == {len(static_country_modules()) + 1}\n"
+                + """assert 'Input formats' in input_guide()
 """
             )
             subprocess.run([sys.executable, "-c", direct], cwd=root, env=environment, check=True, capture_output=True)

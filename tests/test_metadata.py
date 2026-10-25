@@ -19,6 +19,7 @@ from idnumbers import list_supported_countries
 from idnumbers.nationalid import AUS, AUT, BGR, CHE, COL, CYP, FIN, HKG, IRL, IRN, SMR
 from idnumbers.nationalid.metadata import IdMetadata
 from idnumbers.registry import CountryEntry
+from tests.helpers.inventory import MIN_ID_TYPES, registered_id_classes
 
 OLD_KEYS = (
     "iso3166_alpha2",
@@ -149,11 +150,12 @@ def all_aliases() -> List[Type[Any]]:
 class TestMetadataType(TestCase):
     def test_the_id_classes_are_found(self) -> None:
         classes = [cls for _, cls in id_classes()]
-        # Independent pin: tests/test_registry.py has ID_TYPE_COUNT = 113;
-        # tests/test_validate_regexp.py pins 114 classes including the shared Yugoslav base.
-        expected = 113
-        self.assertEqual(len(classes), expected)
-        self.assertEqual(len(set(classes)), expected, "id_classes() lists a class twice")
+        keys = [class_key(cls) for cls in classes]
+        self.assertEqual(len(set(classes)), len(classes), "id_classes() lists a class twice")
+        self.assertEqual(len(set(keys)), len(keys), "id_classes() lists a class twice")
+        # The expected set is read from the source tree, so a class that is lost or extra is named here.
+        self.assertSetEqual(set(keys), registered_id_classes())
+        self.assertGreaterEqual(len(keys), MIN_ID_TYPES)
 
     def test_every_metadata_is_an_id_metadata(self) -> None:
         for entry, cls in id_classes():

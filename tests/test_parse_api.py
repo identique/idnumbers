@@ -9,6 +9,7 @@ import idnumbers
 from idnumbers import api, registry
 from idnumbers.nationalid import BEL, TWN
 from tests import test_api
+from tests.helpers.inventory import MIN_PARSABLE_PRIMARIES
 from tests.test_api import (
     NoneParser,
     RaisingParser,
@@ -57,7 +58,7 @@ class TestParseIdInfo(TestCase):
                 self.assertEqual(result.info, expected)
                 self.assertEqual(result.country_code, entry.alpha3)
                 self.assertEqual(result.id_number, example)
-        self.assertEqual(count, 49)
+        self.assertGreaterEqual(count, MIN_PARSABLE_PRIMARIES)
 
     def test_registered_aliases_and_single_parser_call(self) -> None:
         with isolated_registry():

@@ -2,7 +2,7 @@
 
 import html
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, Optional
+from typing import TYPE_CHECKING, Dict, Optional, Sequence
 
 from idnumbers import FailureReason, format_id, normalize_id
 from idnumbers.registry import list_supported_countries
@@ -168,7 +168,27 @@ def failure_guide() -> str:
     return "\n".join(lines) + "\n"
 
 
+def english_list(names: Sequence[str]) -> str:
+    """Join names for a sentence: ``A``, ``A and B`` or ``A, B and C``."""
+    if len(names) < 2:
+        return "".join(names)
+    return ", ".join(names[:-1]) + " and " + names[-1]
+
+
 def input_guide() -> str:
+    entries = sorted(list_supported_countries(), key=lambda entry: entry.alpha3)
+    table = []
+    rejected = []
+    for entry in entries:
+        cls = entry.national_id
+        value = cls.METADATA.example
+        variants = [value.lower(), " " + value + " ", normalize_id(entry.alpha3, value), format_id(entry.alpha3, value)]
+        outcomes = ["yes" if cls.validate(variant) else "no" for variant in variants]
+        if outcomes[2] == "no":
+            rejected.append(entry.alpha3)
+        table.append(
+            f"| [{entry.alpha3}](countries/{entry.alpha3}.md) | {cell(value)} | " + " | ".join(outcomes) + " |"
+        )
     lines = [
         MARKER,
         "# Input formats",
@@ -206,19 +226,12 @@ def input_guide() -> str:
         "",
         "Empirical only: one synthetic current METADATA example per country, plus its lowercase, surrounding",
         "space, normalized and formatted variants. This is **not** a complete country input policy.",
-        "CHE, CHL, KOR and USA reject their normalized example; all 85 formatted examples validate.",
+        f"{english_list(rejected)} reject their normalized example; all {len(entries)} formatted examples validate.",
         "",
         "| Country | Example | Lowercase | Surrounding spaces | Normalized | Formatted |",
         "| --- | --- | --- | --- | --- | --- |",
     ]
-    for entry in sorted(list_supported_countries(), key=lambda entry: entry.alpha3):
-        cls = entry.national_id
-        value = cls.METADATA.example
-        variants = [value.lower(), " " + value + " ", normalize_id(entry.alpha3, value), format_id(entry.alpha3, value)]
-        outcomes = ["yes" if cls.validate(variant) else "no" for variant in variants]
-        lines.append(
-            f"| [{entry.alpha3}](countries/{entry.alpha3}.md) | {cell(value)} | " + " | ".join(outcomes) + " |"
-        )
+    lines.extend(table)
     return "\n".join(lines) + "\n"
 
 

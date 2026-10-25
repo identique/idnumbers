@@ -4,6 +4,15 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Documentation
+
+- **Contributor guide** ([#640](https://github.com/identique/idnumbers/issues/640)): the tests compare the ID classes
+  and country modules with a static scan of the source tree instead of hard-coded count pins, so a lost or extra class
+  fails by name. Adding an ID type or a country needs no count edits. The input guide and the README derive or drop
+  their example counts. Library behavior is unchanged.
+
 ## 1.21.0 (2026-10-24)
 
 ### Validity changes

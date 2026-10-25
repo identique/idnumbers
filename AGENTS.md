@@ -135,8 +135,10 @@ working directories.
   - `yugoslavia.py`: the JMBG logic shared by BIH, MKD, MNE, SRB and SVN.
 - **Country registry:** `idnumbers/registry.py` maps every public country module to its alpha-3 code, alpha-2 code and
   CLDR English name, and `idnumbers` re-exports its functions. A new country module must be added to its `_BUILTIN`
-  table, and `COUNTRY_COUNT` and `ID_TYPE_COUNT` in `tests/test_registry.py` must be raised to match; the test fails
-  otherwise.
+  table. No test pins a count of countries or ID types: `tests/helpers/inventory.py` scans the source tree without
+  importing it, and the registry, discovery and docs-generator tests must find exactly what it lists, so a lost or
+  extra class fails by name. A new ID type needs its module, its tests, its re-export and a frozen entry in
+  `tests/helpers/failure_reason_vectors.json`, and no count edits.
 - **Unified API:** `idnumbers/api.py` has `validate()` / `validate_many()`, which use the registry's `NationalID`;
   `idnumbers` re-exports them.
 - **Input contract:** `validate()` never raises. It returns `False` for non-`str`, empty or malformed input, and
