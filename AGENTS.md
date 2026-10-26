@@ -140,9 +140,9 @@ working directories.
   or extra class fails by name. Two pins remain on purpose. The parity tests pin the vendored corpus's country count,
   which changes only when the corpus is refreshed. `test_all_date_migrations_have_witnesses` in
   `tests/test_failure_reasons.py` lists the countries with birth-date witnesses and counts their classes, so a new ID
-  type with a birth-date witness updates that list and count. A new ID type needs its module, its tests, its re-export,
-  a frozen entry in `tests/helpers/failure_reason_vectors.json` and regenerated guides (see `CONTRIBUTING.md`), and no
-  registry count edits.
+  type with a birth-date witness updates that count, and the list too when its country is new. A new ID type needs its
+  module, its tests, its re-export, a frozen entry in `tests/helpers/failure_reason_vectors.json` and regenerated guides
+  (see `CONTRIBUTING.md`), and no registry count edits.
 - **Unified API:** `idnumbers/api.py` has `validate()` / `validate_many()`, which use the registry's `NationalID`;
   `idnumbers` re-exports them.
 - **Input contract:** `validate()` never raises. It returns `False` for non-`str`, empty or malformed input, and
