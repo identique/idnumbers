@@ -95,6 +95,10 @@ class TestGeneratedDocumentation(TestCase):
             example_summary(3, ["CHE"], ["KOR", "USA"]),
             "CHE rejects its normalized example; KOR and USA reject their formatted example.",
         )
+        self.assertEqual(
+            example_summary(1, [], []),
+            "The one normalized example validates; the one formatted example validates.",
+        )
 
     def test_check_missing_changed_stale_and_user_files(self) -> None:
         with TemporaryDirectory() as directory:

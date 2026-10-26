@@ -177,6 +177,8 @@ def english_list(names: Sequence[str]) -> str:
 
 def _example_clause(total: int, form: str, rejected: Sequence[str]) -> str:
     if not rejected:
+        if total == 1:
+            return f"the one {form} example validates"
         return f"all {total} {form} examples validate"
     if len(rejected) == 1:
         return f"{rejected[0]} rejects its {form} example"
