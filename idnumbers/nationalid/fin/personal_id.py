@@ -153,12 +153,12 @@ class PersonalIdentityCode:
         dd = int(match_obj.group("dd"))
         century = match_obj.group("century")
         sn = match_obj.group("sn")
-        if int(sn) not in PersonalIdentityCode.ISSUED_SN_RANGE:
-            return None
         yyyy_base = PersonalIdentityCode.DOB_BASE_MAP[century]
         try:
             calendar_date = _calendar_date(yyyy_base + yy, mm, dd)
             if calendar_date is None:
+                return None
+            if int(sn) not in PersonalIdentityCode.ISSUED_SN_RANGE:
                 return None
             return {
                 "yyyymmdd": calendar_date,

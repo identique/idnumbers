@@ -1,5 +1,6 @@
 from unittest import TestCase, main
 
+from idnumbers import FailureReason, failure_reason
 from idnumbers.nationalid import FIN
 from idnumbers.nationalid.constant import Gender
 
@@ -33,6 +34,16 @@ class TestKORValidation(TestCase):
                 self.assertTrue(FIN.PersonalIdentityCode.checksum(value))
                 self.assertFalse(FIN.PersonalIdentityCode.validate(value))
                 self.assertIsNone(FIN.PersonalIdentityCode.parse(value))
+
+    def test_failure_reasons_for_out_of_range_individual_numbers(self):
+        # An impossible date is reported first, even when the individual number is also out of range.
+        for value in ("310252-9998", "310252-0001"):
+            with self.subTest(value=value):
+                self.assertEqual(FailureReason.INVALID_BIRTHDATE, failure_reason(FIN.PersonalIdentityCode, value))
+        # A real date with an out-of-range individual number is a plain validation failure.
+        for value in ("131052-9993", "131052-001W"):
+            with self.subTest(value=value):
+                self.assertEqual(FailureReason.VALIDATION_FAILED, failure_reason(FIN.PersonalIdentityCode, value))
 
     def test_parse(self):
         result = FIN.PersonalIdentityCode.parse("131052-308T")
