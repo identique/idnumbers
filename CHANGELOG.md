@@ -31,6 +31,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   that remain (the vendored parity corpus and the classes with birth-date witnesses) and lists regenerating the guides
   among the steps for a new ID type. The tests also require a checksum witness for every class with a `checksum()`
   method, and the input guide derives its formatted-example sentence from its table. Library behavior is unchanged.
+- **Contributor guide** ([#662](https://github.com/identique/idnumbers/issues/662)): `AGENTS.md` says that a new ID type
+  with a birth-date witness always updates the witness count, and the country list only when its country is new. The
+  input guide's example sentence also reads correctly for a single country. Library behavior and the generated guides
+  are unchanged.
 
 ## 1.21.0 (2026-10-24)
 
