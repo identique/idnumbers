@@ -4,6 +4,14 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Documentation
+
+- **FIN** ([#669](https://github.com/identique/idnumbers/issues/669)): the `PersonalIdentityCode` docstrings credit DVV
+  only for the issued individual numbers 002-899 and attribute the description of 900-999 as temporary codes to
+  Finnish Wikipedia (not official). Library behavior is unchanged.
+
 ## 1.22.0 (2026-10-26)
 
 ### Validity changes
