@@ -63,9 +63,10 @@ class PersonalIdentityCode:
 
     The individual number (``SSS``) must be between 002 and 899. Government Decree 128/2010 § 2 defines it only as a
     three-digit number, odd for men and even for women, but DVV (the Digital and Population Data Services Agency) says
-    that in practice all individual numbers issued are between 002 and 899. Numbers 900-999 are temporary codes, used
-    for example in hospitals when a person's personal identity code is not known yet; DVV does not issue them and they
-    are not recorded in the Population Information System. python-stdnum rejects the same numbers by default.
+    that in practice all individual numbers issued are between 002 and 899, so DVV does not issue 000, 001 or 900-999.
+    Finnish Wikipedia (not official) describes 900-999 as temporary codes, used for example in hospitals when a
+    person's personal identity code is not known yet, that are not recorded in the Population Information System.
+    python-stdnum rejects the same numbers by default.
 
     Sources:
 
@@ -129,7 +130,7 @@ class PersonalIdentityCode:
     """ possible checksum characteres """
 
     ISSUED_SN_RANGE = range(2, 900)
-    """individual numbers DVV issues: 000 and 001 are not issued, and 900-999 are temporary codes"""
+    """individual numbers DVV issues (002-899); Finnish Wikipedia (not official) calls 900-999 temporary codes"""
 
     @staticmethod
     def validate(id_number: str) -> bool:

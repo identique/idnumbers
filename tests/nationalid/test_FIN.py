@@ -15,7 +15,8 @@ class TestKORValidation(TestCase):
         self.assertFalse(FIN.PersonalIdentityCode.validate("131052-308A"))
 
     def test_individual_number_range(self):
-        # DVV issues individual numbers 002-899; 000 and 001 are not issued and 900-999 are temporary codes.
+        # DVV says all individual numbers issued are 002-899, so 000, 001 and 900-999 are rejected (Finnish Wikipedia,
+        # not official, describes 900-999 as temporary codes).
         for value in ("131052-002X", "131052-003Y", "131052-898U", "131052-899V", "010100A002H", "010100A899E"):
             with self.subTest(value=value):
                 self.assertTrue(FIN.PersonalIdentityCode.validate(value))
