@@ -8,8 +8,10 @@ class EntityVAT:
     Entity VAT Number is called Momsregistreringsnummer or CVR nummer.
     https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Denmark-TIN.pdf
     https://wiki.scn.sap.com/wiki/display/CRM/Denmark
-    CPR numbers issued after 1 October 2007 can have a different format meaning that the last digit is not a check digit
-    and can therefore not be verified on the TIN on Europa web portal.
+
+    A CVR number consists of eight digits with no embedded information. The first seven digits are serial numbers, and
+    the eighth is a modulus 11 control digit. See Statistics Denmark (Danmarks Statistik):
+    https://www.dst.dk/da/Statistik/dokumentation/Times/moduldata-for-arbejdsmarked/cvr-nr
     """
 
     METADATA = IdMetadata(
@@ -26,6 +28,7 @@ class EntityVAT:
                 "https://wiki.scn.sap.com/wiki/display/CRM/Denmark",
                 "https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/"
                 "tax-identification-numbers/Denmark-TIN.pdf",
+                "https://www.dst.dk/da/Statistik/dokumentation/Times/moduldata-for-arbejdsmarked/cvr-nr",
             ],
             "deprecated": False,
             "country_name": "Denmark",
