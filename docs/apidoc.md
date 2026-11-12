@@ -22,6 +22,29 @@ pydoctor --docformat=restructuredtext --make-html --html-output=docs/$(cat ./VER
 
 It outputs the API docs to a folder named `docs/version`. Have fun with it!
 
+## Rebuild versioned docs from a release tag
+
+The `apidoc` workflow runs from the current `main` workflow definition. To rebuild an older version manually, select
+`main` in the workflow dispatch and run:
+
+```shell
+gh workflow run docs.yml --ref main -f version=1.22.0 -f source-ref=v1.22.0
+```
+
+For a nonempty version, the selected source must contain exactly that stable `X.Y.Z` in `VERSION` (with at most one
+final newline). `source-ref` accepts only a matching `vX.Y.Z` tag or its canonical `refs/tags/vX.Y.Z` spelling; it
+does not accept branches, arbitrary commits or other refs. With `source-ref` omitted, the workflow uses the exact
+caller `github.sha` instead. That default is intentional: the release workflow rebuilds docs before creating its
+version tag, so it can deploy from the caller commit without a tag. An empty version builds the development docs from
+the caller commit and does not add a `dev` entry to version history.
+
+The current workflow helper and candidate version list remain separate from the selected historical source. The
+deploy merges the current candidate with the latest deployed `gh-pages` history, orders stable versions numerically,
+and retains entries from concurrent deployments. It replaces only the selected `docs/vX.Y.Z` directory (or `docs/dev`)
+and `docs/versions.js`; unrelated deployed files are preserved. Invalid refs, mismatched source versions, malformed
+history, fetch/read failures, rebase conflicts or exhausted non-force push retries fail the workflow rather than
+silently dropping history.
+
 ## Check rendered reference links locally
 
 After the build above with the pinned `pydoctor==22.9.1`, run from the repository root:
