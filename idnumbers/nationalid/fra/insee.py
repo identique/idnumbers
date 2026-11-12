@@ -16,11 +16,10 @@ class BirthDepartment(TypedDict):
 class ParseResult(TypedDict):
     """parse result of INSEE"""
 
-    gender: Gender
+    gender: Optional[Gender]
     """
-    gender, possible value: male, female. The first digit 1 (and 7, a temporary number) is male, 2 (and 8) is female.
-    3 and 4 are also used for people being registered, but the sources don't say which sex they stand for, so
-    parse() reports them as female (see https://github.com/identique/idnumbers/issues/429).
+    Codes 1/7 mean male and 2/8 mean female. The official INSEE RNIPP documentation does not specify codes 3 and 4,
+    so the gender field is None for them. Valid numbers with codes 3 and 4 still return a complete parse result.
     """
     yy: str
     """year of birth"""
@@ -38,6 +37,7 @@ class INSEE:
     https://en.wikipedia.org/wiki/National_identification_number#France
     https://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR
     https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente
+    https://www.insee.fr/fr/information/6665188
     """
 
     METADATA = IdMetadata(
@@ -63,6 +63,7 @@ class INSEE:
                 "https://fr.wikipedia.org/wiki/"
                 "Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR",
                 "https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente",
+                "https://www.insee.fr/fr/information/6665188",
             ],
             "deprecated": False,
             "country_name": "France",
@@ -98,12 +99,17 @@ class INSEE:
             return None
         if not INSEE.checksum(id_number):
             return None
-        gender = match_obj.group("gender")
+        gender_code = match_obj.group("gender")
         yy = match_obj.group("yy")
         mm = match_obj.group("mm")
         control_key = match_obj.group("control_key")
         return {
-            "gender": Gender.MALE if gender in ("1", "7") else Gender.FEMALE,
+            "gender": {
+                "1": Gender.MALE,
+                "7": Gender.MALE,
+                "2": Gender.FEMALE,
+                "8": Gender.FEMALE,
+            }.get(gender_code),
             "yy": yy,
             "mm": mm,
             "birth_department": birth_department,

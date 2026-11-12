@@ -70,11 +70,41 @@ class TestFRAValidation(TestCase):
         self.assertEqual(Gender.FEMALE, FRA.NationalID.parse("285087512304594")["gender"])
         self.assertEqual(Gender.FEMALE, FRA.NationalID.parse("885087512304585")["gender"])
 
-    def test_parse_gender_code_3(self):
-        # pins the current behaviour: no source says which sex 3 and 4 stand for, see
-        # https://github.com/identique/idnumbers/issues/429
-        self.assertTrue(FRA.NationalID.validate("385087512304544"))
-        self.assertEqual(Gender.FEMALE, FRA.NationalID.parse("385087512304544")["gender"])
+    def test_parse_gender_codes_3_and_4_as_unknown(self):
+        # These checksummed identifiers are synthetic; the official INSEE source does not specify these gender codes.
+        expected_results = (
+            (
+                "385087512304544",
+                {
+                    "gender": None,
+                    "yy": "85",
+                    "mm": "08",
+                    "birth_department": {"department": "75", "city": "123", "country": ""},
+                    "checksum": "44",
+                },
+            ),
+            (
+                "485087512304591",
+                {
+                    "gender": None,
+                    "yy": "85",
+                    "mm": "08",
+                    "birth_department": {"department": "75", "city": "123", "country": ""},
+                    "checksum": "91",
+                },
+            ),
+        )
+        for number, expected in expected_results:
+            with self.subTest(number=number):
+                self.assertTrue(FRA.NationalID.validate(number))
+                self.assertEqual(expected, FRA.INSEE.parse(number))
+                self.assertEqual(expected, FRA.NationalID.parse(number))
+
+        for number in ("385087512304545", "485087512304592"):
+            with self.subTest(number=number):
+                self.assertFalse(FRA.NationalID.validate(number))
+                self.assertIsNone(FRA.INSEE.parse(number))
+                self.assertIsNone(FRA.NationalID.parse(number))
 
 
 if __name__ == "__main__":

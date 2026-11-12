@@ -3,8 +3,8 @@
 from typing import Any, Mapping, Optional
 
 from idnumbers import FailureReason, ParseFailure, ParseIdInfoResult, ParseSuccess, parse_id_info, failure_reason
-from idnumbers.nationalid import AUS, HKG, LKA, TUR
-from idnumbers.nationalid.constant import Citizenship
+from idnumbers.nationalid import AUS, FRA, HKG, LKA, TUR
+from idnumbers.nationalid.constant import Citizenship, Gender
 
 
 def by_discriminator(result: ParseIdInfoResult) -> None:
@@ -48,3 +48,11 @@ if old_nic is not None:
 hkg_checksum: Optional[str] = HKG.NationalID.checksum("TP1490258")
 tur_checksum: Optional[str] = TUR.NationalID.checksum("10000000146")
 print(hkg_checksum, tur_checksum)
+
+
+fra_result = FRA.INSEE.parse("385087512304544")
+if fra_result is not None:
+    fra_gender: Optional[Gender] = fra_result["gender"]
+    if fra_gender is not None:
+        known_fra_gender: Gender = fra_gender
+        print(known_fra_gender)
