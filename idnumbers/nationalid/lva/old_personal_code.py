@@ -111,5 +111,5 @@ class OldPersonalCode:
 
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
-        """Use new personal code to calculate the checksum"""
-        return PersonalCode.checksum(id_number)
+        """Calculate the original weighted checksum for any format-matching number."""
+        return PersonalCode._legacy_checksum(id_number)

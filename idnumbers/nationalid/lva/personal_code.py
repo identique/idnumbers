@@ -17,9 +17,8 @@ class PersonalCode:
     https://www.pmlp.gov.lv/en/change-personal-identity-number
     https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/latvia-tin.pdf
 
-    These sources establish date/prefix rules, not a modern checksum requirement.
-    The existing checksum behaviour is retained pending clarification in issue #440.
-    https://github.com/identique/idnumbers/issues/440
+    PMLP specifies that the first digit is 3, the second is 2-9, and each remaining digit may be any
+    digit from 0 to 9. The final digit is therefore not a check digit for modern codes.
     """
 
     METADATA = IdMetadata(
@@ -50,7 +49,8 @@ class PersonalCode:
             "official_name": "personas kods",
             "display_format": "DDMMYY-SSSSS",
             "example": "161175-19997",
-            "checksum_algorithm": "(1101 - weighted sum) mod 11 mod 10 (weights 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)",
+            "checksum_algorithm": "(1101 - weighted sum) mod 11 mod 10 for legacy only; "
+            "weights 1, 6, 3, 7, 9, 10, 5, 8, 4, 2; modern codes have no check digit",
             "masks": ("######-#####", "###########"),
         }
     )
@@ -63,16 +63,14 @@ class PersonalCode:
         """
         Validate
         """
-        check_digit = PersonalCode.checksum(id_number)
-        # checksum() is None unless the input is a str that matches the regexp, so [-1] is safe below
-        if check_digit is None or str(check_digit) != id_number[-1]:
+        if not validate_regexp(id_number, PersonalCode.METADATA.regexp):
             return False
         prefix = int(normalize(id_number)[:2])
         if 32 <= prefix <= 39:
             return True
         if not 1 <= prefix <= 31:
             return False
-        # Local import avoids the cycle: OldPersonalCode uses PersonalCode.checksum().
+        # Local import avoids the cycle: OldPersonalCode uses PersonalCode._legacy_checksum().
         from .old_personal_code import OldPersonalCode
 
         return OldPersonalCode.validate(id_number)
@@ -80,9 +78,21 @@ class PersonalCode:
     @staticmethod
     def checksum(id_number: str) -> Optional[CHECK_DIGIT]:
         """
-        Calculate national id checksum: (1101-sum) mod 11 and mod 10.
-        None is returned if the input does not match the format.
+        Calculate the legacy national ID checksum: (1101-sum) mod 11 and mod 10.
+
+        Modern numbers beginning with 32-39 have no check digit, so this returns None for them. None is also
+        returned if the input does not match the format.
         """
+        if not validate_regexp(id_number, PersonalCode.METADATA.regexp):
+            return None
+        prefix = int(normalize(id_number)[:2])
+        if 32 <= prefix <= 39:
+            return None
+        return PersonalCode._legacy_checksum(id_number)
+
+    @staticmethod
+    def _legacy_checksum(id_number: str) -> Optional[CHECK_DIGIT]:
+        """Calculate the original weighted checksum for any format-matching number."""
         if not validate_regexp(id_number, PersonalCode.METADATA.regexp):
             return None
         numbers = [int(i) for i in normalize(id_number)[:10]]

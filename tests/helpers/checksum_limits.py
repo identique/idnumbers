@@ -86,6 +86,8 @@ SINGLE_DIGIT_CHANGE_UNDETECTED: Dict[str, Tuple[str, ...]] = {
         "900120401V",
         "900120061V",
     ),
+    # personal_code.py: the mutation crosses into modern prefix 36, which has no check digit
+    "idnumbers.nationalid.lva.personal_code.PersonalCode": ("361175-19997",),
     # personal_code.py: checksum retries mod 11 with different weights
     "idnumbers.nationalid.ltu.personal_code.PersonalCode": ("39006010077",),
     # curp.py: weights share factors with modulus 10
