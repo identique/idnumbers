@@ -4,6 +4,13 @@ These changelog notes follow [Keep a Changelog](https://keepachangelog.com/en/1.
 
 Releases before 1.12.0 are listed on the [GitHub releases page](https://github.com/identique/idnumbers/releases).
 
+## Unreleased
+
+### Documentation
+
+- **API docs** ([#249](https://github.com/identique/idnumbers/issues/249)): versioned docs can be rebuilt from a
+  matching release tag without replacing newer deployed version history. Library behavior is unchanged.
+
 ## 1.23.0 (2026-11-13)
 
 ### Validity changes

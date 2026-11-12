@@ -1,6 +1,6 @@
 name: apidoc
 
-# build the documentation whenever there are new commits on main
+# Build the development docs on main; manual runs may rebuild a selected stable release.
 on:
   push:
     branches:
@@ -9,19 +9,33 @@ on:
     inputs:
       version:
         description: 'Version value'
+        type: string
+        required: false
+        default: ''
+      source-ref:
+        description: 'Optional matching version tag to build instead of the caller commit'
+        type: string
+        required: false
+        default: ''
   workflow_call:
     inputs:
       version:
         description: 'Version value'
         type: string
+        required: false
+        default: ''
+      source-ref:
+        description: 'Optional matching version tag to build instead of the caller commit'
+        type: string
+        required: false
+        default: ''
 
-# security: restrict permissions for CI jobs.
+# Security: restrict permissions for CI jobs.
 permissions:
   contents: write
   pages: write
 
 jobs:
-  # Build and Deploy the documentation and upload the static HTML files as an artifact.
   build_deploy:
     runs-on: ubuntu-24.04
     # One deploy per group at a time, never cancelled: dev builds share a group, so back-to-back pushes to main queue
@@ -34,49 +48,17 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          ref: ${{ github.sha }}
       - uses: actions/setup-python@v7
         with:
           python-version: '3.10'
       - run: pip install pydoctor==22.9.1
-      - name: build dev build
-        if: inputs.version == ''
-        run: |
-          pydoctor --docformat=restructuredtext --make-html --html-output=pydocs/dev --project-name="idnumbers" --project-version=dev --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
-          echo "window._CURRENT_VERSION = 'dev';" > pydocs/dev/current_version.js
-      - name: build prod build
-        if: inputs.version != ''
-        run: |
-          pydoctor --docformat=restructuredtext --make-html --html-output=pydocs/v${{ inputs.version }} --project-name="idnumbers" --project-version=${{ inputs.version }} --project-url=https://github.com/identique/idnumbers --template-dir=./docs/template idnumbers
-          echo "window._CURRENT_VERSION = '${{ inputs.version }}';" > pydocs/v${{ inputs.version }}/current_version.js
-      - name: prepare for deploy
-        run: |
-          cp docs/template/versions.js pydocs/
-          ls pydocs/
-          git checkout origin/gh-pages -b gh-pages
-          git config --local user.email "microdataxyz@outlook.com"
-          git config --local user.name "Microdata Bot"
-      - name: deploy dev apidoc
-        if: inputs.version == ''
-        run: |
-          cp -rf pydocs/* ./docs
-          git add ./docs
-          git diff-index --quiet HEAD || git commit -m "Update dev doc"
-      - name: deploy prod apidoc
-        if: inputs.version != ''
-        run: |
-          ls pydocs
-          rm -rf ./docs/v${{ inputs.version }}
-          cp -rf pydocs/v${{ inputs.version }} ./docs/v${{ inputs.version }}
-          cp pydocs/versions.js ./docs/versions.js
-          git add ./docs
-          git diff-index --quiet HEAD || git commit -m "Add release doc v${{ inputs.version }}"
-      # A deploy in the other group may have pushed gh-pages first: rebase this run's docs commit onto it and push
-      # again. A rebase conflict fails the job instead of overwriting the other deploy.
-      - name: push gh-pages
-        run: |
-          for attempt in 1 2 3; do
-            git push origin gh-pages && exit 0
-            echo "gh-pages moved on the remote (attempt $attempt); rebasing the docs commit"
-            git pull --rebase origin gh-pages
-          done
-          git push origin gh-pages
+      - name: build selected source and stage deploy helper
+        run: python tools/docs_rebuild.py prepare
+        env:
+          GITHUB_WORKSPACE: ${{ github.workspace }}
+          IDNUMBERS_DOCS_VERSION: ${{ inputs.version || '' }}
+          IDNUMBERS_DOCS_SOURCE_REF: ${{ inputs.source-ref || '' }}
+          IDNUMBERS_DOCS_CALLER_SHA: ${{ github.sha }}
+      - name: deploy docs and merge current gh-pages history
+        run: python "$RUNNER_TEMP/idnumbers-docs-orchestrator/docs_rebuild.py" deploy

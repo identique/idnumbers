@@ -4,6 +4,8 @@ from pathlib import Path
 import re
 import unittest
 
+from tools import docs_rebuild
+
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github/workflows"
 
@@ -65,50 +67,40 @@ class ReleaseWorkflowRuntimeTest(unittest.TestCase):
         for contract in (
             "workflow_dispatch:",
             "workflow_call:",
+            "source-ref:",
             "type: string",
             "permissions:\n  contents: write\n  pages: write",
             "fetch-depth: 0",
+            "ref: ${{ github.sha }}",
             "python-version: '3.10'",
             "pip install pydoctor==22.9.1",
-            "git checkout origin/gh-pages -b gh-pages",
-            'git config --local user.email "microdataxyz@outlook.com"',
-            'git config --local user.name "Microdata Bot"',
-            "cp docs/template/versions.js pydocs/",
-            "cp pydocs/versions.js ./docs/versions.js",
-            "--html-output=pydocs/dev",
-            "--html-output=pydocs/v${{ inputs.version }}",
-            "cp -rf pydocs/* ./docs",
-            "rm -rf ./docs/v${{ inputs.version }}",
-            "cp -rf pydocs/v${{ inputs.version }} ./docs/v${{ inputs.version }}",
-            'git diff-index --quiet HEAD || git commit -m "Update dev doc"',
-            'git diff-index --quiet HEAD || git commit -m "Add release doc v${{ inputs.version }}"',
-            "git push origin gh-pages",
+            "run: python tools/docs_rebuild.py prepare",
+            'run: python "$RUNNER_TEMP/idnumbers-docs-orchestrator/docs_rebuild.py" deploy',
+            "GITHUB_WORKSPACE: ${{ github.workspace }}",
+            "IDNUMBERS_DOCS_VERSION: ${{ inputs.version || '' }}",
+            "IDNUMBERS_DOCS_SOURCE_REF: ${{ inputs.source-ref || '' }}",
+            "IDNUMBERS_DOCS_CALLER_SHA: ${{ github.sha }}",
+            "required: false",
+            "default: ''",
         ):
             with self.subTest(contract=contract):
                 self.assertIn(contract, workflow)
-        self.assertEqual(workflow.count("--docformat=restructuredtext"), 2)
-        self.assertEqual(workflow.count("if: inputs.version == ''"), 2)
-        self.assertEqual(workflow.count("if: inputs.version != ''"), 2)
+        self.assertEqual(workflow.count("source-ref:"), 2)
+        self.assertLess(workflow.index("tools/docs_rebuild.py prepare"), workflow.index('docs_rebuild.py" deploy'))
+        self.assertNotRegex(workflow, r"\$\{\{\s*inputs\.(?:version|source-ref)\s*\}\}")
         self.assertNotIn("persist-credentials: false", workflow)
         self.assertNotIn("id-token:", workflow)
 
     def test_docs_deploys_queue_per_group_and_retry_a_rejected_push(self):
         workflow = self.workflow("docs.yml")
+        helper = (ROOT / "tools/docs_rebuild.py").read_text()
         group = "concurrency:\n      group: apidoc-${{ inputs.version || 'dev' }}\n      cancel-in-progress: false\n"
         self.assertEqual(workflow.count(group), 1)
         self.assertNotIn("cancel-in-progress: true", workflow)
-        push = workflow.split("      - name: push gh-pages\n", 1)[1]
-        for contract in (
-            "for attempt in 1 2 3; do",
-            "git push origin gh-pages && exit 0",
-            "git pull --rebase origin gh-pages",
-            "done\n          git push origin gh-pages\n",
-        ):
-            with self.subTest(contract=contract):
-                self.assertIn(contract, push)
-        self.assertNotIn("exit 1", push)
-        self.assertEqual(workflow.count("git push"), 2)
-        self.assertNotRegex(workflow, r"git push\b[^\n]*(--force|\s-f\b)")
+        self.assertEqual(docs_rebuild._MAX_REBASE_ATTEMPTS, 3)
+        self.assertIn('"pull", "--rebase", "origin", "gh-pages"', helper)
+        self.assertIn('"push", "origin", "gh-pages:gh-pages"', helper)
+        self.assertNotRegex(helper, r"git\s+push\b[^\n]*(--force|\s-f\b)")
 
     def test_release_token_route_stays_default(self):
         workflow = self.workflow("release_to_pypi.yml")
