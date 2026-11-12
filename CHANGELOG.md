@@ -6,6 +6,12 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ## Unreleased
 
+### Validity changes
+
+- **LVA** ([#440](https://github.com/identique/idnumbers/issues/440)): modern personal codes beginning with 32-39
+  validate regardless of their final digit, and `PersonalCode.checksum()` returns `None` for them. Legacy date and
+  check-digit validation is unchanged.
+
 ### Changed
 
 - **Country registry** ([#562](https://github.com/identique/idnumbers/issues/562)): `register()` rejects names consisting

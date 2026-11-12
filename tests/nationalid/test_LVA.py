@@ -91,22 +91,30 @@ class TestLVAValidation(TestCase):
             body = "{:02d}01001123".format(prefix)
             for value in self.formats(self.make_code(body)):
                 with self.subTest(value=value):
-                    self.assertEqual(int(value[-1]), LVA.PersonalCode.checksum(value))
+                    if 32 <= prefix <= 39:
+                        self.assertIsNone(LVA.PersonalCode.checksum(value))
+                    else:
+                        self.assertEqual(int(value[-1]), LVA.PersonalCode.checksum(value))
                     self.assertEqual(1 <= prefix <= 39, LVA.PersonalCode.validate(value))
                     self.assertEqual(1 <= prefix <= 39, LVA.NationalID.validate(value))
+                    self.assertEqual(int(value[-1]), LVA.OldPersonalCode.checksum(value))
+                    self.assertEqual(1 <= prefix <= 31, LVA.OldPersonalCode.validate(value))
 
     def test_modern_prefixes_do_not_encode_dates_or_centuries(self):
         for prefix in range(32, 40):
             for suffix in ("00000000", "13999999", "99999999"):
-                code = self.make_code(str(prefix) + suffix)
-                for value in self.formats(code):
-                    with self.subTest(value=value):
-                        self.assertTrue(LVA.PersonalCode.validate(value))
-                        self.assertTrue(LVA.NationalID.validate(value))
-                        self.assertIsNone(LVA.OldPersonalCode.parse(value))
-                        wrong = value[:-1] + str((int(value[-1]) + 1) % 10)
-                        self.assertFalse(LVA.PersonalCode.validate(wrong))
-                        self.assertFalse(LVA.NationalID.validate(wrong))
+                body = str(prefix) + suffix
+                old_checksum = int(self.make_code(body)[-1])
+                for final_digit in range(10):
+                    code = body + str(final_digit)
+                    for value in self.formats(code):
+                        with self.subTest(value=value):
+                            self.assertTrue(LVA.PersonalCode.validate(value))
+                            self.assertTrue(LVA.NationalID.validate(value))
+                            self.assertIsNone(LVA.PersonalCode.checksum(value))
+                            self.assertEqual(old_checksum, LVA.OldPersonalCode.checksum(value))
+                            self.assertFalse(LVA.OldPersonalCode.validate(value))
+                            self.assertIsNone(LVA.OldPersonalCode.parse(value))
 
     def test_wrong_legacy_checksum(self):
         for value in self.formats(self.make_code("0101001123")):
@@ -128,6 +136,8 @@ class TestLVAValidation(TestCase):
             "290156--11605",
             "290156 11605",
             "290156-11605\n",
+            "320100-1123x",
+            "3201001123\n",
             "２９０１５６１１６０５",
             "٢٩٠١٥٦١١٦٠٥",
         )
@@ -136,6 +146,9 @@ class TestLVAValidation(TestCase):
                 self.assertFalse(LVA.PersonalCode.validate(value))
                 self.assertFalse(LVA.NationalID.validate(value))
                 self.assertIsNone(LVA.PersonalCode.checksum(value))
+                self.assertFalse(LVA.OldPersonalCode.validate(value))
+                self.assertIsNone(LVA.OldPersonalCode.parse(value))
+                self.assertIsNone(LVA.OldPersonalCode.checksum(value))
 
     def test_primary_api_remains_nonparsable(self):
         self.assertFalse(LVA.PersonalCode.METADATA.parsable)

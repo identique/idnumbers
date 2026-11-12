@@ -53,7 +53,7 @@ assert info is not None
 | --- | --- |
 | alias_of | <code>None</code> |
 | checksum | <code>True</code> |
-| checksum_algorithm | <code>(1101 - weighted sum) mod 11 mod 10 (weights 1, 6, 3, 7, 9, 10, 5, 8, 4, 2)</code> |
+| checksum_algorithm | <code>(1101 - weighted sum) mod 11 mod 10 for legacy only; weights 1, 6, 3, 7, 9, 10, 5, 8, 4, 2; modern codes have no check digit</code> |
 | country_name | <code>Latvia</code> |
 | deprecated | <code>False</code> |
 | display_format | <code>DDMMYY-SSSSS</code> |
