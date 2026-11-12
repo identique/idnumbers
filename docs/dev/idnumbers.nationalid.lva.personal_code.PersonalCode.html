@@ -226,6 +226,16 @@
             </div>
         
 
+    </li><li class="private">
+        
+        
+        
+
+        
+            <div class="itemName"><code><a href="#_legacy_checksum" class="internal-link" title="idnumbers.nationalid.lva.personal_code.PersonalCode._legacy_checksum">_legacy<wbr></wbr>_checksum</a></code>
+            </div>
+        
+
     </li>
 </ul> 
 
@@ -345,9 +355,8 @@ section 6(2) and transitional provision 4 of the Law on the Register of Natural 
 <a class="rst-reference rst-external" href="https://likumi.lv/ta/id/296185" target="_top">https://likumi.lv/ta/id/296185</a>
 <a class="rst-reference rst-external" href="https://www.pmlp.gov.lv/en/change-personal-identity-number" target="_top">https://www.pmlp.gov.lv/en/change-personal-identity-number</a>
 <a class="rst-reference rst-external" href="https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/latvia-tin.pdf" target="_top">https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/latvia-tin.pdf</a></p>
-<p>These sources establish date/prefix rules, not a modern checksum requirement.
-The existing checksum behaviour is retained pending clarification in issue #440.
-<a class="rst-reference rst-external" href="https://github.com/identique/idnumbers/issues/440" target="_top">https://github.com/identique/idnumbers/issues/440</a></p>
+<p>PMLP specifies that the first digit is 3, the second is 2-9, and each remaining digit may be any
+digit from 0 to 9. The final digit is therefore not a check digit for modern codes.</p>
 </div>
         </div>
 
@@ -359,7 +368,7 @@ The existing checksum behaviour is retained pending clarification in issue #440.
     
     <td>Static Method</td>
     <td><code><a href="#checksum" class="internal-link" title="idnumbers.nationalid.lva.personal_code.PersonalCode.checksum">checksum</a></code></td>
-    <td>Calculate national id checksum: (1101-sum) mod 11 and mod 10. None is returned if the input does not match the format.</td>
+    <td>Calculate the legacy national ID checksum: (1101-sum) mod 11 and mod 10.</td>
   </tr><tr class="staticmethod">
     
     <td>Static Method</td>
@@ -375,6 +384,11 @@ The existing checksum behaviour is retained pending clarification in issue #440.
     <td>Constant</td>
     <td><code><a href="#MULTIPLIER" class="internal-link" title="idnumbers.nationalid.lva.personal_code.PersonalCode.MULTIPLIER">MULTIPLIER</a></code></td>
     <td>multiplier for checksum</td>
+  </tr><tr class="staticmethod private">
+    
+    <td>Static Method</td>
+    <td><code><a href="#_legacy_checksum" class="internal-link" title="idnumbers.nationalid.lva.personal_code.PersonalCode._legacy_checksum">_legacy<wbr></wbr>_checksum</a></code></td>
+    <td>Calculate the original weighted checksum for any format-matching number.</td>
   </tr>
 </table>
           
@@ -404,8 +418,9 @@ The existing checksum behaviour is retained pending clarification in issue #440.
   </div>
   <div class="docstring functionBody">
     
-    <div><p>Calculate national id checksum: (1101-sum) mod 11 and mod 10.
-None is returned if the input does not match the format.</p>
+    <div><p>Calculate the legacy national ID checksum: (1101-sum) mod 11 and mod 10.</p>
+<p>Modern numbers beginning with 32-39 have no check digit, so this returns None for them. None is also
+returned if the input does not match the format.</p>
 <table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.nationalid.util.html#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
   </div>
 </div><div class="basestaticmethod">
@@ -488,6 +503,30 @@ None is returned if the input does not match the format.</p>
 </div>
     <table class="valueTable"><tr class="fieldStart"><td class="fieldName">Value</td></tr><tr><td><pre class="constant-value"><code>[<wbr></wbr>1, <wbr></wbr>6, <wbr></wbr>3, <wbr></wbr>7, <wbr></wbr>9, <wbr></wbr>10, <wbr></wbr>5, <wbr></wbr>8, <wbr></wbr>4, <wbr></wbr>2]</code></pre></td></tr></table>
   </div>
+</div><div class="basestaticmethod private">
+  
+  
+  <a name="idnumbers.nationalid.lva.personal_code.PersonalCode._legacy_checksum">
+    
+  </a>
+  <a name="_legacy_checksum">
+    
+  </a>
+  <div class="functionHeader">
+    @staticmethod<br />
+    <span class="py-keyword">def</span> <span class="py-defname">_legacy_checksum</span>(id_number):
+    
+    <a class="headerLink" href="#_legacy_checksum" title="idnumbers.nationalid.lva.personal_code.PersonalCode._legacy_checksum">
+      
+      
+      ¶
+    </a>
+  </div>
+  <div class="docstring functionBody">
+    
+    <div><p>Calculate the original weighted checksum for any format-matching number.</p>
+<table class="fieldTable"><tr class="fieldStart"><td class="fieldName" colspan="2">Parameters</td></tr><tr><td class="fieldArgContainer"><span class="fieldArg">id<wbr></wbr>_number:</span><code>str</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr><tr class="fieldStart"><td class="fieldName" colspan="2">Returns</td></tr><tr><td class="fieldArgContainer"><code>Optional[<wbr></wbr><a href="idnumbers.nationalid.util.html#CHECK_DIGIT" class="internal-link" title="idnumbers.nationalid.util.CHECK_DIGIT">CHECK_DIGIT</a>]</code></td><td class="fieldArgDesc"><span class="undocumented">Undocumented</span></td></tr></table></div>
+  </div>
 </div>
         </div>
       
@@ -500,7 +539,7 @@ None is returned if the input does not match the format.</p>
   <div class="container">
     <a href="index.html">API Documentation</a> for <a href="https://github.com/identique/idnumbers" class="projecthome">idnumbers</a>,
   generated by <a href="https://github.com/twisted/pydoctor/">pydoctor</a>
-    22.9.1 at 2026-11-12 15:50:41.
+    22.9.1 at 2026-11-12 16:24:36.
   </div>
 
   <!-- Search related scripts needs to be loaded at the end of HTML 
