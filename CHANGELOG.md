@@ -6,6 +6,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ## Unreleased
 
+### Added
+
+- **GRC** TIN namespace ([#263](https://github.com/identique/idnumbers/issues/263)): expose `TIN.individual` and
+  `TIN.entity` as the existing `TaxIdentityNumber` class; validation and the `NationalID` mapping are unchanged.
+
 ### Documentation
 
 - **API docs** ([#249](https://github.com/identique/idnumbers/issues/249)): versioned docs can be rebuilt from a
