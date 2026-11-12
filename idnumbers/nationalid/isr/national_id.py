@@ -11,6 +11,11 @@ class NationalID:
     https://en.wikipedia.org/wiki/National_identification_number#Israel
     https://taxid.pro/docs/countries/israel
 
+    Input must be exactly nine ASCII digits: separators are not removed and shorter inputs are not padded
+    automatically. Callers may explicitly left-pad an unseparated shorter digit string before validation, for example
+    ``'39337423'.zfill(9)`` produces ``'039337423'``. This is caller-side preparation, not an official rule for
+    canonical or issued numbers, and padding does not guarantee validity. This class has no ``parse()`` method.
+
     The python-stdnum 2.2 algorithm requires a positive numeric value independently of the Luhn check:
     https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/il/idnr.py
     This excludes the all-zero number; passing these checks does not establish that an ID was issued.
