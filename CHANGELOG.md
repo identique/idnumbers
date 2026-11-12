@@ -6,6 +6,13 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ## Unreleased
 
+### Changed
+
+- **Country registry** ([#562](https://github.com/identique/idnumbers/issues/562)): `register()` rejects names consisting
+  only of whitespace or characters in Unicode categories `Cf`, `Cc`, `Zs`, `Zl`, `Zp` and `Mn`. Built-in country
+  registration and ID-number validity are unchanged. **Breaking:** custom registrations with those names now raise
+  `ValueError`.
+
 ### Documentation
 
 - **DNK** ([#676](https://github.com/identique/idnumbers/issues/676)): the `EntityVAT` docstring describes CVR numbers
