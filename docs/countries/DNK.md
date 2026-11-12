@@ -22,7 +22,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | example | <code>12345674</code> |
 | id_type | <code>VAT Registration Number</code> |
 | iso3166_alpha2 | <code>DK</code> |
-| links | <code>[&#x27;https://wiki.scn.sap.com/wiki/display/CRM/Denmark&#x27;, &#x27;https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Denmark-TIN.pdf&#x27;]</code> |
+| links | <code>[&#x27;https://wiki.scn.sap.com/wiki/display/CRM/Denmark&#x27;, &#x27;https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Denmark-TIN.pdf&#x27;, &#x27;https://www.dst.dk/da/Statistik/dokumentation/Times/moduldata-for-arbejdsmarked/cvr-nr&#x27;]</code> |
 | masks | <code>(&#x27;########&#x27;,)</code> |
 | max_length | <code>8</code> |
 | min_length | <code>8</code> |
@@ -35,6 +35,7 @@ Reference links recorded by this implementation (source quality varies):
 
 - <https://wiki.scn.sap.com/wiki/display/CRM/Denmark>
 - <https://www.oecd.org/tax/automatic-exchange/crs-implementation-and-assistance/tax-identification-numbers/Denmark-TIN.pdf>
+- <https://www.dst.dk/da/Statistik/dokumentation/Times/moduldata-for-arbejdsmarked/cvr-nr>
 
 ```python
 from idnumbers.nationalid.dnk.entity_vat import EntityVAT

@@ -8,6 +8,9 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Documentation
 
+- **DNK** ([#676](https://github.com/identique/idnumbers/issues/676)): the `EntityVAT` docstring describes CVR numbers
+  as eight digits with no embedded information, seven serial digits and a modulus 11 control digit, and cites DST.
+  Library behavior is unchanged.
 - **FIN** ([#669](https://github.com/identique/idnumbers/issues/669)): the `PersonalIdentityCode` docstrings credit DVV
   only for the issued individual numbers 002-899 and attribute the description of 900-999 as temporary codes to
   Finnish Wikipedia (not official). Library behavior is unchanged.
