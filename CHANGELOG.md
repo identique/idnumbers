@@ -8,6 +8,11 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 
 ### Validity changes
 
+- **IDN** NIK ([#430](https://github.com/identique/idnumbers/issues/430)): add 504 district codes supported by the
+  agreed sources: 24, 101 and 247 for provinces 93, 94 and 95 from Kepmendagri 100.1.1-6117/2022, and 132 for
+  province 96 from Kepmendagri 300.2.2-2138/2025. All existing codes and date/serial checks are unchanged. This is
+  an additive, cross-checked subset, not an exhaustive current district list; untranscribed and disputed rows remain
+  unsupported.
 - **LVA** ([#440](https://github.com/identique/idnumbers/issues/440)): modern personal codes beginning with 32-39
   validate regardless of their final digit, and `PersonalCode.checksum()` returns `None` for them. Legacy date and
   check-digit validation is unchanged.

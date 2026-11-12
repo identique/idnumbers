@@ -22,7 +22,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | example | <code>1101010101900001</code> |
 | id_type | <code>National ID Number</code> |
 | iso3166_alpha2 | <code>ID</code> |
-| links | <code>[&#x27;https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/id/nik.py&#x27;, &#x27;https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan&#x27;]</code> |
+| links | <code>[&#x27;https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/id/nik.py&#x27;, &#x27;https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan&#x27;, &#x27;https://id.wikisource.org/wiki/Keputusan_Menteri_Dalam_Negeri_Nomor_100.1.1-6117_Tahun_2022&#x27;, &#x27;https://github.com/cahyadsn/wilayah/blob/c2eff0881e3c75b8822f8c84ea9d23affc11aadb/db/archive/wilayah_2023.sql&#x27;, &#x27;https://peraturan.bpk.go.id/Details/322942/keputusan-mendagri-no-nomor-30022-2138-tahun&#x27;, &#x27;https://peraturan.bpk.go.id/Download/384753/Lampiran-Kepmen%20300.2.2-2138%20Tahun%202025.pdf&#x27;, &#x27;https://github.com/cahyadsn/wilayah/blob/c2eff0881e3c75b8822f8c84ea9d23affc11aadb/db/wilayah.sql&#x27;]</code> |
 | masks | <code>(&#x27;################&#x27;,)</code> |
 | max_length | <code>16</code> |
 | min_length | <code>16</code> |
@@ -35,6 +35,11 @@ Reference links recorded by this implementation (source quality varies):
 
 - <https://github.com/arthurdejong/python-stdnum/blob/2.2/stdnum/id/nik.py>
 - <https://id.wikipedia.org/wiki/Nomor_Induk_Kependudukan>
+- <https://id.wikisource.org/wiki/Keputusan_Menteri_Dalam_Negeri_Nomor_100.1.1-6117_Tahun_2022>
+- <https://github.com/cahyadsn/wilayah/blob/c2eff0881e3c75b8822f8c84ea9d23affc11aadb/db/archive/wilayah_2023.sql>
+- <https://peraturan.bpk.go.id/Details/322942/keputusan-mendagri-no-nomor-30022-2138-tahun>
+- <https://peraturan.bpk.go.id/Download/384753/Lampiran-Kepmen%20300.2.2-2138%20Tahun%202025.pdf>
+- <https://github.com/cahyadsn/wilayah/blob/c2eff0881e3c75b8822f8c84ea9d23affc11aadb/db/wilayah.sql>
 
 ```python
 from idnumbers.nationalid.idn.national_id import NIK
