@@ -1,3 +1,6 @@
+import json
+from collections import Counter
+from pathlib import Path
 from unittest import TestCase, main
 
 from idnumbers.nationalid import IDN
@@ -94,6 +97,72 @@ class TestIDNValidation(TestCase):
         ):
             with self.subTest(id_number=id_number):
                 self.assertFalse(IDN.NationalID.validate(id_number))
+                self.assertIsNone(IDN.NationalID.parse(id_number))
+
+
+class TestPapuaDistricts(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        fixture_path = Path(__file__).parent / "data" / "idn_papua_districts.json"
+        fixture = json.loads(fixture_path.read_text(encoding="utf-8"))
+        cls.districts = fixture["districts"]
+        cls.expected_codes = [district["code"] for district in cls.districts]
+
+    def test_new_districts_match_source_fixture_without_duplicates(self):
+        prefixes = ("93", "94", "95", "96")
+        new_codes = [code for code in IDN.NIK.DISTRICT if code.startswith(prefixes)]
+        expected_counts = {"93": 24, "94": 101, "95": 247, "96": 132}
+
+        self.assertEqual(self.expected_codes, sorted(self.expected_codes))
+        self.assertEqual(set(self.expected_codes), set(new_codes))
+        self.assertEqual(len(self.expected_codes), len(set(self.expected_codes)))
+        self.assertEqual(len(new_codes), len(set(new_codes)))
+        self.assertEqual(7534, len(IDN.NIK.DISTRICT))
+        self.assertEqual(len(IDN.NIK.DISTRICT), len(set(IDN.NIK.DISTRICT)))
+        self.assertEqual(expected_counts, dict(Counter(code[:2] for code in new_codes)))
+
+    def test_every_new_district_validates_and_parses_through_both_aliases(self):
+        # The suffix is synthetic: 1 January 1990 with serial 0001. It is not an issued identity.
+        for district in self.districts:
+            code = district["code"]
+            id_number = f"{code}0101900001"
+            with self.subTest(code=code, name=district["name"]):
+                self.assertTrue(IDN.NIK.validate(id_number))
+                self.assertTrue(IDN.NationalID.validate(id_number))
+
+                nik_result = IDN.NIK.parse(id_number)
+                national_id_result = IDN.NationalID.parse(id_number)
+                self.assertIsNotNone(nik_result)
+                self.assertIsNotNone(national_id_result)
+                self.assertEqual(code, nik_result["district"])
+                self.assertEqual(code, national_id_result["district"])
+                self.assertEqual(nik_result, national_id_result)
+
+    def test_each_new_province_and_existing_91_92_districts_are_accepted(self):
+        for prefix in ("93", "94", "95", "96", "91", "92"):
+            with self.subTest(prefix=prefix):
+                district = next(code for code in IDN.NIK.DISTRICT if code.startswith(prefix))
+                id_number = f"{district}0101900001"
+                self.assertTrue(IDN.NIK.validate(id_number))
+                result = IDN.NationalID.parse(id_number)
+                self.assertIsNotNone(result)
+                self.assertEqual(district, result["district"])
+
+    def test_invalid_dates_serials_and_unagreed_districts_remain_rejected(self):
+        invalid_numbers = (
+            ("impossible date", "9301063104900001"),
+            ("zero serial", "9301060101900000"),
+            ("disputed Wikisource row", "9401090101900001"),
+            ("row missing from transcription", "9301010101900001"),
+            ("nearby nonexistent district", "9301230101900001"),
+        )
+        self.assertNotIn("930123", IDN.NIK.DISTRICT)
+
+        for description, id_number in invalid_numbers:
+            with self.subTest(description=description):
+                self.assertFalse(IDN.NIK.validate(id_number))
+                self.assertFalse(IDN.NationalID.validate(id_number))
+                self.assertIsNone(IDN.NIK.parse(id_number))
                 self.assertIsNone(IDN.NationalID.parse(id_number))
 
 
