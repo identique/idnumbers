@@ -17,8 +17,8 @@ class PersonalCode:
     https://www.pmlp.gov.lv/en/change-personal-identity-number
     https://www.oecd.org/content/dam/oecd/en/topics/policy-issue-focus/aeoi/latvia-tin.pdf
 
-    PMLP says modern codes begin with 32-39, the third digit is 2-9, and the remaining digits are
-    randomly generated. The final digit is therefore not checked for modern codes.
+    PMLP specifies that the first digit is 3, the second is 2-9, and each remaining digit may be any
+    digit from 0 to 9. The final digit is therefore not a check digit for modern codes.
     """
 
     METADATA = IdMetadata(
@@ -70,7 +70,7 @@ class PersonalCode:
             return True
         if not 1 <= prefix <= 31:
             return False
-        # Local import avoids the cycle: OldPersonalCode uses PersonalCode.checksum().
+        # Local import avoids the cycle: OldPersonalCode uses PersonalCode._legacy_checksum().
         from .old_personal_code import OldPersonalCode
 
         return OldPersonalCode.validate(id_number)
