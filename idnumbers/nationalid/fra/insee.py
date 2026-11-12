@@ -18,8 +18,8 @@ class ParseResult(TypedDict):
 
     gender: Optional[Gender]
     """
-    Gender for codes 1/7 (male) and 2/8 (female). The official INSEE RNIPP documentation does not specify the meaning
-    of codes 3 and 4, so parse() returns None for those codes.
+    Codes 1/7 mean male and 2/8 mean female. The official INSEE RNIPP documentation does not specify codes 3 and 4,
+    so the gender field is None for them. Valid numbers with codes 3 and 4 still return a complete parse result.
     """
     yy: str
     """year of birth"""
