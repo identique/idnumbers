@@ -545,11 +545,51 @@ class TestRegister(RegistryStateCase):
         with self.assertRaisesRegex(ValueError, "alpha2 must be exactly 2 ASCII letters, got '' for ABC"):
             registry.register("abc", make_validator(), alpha2="")
 
-    def test_blank_name_has_its_own_message(self) -> None:
-        for name in ("", " ", "\t\n"):
+    def test_name_without_visible_characters_has_its_own_message(self) -> None:
+        names = (
+            "",
+            " ",
+            "\t\n",
+            "\u200b",  # ZERO WIDTH SPACE (Cf)
+            "\u200d",  # ZERO WIDTH JOINER (Cf)
+            "\u2060",  # WORD JOINER (Cf)
+            "\x00",  # NULL (Cc)
+            "\u00a0",  # NO-BREAK SPACE (Zs)
+            "\u2028",  # LINE SEPARATOR (Zl)
+            "\u2029",  # PARAGRAPH SEPARATOR (Zp)
+            "\u0301",  # COMBINING ACUTE ACCENT (Mn)
+            "\u200b\u0301",  # Mixed format and nonspacing-mark characters.
+        )
+        for name in names:
             with self.subTest(name=name):
+                before = self.snapshot()
                 with self.assertRaisesRegex(ValueError, "the name of ABC must not be empty or blank"):
                     registry.register("abc", make_validator(), name=name)
+                self.assertEqual(self.snapshot(), before)
+
+    def test_name_with_visible_characters_is_preserved(self) -> None:
+        cases = (
+            ("qaa", "QA", "Visible\u200b"),  # Cf
+            ("qab", "QB", "Visible\u200d"),  # Cf
+            ("qac", "QC", "Visible\u2060"),  # Cf
+            ("qad", "QD", "Visi\x00ble"),  # Cc
+            ("qae", "QE", "Visible\u00a0"),  # Zs
+            ("qaf", "QF", "Visible\u2028"),  # Zl
+            ("qag", "QG", "Visible\u2029"),  # Zp
+            ("qah", "QH", "Visible\u0301"),  # Mn
+            ("qai", "QI", "e\u0301"),  # Decomposed e + COMBINING ACUTE ACCENT.
+        )
+        for alpha3, alpha2, name in cases:
+            with self.subTest(alpha3=alpha3, name=name):
+                validator = make_validator(alpha2)
+                registry.register(alpha3, validator, name=name)
+                entry = registry.get_country(alpha3)
+                assert entry is not None
+                self.assertEqual(entry.name, name)
+                listed = next(
+                    country for country in registry.list_supported_countries() if country.alpha3 == alpha3.upper()
+                )
+                self.assertEqual(listed.name, name)
 
     def test_non_ascii_codes_that_uppercase_to_ascii_are_rejected(self) -> None:
         # 'ß'.upper() == 'SS' and 'ﬀ'.upper() == 'FF', so only the original string shows the code isn't ASCII.

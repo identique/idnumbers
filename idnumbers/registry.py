@@ -28,6 +28,7 @@ Example::
 
 import importlib
 import threading
+import unicodedata
 from typing import Any, Dict, Iterable, List, NamedTuple, Optional, Set, Tuple, Type
 
 __all__ = [
@@ -245,9 +246,10 @@ def register(
         list, a tuple or a generator. It is read once, and each alias is stored in upper case.
     :raises TypeError: when ``validator`` isn't a class with ``METADATA`` and a callable ``validate``, when a code, the
         name or an alias isn't a ``str``, when ``aliases`` is a single ``str``, or when ``aliases`` isn't iterable.
-    :raises ValueError: when a code or an alias is malformed, when the name is empty or blank, when no alpha-2 code is
-        given and the validator's ``METADATA`` has none, when a key is repeated, or when a key is already taken by
-        another country or the registration conflicts with an earlier one.
+    :raises ValueError: when a code or an alias is malformed, when the name is empty or every character is whitespace
+        or has Unicode category ``Cf``, ``Cc``, ``Zs``, ``Zl``, ``Zp`` or ``Mn``, when no alpha-2 code is given and the
+        validator's ``METADATA`` has none, when a key is repeated, or when a key is already taken by another country or
+        the registration conflicts with an earlier one.
     """
     alias_list = _check_types(alpha3, validator, alpha2, name, aliases)
     if not _is_code(alpha3, 3):
@@ -259,7 +261,10 @@ def register(
     if not isinstance(code2, str) or not _is_code(code2, 2):
         raise ValueError(f"alpha2 must be exactly 2 ASCII letters, got {code2!r} for {key3}")
     key2 = code2.upper()
-    if name is not None and not name.strip():
+    if name is not None and all(
+        character.isspace() or unicodedata.category(character) in {"Cf", "Cc", "Zs", "Zl", "Zp", "Mn"}
+        for character in name
+    ):
         raise ValueError(f"the name of {key3} must not be empty or blank")
     keys_of_aliases = tuple(_alias_key(key3, alias) for alias in alias_list)
     all_keys = (key3, key2) + keys_of_aliases
