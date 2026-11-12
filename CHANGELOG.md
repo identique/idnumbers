@@ -14,6 +14,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
 - **FIN** ([#669](https://github.com/identique/idnumbers/issues/669)): the `PersonalIdentityCode` docstrings credit DVV
   only for the issued individual numbers 002-899 and attribute the description of 900-999 as temporary codes to
   Finnish Wikipedia (not official). Library behavior is unchanged.
+- **ISR** ([#455](https://github.com/identique/idnumbers/issues/455)): the `NationalID` docstring states that validation
+  requires exactly nine ASCII digits, without separators or automatic padding. Callers may explicitly left-pad a
+  shorter unseparated digit string before validating, but this is not an official normalization or issuance rule,
+  does not guarantee validity, and the class has no `parse()` method. Library behavior is unchanged.
 
 ## 1.22.0 (2026-10-26)
 
