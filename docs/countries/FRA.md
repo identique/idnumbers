@@ -22,7 +22,7 @@ Current implementation metadata, not a promise that an ID was issued. All exampl
 | example | <code>255081416802538</code> |
 | id_type | <code>Social Security Number</code> |
 | iso3166_alpha2 | <code>FR</code> |
-| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#France&#x27;, &#x27;https://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR&#x27;, &#x27;https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente&#x27;]</code> |
+| links | <code>[&#x27;https://en.wikipedia.org/wiki/National_identification_number#France&#x27;, &#x27;https://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR&#x27;, &#x27;https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente&#x27;, &#x27;https://www.insee.fr/fr/information/6665188&#x27;]</code> |
 | masks | <code>(&#x27;###############&#x27;, &#x27;######X########&#x27;)</code> |
 | max_length | <code>15</code> |
 | min_length | <code>15</code> |
@@ -36,6 +36,7 @@ Reference links recorded by this implementation (source quality varies):
 - <https://en.wikipedia.org/wiki/National_identification_number#France>
 - <https://fr.wikipedia.org/wiki/Num%C3%A9ro_de_s%C3%A9curit%C3%A9_sociale_en_France#Signification_des_chiffres_du_NIR>
 - <https://forum-assures.ameli.fr/questions/1764572-nia-numero-immatriculation-attente>
+- <https://www.insee.fr/fr/information/6665188>
 
 ```python
 from idnumbers.nationalid.fra.insee import INSEE

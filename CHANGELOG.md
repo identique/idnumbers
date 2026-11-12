@@ -12,6 +12,10 @@ Releases before 1.12.0 are listed on the [GitHub releases page](https://github.c
   only of whitespace or characters in Unicode categories `Cf`, `Cc`, `Zs`, `Zl`, `Zp` and `Mn`. Built-in country
   registration and ID-number validity are unchanged. **Breaking:** custom registrations with those names now raise
   `ValueError`.
+- **FRA** INSEE ([#429](https://github.com/identique/idnumbers/issues/429)): `ParseResult.gender` is now
+  `Optional[Gender]`. Valid numbers starting with 3 or 4 still validate and parse with all fields present, but report
+  `gender=None` because the official source does not specify those codes. Validation and gender parsing for codes 1, 2,
+  7 and 8 are unchanged. **Breaking:** callers that assumed every parsed gender was known must handle `None`.
 
 ### Documentation
 
