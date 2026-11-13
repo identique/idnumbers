@@ -24,3 +24,4 @@ window._VERSIONS.push('1.20.0');
 window._VERSIONS.push('1.21.0');
 window._VERSIONS.push('1.22.0');
 window._VERSIONS.push('1.23.0');
+window._VERSIONS.push('1.24.0');
